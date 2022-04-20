@@ -1,98 +1,22 @@
-"""Temp file used for testing new logic system."""
+'Temp file used for testing new logic system.'
+_C='forward'
+_B='algorithm'
+_A=True
 import random
 from copy import deepcopy
-
 import pytest
-
 from randomizer.Fill import Generate_Spoiler
 from randomizer.Lists import Exceptions
 from randomizer.Settings import Settings
 from randomizer.Spoiler import Spoiler
-
-
 @pytest.fixture
-def generate_settings():
-    # Setting test settings
-    data = {}
-    data["seed"] = random.randint(0, 100000000)
-    # important things
-    data["blocker_0"] = 0
-    data["blocker_1"] = 0
-    data["blocker_2"] = 0
-    data["blocker_3"] = 0
-    data["blocker_4"] = 0
-    data["blocker_5"] = 0
-    data["blocker_6"] = 0
-    data["blocker_7"] = 100
-    data["troff_0"] = 100
-    data["troff_1"] = 100
-    data["troff_2"] = 100
-    data["troff_3"] = 100
-    data["troff_4"] = 100
-    data["troff_5"] = 100
-    data["troff_6"] = 100
-
-    data["unlock_all_moves"] = False
-    data["kasplat_rando"] = False
-    data["unlock_all_kongs"] = False
-    data["crown_door_open"] = False
-    data["coin_door_open"] = False
-    data["unlock_fairy_shockwave"] = False
-    data["krool_phase_count"] = 4
-
-    # not important things
-    data["download_patch_file"] = True
-
-    data["music_bgm"] = True
-    data["music_fanfares"] = True
-    data["music_events"] = True
-
-    data["generate_spoilerlog"] = True
-    data["fast_start_beginning_of_game"] = False
-    data["fast_start_hideout_helm"] = False
-    data["quality_of_life"] = True
-    data["enable_tag_anywhere"] = False
-    data["random_krool_phase_order"] = True
-    return data
-
-
-def test_forward(generate_settings):
-    generate_settings["algorithm"] = "forward"
-    settings = Settings(generate_settings)
-    settings.shuffle_loading_zones = "all"
-    settings.decoupled_loading_zones = True
-    spoiler = Spoiler(settings)
-    Generate_Spoiler(spoiler)
-    spoiler.toJson()
-
-
+def generate_settings():B=False;A={};A['seed']=random.randint(0,100000000);A['blocker_0']=0;A['blocker_1']=0;A['blocker_2']=0;A['blocker_3']=0;A['blocker_4']=0;A['blocker_5']=0;A['blocker_6']=0;A['blocker_7']=100;A['troff_0']=100;A['troff_1']=100;A['troff_2']=100;A['troff_3']=100;A['troff_4']=100;A['troff_5']=100;A['troff_6']=100;A['unlock_all_moves']=B;A['kasplat_rando']=B;A['unlock_all_kongs']=B;A['crown_door_open']=B;A['coin_door_open']=B;A['unlock_fairy_shockwave']=B;A['krool_phase_count']=4;A['download_patch_file']=_A;A['music_bgm']=_A;A['music_fanfares']=_A;A['music_events']=_A;A['generate_spoilerlog']=_A;A['fast_start_beginning_of_game']=B;A['fast_start_hideout_helm']=B;A['quality_of_life']=_A;A['enable_tag_anywhere']=B;A['random_krool_phase_order']=_A;return A
+def test_forward(generate_settings):B=generate_settings;B[_B]=_C;A=Settings(B);A.shuffle_loading_zones='all';A.decoupled_loading_zones=_A;C=Spoiler(A);Generate_Spoiler(C);C.toJson()
 def test_shuffles(generate_settings):
-    generate_settings["algorithm"] = "forward"
-    settings = Settings(generate_settings)
-    duped = deepcopy(settings)
-    duped.training_barrels = True
-    duped.unlock_all_moves = True
-    duped.unlock_all_kongs = True
-    duped.unlock_fairy_shockwave = True
-    duped.shuffle_items = "moves"
-    duped.shuffle_loading_zones = "all"
-    duped.decoupled_loading_zones = True
-    spoiler = Spoiler(duped)
-    # TODO: We know this exception is a bit overkill, and will be replaced in the future, we are expecting failures
-    try:
-        Generate_Spoiler(spoiler)
-        spoiler.toJson()
-    except Exception:
-        pass
-
-
+	B=generate_settings;B[_B]=_C;D=Settings(B);A=deepcopy(D);A.training_barrels=_A;A.unlock_all_moves=_A;A.unlock_all_kongs=_A;A.unlock_fairy_shockwave=_A;A.shuffle_items='moves';A.shuffle_loading_zones='all';A.decoupled_loading_zones=_A;C=Spoiler(A)
+	try:Generate_Spoiler(C);C.toJson()
+	except Exception:pass
 def test_assumed(generate_settings):
-    generate_settings["algorithm"] = "assumed"
-    settings = Settings(generate_settings)
-    spoiler = Spoiler(settings)
-    # TODO: We know this exception is a bit overkill, and will be replaced in the future, we are expecting failures
-    try:
-        Generate_Spoiler(spoiler)
-        spoiler.toJson()
-    except Exception:
-        pass
+	A=generate_settings;A[_B]='assumed';C=Settings(A);B=Spoiler(C)
+	try:Generate_Spoiler(B);B.toJson()
+	except Exception:pass

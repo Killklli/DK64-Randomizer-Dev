@@ -1,703 +1,261 @@
-"""Encoders for updating file data."""
-import json
-import math
-import struct
+'Encoders for updating file data.'
+_k='behaviour'
+_j='unkFooter'
+_i='Unknown field type in readStruct(): '
+_h='unk10'
+_g='scale'
+_f='mapping'
+_e='unk4'
+_d='unk18'
+_c='index_offset'
+_b=False
+_a='actors'
+_Z='conveyor_data'
+_Y='model2Index'
+_X='extra_data_count'
+_W='points'
+_V='character_spawners'
+_U='points_0xA'
+_T='points_0x6'
+_S='fences'
+_R=True
+_Q='model2'
+_P='extra_data'
+_O='uint'
+_N='w+b'
+_M='w'
+_L='rb'
+_K='index_of'
+_J='z_pos'
+_I='y_pos'
+_H='x_pos'
+_G='ushort'
+_F='byte'
+_E='size'
+_D='short'
+_C='big'
+_B='name'
+_A='type'
+import json,math,struct
 from typing import BinaryIO
-
 from actor_names import actor_names
 from character_spawner_names import character_spawner_names
 from map_names import maps
 from model2_names import model2_names
 from model_names import cutscene_model_names
-
-# Useful for detecting booleans, enums, indexes etc
-valueSamples = {}
-
-
-def sampleValue(tag: str, value):
-    """Sample the value."""
-    if tag not in valueSamples:
-        valueSamples[tag] = {"min": math.inf, "max": -math.inf, "all": {}}
-    if type(value) == int or type(value) == float:
-        valueSamples[tag]["min"] = min(value, valueSamples[tag]["min"])
-        valueSamples[tag]["max"] = max(value, valueSamples[tag]["max"])
-    if value not in valueSamples[tag]["all"]:
-        valueSamples[tag]["all"][value] = 0
-    valueSamples[tag]["all"][value] += 1
-    return value
-
-
-dump_struct_debug_info = False
-
-
-def ScriptHawkSetPosition(x, y, z):
-    """Set Scripthawk position."""
-    return "Game.setPosition(" + str(x) + "," + str(y) + "," + str(z) + ");"
-
-
-def getStructSize(struct_fields: list):
-    """Get Struct size."""
-    totalSize = 0
-    for field in struct_fields:
-        # Short-cuts
-        if field["type"] == "byte":
-            field["size"] = 1
-        elif field["type"] == "short":
-            field["size"] = 2
-        elif field["type"] == "ushort":
-            field["size"] = 2
-        elif field["type"] == float:
-            field["size"] = 4
-
-        totalSize += field["size"]
-
-    return totalSize
-
-
-def readStructArray(byte_read: bytes, offset: int, length: int, struct_fields: list):
-    """Read Struct Array."""
-    decoded_struct_array = []
-    read_head = offset
-    struct_size = getStructSize(struct_fields)
-    for i in range(length):
-        decoded_struct_array.append(readStruct(byte_read, read_head, struct_fields))
-        read_head += struct_size
-    return decoded_struct_array
-
-
-def readStruct(byte_read: bytes, offset: int, struct_fields: list):
-    """Read a particular struct."""
-    read_head = offset
-    decoded_struct = {}
-    for field in struct_fields:
-        # Short-cuts
-        if field["type"] == "byte":
-            field["type"] = "uint"
-            field["size"] = 1
-        if field["type"] == "short":
-            field["type"] = int
-            field["size"] = 2
-        elif field["type"] == "ushort":
-            field["type"] = "uint"
-            field["size"] = 2
-
-        # Actual reads
-        if field["type"] == int:
-            decoded_struct[field["name"]] = int.from_bytes(byte_read[read_head : read_head + field["size"]], byteorder="big", signed=True)
-        elif field["type"] == "uint":
-            decoded_struct[field["name"]] = int.from_bytes(byte_read[read_head : read_head + field["size"]], byteorder="big")
-        elif field["type"] == float:
-            field["size"] = 4
-            decoded_struct[field["name"]] = struct.unpack(">f", byte_read[read_head : read_head + 4])[0]
-        elif field["type"] == bool:
-            decoded_struct[field["name"]] = True if int.from_bytes(byte_read[read_head : read_head + field["size"]], byteorder="big") else False
-        elif field["type"] == bytes:
-            decoded_struct[field["name"]] = byte_read[read_head : read_head + field["size"]].hex(" ").upper()
-        else:
-            print("Unknown field type in readStruct(): " + field["type"])
-
-        if "index_of" in field:
-            index_offset = 0
-            if "index_offset" in field:
-                index_offset = field["index_offset"]
-
-            if decoded_struct[field["name"]] + index_offset < len(field["index_of"]):
-                decoded_struct[field["name"] + "_name"] = field["index_of"][decoded_struct[field["name"]] + index_offset]
-            else:
-                decoded_struct[field["name"] + "_name"] = "Unknown " + hex(decoded_struct[field["name"]] + index_offset)
-
-        if "sample" in field:
-            sampleName = field["sample"] if type(field["sample"]) == str else field["name"]
-            sampleValue(sampleName, decoded_struct[field["name"]])
-
-        read_head += field["size"]
-
-    if dump_struct_debug_info:
-        decoded_struct["DEBUG_File_Address"] = hex(offset)
-        if "x_pos" in decoded_struct and "y_pos" in decoded_struct and "z_pos" in decoded_struct:
-            decoded_struct["DEBUG_Set_Position"] = ScriptHawkSetPosition(decoded_struct["x_pos"], decoded_struct["y_pos"], decoded_struct["z_pos"])
-
-    return decoded_struct
-
-
-def writeStructArray(fh: BinaryIO, struct_array: list, struct_fields: list, include_count: bool = False, count_bytes: int = 0):
-    """Write the struct Array."""
-    if include_count:
-        fh.write(len(struct_array).to_bytes(count_bytes, byteorder="big"))
-
-    for struct_data in struct_array:
-        writeStruct(fh, struct_data, struct_fields)
-
-
-def writeStruct(fh: BinaryIO, struct_data: dict, struct_fields: list):
-    """Write a particular struct."""
-    for field in struct_fields:
-        # Short-cuts
-        if field["type"] == "byte":
-            field["type"] = "uint"
-            field["size"] = 1
-        elif field["type"] == "short":
-            field["type"] = int
-            field["size"] = 2
-        elif field["type"] == "ushort":
-            field["type"] = "uint"
-            field["size"] = 2
-
-        # Actual reads
-        if field["type"] == int:
-            fh.write(int(struct_data[field["name"]]).to_bytes(field["size"], byteorder="big", signed=True))
-        elif field["type"] == "uint":
-            fh.write(int(struct_data[field["name"]]).to_bytes(field["size"], byteorder="big"))
-        elif field["type"] == float:
-            fh.write(struct.pack(">f", struct_data[field["name"]]))
-        elif field["type"] == bool:
-            fh.write(bytes([1 if struct_data[field["name"]] else 0]))
-        elif field["type"] == bytes:
-            fh.write(bytes.fromhex(struct_data[field["name"]]))
-        else:
-            print("Unknown field type in readStruct(): " + field["type"])
-
-
-lz_object_types = [
-    "Unknown 0x0",  # In maps 6,14,30,43,55,106 (Minecarts, Aztec Beetle Race, Galleon, Shipwreck)
-    "Unused 0x1",
-    "Unknown 0x2",  # In Castle Minecart / MJ / Fungi (Rabbit Race)
-    "Boss Door Trigger 0x3",  # Also sets boss fadeout type as fade instead of spin. In toolshed too??
-    "Unknown 0x4",  # In Fungi Minecart
-    "Cutscene Trigger 0x5",
-    "Unknown 0x6",  # In Treehouse / MJ / Fungi. Not phase reset plane
-    "Unknown 0x7",  # In Fungi / Fungi Minecart
-    "Unknown 0x8",  # In Fungi / Fungi Minecart
-    "Loading Zone 0x9",
-    "Cutscene Trigger 0xA",
-    "Unknown 0xB",  # In Minecart Mayhem
-    "Loading Zone + Objects 0xC",  # Alows objects through
-    "Loading Zone 0xD",
-    "Unused 0xE",
-    "Warp Trigger 0xF",  # Factory Poles
-    "Loading Zone 0x10",
-    "Loading Zone 0x11",  # Snide's, Return to Parent Map?
-    "Unused 0x12",
-    "Unknown 0x13",  # In maps 7,17,30,34,38,47,48,194 (Japes, Helm, Galleon, Isles, Aztec, Shipwreck, Fungi, Caves)
-    "Boss Loading Zone 0x14",  # Takes you to the boss of that level
-    "Cutscene Trigger 0x15",
-    "Unknown 0x16",  # In Aztec Beetle Race
-    "Cutscene Trigger 0x17",
-    "Unknown 0x18",  # In Fungi Minecart
-    "Trigger 0x19",  # Seal Race
-    "Unknown 0x1A",  # In Caves Beetle Race
-    "Slide Trigger 0x1B",  # Beetle Races
-    "Unknown 0x1C",  # Beetle Races
-    "Unused 0x1D",
-    "Unused 0x1E",
-    "Unused 0x1F",
-    "Cutscene Trigger 0x20",
-    "Unused 0x21",
-    "Unused 0x22",
-    "Unused 0x23",
-    "Unknown 0x24",  # Cannon Trigger? Also used Aztec Snake Road and maps 7,17,26,34,38,48,72,173
-    "Unknown 0x25",  # In Factory
-    "Unknown 0x26",  # In BFI & K. Lumsy. Seems to be centred around torches?
-]
-
-lz_struct = [
-    {"name": "x_pos", "type": "short"},
-    {"name": "y_pos", "type": "short"},
-    {"name": "z_pos", "type": "short"},
-    {"name": "radius", "type": "short"},
-    {"name": "height", "type": "short"},
-    {"name": "unkA", "type": "ushort"},  # Probably an index, values range from 0-50 except 38 is never seen
-    {"name": "activation_type", "type": "byte"},
-    {"name": "boolD", "type": bool, "size": 1},  # If set, enter K. Rool LZ is active without all keys
-    {"name": "unkE", "type": "byte"},  # Usually 1, but values range from 0-4
-    {
-        "name": "unkF",
-        "type": "byte",
-    },  # Usually 0, but other known values are 2,4,5,32,48,50,64,75,80,96,128,144,209,228,255
-    {"name": "object_type", "type": "short", "index_of": lz_object_types},
-    {"name": "destination_map", "type": "ushort", "index_of": maps},
-    {"name": "destination_exit", "type": "ushort"},
-    {"name": "transition_type", "type": "ushort"},
-    {"name": "unk18", "type": "ushort"},
-    {"name": "cutscene_is_tied", "type": "ushort"},
-    {"name": "cutscene_index", "type": "ushort"},
-    {"name": "shift_camera_to_kong", "type": "ushort"},
-    {"name": "unk20", "type": bytes, "size": 0x38 - 0x20},  # TODO: Break this down into smaller fields
-]
-
-
-def decodeLoadingZones(decoded_filename: str, encoded_filename: str):
-    """Decode loading zones."""
-    with open(encoded_filename, "rb") as fh:
-        byte_read = fh.read()
-        num_loading_zones = int.from_bytes(byte_read[0x0:0x2], byteorder="big")
-
-        loading_zones = readStructArray(byte_read, 2, num_loading_zones, lz_struct)
-        for lz_data in loading_zones:
-            if "Loading Zone" not in lz_data["object_type_name"]:
-                del lz_data["destination_map_name"]
-
-        with open(decoded_filename, "w") as fjson:
-            json.dump(loading_zones, fjson, indent=4, default=str)
-
-
-def encodeLoadingZones(decoded_filename: str, encoded_filename: str):
-    """Encode loading zones."""
-    with open(decoded_filename) as fjson:
-        loading_zones = json.load(fjson)
-
-        with open(encoded_filename, "w+b") as fh:
-            writeStructArray(fh, loading_zones, lz_struct, include_count=True, count_bytes=2)
-
-
-exit_struct = [
-    {"name": "x_pos", "type": "short"},
-    {"name": "y_pos", "type": "short"},
-    {"name": "z_pos", "type": "short"},
-    {"name": "angle", "type": "short"},
-    {"name": "has_autowalk", "type": "byte"},  # Vanilla uses values 0, 1, and 2
-    {"name": "size", "type": "byte"},  # Vanilla uses values 0 and 1 (TODO: boolean?)
-]
-
-
-def decodeExits(decoded_filename: str, encoded_filename: str):
-    """Decode exits."""
-    with open(encoded_filename, "rb") as fh:
-        byte_read = fh.read()
-        num_exits = math.floor(len(byte_read) / 0xA)
-        exits = readStructArray(byte_read, 0, num_exits, exit_struct)
-        with open(decoded_filename, "w") as fjson:
-            json.dump(exits, fjson, indent=4, default=str)
-
-
-def encodeExits(decoded_filename: str, encoded_filename: str):
-    """Encode exits."""
-    with open(decoded_filename) as fjson:
-        exits = json.load(fjson)
-        with open(encoded_filename, "w+b") as fh:
-            writeStructArray(fh, exits, exit_struct)
-
-
-autowalk_point_struct = [
-    {"name": "x_pos", "type": "short"},
-    {"name": "y_pos", "type": "short"},
-    {"name": "z_pos", "type": "short"},
-    {"name": "unk6", "type": bytes, "size": 0x12 - 0x6},  # TODO: Break this down into smaller fields
-]
-
-
-def decodeAutowalk(decoded_filename: str, encoded_filename: str):
-    """Decode autowalk."""
-    with open(encoded_filename, "rb") as fh:
-        byte_read = fh.read()
-        path_base = 0
-        autowalk_paths = []
-
-        num_paths = int.from_bytes(byte_read[0x0:0x2], byteorder="big")
-        path_base += 2
-        for i in range(num_paths):
-            num_points = int.from_bytes(byte_read[path_base : path_base + 2], byteorder="big")
-            path_base += 2
-            path = readStructArray(byte_read, path_base, num_points, autowalk_point_struct)
-            path_base += num_points * 0x12
-            autowalk_paths.append(path)
-
-        with open(decoded_filename, "w") as fjson:
-            json.dump(autowalk_paths, fjson, indent=4, default=str)
-
-
-def encodeAutowalk(decoded_filename: str, encoded_filename: str):
-    """Encode autowalk."""
-    with open(decoded_filename) as fjson:
-        autowalk_paths = json.load(fjson)
-        with open(encoded_filename, "w+b") as fh:
-            fh.write(len(autowalk_paths).to_bytes(2, byteorder="big"))
-            for path in autowalk_paths:
-                writeStructArray(fh, path, autowalk_point_struct, include_count=True, count_bytes=2)
-
-
-path_point_struct = [
-    {"name": "unk0", "type": "short"},
-    {"name": "x_pos", "type": "short"},
-    {"name": "y_pos", "type": "short"},
-    {"name": "z_pos", "type": "short"},
-    {"name": "speed", "type": "byte"},  # 1 - 3 in vanilla
-    {"name": "unk9", "type": "byte"},  # Ranges from 0-255
-]
-
-
-def decodePaths(decoded_filename: str, encoded_filename: str):
-    """Decode paths."""
-    with open(encoded_filename, "rb") as fh:
-        byte_read = fh.read()
-
-        paths = []
-        num_paths = int.from_bytes(byte_read[0x0:0x2], byteorder="big")
-        path_base = 2
-        for i in range(num_paths):
-            this_path = byte_read[path_base : path_base + 0x6]
-            num_points = int.from_bytes(this_path[0x2:0x4], byteorder="big")
-            path = {
-                "id": int.from_bytes(this_path[0x0:0x2], byteorder="big"),
-                "unk4": int.from_bytes(this_path[0x4:0x6], byteorder="big"),
-            }
-            # sampleValue("path->unk4", path["unk4"])
-            path_base += 0x6
-
-            if num_points > 0:
-                path["points"] = readStructArray(byte_read, path_base, num_points, path_point_struct)
-                path_base += num_points * 0xA
-
-            paths.append(path)
-
-        with open(decoded_filename, "w") as fjson:
-            json.dump(paths, fjson, indent=4, default=str)
-
-
-def encodePaths(decoded_filename: str, encoded_filename: str):
-    """Encode Paths."""
-    with open(decoded_filename) as fjson:
-        paths = json.load(fjson)
-        with open(encoded_filename, "w+b") as fh:
-            # File header
-            fh.write(len(paths).to_bytes(2, byteorder="big"))
-
-            for path in paths:
-                num_points = len(path["points"]) if "points" in path else 0
-
-                # Path header
-                fh.write(int(path["id"]).to_bytes(2, byteorder="big"))
-                fh.write(num_points.to_bytes(2, byteorder="big"))
-                fh.write(int(path["unk4"]).to_bytes(2, byteorder="big"))
-
-                # Path points
-                if num_points > 0:
-                    writeStructArray(fh, path["points"], path_point_struct)
-
-
-checkpoint_struct = [
-    {"name": "x_pos", "type": "short"},
-    {"name": "y_pos", "type": "short"},
-    {"name": "z_pos", "type": "short"},
-    {"name": "angle", "type": "short"},
-    {"name": "unk8", "type": float},  # Range -1.0 to 1.0
-    {"name": "unkC", "type": float},  # Range -1.0 to 1.0
-    {"name": "visibility", "type": "byte"},  # 0 is goal, seal race is 1 (buoy?), invisible is 2
-    {"name": "unk11", "type": "byte"},  # Always 0
-    {"name": "unk12", "type": "ushort"},  # Always 0
-    {"name": "unk14", "type": float},  # Seen values of 0.5-1.0 +/- epsilon
-    {"name": "unk18", "type": "ushort"},  # Always 512
-    {"name": "unk1A", "type": "ushort"},  # Seen values of 26,39,42,43,44,47,48,49,50,53,55,65,89,90,110,124
-]
-
-
-def decodeCheckpoints(decoded_filename: str, encoded_filename: str):
-    """Decode Checkpoints."""
-    with open(encoded_filename, "rb") as fh:
-        byte_read = fh.read()
-
-        checkpoints = []
-        num_checkpoints = int.from_bytes(byte_read[0x1:0x3], byteorder="big")
-        num_checkpoint_mappings = int.from_bytes(byte_read[0x3:0x5], byteorder="big")
-
-        if num_checkpoints != num_checkpoint_mappings:
-            print(" - Error: Number of checkpoints does not match number of checkpoint mappings.")
-            return 0
-
-        checkpoint_base = 5 + num_checkpoint_mappings * 2
-        for i in range(num_checkpoints):
-            mapping = int.from_bytes(byte_read[5 + i * 2 : 7 + i * 2], byteorder="big")
-            checkpoint = readStruct(byte_read, checkpoint_base, checkpoint_struct)
-
-            # Only include the mapping in the JSON if it does not match the physical index
-            if mapping != i:
-                checkpoint["mapping"] = mapping
-
-            checkpoints.append(checkpoint)
-            checkpoint_base += 0x1C
-
-        with open(decoded_filename, "w") as fjson:
-            json.dump(checkpoints, fjson, indent=4, default=str)
-
-
-def encodeCheckpoints(decoded_filename: str, encoded_filename: str):
-    """Encode Checkpoints."""
-    with open(decoded_filename) as fjson:
-        checkpoints = json.load(fjson)
-        with open(encoded_filename, "w+b") as fh:
-            # File header
-            fh.write(bytes([0x1]))  # Seems to always be 1
-            fh.write(len(checkpoints).to_bytes(2, byteorder="big"))  # Num Checkpoints
-            fh.write(len(checkpoints).to_bytes(2, byteorder="big"))  # Num Mappings
-
-            # Checkpoint index mapping
-            for checkpointIndex, checkpoint in enumerate(checkpoints):
-                if "mapping" in checkpoint:
-                    fh.write(int(checkpoint["mapping"]).to_bytes(2, byteorder="big"))
-                else:
-                    fh.write(checkpointIndex.to_bytes(2, byteorder="big"))
-
-            # Checkpoint data
-            writeStructArray(fh, checkpoints, checkpoint_struct)
-
-
-character_spawner_point_0x6_struct = [
-    {"name": "x_pos", "type": "short"},
-    {"name": "y_pos", "type": "short"},
-    {"name": "z_pos", "type": "short"},
-]
-character_spawner_point_0xA_struct = [
-    {"name": "x_pos", "type": "short"},
-    {"name": "y_pos", "type": "short"},
-    {"name": "z_pos", "type": "short"},
-    {"name": "unk6", "type": bytes, "size": 0xA - 0x6},  # TODO: Break this down into smaller fields
-]
-character_spawner_struct = [
-    {"name": "enemy_val", "type": "byte", "index_of": character_spawner_names},
-    {"name": "unk1", "type": "byte"},  # Seen values 0-248 with some gaps (most commonly 0,124,125)
-    {"name": "y_rot", "type": "ushort"},
-    {"name": "x_pos", "type": "short"},
-    {"name": "y_pos", "type": "short"},
-    {"name": "z_pos", "type": "short"},
-    {"name": "cutscene_model", "type": "byte", "index_of": cutscene_model_names},
-    {"name": "unkB", "type": "byte"},  # Seen values 0-215 with some gaps, 0 and 40 are most common
-    {"name": "max_idle_speed", "type": "byte"},
-    {"name": "max_aggro_speed", "type": "byte"},
-    {
-        "name": "unkE",
-        "type": "byte",
-    },  # Seen values 1-47 with decreasing frequency as the value increases, possibly an index?
-    {"name": "scale", "type": "byte"},
-    {"name": "aggro", "type": "byte"},
-    {"name": "extra_data_count", "type": "byte"},
-    {"name": "initial_spawn_state", "type": "byte"},
-    {"name": "spawn_trigger", "type": "byte"},
-    {"name": "initial_respawn_timer", "type": "byte"},
-    {"name": "unk15", "type": "byte"},  # Seen values 0-254 with some gaps, 0 is most common
-]
-
-
-def decodeCharacterSpawners(decoded_filename: str, encoded_filename: str):
-    """Decode character Spawners."""
-    with open(encoded_filename, "rb") as fh:
-        byte_read = fh.read()
-        read_header = 0
-        extract = {}
-
-        # Fences?
-        num_fences = int.from_bytes(byte_read[0x0:0x2], byteorder="big")
-        read_header += 2
-
-        if num_fences > 0:
-            extract["fences"] = []
-            for i in range(num_fences):
-                fence_data = {}
-
-                # Points_0x6
-                num_points = int.from_bytes(byte_read[read_header : read_header + 2], byteorder="big")
-                read_header += 2
-
-                if num_points > 0:
-                    fence_data["points_0x6"] = readStructArray(byte_read, read_header, num_points, character_spawner_point_0x6_struct)
-                    read_header += num_points * 0x6
-
-                # Points_0xA
-                num_points_0xA = int.from_bytes(byte_read[read_header : read_header + 2], byteorder="big")
-                read_header += 2
-
-                if num_points_0xA > 0:
-                    fence_data["points_0xA"] = readStructArray(byte_read, read_header, num_points_0xA, character_spawner_point_0xA_struct)
-                    read_header += num_points_0xA * 0xA
-
-                # fence_data["unkFooterAddress"] = hex(read_header)
-                fence_data["unkFooter"] = byte_read[read_header : read_header + 0x4].hex(" ").upper()  # TODO: Break this down into smaller fields
-                read_header += 4
-
-                extract["fences"].append(fence_data)
-
-        # Spawners
-        num_character_spawners = int.from_bytes(byte_read[read_header : read_header + 2], byteorder="big")
-        read_header += 2
-
-        if num_character_spawners > 0:
-            extract["character_spawners"] = []
-            for i in range(num_character_spawners):
-                spawner_data = readStruct(byte_read, read_header, character_spawner_struct)
-
-                extra_count = spawner_data["extra_data_count"]
-                del spawner_data["extra_data_count"]
-                read_header += 0x16
-
-                if spawner_data["enemy_val_name"] != "Cutscene Object":
-                    del spawner_data["cutscene_model_name"]
-
-                # TODO: Figure what it does
-                if extra_count > 0:
-                    spawner_data["extra_data"] = []
-                    for j in range(extra_count):
-                        spawner_data["extra_data"].append(int.from_bytes(byte_read[read_header : read_header + 2], byteorder="big"))
-                        read_header += 2
-
-                extract["character_spawners"].append(spawner_data)
-
-        # Note: This is the case for several maps
-        # TODO: Figure out why, and if/how they map fences onto spawners
-        # if num_character_spawners != num_fences:
-        # print("FENCE COUNT (" + str(num_fences) + ") != SPAWN COUNT (" + str(num_character_spawners) + ") IN " + decoded_filename)
-
-        with open(decoded_filename, "w") as fjson:
-            json.dump(extract, fjson, indent=4, default=str)
-
-
-def encodeCharacterSpawners(decoded_filename: str, encoded_filename: str):
-    """Encode Character Spawners."""
-    with open(decoded_filename) as fjson:
-        spawners = json.load(fjson)
-
-        with open(encoded_filename, "w+b") as fh:
-            # Fences
-            num_fences = len(spawners["fences"]) if "fences" in spawners else 0
-            fh.write(num_fences.to_bytes(2, byteorder="big"))
-            if num_fences > 0:
-                for fence in spawners["fences"]:
-                    num_points = len(fence["points_0x6"]) if "points_0x6" in fence else 0
-                    fh.write(num_points.to_bytes(2, byteorder="big"))
-                    if "points_0x6" in fence:
-                        writeStructArray(fh, fence["points_0x6"], character_spawner_point_0x6_struct)
-
-                    num_points_0xA = len(fence["points_0xA"]) if "points_0xA" in fence else 0
-                    fh.write(num_points_0xA.to_bytes(2, byteorder="big"))
-                    if "points_0xA" in fence:
-                        writeStructArray(fh, fence["points_0xA"], character_spawner_point_0xA_struct)
-
-                    fh.write(bytes.fromhex(fence["unkFooter"]))
-
-            # Spawners
-            num_character_spawners = len(spawners["character_spawners"]) if "character_spawners" in spawners else 0
-            fh.write(num_character_spawners.to_bytes(2, byteorder="big"))
-            if num_character_spawners > 0:
-                for spawner in spawners["character_spawners"]:
-                    spawner["extra_data_count"] = len(spawner["extra_data"]) if "extra_data" in spawner else 0
-                    writeStruct(fh, spawner, character_spawner_struct)
-                    if "extra_data" in spawner:
-                        for extra_data in spawner["extra_data"]:
-                            fh.write(int(extra_data).to_bytes(2, byteorder="big"))
-
-
-setup_model2_struct = [
-    {"name": "x_pos", "type": float},
-    {"name": "y_pos", "type": float},
-    {"name": "z_pos", "type": float},
-    {"name": "scale", "type": float},
-    {"name": "unk10", "type": bytes, "size": 0x18 - 0x10},  # TODO: Break this down into smaller fields
-    {"name": "angle18", "type": float},
-    {"name": "angle1C", "type": float},
-    {"name": "angle20", "type": float},
-    {"name": "unk24", "type": float},
-    {"name": "behaviour", "type": "short", "index_of": model2_names},
-    {"name": "unk2A", "type": bytes, "size": 0x30 - 0x2A},  # TODO: Break this down into smaller fields
-]
-setup_conveyor_data_struct = [
-    {
-        "name": "model2Index",
-        "type": int,
-        "size": 4,
-    },  # Note: Not included in JSON, instead this struct lives in setup["model2"][index]["conveyorData"]
-    {"name": "unk4", "type": float},
-    {"name": "unk8", "type": float},
-    {"name": "unkC", "type": float},
-    {"name": "unk10", "type": float},
-    {"name": "unk14", "type": float},
-    {"name": "unk18", "type": float},
-    {"name": "unk1C", "type": float},
-    {"name": "unk20", "type": float},
-]
-setup_actor_spawner_struct = [
-    {"name": "x_pos", "type": float},
-    {"name": "y_pos", "type": float},
-    {"name": "z_pos", "type": float},
-    {"name": "scale", "type": float},
-    {"name": "unk10", "type": bytes, "size": 0x32 - 0x10},  # TODO: 0x10 is sometimes a float, how do we integrate this?
-    # {"name": "destination_map", "type": "byte"}, # TODO: At 0x13, Only for bonus barrels, how do we integrate this?
-    {"name": "behaviour", "type": "ushort", "index_of": actor_names, "index_offset": 0x10},
-    {"name": "unk34", "type": bytes, "size": 0x38 - 0x34},  # TODO: Break this down into smaller fields
-]
-
-
-def decodeSetup(decoded_filename: str, encoded_filename: str):
-    """Decode Setup."""
-    with open(encoded_filename, "rb") as fh:
-        byte_read = fh.read()
-        pointer = 0
-
-        setup = {}
-
-        # Object Model 2
-        num_model2 = int.from_bytes(byte_read[pointer : pointer + 0x4], byteorder="big")
-        pointer += 4
-
-        if num_model2 > 0:
-            setup["model2"] = readStructArray(byte_read, pointer, num_model2, setup_model2_struct)
-            pointer += num_model2 * 0x30
-
-        # Conveyor Data
-        num_conveyor = int.from_bytes(byte_read[pointer : pointer + 0x4], byteorder="big")
-        pointer += 4
-
-        if num_conveyor > 0:
-            for i in range(num_conveyor):
-                conveyor_data = readStruct(byte_read, pointer, setup_conveyor_data_struct)
-
-                # Put this struct in to the right spot and get rid of unneeded data
-                model2_index = conveyor_data["model2Index"]
-                del conveyor_data["model2Index"]
-                setup["model2"][model2_index]["conveyor_data"] = conveyor_data
-
-                pointer += 0x24
-
-        # Actor Spawners
-        num_actor_spawners = int.from_bytes(byte_read[pointer : pointer + 0x4], byteorder="big")
-        pointer += 4
-
-        if num_actor_spawners > 0:
-            setup["actors"] = readStructArray(byte_read, pointer, num_actor_spawners, setup_actor_spawner_struct)
-            pointer += num_actor_spawners * 0x38
-
-        with open(decoded_filename, "w") as fjson:
-            json.dump(setup, fjson, indent=4, default=str)
-
-
-def encodeSetup(decoded_filename: str, encoded_filename: str):
-    """Encode Setup."""
-    with open(decoded_filename) as fjson:
-        setup = json.load(fjson)
-
-        with open(encoded_filename, "w+b") as fh:
-            num_conveyors = 0
-            num_model2 = len(setup["model2"]) if "model2" in setup else 0
-            num_actor_spawners = len(setup["actors"]) if "actors" in setup else 0
-
-            # Model 2
-            fh.write(num_model2.to_bytes(4, byteorder="big"))
-
-            if num_model2 > 0:
-                for i, this_model2 in enumerate(setup["model2"]):
-                    writeStruct(fh, this_model2, setup_model2_struct)
-                    if "conveyor_data" in this_model2:
-                        num_conveyors += 1
-
-            # Conveyor Data
-            fh.write(num_conveyors.to_bytes(4, byteorder="big"))
-
-            if num_conveyors > 0:
-                for i, this_model2 in enumerate(setup["model2"]):
-                    if "conveyor_data" in this_model2:
-                        conveyor_data = this_model2["conveyor_data"]
-                        conveyor_data["model2Index"] = i
-                        writeStruct(fh, conveyor_data, setup_conveyor_data_struct)
-
-            # Actor Spawners
-            fh.write(num_actor_spawners.to_bytes(4, byteorder="big"))
-
-            if num_actor_spawners > 0:
-                writeStructArray(fh, setup["actors"], setup_actor_spawner_struct)
+valueSamples={}
+def sampleValue(tag,value):
+	'Sample the value.';E='max';D='min';C='all';B=value;A=tag
+	if A not in valueSamples:valueSamples[A]={D:math.inf,E:-math.inf,C:{}}
+	if type(B)==int or type(B)==float:valueSamples[A][D]=min(B,valueSamples[A][D]);valueSamples[A][E]=max(B,valueSamples[A][E])
+	if B not in valueSamples[A][C]:valueSamples[A][C][B]=0
+	valueSamples[A][C][B]+=1;return B
+dump_struct_debug_info=_b
+def ScriptHawkSetPosition(x,y,z):'Set Scripthawk position.';return'Game.setPosition('+str(x)+','+str(y)+','+str(z)+');'
+def getStructSize(struct_fields):
+	'Get Struct size.';B=0
+	for A in struct_fields:
+		if A[_A]==_F:A[_E]=1
+		elif A[_A]==_D:A[_E]=2
+		elif A[_A]==_G:A[_E]=2
+		elif A[_A]==float:A[_E]=4
+		B+=A[_E]
+	return B
+def readStructArray(byte_read,offset,length,struct_fields):
+	'Read Struct Array.';A=struct_fields;B=[];C=offset;D=getStructSize(A)
+	for E in range(length):B.append(readStruct(byte_read,C,A));C+=D
+	return B
+def readStruct(byte_read,offset,struct_fields):
+	'Read a particular struct.';H='_name';G=offset;F='sample';D=byte_read;C=G;B={}
+	for A in struct_fields:
+		if A[_A]==_F:A[_A]=_O;A[_E]=1
+		if A[_A]==_D:A[_A]=int;A[_E]=2
+		elif A[_A]==_G:A[_A]=_O;A[_E]=2
+		if A[_A]==int:B[A[_B]]=int.from_bytes(D[C:C+A[_E]],byteorder=_C,signed=_R)
+		elif A[_A]==_O:B[A[_B]]=int.from_bytes(D[C:C+A[_E]],byteorder=_C)
+		elif A[_A]==float:A[_E]=4;B[A[_B]]=struct.unpack('>f',D[C:C+4])[0]
+		elif A[_A]==bool:B[A[_B]]=_R if int.from_bytes(D[C:C+A[_E]],byteorder=_C)else _b
+		elif A[_A]==bytes:B[A[_B]]=D[C:C+A[_E]].hex(' ').upper()
+		else:print(_i+A[_A])
+		if _K in A:
+			E=0
+			if _c in A:E=A[_c]
+			if B[A[_B]]+E<len(A[_K]):B[A[_B]+H]=A[_K][B[A[_B]]+E]
+			else:B[A[_B]+H]='Unknown '+hex(B[A[_B]]+E)
+		if F in A:I=A[F]if type(A[F])==str else A[_B];sampleValue(I,B[A[_B]])
+		C+=A[_E]
+	if dump_struct_debug_info:
+		B['DEBUG_File_Address']=hex(G)
+		if _H in B and _I in B and _J in B:B['DEBUG_Set_Position']=ScriptHawkSetPosition(B[_H],B[_I],B[_J])
+	return B
+def writeStructArray(fh,struct_array,struct_fields,include_count=_b,count_bytes=0):
+	'Write the struct Array.';A=struct_array
+	if include_count:fh.write(len(A).to_bytes(count_bytes,byteorder=_C))
+	for B in A:writeStruct(fh,B,struct_fields)
+def writeStruct(fh,struct_data,struct_fields):
+	'Write a particular struct.';C=struct_data;B=fh
+	for A in struct_fields:
+		if A[_A]==_F:A[_A]=_O;A[_E]=1
+		elif A[_A]==_D:A[_A]=int;A[_E]=2
+		elif A[_A]==_G:A[_A]=_O;A[_E]=2
+		if A[_A]==int:B.write(int(C[A[_B]]).to_bytes(A[_E],byteorder=_C,signed=_R))
+		elif A[_A]==_O:B.write(int(C[A[_B]]).to_bytes(A[_E],byteorder=_C))
+		elif A[_A]==float:B.write(struct.pack('>f',C[A[_B]]))
+		elif A[_A]==bool:B.write(bytes([1 if C[A[_B]]else 0]))
+		elif A[_A]==bytes:B.write(bytes.fromhex(C[A[_B]]))
+		else:print(_i+A[_A])
+lz_object_types=['Unknown 0x0','Unused 0x1','Unknown 0x2','Boss Door Trigger 0x3','Unknown 0x4','Cutscene Trigger 0x5','Unknown 0x6','Unknown 0x7','Unknown 0x8','Loading Zone 0x9','Cutscene Trigger 0xA','Unknown 0xB','Loading Zone + Objects 0xC','Loading Zone 0xD','Unused 0xE','Warp Trigger 0xF','Loading Zone 0x10','Loading Zone 0x11','Unused 0x12','Unknown 0x13','Boss Loading Zone 0x14','Cutscene Trigger 0x15','Unknown 0x16','Cutscene Trigger 0x17','Unknown 0x18','Trigger 0x19','Unknown 0x1A','Slide Trigger 0x1B','Unknown 0x1C','Unused 0x1D','Unused 0x1E','Unused 0x1F','Cutscene Trigger 0x20','Unused 0x21','Unused 0x22','Unused 0x23','Unknown 0x24','Unknown 0x25','Unknown 0x26']
+lz_struct=[{_B:_H,_A:_D},{_B:_I,_A:_D},{_B:_J,_A:_D},{_B:'radius',_A:_D},{_B:'height',_A:_D},{_B:'unkA',_A:_G},{_B:'activation_type',_A:_F},{_B:'boolD',_A:bool,_E:1},{_B:'unkE',_A:_F},{_B:'unkF',_A:_F},{_B:'object_type',_A:_D,_K:lz_object_types},{_B:'destination_map',_A:_G,_K:maps},{_B:'destination_exit',_A:_G},{_B:'transition_type',_A:_G},{_B:_d,_A:_G},{_B:'cutscene_is_tied',_A:_G},{_B:'cutscene_index',_A:_G},{_B:'shift_camera_to_kong',_A:_G},{_B:'unk20',_A:bytes,_E:56-32}]
+def decodeLoadingZones(decoded_filename,encoded_filename):
+	'Decode loading zones.'
+	with open(encoded_filename,_L)as D:
+		A=D.read();E=int.from_bytes(A[0:2],byteorder=_C);B=readStructArray(A,2,E,lz_struct)
+		for C in B:
+			if'Loading Zone'not in C['object_type_name']:del C['destination_map_name']
+		with open(decoded_filename,_M)as F:json.dump(B,F,indent=4,default=str)
+def encodeLoadingZones(decoded_filename,encoded_filename):
+	'Encode loading zones.'
+	with open(decoded_filename)as A:
+		B=json.load(A)
+		with open(encoded_filename,_N)as C:writeStructArray(C,B,lz_struct,include_count=_R,count_bytes=2)
+exit_struct=[{_B:_H,_A:_D},{_B:_I,_A:_D},{_B:_J,_A:_D},{_B:'angle',_A:_D},{_B:'has_autowalk',_A:_F},{_B:_E,_A:_F}]
+def decodeExits(decoded_filename,encoded_filename):
+	'Decode exits.'
+	with open(encoded_filename,_L)as B:
+		A=B.read();C=math.floor(len(A)/10);D=readStructArray(A,0,C,exit_struct)
+		with open(decoded_filename,_M)as E:json.dump(D,E,indent=4,default=str)
+def encodeExits(decoded_filename,encoded_filename):
+	'Encode exits.'
+	with open(decoded_filename)as A:
+		B=json.load(A)
+		with open(encoded_filename,_N)as C:writeStructArray(C,B,exit_struct)
+autowalk_point_struct=[{_B:_H,_A:_D},{_B:_I,_A:_D},{_B:_J,_A:_D},{_B:'unk6',_A:bytes,_E:18-6}]
+def decodeAutowalk(decoded_filename,encoded_filename):
+	'Decode autowalk.'
+	with open(encoded_filename,_L)as E:
+		B=E.read();A=0;C=[];F=int.from_bytes(B[0:2],byteorder=_C);A+=2
+		for I in range(F):D=int.from_bytes(B[A:A+2],byteorder=_C);A+=2;G=readStructArray(B,A,D,autowalk_point_struct);A+=D*18;C.append(G)
+		with open(decoded_filename,_M)as H:json.dump(C,H,indent=4,default=str)
+def encodeAutowalk(decoded_filename,encoded_filename):
+	'Encode autowalk.'
+	with open(decoded_filename)as C:
+		A=json.load(C)
+		with open(encoded_filename,_N)as B:
+			B.write(len(A).to_bytes(2,byteorder=_C))
+			for D in A:writeStructArray(B,D,autowalk_point_struct,include_count=_R,count_bytes=2)
+path_point_struct=[{_B:'unk0',_A:_D},{_B:_H,_A:_D},{_B:_I,_A:_D},{_B:_J,_A:_D},{_B:'speed',_A:_F},{_B:'unk9',_A:_F}]
+def decodePaths(decoded_filename,encoded_filename):
+	'Decode paths.'
+	with open(encoded_filename,_L)as G:
+		B=G.read();E=[];H=int.from_bytes(B[0:2],byteorder=_C);A=2
+		for J in range(H):
+			C=B[A:A+6];D=int.from_bytes(C[2:4],byteorder=_C);F={'id':int.from_bytes(C[0:2],byteorder=_C),_e:int.from_bytes(C[4:6],byteorder=_C)};A+=6
+			if D>0:F[_W]=readStructArray(B,A,D,path_point_struct);A+=D*10
+			E.append(F)
+		with open(decoded_filename,_M)as I:json.dump(E,I,indent=4,default=str)
+def encodePaths(decoded_filename,encoded_filename):
+	'Encode Paths.'
+	with open(decoded_filename)as E:
+		C=json.load(E)
+		with open(encoded_filename,_N)as A:
+			A.write(len(C).to_bytes(2,byteorder=_C))
+			for B in C:
+				D=len(B[_W])if _W in B else 0;A.write(int(B['id']).to_bytes(2,byteorder=_C));A.write(D.to_bytes(2,byteorder=_C));A.write(int(B[_e]).to_bytes(2,byteorder=_C))
+				if D>0:writeStructArray(A,B[_W],path_point_struct)
+checkpoint_struct=[{_B:_H,_A:_D},{_B:_I,_A:_D},{_B:_J,_A:_D},{_B:'angle',_A:_D},{_B:'unk8',_A:float},{_B:'unkC',_A:float},{_B:'visibility',_A:_F},{_B:'unk11',_A:_F},{_B:'unk12',_A:_G},{_B:'unk14',_A:float},{_B:_d,_A:_G},{_B:'unk1A',_A:_G}]
+def decodeCheckpoints(decoded_filename,encoded_filename):
+	'Decode Checkpoints.'
+	with open(encoded_filename,_L)as I:
+		A=I.read();C=[];D=int.from_bytes(A[1:3],byteorder=_C);E=int.from_bytes(A[3:5],byteorder=_C)
+		if D!=E:print(' - Error: Number of checkpoints does not match number of checkpoint mappings.');return 0
+		F=5+E*2
+		for B in range(D):
+			G=int.from_bytes(A[5+B*2:7+B*2],byteorder=_C);H=readStruct(A,F,checkpoint_struct)
+			if G!=B:H[_f]=G
+			C.append(H);F+=28
+		with open(decoded_filename,_M)as J:json.dump(C,J,indent=4,default=str)
+def encodeCheckpoints(decoded_filename,encoded_filename):
+	'Encode Checkpoints.'
+	with open(decoded_filename)as D:
+		B=json.load(D)
+		with open(encoded_filename,_N)as A:
+			A.write(bytes([1]));A.write(len(B).to_bytes(2,byteorder=_C));A.write(len(B).to_bytes(2,byteorder=_C))
+			for (E,C) in enumerate(B):
+				if _f in C:A.write(int(C[_f]).to_bytes(2,byteorder=_C))
+				else:A.write(E.to_bytes(2,byteorder=_C))
+			writeStructArray(A,B,checkpoint_struct)
+character_spawner_point_0x6_struct=[{_B:_H,_A:_D},{_B:_I,_A:_D},{_B:_J,_A:_D}]
+character_spawner_point_0xA_struct=[{_B:_H,_A:_D},{_B:_I,_A:_D},{_B:_J,_A:_D},{_B:'unk6',_A:bytes,_E:10-6}]
+character_spawner_struct=[{_B:'enemy_val',_A:_F,_K:character_spawner_names},{_B:'unk1',_A:_F},{_B:'y_rot',_A:_G},{_B:_H,_A:_D},{_B:_I,_A:_D},{_B:_J,_A:_D},{_B:'cutscene_model',_A:_F,_K:cutscene_model_names},{_B:'unkB',_A:_F},{_B:'max_idle_speed',_A:_F},{_B:'max_aggro_speed',_A:_F},{_B:'unkE',_A:_F},{_B:_g,_A:_F},{_B:'aggro',_A:_F},{_B:_X,_A:_F},{_B:'initial_spawn_state',_A:_F},{_B:'spawn_trigger',_A:_F},{_B:'initial_respawn_timer',_A:_F},{_B:'unk15',_A:_F}]
+def decodeCharacterSpawners(decoded_filename,encoded_filename):
+	'Decode character Spawners.'
+	with open(encoded_filename,_L)as K:
+		B=K.read();A=0;D={};H=int.from_bytes(B[0:2],byteorder=_C);A+=2
+		if H>0:
+			D[_S]=[]
+			for L in range(H):
+				E={};F=int.from_bytes(B[A:A+2],byteorder=_C);A+=2
+				if F>0:E[_T]=readStructArray(B,A,F,character_spawner_point_0x6_struct);A+=F*6
+				G=int.from_bytes(B[A:A+2],byteorder=_C);A+=2
+				if G>0:E[_U]=readStructArray(B,A,G,character_spawner_point_0xA_struct);A+=G*10
+				E[_j]=B[A:A+4].hex(' ').upper();A+=4;D[_S].append(E)
+		I=int.from_bytes(B[A:A+2],byteorder=_C);A+=2
+		if I>0:
+			D[_V]=[]
+			for L in range(I):
+				C=readStruct(B,A,character_spawner_struct);J=C[_X];del C[_X];A+=22
+				if C['enemy_val_name']!='Cutscene Object':del C['cutscene_model_name']
+				if J>0:
+					C[_P]=[]
+					for N in range(J):C[_P].append(int.from_bytes(B[A:A+2],byteorder=_C));A+=2
+				D[_V].append(C)
+		with open(decoded_filename,_M)as M:json.dump(D,M,indent=4,default=str)
+def encodeCharacterSpawners(decoded_filename,encoded_filename):
+	'Encode Character Spawners.'
+	with open(decoded_filename)as G:
+		C=json.load(G)
+		with open(encoded_filename,_N)as A:
+			E=len(C[_S])if _S in C else 0;A.write(E.to_bytes(2,byteorder=_C))
+			if E>0:
+				for B in C[_S]:
+					H=len(B[_T])if _T in B else 0;A.write(H.to_bytes(2,byteorder=_C))
+					if _T in B:writeStructArray(A,B[_T],character_spawner_point_0x6_struct)
+					I=len(B[_U])if _U in B else 0;A.write(I.to_bytes(2,byteorder=_C))
+					if _U in B:writeStructArray(A,B[_U],character_spawner_point_0xA_struct)
+					A.write(bytes.fromhex(B[_j]))
+			F=len(C[_V])if _V in C else 0;A.write(F.to_bytes(2,byteorder=_C))
+			if F>0:
+				for D in C[_V]:
+					D[_X]=len(D[_P])if _P in D else 0;writeStruct(A,D,character_spawner_struct)
+					if _P in D:
+						for J in D[_P]:A.write(int(J).to_bytes(2,byteorder=_C))
+setup_model2_struct=[{_B:_H,_A:float},{_B:_I,_A:float},{_B:_J,_A:float},{_B:_g,_A:float},{_B:_h,_A:bytes,_E:24-16},{_B:'angle18',_A:float},{_B:'angle1C',_A:float},{_B:'angle20',_A:float},{_B:'unk24',_A:float},{_B:_k,_A:_D,_K:model2_names},{_B:'unk2A',_A:bytes,_E:48-42}]
+setup_conveyor_data_struct=[{_B:_Y,_A:int,_E:4},{_B:_e,_A:float},{_B:'unk8',_A:float},{_B:'unkC',_A:float},{_B:_h,_A:float},{_B:'unk14',_A:float},{_B:_d,_A:float},{_B:'unk1C',_A:float},{_B:'unk20',_A:float}]
+setup_actor_spawner_struct=[{_B:_H,_A:float},{_B:_I,_A:float},{_B:_J,_A:float},{_B:_g,_A:float},{_B:_h,_A:bytes,_E:50-16},{_B:_k,_A:_G,_K:actor_names,_c:16},{_B:'unk34',_A:bytes,_E:56-52}]
+def decodeSetup(decoded_filename,encoded_filename):
+	'Decode Setup.'
+	with open(encoded_filename,_L)as H:
+		B=H.read();A=0;C={};D=int.from_bytes(B[A:A+4],byteorder=_C);A+=4
+		if D>0:C[_Q]=readStructArray(B,A,D,setup_model2_struct);A+=D*48
+		G=int.from_bytes(B[A:A+4],byteorder=_C);A+=4
+		if G>0:
+			for K in range(G):E=readStruct(B,A,setup_conveyor_data_struct);I=E[_Y];del E[_Y];C[_Q][I][_Z]=E;A+=36
+		F=int.from_bytes(B[A:A+4],byteorder=_C);A+=4
+		if F>0:C[_a]=readStructArray(B,A,F,setup_actor_spawner_struct);A+=F*56
+		with open(decoded_filename,_M)as J:json.dump(C,J,indent=4,default=str)
+def encodeSetup(decoded_filename,encoded_filename):
+	'Encode Setup.'
+	with open(decoded_filename)as I:
+		A=json.load(I)
+		with open(encoded_filename,_N)as B:
+			D=0;E=len(A[_Q])if _Q in A else 0;F=len(A[_a])if _a in A else 0;B.write(E.to_bytes(4,byteorder=_C))
+			if E>0:
+				for (G,C) in enumerate(A[_Q]):
+					writeStruct(B,C,setup_model2_struct)
+					if _Z in C:D+=1
+			B.write(D.to_bytes(4,byteorder=_C))
+			if D>0:
+				for (G,C) in enumerate(A[_Q]):
+					if _Z in C:H=C[_Z];H[_Y]=G;writeStruct(B,H,setup_conveyor_data_struct)
+			B.write(F.to_bytes(4,byteorder=_C))
+			if F>0:writeStructArray(B,A[_a],setup_actor_spawner_struct)

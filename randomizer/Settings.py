@@ -1,377 +1,82 @@
-"""Settings class and functions."""
-import hashlib
-import inspect
-import json
-import random
-import sys
-
-from randomizer.ShuffleBosses import ShuffleBosses, ShuffleBossKongs, ShuffleKutoutKongs
+'Settings class and functions.'
+_F='vanilla'
+_E='random_helm'
+_D='none'
+_C=True
+_B=False
+_A=None
+import hashlib,inspect,json,random,sys
+from randomizer.ShuffleBosses import ShuffleBosses,ShuffleBossKongs,ShuffleKutoutKongs
 from randomizer.Enums.Events import Events
-from randomizer.Enums.Kongs import Kongs, GetKongs
-from randomizer.Prices import RandomizePrices, VanillaPrices
-
-
+from randomizer.Enums.Kongs import Kongs,GetKongs
+from randomizer.Prices import RandomizePrices,VanillaPrices
 class Settings:
-    """Class used to store settings for seed generation."""
-
-    def __init__(self, form_data: dict):
-        """Init all the settings using the form data to set the flags.
-
-        Args:
-            form_data (dict): Post data from the html form.
-        """
-        self.__hash = self.__get_hash()
-        self.public_hash = self.__get_hash()
-        self.algorithm = "forward"
-        self.generate_main()
-        self.generate_progression()
-        self.generate_misc()
-        for k, v in form_data.items():
-            setattr(self, k, v)
-        self.update_progression_totals()
-        self.seed_id = str(self.seed)
-        self.seed = str(self.seed) + self.__hash
-        self.set_seed()
-        # Store banana values in array
-        self.EntryGBs = [
-            self.blocker_0,
-            self.blocker_1,
-            self.blocker_2,
-            self.blocker_3,
-            self.blocker_4,
-            self.blocker_5,
-            self.blocker_6,
-            self.blocker_7,
-        ]
-        self.BossBananas = [
-            self.troff_0,
-            self.troff_1,
-            self.troff_2,
-            self.troff_3,
-            self.troff_4,
-            self.troff_5,
-            self.troff_6,
-        ]
-        self.seed_hash = [random.randint(0, 9) for i in range(5)]
-        # Settings which are not yet implemented on the web page
-
-        # Always start with training barrels currently
-        # training_barrels: str
-        # normal
-        # shuffled
-        # startwith
-        self.training_barrels = "startwith"
-
-        # currently just set to moves by shop_location_rando
-        # shuffle_items: str
-        # none
-        # moves
-        # all (currently only theoretical)
-        self.shuffle_items = "none"
-
-        # Pointless with just move rando, maybe have it once full rando
-        # progressive_upgrades: bool
-        self.progressive_upgrades = False
-
-        # Waiting for UI branch
-        # open_lobbies: bool
-        self.open_lobbies = True
-
-        # Waiting for UI branch
-        # krool_access: str
-        # vanilla (Keys 3 and 8)
-        # all (All keys)
-        # random (Random keys dictated by the specified amount)
-        # random_helm (Random keys dictated by the specified amount, Key 8 is guaranteed)
-        # open (Ship is there from start)
-        self.krool_access = "random_helm"
-        self.krool_keys_required = []
-
-        self.prices = VanillaPrices.copy()
-        self.resolve_settings()
-
-    def update_progression_totals(self):
-        """Update the troff and blocker totals if we're randomly setting them."""
-        if self.randomize_cb_required_amounts:
-            randomlist = random.sample(range(0, 260), 7)
-            cbs = randomlist
-            self.troff_0 = cbs[0]
-            self.troff_1 = cbs[1]
-            self.troff_2 = cbs[2]
-            self.troff_3 = cbs[3]
-            self.troff_4 = cbs[4]
-            self.troff_5 = cbs[5]
-            self.troff_6 = cbs[6]
-        if self.randomize_blocker_required_amounts:
-            randomlist = random.sample(range(0, 70), 7)
-            b_lockers = randomlist
-            b_lockers.append(1)
-            random.shuffle(b_lockers)
-            self.blocker_0 = b_lockers[0]
-            self.blocker_1 = b_lockers[1]
-            self.blocker_2 = b_lockers[2]
-            self.blocker_3 = b_lockers[3]
-            self.blocker_4 = b_lockers[4]
-            self.blocker_5 = b_lockers[5]
-            self.blocker_6 = b_lockers[6]
-            self.blocker_7 = b_lockers[7]
-
-    def generate_main(self):
-        """Set Default items on main page."""
-        self.seed = None
-        self.download_patch_file = None
-        self.bonus_barrel_rando = None
-        self.loading_zone_coupled = None
-        self.shop_location_rando = None
-        # random_prices: str
-        # vanilla
-        # low
-        # medium
-        # high
-        self.random_prices = "vanilla"
-        self.boss_location_rando = None
-        self.boss_kong_rando = None
-        self.kasplat_rando = None
-
-    def set_seed(self):
-        """Forcibly re-set the random seed to the seed set in the config."""
-        random.seed(self.seed)
-
-    def generate_progression(self):
-        """Set default items on progression page."""
-        self.blocker_0 = None
-        self.blocker_1 = None
-        self.blocker_2 = None
-        self.blocker_3 = None
-        self.blocker_4 = None
-        self.blocker_5 = None
-        self.blocker_6 = None
-        self.blocker_7 = None
-        self.troff_0 = None
-        self.troff_1 = None
-        self.troff_2 = None
-        self.troff_3 = None
-        self.troff_4 = None
-        self.troff_5 = None
-        self.troff_6 = None
-
-    def generate_misc(self):
-        """Set default items on misc page."""
-        #  Settings which affect logic
-        # start_with_moves: bool
-        self.unlock_all_moves = None
-        # unlock_all_kongs: bool
-        self.unlock_all_kongs = None
-        # crown_door_open: bool
-        self.crown_door_open = None
-        # coin_door_open: bool
-        self.coin_door_open = None
-        # unlock_fairy_shockwave: bool
-        self.unlock_fairy_shockwave = None
-        # krool_phase_count: int, [1-5]
-        self.krool_phase_count = 5
-        # krool_key_count: int, [0-8]
-        self.krool_key_count = 8
-
-        # bonus_barrels: str
-        # skip - NOT IMPLEMENTED YET
-        # normal
-        # random
-        self.bonus_barrels = "normal"
-
-        # hard_shooting: bool
-        self.hard_shooting = False
-
-        # shuffle_loading_zones: str
-        # none
-        # levels
-        # all
-        self.shuffle_loading_zones = "none"
-
-        # decoupled_loading_zones: bool
-        self.decoupled_loading_zones = False
-
-        #  Music
-        self.music_bgm = None
-        self.music_fanfares = None
-        self.music_events = None
-
-        #  Misc
-        self.generate_spoilerlog = None
-        self.fast_start_beginning_of_game = None
-        self.fast_start_hideout_helm = None
-        self.quality_of_life = None
-        self.enable_tag_anywhere = None
-        self.random_krool_phase_order = None
-        self.random_medal_requirement = True
-        self.bananaport_rando = False
-        self.shop_indicator = False
-        self.randomize_cb_required_amounts = False
-        self.randomize_blocker_required_amounts = False
-        self.perma_death = False
-        self.disable_tag_barrels = False
-        self.level_randomization = "none"
-        self.kong_rando = False
-
-    def resolve_settings(self):
-        """Resolve settings which are not directly set through the UI."""
-        kongs = GetKongs()
-
-        # Price Rando
-        if self.random_prices != "vanilla":
-            self.prices = RandomizePrices(self.random_prices)
-
-        # Kong rando
-        if self.kong_rando:
-            self.starting_kong = random.choice(kongs)
-            if self.shuffle_loading_zones == "none":
-                self.diddy_freeing_kong = self.starting_kong
-            else:
-                self.diddy_freeing_kong = random.choice(kongs)
-            self.lanky_freeing_kong = random.choice(kongs)
-            self.tiny_freeing_kong = Kongs.diddy
-            self.chunky_freeing_kong = random.choice([Kongs.lanky, Kongs.tiny])
-        else:
-            self.starting_kong = Kongs.donkey
-            self.diddy_freeing_kong = Kongs.donkey
-            self.lanky_freeing_kong = Kongs.donkey
-            self.tiny_freeing_kong = Kongs.diddy
-            self.chunky_freeing_kong = Kongs.lanky
-
-        # Handle K. Rool Phases
-        self.krool_donkey = False
-        self.krool_diddy = False
-        self.krool_lanky = False
-        self.krool_tiny = False
-        self.krool_chunky = True
-
-        phases = [x for x in kongs if x != Kongs.chunky]
-        if self.random_krool_phase_order:
-            random.shuffle(phases)
-        if self.krool_phase_count < 5:
-            phases = random.sample(phases, self.krool_phase_count - 1)
-        orderedPhases = []
-        for kong in phases:
-            if kong == Kongs.donkey:
-                self.krool_donkey = True
-                orderedPhases.append(Kongs.donkey)
-            if kong == Kongs.diddy:
-                self.krool_diddy = True
-                orderedPhases.append(Kongs.diddy)
-            if kong == Kongs.lanky:
-                self.krool_lanky = True
-                orderedPhases.append(Kongs.lanky)
-            if kong == Kongs.tiny:
-                self.krool_tiny = True
-                orderedPhases.append(Kongs.tiny)
-        orderedPhases.append(Kongs.chunky)
-        self.krool_order = orderedPhases
-
-        # Set keys required for KRool
-        KeyEvents = [
-            Events.JapesKeyTurnedIn,
-            Events.AztecKeyTurnedIn,
-            Events.FactoryKeyTurnedIn,
-            Events.GalleonKeyTurnedIn,
-            Events.ForestKeyTurnedIn,
-            Events.CavesKeyTurnedIn,
-            Events.CastleKeyTurnedIn,
-            Events.HelmKeyTurnedIn,
-        ]
-        key_list = KeyEvents.copy()
-        required_key_count = self.krool_key_count
-        if self.krool_access == "random_helm":
-            key_list.remove(Events.HelmKeyTurnedIn)
-            required_key_count -= 1
-        if self.krool_access == "vanilla":
-            self.krool_keys_required.extend([Events.FactoryKeyTurnedIn, Events.HelmKeyTurnedIn])
-        elif self.krool_access == "all":
-            self.krool_keys_required.extend(KeyEvents)
-        elif self.krool_access == "random" or self.krool_access == "random_helm":
-            random.shuffle(key_list)
-            for x in range(required_key_count):
-                self.krool_keys_required.append(key_list[x])
-        if self.krool_access == "random_helm":
-            self.krool_keys_required.append(Events.HelmKeyTurnedIn)
-
-        # Banana medals
-        if self.random_medal_requirement:
-            # Range roughly from 4 to 15, average around 10
-            self.BananaMedalsRequired = round(random.normalvariate(10, 1.5))
-        else:
-            self.BananaMedalsRequired = 15
-
-        # Boss Rando
-        self.boss_maps = ShuffleBosses(self.boss_location_rando)
-        self.boss_kongs = ShuffleBossKongs(self.boss_maps, self.boss_kong_rando)
-        self.kutout_kongs = ShuffleKutoutKongs(self.boss_maps, self.boss_kongs, self.boss_kong_rando)
-
-        # Bonus Barrel Rando
-        if self.bonus_barrel_rando:
-            self.bonus_barrels = "random"
-
-        # Loading Zone Rando
-        if self.level_randomization == "level_order":
-            self.shuffle_loading_zones = "levels"
-        elif self.level_randomization == "loadingzone":
-            self.shuffle_loading_zones = "all"
-        elif self.level_randomization == "loadingzonesdecoupled":
-            self.shuffle_loading_zones = "all"
-            self.decoupled_loading_zones = True
-        elif self.level_randomization == "vanilla":
-            self.shuffle_loading_zones = "none"
-
-        # Move Location Rando
-        if self.shop_location_rando:
-            self.shuffle_items = "moves"
-
-    def __repr__(self):
-        """Return printable version of the object as json.
-
-        Returns:
-            str: Json string of the dict.
-        """
-        return json.dumps(self.__dict__)
-
-    def __get_hash(self):
-        """Get the hash value of all of the source code loaded."""
-        hash_value = []
-        files = []
-        files.append(inspect.getsource(Settings))
-        files.append(inspect.getsource(__import__("randomizer.Spoiler")))
-        files.append(inspect.getsource(__import__("randomizer.Fill")))
-        files.append(inspect.getsource(__import__("randomizer.BackgroundRandomizer")))
-        try:
-            files.append(inspect.getsource(__import__("version")))
-        except Exception:  # Fails if running python by itself
-            pass
-        for file in sorted(files):
-            hash_value.append(hashlib.md5(file.encode("utf-8")).hexdigest())
-        return "".join(hash_value)
-
-    def compare_hash(self, hash):
-        """Compare our hash with a passed hash value."""
-        if self.__hash != hash:
-            raise Exception("Error: Comparison failed, Hashes do not match.")
-
-    def verify_hash(self):
-        """Verify our hash files match our existing code."""
-        try:
-            if self.__hash == self.__get_hash():
-                return True
-            else:
-                raise Exception("Error: Hashes do not match")
-        except Exception:
-            return False
-
-    def __setattr__(self, name, value):
-        """Set an attributes value but only after verifying our hash."""
-        self.verify_hash()
-        super().__setattr__(name, value)
-
-    def __delattr__(self, name):
-        """Delete an attribute if its not our settings hash or if the code has been modified."""
-        self.verify_hash()
-        if name == "_Settings__hash":
-            raise Exception("Error: Attempted deletion of race hash.")
-        super().__delattr__(name)
+	'Class used to store settings for seed generation.'
+	def __init__(A,form_data):
+		'Init all the settings using the form data to set the flags.\n\n        Args:\n            form_data (dict): Post data from the html form.\n        ';A.__hash=A.__get_hash();A.public_hash=A.__get_hash();A.algorithm='forward';A.generate_main();A.generate_progression();A.generate_misc()
+		for (B,C) in form_data.items():setattr(A,B,C)
+		A.update_progression_totals();A.seed_id=str(A.seed);A.seed=str(A.seed)+A.__hash;A.set_seed();A.EntryGBs=[A.blocker_0,A.blocker_1,A.blocker_2,A.blocker_3,A.blocker_4,A.blocker_5,A.blocker_6,A.blocker_7];A.BossBananas=[A.troff_0,A.troff_1,A.troff_2,A.troff_3,A.troff_4,A.troff_5,A.troff_6];A.seed_hash=[random.randint(0,9)for A in range(5)];A.training_barrels='startwith';A.shuffle_items=_D;A.progressive_upgrades=_B;A.open_lobbies=_C;A.krool_access=_E;A.krool_keys_required=[];A.prices=VanillaPrices.copy();A.resolve_settings()
+	def update_progression_totals(A):
+		"Update the troff and blocker totals if we're randomly setting them."
+		if A.randomize_cb_required_amounts:D=random.sample(range(0,260),7);C=D;A.troff_0=C[0];A.troff_1=C[1];A.troff_2=C[2];A.troff_3=C[3];A.troff_4=C[4];A.troff_5=C[5];A.troff_6=C[6]
+		if A.randomize_blocker_required_amounts:D=random.sample(range(0,70),7);B=D;B.append(1);random.shuffle(B);A.blocker_0=B[0];A.blocker_1=B[1];A.blocker_2=B[2];A.blocker_3=B[3];A.blocker_4=B[4];A.blocker_5=B[5];A.blocker_6=B[6];A.blocker_7=B[7]
+	def generate_main(A):'Set Default items on main page.';A.seed=_A;A.download_patch_file=_A;A.bonus_barrel_rando=_A;A.loading_zone_coupled=_A;A.shop_location_rando=_A;A.random_prices=_F;A.boss_location_rando=_A;A.boss_kong_rando=_A;A.kasplat_rando=_A
+	def set_seed(A):'Forcibly re-set the random seed to the seed set in the config.';random.seed(A.seed)
+	def generate_progression(A):'Set default items on progression page.';A.blocker_0=_A;A.blocker_1=_A;A.blocker_2=_A;A.blocker_3=_A;A.blocker_4=_A;A.blocker_5=_A;A.blocker_6=_A;A.blocker_7=_A;A.troff_0=_A;A.troff_1=_A;A.troff_2=_A;A.troff_3=_A;A.troff_4=_A;A.troff_5=_A;A.troff_6=_A
+	def generate_misc(A):'Set default items on misc page.';A.unlock_all_moves=_A;A.unlock_all_kongs=_A;A.crown_door_open=_A;A.coin_door_open=_A;A.unlock_fairy_shockwave=_A;A.krool_phase_count=5;A.krool_key_count=8;A.bonus_barrels='normal';A.hard_shooting=_B;A.shuffle_loading_zones=_D;A.decoupled_loading_zones=_B;A.music_bgm=_A;A.music_fanfares=_A;A.music_events=_A;A.generate_spoilerlog=_A;A.fast_start_beginning_of_game=_A;A.fast_start_hideout_helm=_A;A.quality_of_life=_A;A.enable_tag_anywhere=_A;A.random_krool_phase_order=_A;A.random_medal_requirement=_C;A.bananaport_rando=_B;A.shop_indicator=_B;A.randomize_cb_required_amounts=_B;A.randomize_blocker_required_amounts=_B;A.perma_death=_B;A.disable_tag_barrels=_B;A.level_randomization=_D;A.kong_rando=_B
+	def resolve_settings(A):
+		'Resolve settings which are not directly set through the UI.';J='random';G='all';C=GetKongs()
+		if A.random_prices!=_F:A.prices=RandomizePrices(A.random_prices)
+		if A.kong_rando:
+			A.starting_kong=random.choice(C)
+			if A.shuffle_loading_zones==_D:A.diddy_freeing_kong=A.starting_kong
+			else:A.diddy_freeing_kong=random.choice(C)
+			A.lanky_freeing_kong=random.choice(C);A.tiny_freeing_kong=Kongs.diddy;A.chunky_freeing_kong=random.choice([Kongs.lanky,Kongs.tiny])
+		else:A.starting_kong=Kongs.donkey;A.diddy_freeing_kong=Kongs.donkey;A.lanky_freeing_kong=Kongs.donkey;A.tiny_freeing_kong=Kongs.diddy;A.chunky_freeing_kong=Kongs.lanky
+		A.krool_donkey=_B;A.krool_diddy=_B;A.krool_lanky=_B;A.krool_tiny=_B;A.krool_chunky=_C;D=[A for A in C if A!=Kongs.chunky]
+		if A.random_krool_phase_order:random.shuffle(D)
+		if A.krool_phase_count<5:D=random.sample(D,A.krool_phase_count-1)
+		B=[]
+		for E in D:
+			if E==Kongs.donkey:A.krool_donkey=_C;B.append(Kongs.donkey)
+			if E==Kongs.diddy:A.krool_diddy=_C;B.append(Kongs.diddy)
+			if E==Kongs.lanky:A.krool_lanky=_C;B.append(Kongs.lanky)
+			if E==Kongs.tiny:A.krool_tiny=_C;B.append(Kongs.tiny)
+		B.append(Kongs.chunky);A.krool_order=B;H=[Events.JapesKeyTurnedIn,Events.AztecKeyTurnedIn,Events.FactoryKeyTurnedIn,Events.GalleonKeyTurnedIn,Events.ForestKeyTurnedIn,Events.CavesKeyTurnedIn,Events.CastleKeyTurnedIn,Events.HelmKeyTurnedIn];F=H.copy();I=A.krool_key_count
+		if A.krool_access==_E:F.remove(Events.HelmKeyTurnedIn);I-=1
+		if A.krool_access==_F:A.krool_keys_required.extend([Events.FactoryKeyTurnedIn,Events.HelmKeyTurnedIn])
+		elif A.krool_access==G:A.krool_keys_required.extend(H)
+		elif A.krool_access==J or A.krool_access==_E:
+			random.shuffle(F)
+			for K in range(I):A.krool_keys_required.append(F[K])
+		if A.krool_access==_E:A.krool_keys_required.append(Events.HelmKeyTurnedIn)
+		if A.random_medal_requirement:A.BananaMedalsRequired=round(random.normalvariate(10,1.5))
+		else:A.BananaMedalsRequired=15
+		A.boss_maps=ShuffleBosses(A.boss_location_rando);A.boss_kongs=ShuffleBossKongs(A.boss_maps,A.boss_kong_rando);A.kutout_kongs=ShuffleKutoutKongs(A.boss_maps,A.boss_kongs,A.boss_kong_rando)
+		if A.bonus_barrel_rando:A.bonus_barrels=J
+		if A.level_randomization=='level_order':A.shuffle_loading_zones='levels'
+		elif A.level_randomization=='loadingzone':A.shuffle_loading_zones=G
+		elif A.level_randomization=='loadingzonesdecoupled':A.shuffle_loading_zones=G;A.decoupled_loading_zones=_C
+		elif A.level_randomization==_F:A.shuffle_loading_zones=_D
+		if A.shop_location_rando:A.shuffle_items='moves'
+	def __repr__(A):'Return printable version of the object as json.\n\n        Returns:\n            str: Json string of the dict.\n        ';return json.dumps(A.__dict__)
+	def __get_hash(D):
+		'Get the hash value of all of the source code loaded.';B=[];A=[];A.append(inspect.getsource(Settings));A.append(inspect.getsource(__import__('randomizer.Spoiler')));A.append(inspect.getsource(__import__('randomizer.Fill')));A.append(inspect.getsource(__import__('randomizer.BackgroundRandomizer')))
+		try:A.append(inspect.getsource(__import__('version')))
+		except Exception:pass
+		for C in sorted(A):B.append(hashlib.md5(C.encode('utf-8')).hexdigest())
+		return ''.join(B)
+	def compare_hash(A,hash):
+		'Compare our hash with a passed hash value.'
+		if A.__hash!=hash:raise Exception('Error: Comparison failed, Hashes do not match.')
+	def verify_hash(A):
+		'Verify our hash files match our existing code.'
+		try:
+			if A.__hash==A.__get_hash():return _C
+			else:raise Exception('Error: Hashes do not match')
+		except Exception:return _B
+	def __setattr__(A,name,value):'Set an attributes value but only after verifying our hash.';A.verify_hash();super().__setattr__(name,value)
+	def __delattr__(A,name):
+		'Delete an attribute if its not our settings hash or if the code has been modified.';A.verify_hash()
+		if name=='_Settings__hash':raise Exception('Error: Attempted deletion of race hash.')
+		super().__delattr__(name)
