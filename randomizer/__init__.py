@@ -1,1 +1,1 @@
-'Classes to generate seeds.'
+"""Classes to generate seeds."""

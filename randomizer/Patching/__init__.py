@@ -1,1 +1,1 @@
-'Functions to write data to ROM.'
+"""Functions to write data to ROM."""

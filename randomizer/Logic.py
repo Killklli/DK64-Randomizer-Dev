@@ -1,129 +1,476 @@
-'Contains the class which holds logic variables, and the master copy of regions.'
-_C=None
-_B=True
-_A=False
-import randomizer.CollectibleLogicFiles.AngryAztec,randomizer.CollectibleLogicFiles.CreepyCastle,randomizer.CollectibleLogicFiles.CrystalCaves,randomizer.CollectibleLogicFiles.DKIsles,randomizer.CollectibleLogicFiles.FranticFactory,randomizer.CollectibleLogicFiles.FungiForest,randomizer.CollectibleLogicFiles.GloomyGalleon,randomizer.CollectibleLogicFiles.JungleJapes,randomizer.LogicFiles.AngryAztec,randomizer.LogicFiles.CreepyCastle,randomizer.LogicFiles.CrystalCaves,randomizer.LogicFiles.DKIsles,randomizer.LogicFiles.FranticFactory,randomizer.LogicFiles.FungiForest,randomizer.LogicFiles.GloomyGalleon,randomizer.LogicFiles.HideoutHelm,randomizer.LogicFiles.JungleJapes,randomizer.LogicFiles.Shops
+"""Contains the class which holds logic variables, and the master copy of regions."""
+import randomizer.CollectibleLogicFiles.AngryAztec
+import randomizer.CollectibleLogicFiles.CreepyCastle
+import randomizer.CollectibleLogicFiles.CrystalCaves
+import randomizer.CollectibleLogicFiles.DKIsles
+import randomizer.CollectibleLogicFiles.FranticFactory
+import randomizer.CollectibleLogicFiles.FungiForest
+import randomizer.CollectibleLogicFiles.GloomyGalleon
+import randomizer.CollectibleLogicFiles.JungleJapes
+import randomizer.LogicFiles.AngryAztec
+import randomizer.LogicFiles.CreepyCastle
+import randomizer.LogicFiles.CrystalCaves
+import randomizer.LogicFiles.DKIsles
+import randomizer.LogicFiles.FranticFactory
+import randomizer.LogicFiles.FungiForest
+import randomizer.LogicFiles.GloomyGalleon
+import randomizer.LogicFiles.HideoutHelm
+import randomizer.LogicFiles.JungleJapes
+import randomizer.LogicFiles.Shops
 from randomizer.Enums.Collectibles import Collectibles
 from randomizer.Enums.Events import Events
 from randomizer.Enums.Items import Items
 from randomizer.Enums.Kongs import Kongs
 from randomizer.Enums.Levels import Levels
 from randomizer.Enums.Locations import Locations
-from randomizer.Lists.Location import Location,LocationList
+from randomizer.Lists.Location import Location, LocationList
 from randomizer.Lists.MapsAndExits import Maps
-from randomizer.Prices import CanBuy,GetPriceOfMoveItem
-STARTING_SLAM=1
+from randomizer.Prices import CanBuy, GetPriceOfMoveItem
+
+
+STARTING_SLAM = 1  # Currently we're assuming you always start with 1 slam
+
+
 class LogicVarHolder:
-	'Used to store variables when checking logic conditions.'
-	def __init__(A,settings=_C):
-		'Initialize with given parameters.';B=settings
-		if B is _C:return
-		A.settings=B;A.startkong=A.settings.starting_kong;A.Reset()
-	def Reset(A):
-		'Reset all logic variables.\n\n        Done between reachability searches and upon initialization.\n        ';A.donkey=A.startkong==Kongs.donkey or A.settings.unlock_all_kongs;A.diddy=A.startkong==Kongs.diddy or A.settings.unlock_all_kongs;A.lanky=A.startkong==Kongs.lanky or A.settings.unlock_all_kongs;A.tiny=A.startkong==Kongs.tiny or A.settings.unlock_all_kongs;A.chunky=A.startkong==Kongs.chunky or A.settings.unlock_all_kongs;A.vines=_B;A.swim=_B;A.oranges=_B;A.barrels=_B;A.progDonkey=3 if A.settings.unlock_all_moves else 0;A.blast=A.settings.unlock_all_moves;A.strongKong=A.settings.unlock_all_moves;A.grab=A.settings.unlock_all_moves;A.progDiddy=3 if A.settings.unlock_all_moves else 0;A.charge=A.settings.unlock_all_moves;A.jetpack=A.settings.unlock_all_moves;A.spring=A.settings.unlock_all_moves;A.progLanky=3 if A.settings.unlock_all_moves else 0;A.handstand=A.settings.unlock_all_moves;A.balloon=A.settings.unlock_all_moves;A.sprint=A.settings.unlock_all_moves;A.progTiny=3 if A.settings.unlock_all_moves else 0;A.mini=A.settings.unlock_all_moves;A.twirl=A.settings.unlock_all_moves;A.monkeyport=A.settings.unlock_all_moves;A.progChunky=3 if A.settings.unlock_all_moves else 0;A.hunkyChunky=A.settings.unlock_all_moves;A.punch=A.settings.unlock_all_moves;A.gorillaGone=A.settings.unlock_all_moves;A.coconut=A.settings.unlock_all_moves;A.peanut=A.settings.unlock_all_moves;A.grape=A.settings.unlock_all_moves;A.feather=A.settings.unlock_all_moves;A.pineapple=A.settings.unlock_all_moves;A.bongos=A.settings.unlock_all_moves;A.guitar=A.settings.unlock_all_moves;A.trombone=A.settings.unlock_all_moves;A.saxophone=A.settings.unlock_all_moves;A.triangle=A.settings.unlock_all_moves;A.nintendoCoin=_A;A.rarewareCoin=_A;A.camera=A.settings.unlock_fairy_shockwave;A.shockwave=A.settings.unlock_fairy_shockwave;A.scope=A.settings.unlock_all_moves;A.homing=A.settings.unlock_all_moves;A.JapesKey=_A;A.AztecKey=_A;A.FactoryKey=_A;A.GalleonKey=_A;A.ForestKey=_A;A.CavesKey=_A;A.CastleKey=_A;A.HelmKey=_A;A.HelmDonkey1=_A;A.HelmDonkey2=_A;A.HelmDiddy1=_A;A.HelmDiddy2=_A;A.HelmLanky1=_A;A.HelmLanky2=_A;A.HelmTiny1=_A;A.HelmTiny2=_A;A.HelmChunky1=_A;A.HelmChunky2=_A;A.Slam=3 if A.settings.unlock_all_moves else STARTING_SLAM;A.AmmoBelts=2 if A.settings.unlock_all_moves else 0;A.InstUpgrades=3 if A.settings.unlock_all_moves else 0;A.GoldenBananas=0;A.BananaFairies=0;A.BananaMedals=0;A.BattleCrowns=0;A.superSlam=A.settings.unlock_all_moves;A.superDuperSlam=A.settings.unlock_all_moves;A.Blueprints=[];A.Events=[];A.ColoredBananas=[]
-		for B in range(7):A.ColoredBananas.append([0]*5)
-		A.Coins=[0]*5;A.donkeyAccess=_A;A.diddyAccess=_A;A.lankyAccess=_A;A.tinyAccess=_A;A.chunkyAccess=_A;A.kong=A.startkong;A.UpdateKongs()
-	def Update(A,ownedItems):'Update logic variables based on owned items.';B=ownedItems;A.donkey=A.donkey or Items.Donkey in B or A.startkong==Kongs.donkey;A.diddy=A.diddy or Items.Diddy in B or A.startkong==Kongs.diddy;A.lanky=A.lanky or Items.Lanky in B or A.startkong==Kongs.lanky;A.tiny=A.tiny or Items.Tiny in B or A.startkong==Kongs.tiny;A.chunky=A.chunky or Items.Chunky in B or A.startkong==Kongs.chunky;A.vines=A.vines or Items.Vines in B;A.swim=A.swim or Items.Swim in B;A.oranges=A.oranges or Items.Oranges in B;A.barrels=A.barrels or Items.Barrels in B;A.progDonkey=sum((1 for A in B if A==Items.ProgressiveDonkeyPotion));A.blast=A.blast or(Items.BaboonBlast in B or A.progDonkey>=1)and A.donkey;A.strongKong=A.strongKong or(Items.StrongKong in B or A.progDonkey>=2)and A.donkey;A.grab=A.grab or(Items.GorillaGrab in B or A.progDonkey>=3)and A.donkey;A.progDiddy=sum((1 for A in B if A==Items.ProgressiveDiddyPotion));A.charge=A.charge or(Items.ChimpyCharge in B or A.progDiddy>=1)and A.diddy;A.jetpack=A.jetpack or(Items.RocketbarrelBoost in B or A.progDiddy>=2)and A.diddy;A.spring=A.spring or(Items.SimianSpring in B or A.progDiddy>=3)and A.diddy;A.progLanky=sum((1 for A in B if A==Items.ProgressiveLankyPotion));A.handstand=A.handstand or(Items.Orangstand in B or A.progLanky>=1)and A.lanky;A.balloon=A.balloon or(Items.BaboonBalloon in B or A.progLanky>=2)and A.lanky;A.sprint=A.sprint or(Items.OrangstandSprint in B or A.progLanky>=3)and A.lanky;A.progTiny=sum((1 for A in B if A==Items.ProgressiveTinyPotion));A.mini=A.mini or(Items.MiniMonkey in B or A.progTiny>=1)and A.tiny;A.twirl=A.twirl or(Items.PonyTailTwirl in B or A.progTiny>=2)and A.tiny;A.monkeyport=A.monkeyport or(Items.Monkeyport in B or A.progTiny>=3)and A.tiny;A.progChunky=sum((1 for A in B if A==Items.ProgressiveChunkyPotion));A.hunkyChunky=A.hunkyChunky or(Items.HunkyChunky in B or A.progChunky>=1)and A.chunky;A.punch=A.punch or(Items.PrimatePunch in B or A.progChunky>=2)and A.chunky;A.gorillaGone=A.gorillaGone or(Items.GorillaGone in B or A.progChunky>=3)and A.chunky;A.coconut=A.coconut or Items.Coconut in B and A.donkey;A.peanut=A.peanut or Items.Peanut in B and A.diddy;A.grape=A.grape or Items.Grape in B and A.lanky;A.feather=A.feather or Items.Feather in B and A.tiny;A.pineapple=A.pineapple or Items.Pineapple in B and A.chunky;A.bongos=A.bongos or Items.Bongos in B and A.donkey;A.guitar=A.guitar or Items.Guitar in B and A.diddy;A.trombone=A.trombone or Items.Trombone in B and A.lanky;A.saxophone=A.saxophone or Items.Saxophone in B and A.tiny;A.triangle=A.triangle or Items.Triangle in B and A.chunky;A.nintendoCoin=A.nintendoCoin or Items.NintendoCoin in B;A.rarewareCoin=A.rarewareCoin or Items.RarewareCoin in B;A.JapesKey=A.JapesKey or Items.JungleJapesKey in B;A.AztecKey=A.AztecKey or Items.AngryAztecKey in B;A.FactoryKey=A.FactoryKey or Items.FranticFactoryKey in B;A.GalleonKey=A.GalleonKey or Items.GloomyGalleonKey in B;A.ForestKey=A.ForestKey or Items.FungiForestKey in B;A.CavesKey=A.CavesKey or Items.CrystalCavesKey in B;A.CastleKey=A.CastleKey or Items.CreepyCastleKey in B;A.HelmKey=A.HelmKey or Items.HideoutHelmKey in B;A.HelmDonkey1=A.HelmDonkey1 or Items.HelmDonkey1 in B;A.HelmDonkey2=A.HelmDonkey2 or Items.HelmDonkey2 in B;A.HelmDiddy1=A.HelmDiddy1 or Items.HelmDiddy1 in B;A.HelmDiddy2=A.HelmDiddy2 or Items.HelmDiddy2 in B;A.HelmLanky1=A.HelmLanky1 or Items.HelmLanky1 in B;A.HelmLanky2=A.HelmLanky2 or Items.HelmLanky2 in B;A.HelmTiny1=A.HelmTiny1 or Items.HelmTiny1 in B;A.HelmTiny2=A.HelmTiny2 or Items.HelmTiny2 in B;A.HelmChunky1=A.HelmChunky1 or Items.HelmChunky1 in B;A.HelmChunky2=A.HelmChunky2 or Items.HelmChunky2 in B;A.Slam=3 if A.settings.unlock_all_moves else sum((1 for A in B if A==Items.ProgressiveSlam))+STARTING_SLAM;A.AmmoBelts=2 if A.settings.unlock_all_moves else sum((1 for A in B if A==Items.ProgressiveAmmoBelt));A.InstUpgrades=3 if A.settings.unlock_all_moves else sum((1 for A in B if A==Items.ProgressiveInstrumentUpgrade));A.GoldenBananas=sum((1 for A in B if A==Items.GoldenBanana));A.BananaFairies=sum((1 for A in B if A==Items.BananaFairy));A.BananaMedals=sum((1 for A in B if A==Items.BananaMedal));A.BattleCrowns=sum((1 for A in B if A==Items.BattleCrown));A.camera=A.camera or Items.CameraAndShockwave in B;A.shockwave=A.shockwave or Items.CameraAndShockwave in B;A.scope=A.scope or Items.SniperSight in B;A.homing=A.homing or Items.HomingAmmo in B;A.superSlam=A.Slam>=2;A.superDuperSlam=A.Slam>=3;A.Blueprints=[A for A in B if A>=Items.DKIslesDonkeyBlueprint]
-	def AddEvent(A,event):'Add an event to events list so it can be checked for logically.';A.Events.append(event)
-	def SetKong(A,kong):'Set current kong for logic.';A.kong=kong;A.UpdateKongs()
-	def GetKongs(B):
-		'Return all owned kongs.';A=[]
-		if B.donkey:A.append(Kongs.donkey)
-		if B.diddy:A.append(Kongs.diddy)
-		if B.lanky:A.append(Kongs.lanky)
-		if B.tiny:A.append(Kongs.tiny)
-		if B.chunky:A.append(Kongs.chunky)
-		return A
-	def UpdateKongs(A):'Set variables for current kong based on self.kong.';A.isdonkey=A.kong==Kongs.donkey;A.isdiddy=A.kong==Kongs.diddy;A.islanky=A.kong==Kongs.lanky;A.istiny=A.kong==Kongs.tiny;A.ischunky=A.kong==Kongs.chunky
-	def IsKong(B,kong):
-		'Check if logic is currently a specific kong.';A=kong
-		if A==Kongs.donkey:return B.isdonkey
-		if A==Kongs.diddy:return B.isdiddy
-		if A==Kongs.lanky:return B.islanky
-		if A==Kongs.tiny:return B.istiny
-		if A==Kongs.chunky:return B.ischunky
-		if A==Kongs.any:return _B
-	def HasKong(B,kong):
-		'Check if logic currently owns a specific kong.';A=kong
-		if A==Kongs.donkey:return B.donkey
-		if A==Kongs.diddy:return B.diddy
-		if A==Kongs.lanky:return B.lanky
-		if A==Kongs.tiny:return B.tiny
-		if A==Kongs.chunky:return B.chunky
-		if A==Kongs.any:return _B
-	def HasGun(A,kong):
-		'Check if logic currently is currently the specified kong and owns a gun for them.';B=kong
-		if B==Kongs.donkey:return A.coconut and A.isdonkey
-		if B==Kongs.diddy:return A.peanut and A.isdiddy
-		if B==Kongs.lanky:return A.grape and A.islanky
-		if B==Kongs.tiny:return A.feather and A.istiny
-		if B==Kongs.chunky:return A.pineapple and A.ischunky
-		if B==Kongs.any:return A.coconut and A.isdonkey or A.peanut and A.isdiddy or A.grape and A.islanky or A.feather and A.istiny or A.pineapple and A.ischunky
-	def HasInstrument(A,kong):
-		'Check if logic currently is currently the specified kong and owns an instrument for them.';B=kong
-		if B==Kongs.donkey:return A.bongos and A.isdonkey
-		if B==Kongs.diddy:return A.guitar and A.isdiddy
-		if B==Kongs.lanky:return A.trombone and A.islanky
-		if B==Kongs.tiny:return A.saxophone and A.istiny
-		if B==Kongs.chunky:return A.triangle and A.ischunky
-		if B==Kongs.any:return A.bongos and A.isdonkey or A.guitar and A.isdiddy or A.trombone and A.islanky or A.saxophone and A.istiny or A.triangle and A.ischunky
-	def CanFreeTiny(A):
-		'Check if Tiny can be freed,r equires either chimpy charge or primate punch.'
-		if A.settings.tiny_freeing_kong==Kongs.diddy:return A.charge and A.isdiddy
-		elif A.settings.tiny_freeing_kong==Kongs.chunky:return A.punch and A.ischunky
-	def CanFreeLanky(A):'Check if Lanky can be freed, requires freeing kong to have its gun and instrument.';return A.HasGun(A.settings.lanky_freeing_kong)and A.HasInstrument(A.settings.lanky_freeing_kong)
-	def CanFreeChunky(A):
-		'Check if Chunky can be freed, requires either orangstand or ponytail twirl.'
-		if A.settings.chunky_freeing_kong==Kongs.lanky:return A.handstand and A.Slam and A.islanky
-		elif A.settings.chunky_freeing_kong==Kongs.tiny:return A.twirl and A.Slam and A.istiny
-	def UpdateCurrentRegionAccess(A,region):'Set access of current region.';B=region;A.donkeyAccess=B.donkeyAccess;A.diddyAccess=B.diddyAccess;A.lankyAccess=B.lankyAccess;A.tinyAccess=B.tinyAccess;A.chunkyAccess=B.chunkyAccess
-	def LevelEntered(A,level):
-		'Check whether a level, or any level above it, has been entered.';B=level
-		if Events.CastleEntered in A.Events:return _B
-		elif Events.CavesEntered in A.Events and B<=Levels.CrystalCaves:return _B
-		elif Events.ForestEntered in A.Events and B<=Levels.FungiForest:return _B
-		elif Events.GalleonEntered in A.Events and B<=Levels.GloomyGalleon:return _B
-		elif Events.FactoryEntered in A.Events and B<=Levels.FranticFactory:return _B
-		elif Events.AztecEntered in A.Events and B<=Levels.AngryAztec:return _B
-		elif Events.JapesEntered in A.Events and B<=Levels.JungleJapes:return _B
-		return _A
-	def AddCollectible(B,collectible,level):
-		'Add a collectible.';C=level;A=collectible
-		if A.type==Collectibles.coin:
-			if A.kong==Kongs.any:
-				for D in range(5):B.Coins[D]+=A.amount*5
-			else:B.Coins[A.kong]+=A.amount
-		elif A.type==Collectibles.banana:B.ColoredBananas[C][A.kong]+=A.amount
-		elif A.type==Collectibles.bunch:B.ColoredBananas[C][A.kong]+=A.amount*5
-		elif A.type==Collectibles.balloon:B.ColoredBananas[C][A.kong]+=A.amount*10
-		A.added=_B
-	def PurchaseShopItem(A,location):
-		'Purchase items from shops and subtract price from logical coin counts.';B=location
-		if B.item is not _C and B.item is not Items.NoItem:
-			C=GetPriceOfMoveItem(B.item,A.settings,A.Slam,A.AmmoBelts,A.InstUpgrades)
-			if B.kong==Kongs.any:
-				for D in range(5):A.Coins[D]-=C
-			else:A.Coins[B.kong]-=C
-	def HasAccess(A,region,kong):"Check if a certain kong has access to a certain region.\n\n        Usually the region's own HasAccess function is used, but this is necessary for checking access for other regions in logic files.\n        ";return Regions[region].HasAccess(kong)
-	def KasplatAccess(A,location):
-		'Use the kasplat map to check kasplat logic for blueprint locations.';C=location;B=A.kasplat_map[C]
-		if C==Locations.GalleonKasplatGoldTower:
-			if B==Kongs.diddy:return Events.WaterSwitch in A.Events and A.IsKong(Kongs.diddy)
-			else:return Events.TreasureRoomTeleporterUnlocked in A.Events and A.HasAccess(randomizer.Enums.Regions.Regions.Shipyard,B)
-		return A.IsKong(B)
-	def CanBuy(A,location):'Check if there are enough coins to purchase this location.';return CanBuy(location,A.Coins,A.settings,A.Slam,A.AmmoBelts,A.InstUpgrades)
-	def CanAccessKRool(A):
-		'Make sure that each required key has been turned in.'
-		for B in A.settings.krool_keys_required:
-			if B not in A.Events:return _A
-		return _B
-	def IsBossBeatable(A,level):
-		'Return true if the boss for a given level is beatable according to boss location rando and boss kong rando.';C=level;D=A.settings.boss_kongs[C];E=A.settings.boss_maps[C];B=_B
-		if E==Maps.FactoryBoss and D==Kongs.tiny:B=A.twirl
-		elif E==Maps.FungiBoss:B=A.hunkyChunky
-		return A.IsKong(D)and B
-LogicVariables=LogicVarHolder()
-Regions={}
+    """Used to store variables when checking logic conditions."""
+
+    def __init__(self, settings=None):
+        """Initialize with given parameters."""
+        if settings is None:
+            return
+        self.settings = settings
+        self.startkong = self.settings.starting_kong
+        self.Reset()
+
+    def Reset(self):
+        """Reset all logic variables.
+
+        Done between reachability searches and upon initialization.
+        """
+        self.donkey = self.startkong == Kongs.donkey or self.settings.unlock_all_kongs
+        self.diddy = self.startkong == Kongs.diddy or self.settings.unlock_all_kongs
+        self.lanky = self.startkong == Kongs.lanky or self.settings.unlock_all_kongs
+        self.tiny = self.startkong == Kongs.tiny or self.settings.unlock_all_kongs
+        self.chunky = self.startkong == Kongs.chunky or self.settings.unlock_all_kongs
+
+        # Right now assuming start with training barrels
+        self.vines = True  # self.settings.training_barrels == "startwith"
+        self.swim = True  # self.settings.training_barrels == "startwith"
+        self.oranges = True  # self.settings.training_barrels == "startwith"
+        self.barrels = True  # self.settings.training_barrels == "startwith"
+
+        self.progDonkey = 3 if self.settings.unlock_all_moves else 0
+        self.blast = self.settings.unlock_all_moves
+        self.strongKong = self.settings.unlock_all_moves
+        self.grab = self.settings.unlock_all_moves
+
+        self.progDiddy = 3 if self.settings.unlock_all_moves else 0
+        self.charge = self.settings.unlock_all_moves
+        self.jetpack = self.settings.unlock_all_moves
+        self.spring = self.settings.unlock_all_moves
+
+        self.progLanky = 3 if self.settings.unlock_all_moves else 0
+        self.handstand = self.settings.unlock_all_moves
+        self.balloon = self.settings.unlock_all_moves
+        self.sprint = self.settings.unlock_all_moves
+
+        self.progTiny = 3 if self.settings.unlock_all_moves else 0
+        self.mini = self.settings.unlock_all_moves
+        self.twirl = self.settings.unlock_all_moves
+        self.monkeyport = self.settings.unlock_all_moves
+
+        self.progChunky = 3 if self.settings.unlock_all_moves else 0
+        self.hunkyChunky = self.settings.unlock_all_moves
+        self.punch = self.settings.unlock_all_moves
+        self.gorillaGone = self.settings.unlock_all_moves
+
+        self.coconut = self.settings.unlock_all_moves
+        self.peanut = self.settings.unlock_all_moves
+        self.grape = self.settings.unlock_all_moves
+        self.feather = self.settings.unlock_all_moves
+        self.pineapple = self.settings.unlock_all_moves
+
+        self.bongos = self.settings.unlock_all_moves
+        self.guitar = self.settings.unlock_all_moves
+        self.trombone = self.settings.unlock_all_moves
+        self.saxophone = self.settings.unlock_all_moves
+        self.triangle = self.settings.unlock_all_moves
+
+        self.nintendoCoin = False
+        self.rarewareCoin = False
+
+        self.camera = self.settings.unlock_fairy_shockwave
+        self.shockwave = self.settings.unlock_fairy_shockwave
+
+        self.scope = self.settings.unlock_all_moves
+        self.homing = self.settings.unlock_all_moves
+
+        self.JapesKey = False
+        self.AztecKey = False
+        self.FactoryKey = False
+        self.GalleonKey = False
+        self.ForestKey = False
+        self.CavesKey = False
+        self.CastleKey = False
+        self.HelmKey = False
+
+        self.HelmDonkey1 = False
+        self.HelmDonkey2 = False
+        self.HelmDiddy1 = False
+        self.HelmDiddy2 = False
+        self.HelmLanky1 = False
+        self.HelmLanky2 = False
+        self.HelmTiny1 = False
+        self.HelmTiny2 = False
+        self.HelmChunky1 = False
+        self.HelmChunky2 = False
+
+        self.Slam = 3 if self.settings.unlock_all_moves else STARTING_SLAM
+        self.AmmoBelts = 2 if self.settings.unlock_all_moves else 0
+        self.InstUpgrades = 3 if self.settings.unlock_all_moves else 0
+
+        self.GoldenBananas = 0
+        self.BananaFairies = 0
+        self.BananaMedals = 0
+        self.BattleCrowns = 0
+
+        self.superSlam = self.settings.unlock_all_moves
+        self.superDuperSlam = self.settings.unlock_all_moves
+
+        self.Blueprints = []
+
+        self.Events = []
+
+        # Colored banana and coin arrays
+        # Colored bananas as 7 arrays of 5 (7 levels for 5 kongs)
+        self.ColoredBananas = []
+        for i in range(7):
+            self.ColoredBananas.append([0] * 5)
+        self.Coins = [0] * 5
+
+        # These access variables based on current region
+        # Shouldn't be checked unless updated directly beforehand
+        self.donkeyAccess = False
+        self.diddyAccess = False
+        self.lankyAccess = False
+        self.tinyAccess = False
+        self.chunkyAccess = False
+
+        self.kong = self.startkong
+
+        self.UpdateKongs()
+
+    def Update(self, ownedItems):
+        """Update logic variables based on owned items."""
+        self.donkey = self.donkey or Items.Donkey in ownedItems or self.startkong == Kongs.donkey
+        self.diddy = self.diddy or Items.Diddy in ownedItems or self.startkong == Kongs.diddy
+        self.lanky = self.lanky or Items.Lanky in ownedItems or self.startkong == Kongs.lanky
+        self.tiny = self.tiny or Items.Tiny in ownedItems or self.startkong == Kongs.tiny
+        self.chunky = self.chunky or Items.Chunky in ownedItems or self.startkong == Kongs.chunky
+
+        self.vines = self.vines or Items.Vines in ownedItems
+        self.swim = self.swim or Items.Swim in ownedItems
+        self.oranges = self.oranges or Items.Oranges in ownedItems
+        self.barrels = self.barrels or Items.Barrels in ownedItems
+
+        self.progDonkey = sum(1 for x in ownedItems if x == Items.ProgressiveDonkeyPotion)
+        self.blast = self.blast or (Items.BaboonBlast in ownedItems or self.progDonkey >= 1) and self.donkey
+        self.strongKong = self.strongKong or (Items.StrongKong in ownedItems or self.progDonkey >= 2) and self.donkey
+        self.grab = self.grab or (Items.GorillaGrab in ownedItems or self.progDonkey >= 3) and self.donkey
+
+        self.progDiddy = sum(1 for x in ownedItems if x == Items.ProgressiveDiddyPotion)
+        self.charge = self.charge or (Items.ChimpyCharge in ownedItems or self.progDiddy >= 1) and self.diddy
+        self.jetpack = self.jetpack or (Items.RocketbarrelBoost in ownedItems or self.progDiddy >= 2) and self.diddy
+        self.spring = self.spring or (Items.SimianSpring in ownedItems or self.progDiddy >= 3) and self.diddy
+
+        self.progLanky = sum(1 for x in ownedItems if x == Items.ProgressiveLankyPotion)
+        self.handstand = self.handstand or (Items.Orangstand in ownedItems or self.progLanky >= 1) and self.lanky
+        self.balloon = self.balloon or (Items.BaboonBalloon in ownedItems or self.progLanky >= 2) and self.lanky
+        self.sprint = self.sprint or (Items.OrangstandSprint in ownedItems or self.progLanky >= 3) and self.lanky
+
+        self.progTiny = sum(1 for x in ownedItems if x == Items.ProgressiveTinyPotion)
+        self.mini = self.mini or (Items.MiniMonkey in ownedItems or self.progTiny >= 1) and self.tiny
+        self.twirl = self.twirl or (Items.PonyTailTwirl in ownedItems or self.progTiny >= 2) and self.tiny
+        self.monkeyport = self.monkeyport or (Items.Monkeyport in ownedItems or self.progTiny >= 3) and self.tiny
+
+        self.progChunky = sum(1 for x in ownedItems if x == Items.ProgressiveChunkyPotion)
+        self.hunkyChunky = self.hunkyChunky or (Items.HunkyChunky in ownedItems or self.progChunky >= 1) and self.chunky
+        self.punch = self.punch or (Items.PrimatePunch in ownedItems or self.progChunky >= 2) and self.chunky
+        self.gorillaGone = self.gorillaGone or (Items.GorillaGone in ownedItems or self.progChunky >= 3) and self.chunky
+
+        self.coconut = self.coconut or Items.Coconut in ownedItems and self.donkey
+        self.peanut = self.peanut or Items.Peanut in ownedItems and self.diddy
+        self.grape = self.grape or Items.Grape in ownedItems and self.lanky
+        self.feather = self.feather or Items.Feather in ownedItems and self.tiny
+        self.pineapple = self.pineapple or Items.Pineapple in ownedItems and self.chunky
+
+        self.bongos = self.bongos or Items.Bongos in ownedItems and self.donkey
+        self.guitar = self.guitar or Items.Guitar in ownedItems and self.diddy
+        self.trombone = self.trombone or Items.Trombone in ownedItems and self.lanky
+        self.saxophone = self.saxophone or Items.Saxophone in ownedItems and self.tiny
+        self.triangle = self.triangle or Items.Triangle in ownedItems and self.chunky
+
+        self.nintendoCoin = self.nintendoCoin or Items.NintendoCoin in ownedItems
+        self.rarewareCoin = self.rarewareCoin or Items.RarewareCoin in ownedItems
+
+        self.JapesKey = self.JapesKey or Items.JungleJapesKey in ownedItems
+        self.AztecKey = self.AztecKey or Items.AngryAztecKey in ownedItems
+        self.FactoryKey = self.FactoryKey or Items.FranticFactoryKey in ownedItems
+        self.GalleonKey = self.GalleonKey or Items.GloomyGalleonKey in ownedItems
+        self.ForestKey = self.ForestKey or Items.FungiForestKey in ownedItems
+        self.CavesKey = self.CavesKey or Items.CrystalCavesKey in ownedItems
+        self.CastleKey = self.CastleKey or Items.CreepyCastleKey in ownedItems
+        self.HelmKey = self.HelmKey or Items.HideoutHelmKey in ownedItems
+
+        self.HelmDonkey1 = self.HelmDonkey1 or Items.HelmDonkey1 in ownedItems
+        self.HelmDonkey2 = self.HelmDonkey2 or Items.HelmDonkey2 in ownedItems
+        self.HelmDiddy1 = self.HelmDiddy1 or Items.HelmDiddy1 in ownedItems
+        self.HelmDiddy2 = self.HelmDiddy2 or Items.HelmDiddy2 in ownedItems
+        self.HelmLanky1 = self.HelmLanky1 or Items.HelmLanky1 in ownedItems
+        self.HelmLanky2 = self.HelmLanky2 or Items.HelmLanky2 in ownedItems
+        self.HelmTiny1 = self.HelmTiny1 or Items.HelmTiny1 in ownedItems
+        self.HelmTiny2 = self.HelmTiny2 or Items.HelmTiny2 in ownedItems
+        self.HelmChunky1 = self.HelmChunky1 or Items.HelmChunky1 in ownedItems
+        self.HelmChunky2 = self.HelmChunky2 or Items.HelmChunky2 in ownedItems
+
+        self.Slam = 3 if self.settings.unlock_all_moves else sum(1 for x in ownedItems if x == Items.ProgressiveSlam) + STARTING_SLAM
+        self.AmmoBelts = 2 if self.settings.unlock_all_moves else sum(1 for x in ownedItems if x == Items.ProgressiveAmmoBelt)
+        self.InstUpgrades = 3 if self.settings.unlock_all_moves else sum(1 for x in ownedItems if x == Items.ProgressiveInstrumentUpgrade)
+
+        self.GoldenBananas = sum(1 for x in ownedItems if x == Items.GoldenBanana)
+        self.BananaFairies = sum(1 for x in ownedItems if x == Items.BananaFairy)
+        self.BananaMedals = sum(1 for x in ownedItems if x == Items.BananaMedal)
+        self.BattleCrowns = sum(1 for x in ownedItems if x == Items.BattleCrown)
+
+        self.camera = self.camera or Items.CameraAndShockwave in ownedItems
+        self.shockwave = self.shockwave or Items.CameraAndShockwave in ownedItems
+
+        self.scope = self.scope or Items.SniperSight in ownedItems
+        self.homing = self.homing or Items.HomingAmmo in ownedItems
+
+        self.superSlam = self.Slam >= 2
+        self.superDuperSlam = self.Slam >= 3
+
+        self.Blueprints = [x for x in ownedItems if x >= Items.DKIslesDonkeyBlueprint]
+
+    def AddEvent(self, event):
+        """Add an event to events list so it can be checked for logically."""
+        self.Events.append(event)
+
+    def SetKong(self, kong):
+        """Set current kong for logic."""
+        self.kong = kong
+        self.UpdateKongs()
+
+    def GetKongs(self):
+        """Return all owned kongs."""
+        ownedKongs = []
+        if self.donkey:
+            ownedKongs.append(Kongs.donkey)
+        if self.diddy:
+            ownedKongs.append(Kongs.diddy)
+        if self.lanky:
+            ownedKongs.append(Kongs.lanky)
+        if self.tiny:
+            ownedKongs.append(Kongs.tiny)
+        if self.chunky:
+            ownedKongs.append(Kongs.chunky)
+        return ownedKongs
+
+    def UpdateKongs(self):
+        """Set variables for current kong based on self.kong."""
+        self.isdonkey = self.kong == Kongs.donkey
+        self.isdiddy = self.kong == Kongs.diddy
+        self.islanky = self.kong == Kongs.lanky
+        self.istiny = self.kong == Kongs.tiny
+        self.ischunky = self.kong == Kongs.chunky
+
+    def IsKong(self, kong):
+        """Check if logic is currently a specific kong."""
+        if kong == Kongs.donkey:
+            return self.isdonkey
+        if kong == Kongs.diddy:
+            return self.isdiddy
+        if kong == Kongs.lanky:
+            return self.islanky
+        if kong == Kongs.tiny:
+            return self.istiny
+        if kong == Kongs.chunky:
+            return self.ischunky
+        if kong == Kongs.any:
+            return True
+
+    def HasKong(self, kong):
+        """Check if logic currently owns a specific kong."""
+        if kong == Kongs.donkey:
+            return self.donkey
+        if kong == Kongs.diddy:
+            return self.diddy
+        if kong == Kongs.lanky:
+            return self.lanky
+        if kong == Kongs.tiny:
+            return self.tiny
+        if kong == Kongs.chunky:
+            return self.chunky
+        if kong == Kongs.any:
+            return True
+
+    def HasGun(self, kong):
+        """Check if logic currently is currently the specified kong and owns a gun for them."""
+        if kong == Kongs.donkey:
+            return self.coconut and self.isdonkey
+        if kong == Kongs.diddy:
+            return self.peanut and self.isdiddy
+        if kong == Kongs.lanky:
+            return self.grape and self.islanky
+        if kong == Kongs.tiny:
+            return self.feather and self.istiny
+        if kong == Kongs.chunky:
+            return self.pineapple and self.ischunky
+        if kong == Kongs.any:
+            return (self.coconut and self.isdonkey) or (self.peanut and self.isdiddy) or (self.grape and self.islanky) or (self.feather and self.istiny) or (self.pineapple and self.ischunky)
+
+    def HasInstrument(self, kong):
+        """Check if logic currently is currently the specified kong and owns an instrument for them."""
+        if kong == Kongs.donkey:
+            return self.bongos and self.isdonkey
+        if kong == Kongs.diddy:
+            return self.guitar and self.isdiddy
+        if kong == Kongs.lanky:
+            return self.trombone and self.islanky
+        if kong == Kongs.tiny:
+            return self.saxophone and self.istiny
+        if kong == Kongs.chunky:
+            return self.triangle and self.ischunky
+        if kong == Kongs.any:
+            return (self.bongos and self.isdonkey) or (self.guitar and self.isdiddy) or (self.trombone and self.islanky) or (self.saxophone and self.istiny) or (self.triangle and self.ischunky)
+
+    def CanFreeTiny(self):
+        """Check if Tiny can be freed,r equires either chimpy charge or primate punch."""
+        if self.settings.tiny_freeing_kong == Kongs.diddy:
+            return self.charge and self.isdiddy
+        # Theoretical: Free her with punches, currently not implemented
+        elif self.settings.tiny_freeing_kong == Kongs.chunky:
+            return self.punch and self.ischunky
+
+    def CanFreeLanky(self):
+        """Check if Lanky can be freed, requires freeing kong to have its gun and instrument."""
+        return self.HasGun(self.settings.lanky_freeing_kong) and self.HasInstrument(self.settings.lanky_freeing_kong)
+
+    def CanFreeChunky(self):
+        """Check if Chunky can be freed, requires either orangstand or ponytail twirl."""
+        if self.settings.chunky_freeing_kong == Kongs.lanky:
+            return self.handstand and self.Slam and self.islanky
+        elif self.settings.chunky_freeing_kong == Kongs.tiny:
+            return self.twirl and self.Slam and self.istiny
+
+    def UpdateCurrentRegionAccess(self, region):
+        """Set access of current region."""
+        self.donkeyAccess = region.donkeyAccess
+        self.diddyAccess = region.diddyAccess
+        self.lankyAccess = region.lankyAccess
+        self.tinyAccess = region.tinyAccess
+        self.chunkyAccess = region.chunkyAccess
+
+    def LevelEntered(self, level):
+        """Check whether a level, or any level above it, has been entered."""
+        if Events.CastleEntered in self.Events:
+            return True
+        elif Events.CavesEntered in self.Events and level <= Levels.CrystalCaves:
+            return True
+        elif Events.ForestEntered in self.Events and level <= Levels.FungiForest:
+            return True
+        elif Events.GalleonEntered in self.Events and level <= Levels.GloomyGalleon:
+            return True
+        elif Events.FactoryEntered in self.Events and level <= Levels.FranticFactory:
+            return True
+        elif Events.AztecEntered in self.Events and level <= Levels.AngryAztec:
+            return True
+        elif Events.JapesEntered in self.Events and level <= Levels.JungleJapes:
+            return True
+        return False
+
+    def AddCollectible(self, collectible, level):
+        """Add a collectible."""
+        if collectible.type == Collectibles.coin:
+            # Rainbow coin, add 5 coins for each kong
+            if collectible.kong == Kongs.any:
+                for i in range(5):
+                    self.Coins[i] += collectible.amount * 5
+            # Normal coins, add amount for the kong
+            else:
+                self.Coins[collectible.kong] += collectible.amount
+        # Add bananas for correct level for this kong
+        elif collectible.type == Collectibles.banana:
+            self.ColoredBananas[level][collectible.kong] += collectible.amount
+        # Add 5 times amount of banana bunches
+        elif collectible.type == Collectibles.bunch:
+            self.ColoredBananas[level][collectible.kong] += collectible.amount * 5
+        # Add 10 bananas for a balloon
+        elif collectible.type == Collectibles.balloon:
+            self.ColoredBananas[level][collectible.kong] += collectible.amount * 10
+        collectible.added = True
+
+    def PurchaseShopItem(self, location: Location):
+        """Purchase items from shops and subtract price from logical coin counts."""
+        if location.item is not None and location.item is not Items.NoItem:
+            price = GetPriceOfMoveItem(location.item, self.settings, self.Slam, self.AmmoBelts, self.InstUpgrades)
+            # print("BuyShopItem for location: " + location.name)
+            # print("Item: " + ItemList[location.item].name + " has Price: " + str(price))
+            # If shared move, consider all kongs paid for it
+            if location.kong == Kongs.any:
+                for i in range(5):
+                    self.Coins[i] -= price
+            # If kong specific move, just that kong paid for it
+            else:
+                self.Coins[location.kong] -= price
+
+    def HasAccess(self, region, kong):
+        """Check if a certain kong has access to a certain region.
+
+        Usually the region's own HasAccess function is used, but this is necessary for checking access for other regions in logic files.
+        """
+        return Regions[region].HasAccess(kong)
+
+    def KasplatAccess(self, location):
+        """Use the kasplat map to check kasplat logic for blueprint locations."""
+        kong = self.kasplat_map[location]
+        if location == Locations.GalleonKasplatGoldTower:
+            # Water level needs to be raised and you spring up as diddy to get killed by the kasplat
+            # Or, any kong having teleporter access works too
+            if kong == Kongs.diddy:
+                return Events.WaterSwitch in self.Events and self.IsKong(Kongs.diddy)
+            else:
+                return Events.TreasureRoomTeleporterUnlocked in self.Events and self.HasAccess(randomizer.Enums.Regions.Regions.Shipyard, kong)
+        return self.IsKong(kong)
+
+    def CanBuy(self, location):
+        """Check if there are enough coins to purchase this location."""
+        return CanBuy(location, self.Coins, self.settings, self.Slam, self.AmmoBelts, self.InstUpgrades)
+
+    def CanAccessKRool(self):
+        """Make sure that each required key has been turned in."""
+        for keyRequired in self.settings.krool_keys_required:
+            if keyRequired not in self.Events:
+                return False
+        return True
+
+    def IsBossBeatable(self, level):
+        """Return true if the boss for a given level is beatable according to boss location rando and boss kong rando."""
+        requiredKong = self.settings.boss_kongs[level]
+        bossFight = self.settings.boss_maps[level]
+        hasRequiredMoves = True
+        if bossFight == Maps.FactoryBoss and requiredKong == Kongs.tiny:
+            hasRequiredMoves = self.twirl
+        elif bossFight == Maps.FungiBoss:
+            hasRequiredMoves = self.hunkyChunky
+        return self.IsKong(requiredKong) and hasRequiredMoves
+
+
+LogicVariables = LogicVarHolder()
+
+# Import regions from logic files
+Regions = {}
 Regions.update(randomizer.LogicFiles.DKIsles.LogicRegions)
 Regions.update(randomizer.LogicFiles.JungleJapes.LogicRegions)
 Regions.update(randomizer.LogicFiles.AngryAztec.LogicRegions)
@@ -134,7 +481,9 @@ Regions.update(randomizer.LogicFiles.CrystalCaves.LogicRegions)
 Regions.update(randomizer.LogicFiles.CreepyCastle.LogicRegions)
 Regions.update(randomizer.LogicFiles.HideoutHelm.LogicRegions)
 Regions.update(randomizer.LogicFiles.Shops.LogicRegions)
-CollectibleRegions={}
+
+# Auxillary regions for colored bananas and banana coins
+CollectibleRegions = {}
 CollectibleRegions.update(randomizer.CollectibleLogicFiles.DKIsles.LogicRegions)
 CollectibleRegions.update(randomizer.CollectibleLogicFiles.JungleJapes.LogicRegions)
 CollectibleRegions.update(randomizer.CollectibleLogicFiles.AngryAztec.LogicRegions)
@@ -143,13 +492,22 @@ CollectibleRegions.update(randomizer.CollectibleLogicFiles.GloomyGalleon.LogicRe
 CollectibleRegions.update(randomizer.CollectibleLogicFiles.FungiForest.LogicRegions)
 CollectibleRegions.update(randomizer.CollectibleLogicFiles.CrystalCaves.LogicRegions)
 CollectibleRegions.update(randomizer.CollectibleLogicFiles.CreepyCastle.LogicRegions)
+
+
 def ResetRegionAccess():
-	'Reset kong access for all regions.'
-	for A in Regions.values():A.ResetAccess()
+    """Reset kong access for all regions."""
+    for region in Regions.values():
+        region.ResetAccess()
+
+
 def ResetCollectibleRegions():
-	'Reset if each collectible has been added.'
-	for A in CollectibleRegions.values():
-		for B in A:B.added=_A
+    """Reset if each collectible has been added."""
+    for region in CollectibleRegions.values():
+        for collectible in region:
+            collectible.added = False
+
+
 def ClearAllLocations():
-	'Clear item from every location.'
-	for A in LocationList.values():A.item=_C
+    """Clear item from every location."""
+    for location in LocationList.values():
+        location.item = None

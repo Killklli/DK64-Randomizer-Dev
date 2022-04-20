@@ -1,85 +1,167 @@
-'File containing main UI button events that travel between tabs.'
-_H='download_patch_file'
-_G='generate_seed'
-_F=False
-_E='is-valid'
-_D='click'
-_C='is-invalid'
-_B='patchfileloader'
-_A='input-file-rom'
-import json,random,js
+"""File containing main UI button events that travel between tabs."""
+import json
+import random
+
+import js
 from randomizer.Patching.ApplyRandomizer import patching_response
 from randomizer.BackgroundRandomizer import generate_playthrough
 from randomizer.Worker import background
 from ui.bindings import bind
 from ui.progress_bar import ProgressBar
 from ui.rando_options import update_disabled_progression
-@bind('change',_B)
+
+
+@bind("change", "patchfileloader")
 def lanky_file_changed(event):
-	'On the event of a lanky file being loaded.\n\n    Args:\n        event (event): Javascript event.\n    '
-	def C(e):A=str(e.target.result);js.document.getElementById(_B).classList.add(_E);js.loaded_patch=A
-	A=None
-	for D in js.document.getElementById(_B).files:A=D;break
-	B=js.FileReader.new()
-	if A is not None:B.readAsText(A);B.addEventListener('load',C)
-@bind(_D,'generate_lanky_seed')
+    """On the event of a lanky file being loaded.
+
+    Args:
+        event (event): Javascript event.
+    """
+
+    def onload(e):
+        # Load the text of the patch
+        loaded_patch = str(e.target.result)
+        # TODO: Don't just assume the file is valid first
+        js.document.getElementById("patchfileloader").classList.add("is-valid")
+        js.loaded_patch = loaded_patch
+
+    # Attempt to find what file was loaded
+    file = None
+    for uploaded_file in js.document.getElementById("patchfileloader").files:
+        file = uploaded_file
+        break
+    reader = js.FileReader.new()
+    # If we loaded a file, set up the event listener to wait for it to be loaded
+    if file is not None:
+        reader.readAsText(file)
+        reader.addEventListener("load", onload)
+
+
+@bind("click", "generate_lanky_seed")
 def generate_seed_from_patch(event):
-	'Generate a seed from a patch file.'
-	if len(str(js.document.getElementById(_A).value).strip())==0 or _E not in list(js.document.getElementById(_A).classList):
-		js.document.getElementById(_A).select()
-		if _C not in list(js.document.getElementById(_A).classList):js.document.getElementById(_A).classList.add(_C)
-	elif len(str(js.document.getElementById(_B).value).strip())==0:
-		js.document.getElementById(_B).select()
-		if _C not in list(js.document.getElementById(_B).classList):js.document.getElementById(_B).classList.add(_C)
-	else:patching_response(str(js.loaded_patch))
-@bind(_D,_G)
+    """Generate a seed from a patch file."""
+    # Check if the rom filebox has a file loaded in it.
+    if len(str(js.document.getElementById("input-file-rom").value).strip()) == 0 or "is-valid" not in list(js.document.getElementById("input-file-rom").classList):
+        js.document.getElementById("input-file-rom").select()
+        if "is-invalid" not in list(js.document.getElementById("input-file-rom").classList):
+            js.document.getElementById("input-file-rom").classList.add("is-invalid")
+    elif len(str(js.document.getElementById("patchfileloader").value).strip()) == 0:
+        js.document.getElementById("patchfileloader").select()
+        if "is-invalid" not in list(js.document.getElementById("patchfileloader").classList):
+            js.document.getElementById("patchfileloader").classList.add("is-invalid")
+    else:
+        patching_response(str(js.loaded_patch))
+
+
+@bind("click", "generate_seed")
 def generate_seed(event):
-	'Generate a seed based off the current settings.\n\n    Args:\n        event (event): Javascript click event.\n    ';H="'''";G='seed';F='input';D='disabled'
-	if len(str(js.document.getElementById(_A).value).strip())==0 or _E not in list(js.document.getElementById(_A).classList):
-		js.document.getElementById(_A).select()
-		if _C not in list(js.document.getElementById(_A).classList):js.document.getElementById(_A).classList.add(_C)
-	else:
-		ProgressBar().update_progress(0,'Initalizing');E=[]
-		for A in js.document.getElementsByTagName(F):
-			if A.disabled:E.append(A);A.removeAttribute(D)
-		for A in js.document.getElementsByTagName('select'):
-			if A.disabled:E.append(A);A.removeAttribute(D)
-		I=js.jquery('#form').serializeArray();B={}
-		def J(s):
-			'Check if a string is a number or not.'
-			try:int(s);return True
-			except ValueError:pass
-		for C in I:
-			if C.value.lower()in['true','false']:B[C.name]=bool(C.value)
-			elif J(C.value):B[C.name]=int(C.value)
-			else:B[C.name]=C.value
-		for A in js.document.getElementsByTagName(F):
-			if A.type=='checkbox'and not A.checked:
-				if not B.get(A.name):B[A.name]=_F
-		for A in E:A.setAttribute(D,D)
-		if not B.get(G):B[G]=str(random.randint(100000,999999))
-		ProgressBar().update_progress(2,'Randomizing, this may take some time depending on settings.');background(generate_playthrough,[H+json.dumps(B)+H],patching_response)
-@bind(_D,_H)
+    """Generate a seed based off the current settings.
+
+    Args:
+        event (event): Javascript click event.
+    """
+    # Check if the rom filebox has a file loaded in it.
+    if len(str(js.document.getElementById("input-file-rom").value).strip()) == 0 or "is-valid" not in list(js.document.getElementById("input-file-rom").classList):
+        js.document.getElementById("input-file-rom").select()
+        if "is-invalid" not in list(js.document.getElementById("input-file-rom").classList):
+            js.document.getElementById("input-file-rom").classList.add("is-invalid")
+    else:
+        # Start the progressbar
+        ProgressBar().update_progress(0, "Initalizing")
+        # Remove all the disabled attributes and store them for later
+        disabled_options = []
+        for element in js.document.getElementsByTagName("input"):
+            if element.disabled:
+                disabled_options.append(element)
+                element.removeAttribute("disabled")
+        for element in js.document.getElementsByTagName("select"):
+            if element.disabled:
+                disabled_options.append(element)
+                element.removeAttribute("disabled")
+        # Serialize the form into json
+        form = js.jquery("#form").serializeArray()
+        form_data = {}
+
+        def is_number(s):
+            """Check if a string is a number or not."""
+            try:
+                int(s)
+                return True
+            except ValueError:
+                pass
+
+        for obj in form:
+            # Verify each object if its value is a string convert it to a bool
+            if obj.value.lower() in ["true", "false"]:
+                form_data[obj.name] = bool(obj.value)
+            else:
+                if is_number(obj.value):
+                    form_data[obj.name] = int(obj.value)
+                else:
+                    form_data[obj.name] = obj.value
+        # find all input boxes and verify their checked status
+        for element in js.document.getElementsByTagName("input"):
+            if element.type == "checkbox" and not element.checked:
+                if not form_data.get(element.name):
+                    form_data[element.name] = False
+        # Re disable all previously disabled options
+        for element in disabled_options:
+            element.setAttribute("disabled", "disabled")
+        if not form_data.get("seed"):
+            form_data["seed"] = str(random.randint(100000, 999999))
+        ProgressBar().update_progress(2, "Randomizing, this may take some time depending on settings.")
+        background(generate_playthrough, ["'''" + json.dumps(form_data) + "'''"], patching_response)
+
+
+@bind("click", "download_patch_file")
 def update_seed_text(event):
-	'Set seed text based on the download_patch_file click event.\n\n    Args:\n        event (DOMEvent): Javascript dom click event.\n    '
-	if js.document.getElementById(_H).checked:js.document.getElementById(_G).value='Generate Patch File and Seed'
-	else:js.document.getElementById(_G).value='Generate Seed'
-@bind(_D,'nav-seed-gen-tab')
-@bind(_D,'nav-patch-tab')
+    """Set seed text based on the download_patch_file click event.
+
+    Args:
+        event (DOMEvent): Javascript dom click event.
+    """
+    # When we click the download json event just change the button text
+    if js.document.getElementById("download_patch_file").checked:
+        js.document.getElementById("generate_seed").value = "Generate Patch File and Seed"
+    else:
+        js.document.getElementById("generate_seed").value = "Generate Seed"
+
+
+@bind("click", "nav-seed-gen-tab")
+@bind("click", "nav-patch-tab")
 def disable_input(event):
-	'Disable input for the ROM Boxes as we rotate through the navbar.\n\n    Args:\n        event (DOMEvent): DOM item that triggered the event.\n    ';B='input-file-rom_1';A='input-file-rom_2';C=_F
-	try:
-		if'patch-tab'in event.target.id:C=True
-	except Exception:pass
-	if C is _F:
-		if not js.document.getElementById(A):
-			try:js.document.getElementById(_A).id=A
-			except Exception:pass
-		try:js.document.getElementById(B).id=_A
-		except Exception:pass
-	else:
-		if not js.document.getElementById(B):
-			try:js.document.getElementById(_A).id=B
-			except Exception:pass
-		try:js.document.getElementById(A).id=_A
-		except Exception:pass
+    """Disable input for the ROM Boxes as we rotate through the navbar.
+
+    Args:
+        event (DOMEvent): DOM item that triggered the event.
+    """
+    # Try to determine of the patch tab was what triggered the event.
+    ev_type = False
+    try:
+        if "patch-tab" in event.target.id:
+            ev_type = True
+    except Exception:
+        pass
+    # As we rotate between the tabs, verify our disabled progression status
+    # and set our input file box as the correct name so we can use two fileboxes as the same name
+    if ev_type is False:
+        if not js.document.getElementById("input-file-rom_2"):
+            try:
+                js.document.getElementById("input-file-rom").id = "input-file-rom_2"
+            except Exception:
+                pass
+        try:
+            js.document.getElementById("input-file-rom_1").id = "input-file-rom"
+        except Exception:
+            pass
+    else:
+        if not js.document.getElementById("input-file-rom_1"):
+            try:
+                js.document.getElementById("input-file-rom").id = "input-file-rom_1"
+            except Exception:
+                pass
+        try:
+            js.document.getElementById("input-file-rom_2").id = "input-file-rom"
+        except Exception:
+            pass

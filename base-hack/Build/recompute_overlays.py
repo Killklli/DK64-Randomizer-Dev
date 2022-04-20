@@ -1,26 +1,114 @@
-'Update all the overlays in the ROM.'
-_F='dataCompressedData'
-_E='codeCompressedData'
-_D='dataCompressedSize'
-_C='name'
-_B='dataROMAddress'
-_A='codeROMAddress'
+"""Update all the overlays in the ROM."""
 from typing import BinaryIO
-overlays=[{_C:'global_asm',_A:70640,_B:797140,_D:38044},{_C:'menu',_A:835184,_B:869716,_D:1442},{_C:'multiplayer',_A:871168,_B:879096,_D:251},{_C:'minecart',_A:879360,_B:891040,_D:407},{_C:'bonus',_A:891456,_B:914246,_D:682},{_C:'race',_A:914944,_B:943258,_D:731},{_C:'?',_A:944000,_B:957719,_D:908},{_C:'boss',_A:958640,_B:997519,_D:2314},{_C:'arcade',_A:999840,_B:1029164,_D:7876},{_C:'jetpac',_A:1037040,_B:1052925,_D:2358}]
-def isROMAddressOverlay(absolute_address):
-	'Check if its an overlay.';A=absolute_address
-	for B in overlays:
-		if B[_A]==A:return True
-		if B[_B]==A:return True
-	return False
-def readOverlayOriginalData(fr):
-	'Read the original overlay data.';C='codeCompressedSize';B=fr
-	for A in overlays:A[C]=A[_B]-A[_A];B.seek(A[_A]);A[_E]=B.read(A[C]-8);B.read(8);A[_F]=B.read(A[_D]-8);B.read(8)
-def replaceOverlayData(absolute_address,newCompressedData):
-	'Replace the overlay.';D=' - Replacing ';C=newCompressedData;B=absolute_address
-	for A in overlays:
-		if B==A[_A]:print(D+A[_C]+' .code with modified data');A[_E]=C;return
-		if B==A[_B]:print(D+A[_C]+' .data with modified data');A[_F]=C;return
-def writeModifiedOverlaysToROM(fr):
-	'Write the data to ROM.';A=fr
-	for B in overlays:A.seek(B[_A]);A.write(B[_E]);A.write(bytes([0,0,0,0,0,0,0,0]));A.write(B[_F]);A.write(bytes([0,0,0,0,0,0,0,0]))
+
+overlays = [
+    {
+        "name": "global_asm",
+        "codeROMAddress": 0x113F0,
+        "dataROMAddress": 0xC29D4,
+        "dataCompressedSize": 0x949C,  # - 8 for length without gzip footer
+        # Note: These byte arrays should not contain the gzip footer
+        # codeCompressedData: [], // Will be written to ROM
+        # dataCompressedData: [], // Will be written to ROM directly after .code, regardless of the original .data address
+    },
+    {
+        "name": "menu",
+        "codeROMAddress": 0xCBE70,
+        "dataROMAddress": 0xD4554,
+        "dataCompressedSize": 0x5A2,  # - 8 for length without gzip footer
+    },
+    {
+        "name": "multiplayer",
+        "codeROMAddress": 0xD4B00,
+        "dataROMAddress": 0xD69F8,
+        "dataCompressedSize": 0xFB,  # - 8 for length without gzip footer
+    },
+    {
+        "name": "minecart",
+        "codeROMAddress": 0xD6B00,
+        "dataROMAddress": 0xD98A0,
+        "dataCompressedSize": 0x197,  # - 8 for length without gzip footer
+    },
+    {
+        "name": "bonus",
+        "codeROMAddress": 0xD9A40,
+        "dataROMAddress": 0xDF346,
+        "dataCompressedSize": 0x2AA,  # - 8 for length without gzip footer
+    },
+    {
+        "name": "race",
+        "codeROMAddress": 0xDF600,
+        "dataROMAddress": 0xE649A,
+        "dataCompressedSize": 0x2DB,  # - 8 for length without gzip footer
+    },
+    {
+        "name": "?",
+        "codeROMAddress": 0xE6780,
+        "dataROMAddress": 0xE9D17,
+        "dataCompressedSize": 0x38C,  # - 8 for length without gzip footer
+    },
+    {
+        "name": "boss",
+        "codeROMAddress": 0xEA0B0,
+        "dataROMAddress": 0xF388F,
+        "dataCompressedSize": 0x90A,  # - 8 for length without gzip footer
+    },
+    {
+        "name": "arcade",
+        "codeROMAddress": 0xF41A0,
+        "dataROMAddress": 0xFB42C,
+        "dataCompressedSize": 0x1EC4,  # - 8 for length without gzip footer
+    },
+    {
+        "name": "jetpac",
+        "codeROMAddress": 0xFD2F0,
+        "dataROMAddress": 0x1010FD,
+        "dataCompressedSize": 0x936,  # - 8 for length without gzip footer
+    },
+]
+
+
+def isROMAddressOverlay(absolute_address: int):
+    """Check if its an overlay."""
+    for x in overlays:
+        if x["codeROMAddress"] == absolute_address:
+            return True
+        if x["dataROMAddress"] == absolute_address:
+            return True
+
+    return False
+
+
+def readOverlayOriginalData(fr: BinaryIO):
+    """Read the original overlay data."""
+    for x in overlays:
+        x["codeCompressedSize"] = x["dataROMAddress"] - x["codeROMAddress"]
+        fr.seek(x["codeROMAddress"])
+        x["codeCompressedData"] = fr.read(x["codeCompressedSize"] - 8)
+        fr.read(8)  # skip gzip footer
+        x["dataCompressedData"] = fr.read(x["dataCompressedSize"] - 8)
+        fr.read(8)  # skip gzip footer
+
+
+def replaceOverlayData(absolute_address: int, newCompressedData: bytearray):
+    """Replace the overlay."""
+    for x in overlays:
+        if absolute_address == x["codeROMAddress"]:
+            print(" - Replacing " + x["name"] + " .code with modified data")
+            x["codeCompressedData"] = newCompressedData
+            return
+        if absolute_address == x["dataROMAddress"]:
+            print(" - Replacing " + x["name"] + " .data with modified data")
+            x["dataCompressedData"] = newCompressedData
+            return
+
+
+def writeModifiedOverlaysToROM(fr: BinaryIO):
+    """Write the data to ROM."""
+    # TODO: Make sure they aren't too big
+    for x in overlays:
+        fr.seek(x["codeROMAddress"])
+        fr.write(x["codeCompressedData"])
+        fr.write(bytes([0, 0, 0, 0, 0, 0, 0, 0]))  # gzip footer
+        fr.write(x["dataCompressedData"])
+        fr.write(bytes([0, 0, 0, 0, 0, 0, 0, 0]))  # gzip footer

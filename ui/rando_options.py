@@ -1,89 +1,178 @@
-'Options for the main rando tab.'
-_N='randomize_cb_required_amounts'
-_M='randomize_blocker_required_amounts'
-_L='keydown'
-_K='troff_'
-_J='blocker_'
-_I='change'
-_H='level_randomization'
-_G='click'
-_F='presets'
-_E='name'
-_D=True
-_C=False
-_B='unlock_all_kongs'
-_A='disabled'
-import random,js
+"""Options for the main rando tab."""
+import random
+
+import js
 from js import document
 from ui.bindings import bind
-@bind(_I,_H)
+
+
+@bind("change", "level_randomization")
 def update_disabled_progression(evt):
-	'Disable certain page flags depending on checkboxes.';A=document.getElementById(_H)
-	if A.value=='level_order':document.getElementById(_B).setAttribute(_A,_A);document.getElementById(_B).checked=_D
-	else:
-		try:document.getElementById(_B).removeAttribute(_A)
-		except Exception:pass
-def randomseed(evt):'Randomly generate a seed ID.';document.getElementById('seed').value=str(random.randint(100000,999999))
-@bind('input',_J,8)
-@bind('input',_K,8)
+    """Disable certain page flags depending on checkboxes."""
+    element = document.getElementById("level_randomization")
+    if element.value == "level_order":
+        # Disable the kongs button
+        document.getElementById("unlock_all_kongs").setAttribute("disabled", "disabled")
+        document.getElementById("unlock_all_kongs").checked = True
+    else:
+        # Swap the kong
+        try:
+            document.getElementById("unlock_all_kongs").removeAttribute("disabled")
+        except Exception:
+            pass
+
+
+def randomseed(evt):
+    """Randomly generate a seed ID."""
+    document.getElementById("seed").value = str(random.randint(100000, 999999))
+
+
+@bind("input", "blocker_", 8)
+@bind("input", "troff_", 8)
 def on_input(event):
-	'Limits inputs from input boxes on keypress.\n\n    Args:\n        event (domevent): The DOMEvent data.\n\n    Returns:\n        bool: False if we need to stop the event.\n    ';A=event
-	if'troff'in A.target.id:min_max(A,0,500)
-	elif'blocker'in A.target.id:min_max(A,0,200)
-def min_max(event,min,max):
-	'Check if the data is within bounds of requirements.\n\n    Args:\n        event (DomEvent): The doms event.\n        min (int): Minimum Value to keep.\n        max (int): Maximum value to allow.\n\n    Returns:\n        bool: Deny or Success for Handled\n    ';A=event
-	try:
-		if int(A.target.value)>=max:A.preventDefault();document.getElementById(A.target.id).value=max
-		elif int(A.target.value)<=min:A.preventDefault();document.getElementById(A.target.id).value=min
-		else:document.getElementById(A.target.id).value=str(A.target.value)
-	except Exception:A.preventDefault();document.getElementById(A.target.id).value=min
-@bind(_L,_J,8)
-@bind(_L,_K,8)
+    """Limits inputs from input boxes on keypress.
+
+    Args:
+        event (domevent): The DOMEvent data.
+
+    Returns:
+        bool: False if we need to stop the event.
+    """
+    # Make sure we limit the max items in each of these text boxes values
+    if "troff" in event.target.id:
+        min_max(event, 0, 500)
+    elif "blocker" in event.target.id:
+        min_max(event, 0, 200)
+
+
+def min_max(event, min, max):
+    """Check if the data is within bounds of requirements.
+
+    Args:
+        event (DomEvent): The doms event.
+        min (int): Minimum Value to keep.
+        max (int): Maximum value to allow.
+
+    Returns:
+        bool: Deny or Success for Handled
+    """
+    try:
+        # Attempt to cap our min and max for events on numbers
+        if int(event.target.value) >= max:
+            event.preventDefault()
+            document.getElementById(event.target.id).value = max
+        elif int(event.target.value) <= min:
+            event.preventDefault()
+            document.getElementById(event.target.id).value = min
+        else:
+            document.getElementById(event.target.id).value = str(event.target.value)
+    except Exception:
+        # Set the value to min if something goes wrong
+        event.preventDefault()
+        document.getElementById(event.target.id).value = min
+
+
+@bind("keydown", "blocker_", 8)
+@bind("keydown", "troff_", 8)
 def key_down(event):
-	'Check if a key is a proper number, deletion, navigation, Copy/Cut/Paste.\n\n    Args:\n        event (DomEvent): Event from the DOM.\n    ';A=event;B=['Backspace','Delete','ArrowLeft','ArrowRight','Control_L','Control_R','x','v','c']
-	if not A.key.isdigit()and A.key not in B:A.preventDefault()
-	else:0
+    """Check if a key is a proper number, deletion, navigation, Copy/Cut/Paste.
+
+    Args:
+        event (DomEvent): Event from the DOM.
+    """
+    # Disable all buttons that are not in the list below or a digit
+    global_keys = ["Backspace", "Delete", "ArrowLeft", "ArrowRight", "Control_L", "Control_R", "x", "v", "c"]
+    if not event.key.isdigit() and event.key not in global_keys:
+        event.preventDefault()
+    else:
+        pass
+
+
 def set_preset_options():
-	'Set the Blocker presets on the page.';C=document.getElementById(_F);D=[]
-	for E in C.children:D.append(E.value)
-	for A in js.progression_presets:
-		if A.get(_E)not in D:B=document.createElement('option');B.value=A.get(_E);B.innerHTML=A.get(_E);B.title=A.get('description');C.appendChild(B)
-	js.jq('#presets').val('Suggested');toggle_counts_boxes(None);toggle_b_locker_boxes(None);js.load_cookies()
-@bind(_I,_F)
+    """Set the Blocker presets on the page."""
+    # Check what the selected dropdown item is
+    element = document.getElementById("presets")
+    children = []
+    # Find all the items in the dropdown
+    for child in element.children:
+        children.append(child.value)
+    # Find out dropdown item and set our selected item text to it
+    for val in js.progression_presets:
+        if val.get("name") not in children:
+            opt = document.createElement("option")
+            opt.value = val.get("name")
+            opt.innerHTML = val.get("name")
+            opt.title = val.get("description")
+            element.appendChild(opt)
+    js.jq("#presets").val("Suggested")
+    toggle_counts_boxes(None)
+    toggle_b_locker_boxes(None)
+    js.load_cookies()
+
+
+@bind("change", "presets")
 def preset_select_changed(event):
-	'Trigger a change of the form via the JSON templates.';C='checked';E=document.getElementById(_F);B=None
-	for D in js.progression_presets:
-		if D.get(_E)==E.value:B=D
-	for A in B:
-		try:
-			if type(B[A])is bool:
-				if B[A]is _C:document.getElementsByName(A)[0].removeAttribute(C)
-				else:document.getElementsByName(A)[0].setAttribute(C,C)
-			else:js.jq(f"#{A}").val(B[A])
-		except Exception as F:pass
-@bind(_G,_M)
+    """Trigger a change of the form via the JSON templates."""
+    element = document.getElementById("presets")
+    presets = None
+    for val in js.progression_presets:
+        if val.get("name") == element.value:
+            presets = val
+    for key in presets:
+        try:
+            if type(presets[key]) is bool:
+                if presets[key] is False:
+                    document.getElementsByName(key)[0].removeAttribute("checked")
+                else:
+                    document.getElementsByName(key)[0].setAttribute("checked", "checked")
+            else:
+                js.jq(f"#{key}").val(presets[key])
+        except Exception as e:
+            pass
+
+
+@bind("click", "randomize_blocker_required_amounts")
 def toggle_b_locker_boxes(event):
-	'Toggle the textboxes for BLockers.';A=_D
-	if js.document.getElementById(_M).checked:A=_C
-	for C in range(0,10):
-		B=js.document.getElementById(f"blocker_{C}")
-		try:
-			if A:B.removeAttribute(_A)
-			else:B.setAttribute(_A,_A)
-		except AttributeError:pass
-@bind(_G,_B)
+    """Toggle the textboxes for BLockers."""
+    disabled = True
+    if js.document.getElementById("randomize_blocker_required_amounts").checked:
+        disabled = False
+    for i in range(0, 10):
+        blocker = js.document.getElementById(f"blocker_{i}")
+        try:
+            if disabled:
+                blocker.removeAttribute("disabled")
+            else:
+                blocker.setAttribute("disabled", "disabled")
+        except AttributeError:
+            pass
+
+
+@bind("click", "unlock_all_kongs")
 def unlock_kongs_toggle(event):
-	'Toggle the textboxes for unlock_all_kongs.';A='kong_rando';B=_C
-	if js.document.getElementById(_B).checked:B=_D
-	if B:js.document.getElementById(A).setAttribute(_A,_A);js.document.getElementById(A).checked=_C
-	else:js.document.getElementById(A).removeAttribute(_A)
-@bind(_G,_N)
+    """Toggle the textboxes for unlock_all_kongs."""
+    disabled = False
+    if js.document.getElementById("unlock_all_kongs").checked:
+        disabled = True
+    if disabled:
+        js.document.getElementById("kong_rando").setAttribute("disabled", "disabled")
+        js.document.getElementById("kong_rando").checked = False
+    else:
+        js.document.getElementById("kong_rando").removeAttribute("disabled")
+
+
+@bind("click", "randomize_cb_required_amounts")
 def toggle_counts_boxes(event):
-	'Toggle the textboxes for Troff.';A=_D
-	if js.document.getElementById(_N).checked:A=_C
-	for C in range(0,10):
-		B=js.document.getElementById(f"troff_{C}")
-		try:
-			if A:B.removeAttribute(_A)
-			else:B.setAttribute(_A,_A)
-		except AttributeError:pass
+    """Toggle the textboxes for Troff."""
+    disabled = True
+    if js.document.getElementById("randomize_cb_required_amounts").checked:
+        disabled = False
+    for i in range(0, 10):
+        troff = js.document.getElementById(f"troff_{i}")
+        try:
+            if disabled:
+                troff.removeAttribute("disabled")
+            else:
+                troff.setAttribute("disabled", "disabled")
+        except AttributeError:
+            pass

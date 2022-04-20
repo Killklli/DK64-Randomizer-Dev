@@ -1,5 +1,6 @@
-'Contains functions related to setting up the pool of shuffled items.'
+"""Contains functions related to setting up the pool of shuffled items."""
 import itertools
+
 from randomizer.Enums.Items import Items
 from randomizer.Enums.Locations import Locations
 from randomizer.Enums.Transitions import Transitions
@@ -7,108 +8,662 @@ from randomizer.Lists.Item import ItemFromKong
 from randomizer.Lists.LevelInfo import LevelInfoList
 from randomizer.Lists.Location import LocationList
 from randomizer.Lists.ShufflableExit import ShufflableExits
+
+
 def PlaceConstants(settings):
-	'Place items which are to be put in a hard-coded location.';B=settings;LocationList[Locations.BananaHoard].PlaceConstantItem(Items.BananaHoard);LocationList[Locations.HelmKey].PlaceConstantItem(Items.HideoutHelmKey)
-	if B.shuffle_loading_zones!='levels':LocationList[Locations.JapesKey].PlaceConstantItem(Items.JungleJapesKey);LocationList[Locations.AztecKey].PlaceConstantItem(Items.AngryAztecKey);LocationList[Locations.FactoryKey].PlaceConstantItem(Items.FranticFactoryKey);LocationList[Locations.GalleonKey].PlaceConstantItem(Items.GloomyGalleonKey);LocationList[Locations.ForestKey].PlaceConstantItem(Items.FungiForestKey);LocationList[Locations.CavesKey].PlaceConstantItem(Items.CrystalCavesKey);LocationList[Locations.CastleKey].PlaceConstantItem(Items.CreepyCastleKey)
-	else:
-		for C in LevelInfoList.values():
-			if not ShufflableExits[C.TransitionTo].shuffled:LocationList[C.KeyLocation].PlaceConstantItem(C.KeyItem)
-			else:D=ShufflableExits[C.TransitionTo].shuffledId;E=[A for A in LevelInfoList.values()if A.TransitionTo==D][0];LocationList[E.KeyLocation].PlaceConstantItem(C.KeyItem)
-	LocationList[Locations.HelmDonkey1].PlaceConstantItem(Items.HelmDonkey1);LocationList[Locations.HelmDonkey2].PlaceConstantItem(Items.HelmDonkey2);LocationList[Locations.HelmDiddy1].PlaceConstantItem(Items.HelmDiddy1);LocationList[Locations.HelmDiddy2].PlaceConstantItem(Items.HelmDiddy2);LocationList[Locations.HelmLanky1].PlaceConstantItem(Items.HelmLanky1);LocationList[Locations.HelmLanky2].PlaceConstantItem(Items.HelmLanky2);LocationList[Locations.HelmTiny1].PlaceConstantItem(Items.HelmTiny1);LocationList[Locations.HelmTiny2].PlaceConstantItem(Items.HelmTiny2);LocationList[Locations.HelmChunky1].PlaceConstantItem(Items.HelmChunky1);LocationList[Locations.HelmChunky2].PlaceConstantItem(Items.HelmChunky2)
-	if B.shuffle_items!='all':
-		A=[]
-		if B.shuffle_items=='moves':A.extend(DonkeyMoveLocations);A.extend(DiddyMoveLocations);A.extend(LankyMoveLocations);A.extend(TinyMoveLocations);A.extend(ChunkyMoveLocations);A.extend(SharedMoveLocations)
-		if B.kong_rando:A.append(Locations.DiddyKong);A.append(Locations.LankyKong);A.append(Locations.TinyKong);A.append(Locations.ChunkyKong)
-		F=[B for B in LocationList if B not in A]
-		for G in F:LocationList[G].PlaceDefaultItem()
-	if B.training_barrels=='normal':LocationList[Locations.IslesVinesTrainingBarrel].PlaceConstantItem(Items.Vines);LocationList[Locations.IslesSwimTrainingBarrel].PlaceConstantItem(Items.Swim);LocationList[Locations.IslesOrangesTrainingBarrel].PlaceConstantItem(Items.Oranges);LocationList[Locations.IslesBarrelsTrainingBarrel].PlaceConstantItem(Items.Barrels)
-	elif B.training_barrels=='startwith':LocationList[Locations.IslesVinesTrainingBarrel].PlaceConstantItem(Items.NoItem);LocationList[Locations.IslesSwimTrainingBarrel].PlaceConstantItem(Items.NoItem);LocationList[Locations.IslesOrangesTrainingBarrel].PlaceConstantItem(Items.NoItem);LocationList[Locations.IslesBarrelsTrainingBarrel].PlaceConstantItem(Items.NoItem)
-	if B.unlock_all_kongs:LocationList[Locations.DiddyKong].PlaceConstantItem(Items.NoItem);LocationList[Locations.LankyKong].PlaceConstantItem(Items.NoItem);LocationList[Locations.TinyKong].PlaceConstantItem(Items.NoItem);LocationList[Locations.ChunkyKong].PlaceConstantItem(Items.NoItem)
-	if B.unlock_all_moves:LocationList[Locations.SimianSlam].PlaceConstantItem(Items.NoItem);LocationList[Locations.SuperSimianSlam].PlaceConstantItem(Items.NoItem);LocationList[Locations.SuperDuperSimianSlam].PlaceConstantItem(Items.NoItem);LocationList[Locations.BaboonBlast].PlaceConstantItem(Items.NoItem);LocationList[Locations.StrongKong].PlaceConstantItem(Items.NoItem);LocationList[Locations.GorillaGrab].PlaceConstantItem(Items.NoItem);LocationList[Locations.ChimpyCharge].PlaceConstantItem(Items.NoItem);LocationList[Locations.RocketbarrelBoost].PlaceConstantItem(Items.NoItem);LocationList[Locations.SimianSpring].PlaceConstantItem(Items.NoItem);LocationList[Locations.Orangstand].PlaceConstantItem(Items.NoItem);LocationList[Locations.BaboonBalloon].PlaceConstantItem(Items.NoItem);LocationList[Locations.OrangstandSprint].PlaceConstantItem(Items.NoItem);LocationList[Locations.MiniMonkey].PlaceConstantItem(Items.NoItem);LocationList[Locations.PonyTailTwirl].PlaceConstantItem(Items.NoItem);LocationList[Locations.Monkeyport].PlaceConstantItem(Items.NoItem);LocationList[Locations.HunkyChunky].PlaceConstantItem(Items.NoItem);LocationList[Locations.PrimatePunch].PlaceConstantItem(Items.NoItem);LocationList[Locations.GorillaGone].PlaceConstantItem(Items.NoItem);LocationList[Locations.CoconutGun].PlaceConstantItem(Items.NoItem);LocationList[Locations.PeanutGun].PlaceConstantItem(Items.NoItem);LocationList[Locations.GrapeGun].PlaceConstantItem(Items.NoItem);LocationList[Locations.FeatherGun].PlaceConstantItem(Items.NoItem);LocationList[Locations.PineappleGun].PlaceConstantItem(Items.NoItem);LocationList[Locations.AmmoBelt1].PlaceConstantItem(Items.NoItem);LocationList[Locations.HomingAmmo].PlaceConstantItem(Items.NoItem);LocationList[Locations.AmmoBelt2].PlaceConstantItem(Items.NoItem);LocationList[Locations.SniperSight].PlaceConstantItem(Items.NoItem);LocationList[Locations.Bongos].PlaceConstantItem(Items.NoItem);LocationList[Locations.Guitar].PlaceConstantItem(Items.NoItem);LocationList[Locations.Trombone].PlaceConstantItem(Items.NoItem);LocationList[Locations.Saxophone].PlaceConstantItem(Items.NoItem);LocationList[Locations.Triangle].PlaceConstantItem(Items.NoItem);LocationList[Locations.MusicUpgrade1].PlaceConstantItem(Items.NoItem);LocationList[Locations.ThirdMelon].PlaceConstantItem(Items.NoItem);LocationList[Locations.MusicUpgrade2].PlaceConstantItem(Items.NoItem)
-	if B.unlock_fairy_shockwave:LocationList[Locations.CameraAndShockwave].PlaceConstantItem(Items.NoItem)
+    """Place items which are to be put in a hard-coded location."""
+    # Banana Hoard: Pseudo-item used to represent game completion by defeating K. Rool
+    LocationList[Locations.BananaHoard].PlaceConstantItem(Items.BananaHoard)
+    # Helm key is always vanilla
+    LocationList[Locations.HelmKey].PlaceConstantItem(Items.HideoutHelmKey)
+    # Handle key placements
+    if settings.shuffle_loading_zones != "levels":
+        # Keys kept at key locations so boss completion required
+        LocationList[Locations.JapesKey].PlaceConstantItem(Items.JungleJapesKey)
+        LocationList[Locations.AztecKey].PlaceConstantItem(Items.AngryAztecKey)
+        LocationList[Locations.FactoryKey].PlaceConstantItem(Items.FranticFactoryKey)
+        LocationList[Locations.GalleonKey].PlaceConstantItem(Items.GloomyGalleonKey)
+        LocationList[Locations.ForestKey].PlaceConstantItem(Items.FungiForestKey)
+        LocationList[Locations.CavesKey].PlaceConstantItem(Items.CrystalCavesKey)
+        LocationList[Locations.CastleKey].PlaceConstantItem(Items.CreepyCastleKey)
+    else:
+        # Place keys in the lobbies they normally belong in
+        # Ex. Whatever level is in the Japes lobby entrance will always have the Japes key
+        for level in LevelInfoList.values():
+            # If level exit isn't shuffled, use vanilla key
+            if not ShufflableExits[level.TransitionTo].shuffled:
+                LocationList[level.KeyLocation].PlaceConstantItem(level.KeyItem)
+            else:
+                # Find the transition this exit is attached to, and use that to get the proper location to place this key
+                dest = ShufflableExits[level.TransitionTo].shuffledId
+                shuffledTo = [x for x in LevelInfoList.values() if x.TransitionTo == dest][0]
+                LocationList[shuffledTo.KeyLocation].PlaceConstantItem(level.KeyItem)
+    # Helm locations (which are functionally events)
+    LocationList[Locations.HelmDonkey1].PlaceConstantItem(Items.HelmDonkey1)
+    LocationList[Locations.HelmDonkey2].PlaceConstantItem(Items.HelmDonkey2)
+    LocationList[Locations.HelmDiddy1].PlaceConstantItem(Items.HelmDiddy1)
+    LocationList[Locations.HelmDiddy2].PlaceConstantItem(Items.HelmDiddy2)
+    LocationList[Locations.HelmLanky1].PlaceConstantItem(Items.HelmLanky1)
+    LocationList[Locations.HelmLanky2].PlaceConstantItem(Items.HelmLanky2)
+    LocationList[Locations.HelmTiny1].PlaceConstantItem(Items.HelmTiny1)
+    LocationList[Locations.HelmTiny2].PlaceConstantItem(Items.HelmTiny2)
+    LocationList[Locations.HelmChunky1].PlaceConstantItem(Items.HelmChunky1)
+    LocationList[Locations.HelmChunky2].PlaceConstantItem(Items.HelmChunky2)
+    # Settings-dependent locations
+    if settings.shuffle_items != "all":
+        shuffledLocations = []
+        if settings.shuffle_items == "moves":
+            shuffledLocations.extend(DonkeyMoveLocations)
+            shuffledLocations.extend(DiddyMoveLocations)
+            shuffledLocations.extend(LankyMoveLocations)
+            shuffledLocations.extend(TinyMoveLocations)
+            shuffledLocations.extend(ChunkyMoveLocations)
+            shuffledLocations.extend(SharedMoveLocations)
+        if settings.kong_rando:
+            shuffledLocations.append(Locations.DiddyKong)
+            shuffledLocations.append(Locations.LankyKong)
+            shuffledLocations.append(Locations.TinyKong)
+            shuffledLocations.append(Locations.ChunkyKong)
+        locations = [x for x in LocationList if x not in shuffledLocations]
+        for location in locations:
+            LocationList[location].PlaceDefaultItem()
+    if settings.training_barrels == "normal":
+        LocationList[Locations.IslesVinesTrainingBarrel].PlaceConstantItem(Items.Vines)
+        LocationList[Locations.IslesSwimTrainingBarrel].PlaceConstantItem(Items.Swim)
+        LocationList[Locations.IslesOrangesTrainingBarrel].PlaceConstantItem(Items.Oranges)
+        LocationList[Locations.IslesBarrelsTrainingBarrel].PlaceConstantItem(Items.Barrels)
+    elif settings.training_barrels == "startwith":
+        LocationList[Locations.IslesVinesTrainingBarrel].PlaceConstantItem(Items.NoItem)
+        LocationList[Locations.IslesSwimTrainingBarrel].PlaceConstantItem(Items.NoItem)
+        LocationList[Locations.IslesOrangesTrainingBarrel].PlaceConstantItem(Items.NoItem)
+        LocationList[Locations.IslesBarrelsTrainingBarrel].PlaceConstantItem(Items.NoItem)
+    if settings.unlock_all_kongs:
+        LocationList[Locations.DiddyKong].PlaceConstantItem(Items.NoItem)
+        LocationList[Locations.LankyKong].PlaceConstantItem(Items.NoItem)
+        LocationList[Locations.TinyKong].PlaceConstantItem(Items.NoItem)
+        LocationList[Locations.ChunkyKong].PlaceConstantItem(Items.NoItem)
+    if settings.unlock_all_moves:
+        LocationList[Locations.SimianSlam].PlaceConstantItem(Items.NoItem)
+        LocationList[Locations.SuperSimianSlam].PlaceConstantItem(Items.NoItem)
+        LocationList[Locations.SuperDuperSimianSlam].PlaceConstantItem(Items.NoItem)
+        LocationList[Locations.BaboonBlast].PlaceConstantItem(Items.NoItem)
+        LocationList[Locations.StrongKong].PlaceConstantItem(Items.NoItem)
+        LocationList[Locations.GorillaGrab].PlaceConstantItem(Items.NoItem)
+        LocationList[Locations.ChimpyCharge].PlaceConstantItem(Items.NoItem)
+        LocationList[Locations.RocketbarrelBoost].PlaceConstantItem(Items.NoItem)
+        LocationList[Locations.SimianSpring].PlaceConstantItem(Items.NoItem)
+        LocationList[Locations.Orangstand].PlaceConstantItem(Items.NoItem)
+        LocationList[Locations.BaboonBalloon].PlaceConstantItem(Items.NoItem)
+        LocationList[Locations.OrangstandSprint].PlaceConstantItem(Items.NoItem)
+        LocationList[Locations.MiniMonkey].PlaceConstantItem(Items.NoItem)
+        LocationList[Locations.PonyTailTwirl].PlaceConstantItem(Items.NoItem)
+        LocationList[Locations.Monkeyport].PlaceConstantItem(Items.NoItem)
+        LocationList[Locations.HunkyChunky].PlaceConstantItem(Items.NoItem)
+        LocationList[Locations.PrimatePunch].PlaceConstantItem(Items.NoItem)
+        LocationList[Locations.GorillaGone].PlaceConstantItem(Items.NoItem)
+        LocationList[Locations.CoconutGun].PlaceConstantItem(Items.NoItem)
+        LocationList[Locations.PeanutGun].PlaceConstantItem(Items.NoItem)
+        LocationList[Locations.GrapeGun].PlaceConstantItem(Items.NoItem)
+        LocationList[Locations.FeatherGun].PlaceConstantItem(Items.NoItem)
+        LocationList[Locations.PineappleGun].PlaceConstantItem(Items.NoItem)
+        LocationList[Locations.AmmoBelt1].PlaceConstantItem(Items.NoItem)
+        LocationList[Locations.HomingAmmo].PlaceConstantItem(Items.NoItem)
+        LocationList[Locations.AmmoBelt2].PlaceConstantItem(Items.NoItem)
+        LocationList[Locations.SniperSight].PlaceConstantItem(Items.NoItem)
+        LocationList[Locations.Bongos].PlaceConstantItem(Items.NoItem)
+        LocationList[Locations.Guitar].PlaceConstantItem(Items.NoItem)
+        LocationList[Locations.Trombone].PlaceConstantItem(Items.NoItem)
+        LocationList[Locations.Saxophone].PlaceConstantItem(Items.NoItem)
+        LocationList[Locations.Triangle].PlaceConstantItem(Items.NoItem)
+        LocationList[Locations.MusicUpgrade1].PlaceConstantItem(Items.NoItem)
+        LocationList[Locations.ThirdMelon].PlaceConstantItem(Items.NoItem)
+        LocationList[Locations.MusicUpgrade2].PlaceConstantItem(Items.NoItem)
+    if settings.unlock_fairy_shockwave:
+        LocationList[Locations.CameraAndShockwave].PlaceConstantItem(Items.NoItem)
+
+
 def AllItems(settings):
-	'Return all shuffled items.';B=settings;A=[]
-	if B.shuffle_items=='all':A.extend(Blueprints(B));A.extend(HighPriorityItems(B));A.extend(LowPriorityItems(B));A.extend(ExcessItems(B))
-	elif B.shuffle_items=='moves':A.extend(DonkeyMoves);A.extend(DiddyMoves);A.extend(LankyMoves);A.extend(TinyMoves);A.extend(ChunkyMoves);A.extend(ImportantSharedMoves)
-	if B.kong_rando:A.extend(Kongs(B))
-	return A
-def Blueprints(settings):'Return all blueprint items.';A=[Items.DKIslesDonkeyBlueprint,Items.DKIslesDiddyBlueprint,Items.DKIslesLankyBlueprint,Items.DKIslesTinyBlueprint,Items.DKIslesChunkyBlueprint,Items.JungleJapesDonkeyBlueprint,Items.JungleJapesDiddyBlueprint,Items.JungleJapesLankyBlueprint,Items.JungleJapesTinyBlueprint,Items.JungleJapesChunkyBlueprint,Items.AngryAztecDonkeyBlueprint,Items.AngryAztecDiddyBlueprint,Items.AngryAztecLankyBlueprint,Items.AngryAztecTinyBlueprint,Items.AngryAztecChunkyBlueprint,Items.FranticFactoryDonkeyBlueprint,Items.FranticFactoryDiddyBlueprint,Items.FranticFactoryLankyBlueprint,Items.FranticFactoryTinyBlueprint,Items.FranticFactoryChunkyBlueprint,Items.GloomyGalleonDonkeyBlueprint,Items.GloomyGalleonDiddyBlueprint,Items.GloomyGalleonLankyBlueprint,Items.GloomyGalleonTinyBlueprint,Items.GloomyGalleonChunkyBlueprint,Items.FungiForestDonkeyBlueprint,Items.FungiForestDiddyBlueprint,Items.FungiForestLankyBlueprint,Items.FungiForestTinyBlueprint,Items.FungiForestChunkyBlueprint,Items.CrystalCavesDonkeyBlueprint,Items.CrystalCavesDiddyBlueprint,Items.CrystalCavesLankyBlueprint,Items.CrystalCavesTinyBlueprint,Items.CrystalCavesChunkyBlueprint,Items.CreepyCastleDonkeyBlueprint,Items.CreepyCastleDiddyBlueprint,Items.CreepyCastleLankyBlueprint,Items.CreepyCastleTinyBlueprint,Items.CreepyCastleChunkyBlueprint];return A
-def BlueprintAssumedItems(settings):'Items which are assumed to be owned while placing blueprints.';A=settings;return LowPriorityItems(A)+ExcessItems(A)
-def Keys():'Return all key items.';A=[Items.JungleJapesKey,Items.AngryAztecKey,Items.FranticFactoryKey,Items.GloomyGalleonKey,Items.FungiForestKey,Items.CrystalCavesKey,Items.CreepyCastleKey,Items.HideoutHelmKey];return A
+    """Return all shuffled items."""
+    allItems = []
+    if settings.shuffle_items == "all":
+        allItems.extend(Blueprints(settings))
+        allItems.extend(HighPriorityItems(settings))
+        allItems.extend(LowPriorityItems(settings))
+        allItems.extend(ExcessItems(settings))
+    elif settings.shuffle_items == "moves":
+        allItems.extend(DonkeyMoves)
+        allItems.extend(DiddyMoves)
+        allItems.extend(LankyMoves)
+        allItems.extend(TinyMoves)
+        allItems.extend(ChunkyMoves)
+        allItems.extend(ImportantSharedMoves)
+    if settings.kong_rando:
+        allItems.extend(Kongs(settings))
+    return allItems
+
+
+def Blueprints(settings):
+    """Return all blueprint items."""
+    blueprints = [
+        Items.DKIslesDonkeyBlueprint,
+        Items.DKIslesDiddyBlueprint,
+        Items.DKIslesLankyBlueprint,
+        Items.DKIslesTinyBlueprint,
+        Items.DKIslesChunkyBlueprint,
+        Items.JungleJapesDonkeyBlueprint,
+        Items.JungleJapesDiddyBlueprint,
+        Items.JungleJapesLankyBlueprint,
+        Items.JungleJapesTinyBlueprint,
+        Items.JungleJapesChunkyBlueprint,
+        Items.AngryAztecDonkeyBlueprint,
+        Items.AngryAztecDiddyBlueprint,
+        Items.AngryAztecLankyBlueprint,
+        Items.AngryAztecTinyBlueprint,
+        Items.AngryAztecChunkyBlueprint,
+        Items.FranticFactoryDonkeyBlueprint,
+        Items.FranticFactoryDiddyBlueprint,
+        Items.FranticFactoryLankyBlueprint,
+        Items.FranticFactoryTinyBlueprint,
+        Items.FranticFactoryChunkyBlueprint,
+        Items.GloomyGalleonDonkeyBlueprint,
+        Items.GloomyGalleonDiddyBlueprint,
+        Items.GloomyGalleonLankyBlueprint,
+        Items.GloomyGalleonTinyBlueprint,
+        Items.GloomyGalleonChunkyBlueprint,
+        Items.FungiForestDonkeyBlueprint,
+        Items.FungiForestDiddyBlueprint,
+        Items.FungiForestLankyBlueprint,
+        Items.FungiForestTinyBlueprint,
+        Items.FungiForestChunkyBlueprint,
+        Items.CrystalCavesDonkeyBlueprint,
+        Items.CrystalCavesDiddyBlueprint,
+        Items.CrystalCavesLankyBlueprint,
+        Items.CrystalCavesTinyBlueprint,
+        Items.CrystalCavesChunkyBlueprint,
+        Items.CreepyCastleDonkeyBlueprint,
+        Items.CreepyCastleDiddyBlueprint,
+        Items.CreepyCastleLankyBlueprint,
+        Items.CreepyCastleTinyBlueprint,
+        Items.CreepyCastleChunkyBlueprint,
+    ]
+    return blueprints
+
+
+def BlueprintAssumedItems(settings):
+    """Items which are assumed to be owned while placing blueprints."""
+    return LowPriorityItems(settings) + ExcessItems(settings)
+
+
+def Keys():
+    """Return all key items."""
+    keys = [
+        Items.JungleJapesKey,
+        Items.AngryAztecKey,
+        Items.FranticFactoryKey,
+        Items.GloomyGalleonKey,
+        Items.FungiForestKey,
+        Items.CrystalCavesKey,
+        Items.CreepyCastleKey,
+        Items.HideoutHelmKey,
+    ]
+    return keys
+
+
 def Kongs(settings):
-	'Return Kong items depending on settings.';B=settings;A=[]
-	if not B.unlock_all_kongs:A=[Items.Donkey,Items.Diddy,Items.Lanky,Items.Tiny,Items.Chunky];A.remove(ItemFromKong(B.starting_kong))
-	return A
+    """Return Kong items depending on settings."""
+    kongs = []
+    if not settings.unlock_all_kongs:
+        kongs = [Items.Donkey, Items.Diddy, Items.Lanky, Items.Tiny, Items.Chunky]
+        kongs.remove(ItemFromKong(settings.starting_kong))
+    return kongs
+
+
 def Guns(settings):
-	'Return all gun items.';A=[]
-	if not settings.unlock_all_moves:A.extend([Items.Coconut,Items.Peanut,Items.Grape,Items.Feather,Items.Pineapple])
-	return A
+    """Return all gun items."""
+    guns = []
+    if not settings.unlock_all_moves:
+        guns.extend(
+            [
+                Items.Coconut,
+                Items.Peanut,
+                Items.Grape,
+                Items.Feather,
+                Items.Pineapple,
+            ]
+        )
+    return guns
+
+
 def Instruments(settings):
-	'Return all instrument items.';A=[]
-	if not settings.unlock_all_moves:A.extend([Items.Bongos,Items.Guitar,Items.Trombone,Items.Saxophone,Items.Triangle])
-	return A
-def TrainingBarrelAbilities():'Return all training barrel abilities.';A=[Items.Vines,Items.Swim,Items.Oranges,Items.Barrels];return A
+    """Return all instrument items."""
+    instruments = []
+    if not settings.unlock_all_moves:
+        instruments.extend(
+            [
+                Items.Bongos,
+                Items.Guitar,
+                Items.Trombone,
+                Items.Saxophone,
+                Items.Triangle,
+            ]
+        )
+    return instruments
+
+
+def TrainingBarrelAbilities():
+    """Return all training barrel abilities."""
+    barrelAbilities = [
+        Items.Vines,
+        Items.Swim,
+        Items.Oranges,
+        Items.Barrels,
+    ]
+    return barrelAbilities
+
+
 def Upgrades(settings):
-	'Return all upgrade items.';B=settings;A=[]
-	if B.training_barrels=='shuffled':A.extend(TrainingBarrelAbilities())
-	if not B.unlock_all_moves:
-		A.extend(itertools.repeat(Items.ProgressiveSlam,3-1))
-		if B.progressive_upgrades:A.extend(itertools.repeat(Items.ProgressiveDonkeyPotion,3));A.extend(itertools.repeat(Items.ProgressiveDiddyPotion,3));A.extend(itertools.repeat(Items.ProgressiveLankyPotion,3));A.extend(itertools.repeat(Items.ProgressiveTinyPotion,3));A.extend(itertools.repeat(Items.ProgressiveChunkyPotion,3))
-		else:A.extend([Items.BaboonBlast,Items.StrongKong,Items.GorillaGrab,Items.ChimpyCharge,Items.RocketbarrelBoost,Items.SimianSpring,Items.Orangstand,Items.BaboonBalloon,Items.OrangstandSprint,Items.MiniMonkey,Items.PonyTailTwirl,Items.Monkeyport,Items.HunkyChunky,Items.PrimatePunch,Items.GorillaGone])
-	if not B.unlock_fairy_shockwave:A.append(Items.CameraAndShockwave)
-	return A
-def HighPriorityItems(settings):'Get all items which are of high importance logically.\n\n    Placing these first prevents fill failures.\n    ';B=settings;A=[];A.extend(Kongs(B));A.extend(Guns(B));A.extend(Instruments(B));A.extend(Upgrades(B));return A
-def HighPriorityAssumedItems(settings):'Items which are assumed to be owned while placing high priority items.';A=settings;return Blueprints(A)+LowPriorityItems(A)+ExcessItems(A)
+    """Return all upgrade items."""
+    upgrades = []
+    # Add training barrel items to item pool if shuffled
+    if settings.training_barrels == "shuffled":
+        upgrades.extend(TrainingBarrelAbilities())
+    # Add either progressive upgrade items or individual ones depending on settings
+    if not settings.unlock_all_moves:
+        upgrades.extend(itertools.repeat(Items.ProgressiveSlam, 3 - 1))  # -1 for starting slam
+        if settings.progressive_upgrades:
+            upgrades.extend(itertools.repeat(Items.ProgressiveDonkeyPotion, 3))
+            upgrades.extend(itertools.repeat(Items.ProgressiveDiddyPotion, 3))
+            upgrades.extend(itertools.repeat(Items.ProgressiveLankyPotion, 3))
+            upgrades.extend(itertools.repeat(Items.ProgressiveTinyPotion, 3))
+            upgrades.extend(itertools.repeat(Items.ProgressiveChunkyPotion, 3))
+        else:
+            upgrades.extend(
+                [
+                    Items.BaboonBlast,
+                    Items.StrongKong,
+                    Items.GorillaGrab,
+                    Items.ChimpyCharge,
+                    Items.RocketbarrelBoost,
+                    Items.SimianSpring,
+                    Items.Orangstand,
+                    Items.BaboonBalloon,
+                    Items.OrangstandSprint,
+                    Items.MiniMonkey,
+                    Items.PonyTailTwirl,
+                    Items.Monkeyport,
+                    Items.HunkyChunky,
+                    Items.PrimatePunch,
+                    Items.GorillaGone,
+                ]
+            )
+    if not settings.unlock_fairy_shockwave:
+        upgrades.append(Items.CameraAndShockwave)
+
+    return upgrades
+
+
+def HighPriorityItems(settings):
+    """Get all items which are of high importance logically.
+
+    Placing these first prevents fill failures.
+    """
+    itemPool = []
+    itemPool.extend(Kongs(settings))
+    itemPool.extend(Guns(settings))
+    itemPool.extend(Instruments(settings))
+    itemPool.extend(Upgrades(settings))
+    return itemPool
+
+
+def HighPriorityAssumedItems(settings):
+    """Items which are assumed to be owned while placing high priority items."""
+    return Blueprints(settings) + LowPriorityItems(settings) + ExcessItems(settings)
+
+
 def LowPriorityItems(settings):
-	'While most of these items still have logical value they are not as important.';B=settings;A=[];A.extend(itertools.repeat(Items.GoldenBanana,100));A.extend(itertools.repeat(Items.BananaFairy,20));A.extend(itertools.repeat(Items.BananaMedal,15))
-	if not B.crown_door_open:A.extend(itertools.repeat(Items.BattleCrown,4))
-	if not B.coin_door_open:A.append(Items.NintendoCoin);A.append(Items.RarewareCoin)
-	if not B.unlock_all_moves:
-		A.append(Items.SniperSight)
-		if not B.hard_shooting:A.append(Items.HomingAmmo)
-	return A
+    """While most of these items still have logical value they are not as important."""
+    itemPool = []
+
+    itemPool.extend(itertools.repeat(Items.GoldenBanana, 100))
+    itemPool.extend(itertools.repeat(Items.BananaFairy, 20))
+    itemPool.extend(itertools.repeat(Items.BananaMedal, 15))
+    if not settings.crown_door_open:
+        itemPool.extend(itertools.repeat(Items.BattleCrown, 4))
+    if not settings.coin_door_open:
+        itemPool.append(Items.NintendoCoin)
+        itemPool.append(Items.RarewareCoin)
+    if not settings.unlock_all_moves:
+        itemPool.append(Items.SniperSight)
+        if not settings.hard_shooting:
+            itemPool.append(Items.HomingAmmo)
+    return itemPool
+
+
 def ExcessItems(settings):
-	'Items which either have no logical value or are excess copies of those that do.';B=settings;A=[]
-	if not B.unlock_all_moves:
-		if B.hard_shooting:A.append(Items.HomingAmmo)
-		A.extend(itertools.repeat(Items.ProgressiveAmmoBelt,2));A.extend(itertools.repeat(Items.ProgressiveInstrumentUpgrade,3))
-	A.extend(itertools.repeat(Items.GoldenBanana,101));A.extend(itertools.repeat(Items.BananaMedal,25));A.extend(itertools.repeat(Items.BattleCrown,6))
-	if B.crown_door_open:A.extend(itertools.repeat(Items.BattleCrown,4))
-	if B.coin_door_open:A.append(Items.NintendoCoin);A.append(Items.RarewareCoin)
-	return A
-def GetMoveLocationsToRemove(sharedMoveShops):
-	'Determine locations to remove from the move pool based on where shared moves got placed.';A=[]
-	for B in sharedMoveShops:
-		if B==Locations.SharedJapesPotion:A.append(Locations.BaboonBlast);A.append(Locations.ChimpyCharge);A.append(Locations.Orangstand);A.append(Locations.MiniMonkey);A.append(Locations.HunkyChunky)
-		elif B==Locations.SharedJapesGun:A.append(Locations.CoconutGun);A.append(Locations.PeanutGun);A.append(Locations.GrapeGun);A.append(Locations.FeatherGun);A.append(Locations.PineappleGun)
-		elif B==Locations.SharedAztecPotion:A.append(Locations.StrongKong);A.append(Locations.RocketbarrelBoost);A.append(Locations.LankyAztecPotion);A.append(Locations.TinyAztecPotion);A.append(Locations.ChunkyAztecPotion)
-		elif B==Locations.SharedAztecGun:A.append(Locations.DonkeyAztecGun);A.append(Locations.DiddyAztecGun);A.append(Locations.LankyAztecGun);A.append(Locations.TinyAztecGun);A.append(Locations.ChunkyAztecGun)
-		elif B==Locations.SharedAztecInstrument:A.append(Locations.Bongos);A.append(Locations.Guitar);A.append(Locations.Trombone);A.append(Locations.Saxophone);A.append(Locations.Triangle)
-		elif B==Locations.SharedFactoryPotion:A.append(Locations.GorillaGrab);A.append(Locations.SimianSpring);A.append(Locations.BaboonBalloon);A.append(Locations.PonyTailTwirl);A.append(Locations.PrimatePunch)
-		elif B==Locations.AmmoBelt1:A.append(Locations.DonkeyFactoryGun);A.append(Locations.DiddyFactoryGun);A.append(Locations.LankyFactoryGun);A.append(Locations.TinyFactoryGun);A.append(Locations.ChunkyFactoryGun)
-		elif B==Locations.SharedFactoryInstrument:A.append(Locations.DonkeyFactoryInstrument);A.append(Locations.DiddyFactoryInstrument);A.append(Locations.LankyFactoryInstrument);A.append(Locations.TinyFactoryInstrument);A.append(Locations.ChunkyFactoryInstrument)
-		elif B==Locations.SharedGalleonPotion:A.append(Locations.DonkeyGalleonPotion);A.append(Locations.DiddyGalleonPotion);A.append(Locations.LankyGalleonPotion);A.append(Locations.TinyGalleonPotion);A.append(Locations.ChunkyGalleonPotion)
-		elif B==Locations.SharedGalleonGun:A.append(Locations.DonkeyGalleonGun);A.append(Locations.DiddyGalleonGun);A.append(Locations.LankyGalleonGun);A.append(Locations.TinyGalleonGun);A.append(Locations.ChunkyGalleonGun)
-		elif B==Locations.MusicUpgrade1:A.append(Locations.DonkeyGalleonInstrument);A.append(Locations.DiddyGalleonInstrument);A.append(Locations.LankyGalleonInstrument);A.append(Locations.TinyGalleonInstrument);A.append(Locations.ChunkyGalleonInstrument)
-		elif B==Locations.SuperSimianSlam:A.append(Locations.DonkeyForestPotion);A.append(Locations.DiddyForestPotion);A.append(Locations.LankyForestPotion);A.append(Locations.TinyForestPotion);A.append(Locations.ChunkyForestPotion)
-		elif B==Locations.HomingAmmo:A.append(Locations.DonkeyForestGun);A.append(Locations.DiddyForestGun);A.append(Locations.LankyForestGun);A.append(Locations.TinyForestGun);A.append(Locations.ChunkyForestGun)
-		elif B==Locations.SharedCavesPotion:A.append(Locations.DonkeyCavesPotion);A.append(Locations.DiddyCavesPotion);A.append(Locations.OrangstandSprint);A.append(Locations.Monkeyport);A.append(Locations.GorillaGone)
-		elif B==Locations.AmmoBelt2:A.append(Locations.DonkeyCavesGun);A.append(Locations.DiddyCavesGun);A.append(Locations.LankyCavesGun);A.append(Locations.TinyCavesGun);A.append(Locations.ChunkyCavesGun)
-		elif B==Locations.ThirdMelon:A.append(Locations.DonkeyCavesInstrument);A.append(Locations.DiddyCavesInstrument);A.append(Locations.LankyCavesInstrument);A.append(Locations.TinyCavesInstrument);A.append(Locations.ChunkyCavesInstrument)
-		elif B==Locations.SuperDuperSimianSlam:A.append(Locations.DonkeyCastlePotion);A.append(Locations.DiddyCastlePotion);A.append(Locations.LankyCastlePotion);A.append(Locations.TinyCastlePotion);A.append(Locations.ChunkyCastlePotion)
-		elif B==Locations.SniperSight:A.append(Locations.DonkeyCastleGun);A.append(Locations.DiddyCastleGun);A.append(Locations.LankyCastleGun);A.append(Locations.TinyCastleGun);A.append(Locations.ChunkyCastleGun)
-		elif B==Locations.MusicUpgrade2:A.append(Locations.DonkeyCastleInstrument);A.append(Locations.DiddyCastleInstrument);A.append(Locations.LankyCastleInstrument);A.append(Locations.TinyCastleInstrument);A.append(Locations.ChunkyCastleInstrument)
-	return set(A)
-DonkeyMoveLocations={Locations.BaboonBlast,Locations.StrongKong,Locations.GorillaGrab,Locations.CoconutGun,Locations.Bongos,Locations.DonkeyGalleonPotion,Locations.DonkeyForestPotion,Locations.DonkeyCavesPotion,Locations.DonkeyCastlePotion,Locations.DonkeyAztecGun,Locations.DonkeyFactoryGun,Locations.DonkeyGalleonGun,Locations.DonkeyForestGun,Locations.DonkeyCavesGun,Locations.DonkeyCastleGun,Locations.DonkeyFactoryInstrument,Locations.DonkeyGalleonInstrument,Locations.DonkeyCavesInstrument,Locations.DonkeyCastleInstrument}
-DiddyMoveLocations={Locations.ChimpyCharge,Locations.RocketbarrelBoost,Locations.SimianSpring,Locations.PeanutGun,Locations.Guitar,Locations.DiddyGalleonPotion,Locations.DiddyForestPotion,Locations.DiddyCavesPotion,Locations.DiddyCastlePotion,Locations.DiddyAztecGun,Locations.DiddyFactoryGun,Locations.DiddyGalleonGun,Locations.DiddyForestGun,Locations.DiddyCavesGun,Locations.DiddyCastleGun,Locations.DiddyFactoryInstrument,Locations.DiddyGalleonInstrument,Locations.DiddyCavesInstrument,Locations.DiddyCastleInstrument}
-LankyMoveLocations={Locations.Orangstand,Locations.BaboonBalloon,Locations.OrangstandSprint,Locations.GrapeGun,Locations.Trombone,Locations.LankyAztecPotion,Locations.LankyGalleonPotion,Locations.LankyForestPotion,Locations.LankyCastlePotion,Locations.LankyAztecGun,Locations.LankyFactoryGun,Locations.LankyGalleonGun,Locations.LankyForestGun,Locations.LankyCavesGun,Locations.LankyCastleGun,Locations.LankyFactoryInstrument,Locations.LankyGalleonInstrument,Locations.LankyCavesInstrument,Locations.LankyCastleInstrument}
-TinyMoveLocations={Locations.MiniMonkey,Locations.PonyTailTwirl,Locations.Monkeyport,Locations.FeatherGun,Locations.Saxophone,Locations.TinyAztecPotion,Locations.TinyGalleonPotion,Locations.TinyForestPotion,Locations.TinyCastlePotion,Locations.TinyAztecGun,Locations.TinyFactoryGun,Locations.TinyGalleonGun,Locations.TinyForestGun,Locations.TinyCavesGun,Locations.TinyCastleGun,Locations.TinyFactoryInstrument,Locations.TinyGalleonInstrument,Locations.TinyCavesInstrument,Locations.TinyCastleInstrument}
-ChunkyMoveLocations={Locations.HunkyChunky,Locations.PrimatePunch,Locations.GorillaGone,Locations.PineappleGun,Locations.Triangle,Locations.ChunkyAztecPotion,Locations.ChunkyGalleonPotion,Locations.ChunkyForestPotion,Locations.ChunkyCastlePotion,Locations.ChunkyAztecGun,Locations.ChunkyFactoryGun,Locations.ChunkyGalleonGun,Locations.ChunkyForestGun,Locations.ChunkyCavesGun,Locations.ChunkyCastleGun,Locations.ChunkyFactoryInstrument,Locations.ChunkyGalleonInstrument,Locations.ChunkyCavesInstrument,Locations.ChunkyCastleInstrument}
-SharedMoveLocations={Locations.SuperSimianSlam,Locations.SuperDuperSimianSlam,Locations.SniperSight,Locations.HomingAmmo,Locations.AmmoBelt1,Locations.AmmoBelt2,Locations.MusicUpgrade1,Locations.ThirdMelon,Locations.MusicUpgrade2,Locations.SharedJapesPotion,Locations.SharedJapesGun,Locations.SharedAztecPotion,Locations.SharedAztecGun,Locations.SharedAztecInstrument,Locations.SharedFactoryPotion,Locations.SharedFactoryInstrument,Locations.SharedGalleonPotion,Locations.SharedGalleonGun,Locations.SharedCavesPotion}
-DonkeyMoves=[Items.Coconut,Items.Bongos,Items.BaboonBlast,Items.StrongKong,Items.GorillaGrab]
-DiddyMoves=[Items.Peanut,Items.Guitar,Items.ChimpyCharge,Items.RocketbarrelBoost,Items.SimianSpring]
-LankyMoves=[Items.Grape,Items.Trombone,Items.Orangstand,Items.BaboonBalloon,Items.OrangstandSprint]
-TinyMoves=[Items.Feather,Items.Saxophone,Items.MiniMonkey,Items.PonyTailTwirl,Items.Monkeyport]
-ChunkyMoves=[Items.Pineapple,Items.Triangle,Items.HunkyChunky,Items.PrimatePunch,Items.GorillaGone]
-ImportantSharedMoves=[Items.ProgressiveSlam,Items.ProgressiveSlam,Items.SniperSight,Items.HomingAmmo]
-JunkSharedMoves=[Items.ProgressiveAmmoBelt,Items.ProgressiveAmmoBelt,Items.ProgressiveInstrumentUpgrade,Items.ProgressiveInstrumentUpgrade,Items.ProgressiveInstrumentUpgrade]
+    """Items which either have no logical value or are excess copies of those that do."""
+    itemPool = []
+
+    if not settings.unlock_all_moves:
+        # Weapon upgrades
+        if settings.hard_shooting:
+            itemPool.append(Items.HomingAmmo)
+        itemPool.extend(itertools.repeat(Items.ProgressiveAmmoBelt, 2))
+
+        # Instrument upgrades
+        itemPool.extend(itertools.repeat(Items.ProgressiveInstrumentUpgrade, 3))
+
+    # Collectables
+    itemPool.extend(itertools.repeat(Items.GoldenBanana, 101))
+    itemPool.extend(itertools.repeat(Items.BananaMedal, 25))
+    itemPool.extend(itertools.repeat(Items.BattleCrown, 6))
+    if settings.crown_door_open:
+        itemPool.extend(itertools.repeat(Items.BattleCrown, 4))
+    if settings.coin_door_open:
+        itemPool.append(Items.NintendoCoin)
+        itemPool.append(Items.RarewareCoin)
+
+    return itemPool
+
+
+def GetMoveLocationsToRemove(sharedMoveShops: set):
+    """Determine locations to remove from the move pool based on where shared moves got placed."""
+    locationsToRemove = []
+    for sharedMoveShop in sharedMoveShops:
+        # Japes Shops
+        if sharedMoveShop == Locations.SharedJapesPotion:
+            locationsToRemove.append(Locations.BaboonBlast)
+            locationsToRemove.append(Locations.ChimpyCharge)
+            locationsToRemove.append(Locations.Orangstand)
+            locationsToRemove.append(Locations.MiniMonkey)
+            locationsToRemove.append(Locations.HunkyChunky)
+        elif sharedMoveShop == Locations.SharedJapesGun:
+            locationsToRemove.append(Locations.CoconutGun)
+            locationsToRemove.append(Locations.PeanutGun)
+            locationsToRemove.append(Locations.GrapeGun)
+            locationsToRemove.append(Locations.FeatherGun)
+            locationsToRemove.append(Locations.PineappleGun)
+        # Aztec Shops
+        elif sharedMoveShop == Locations.SharedAztecPotion:
+            locationsToRemove.append(Locations.StrongKong)
+            locationsToRemove.append(Locations.RocketbarrelBoost)
+            locationsToRemove.append(Locations.LankyAztecPotion)
+            locationsToRemove.append(Locations.TinyAztecPotion)
+            locationsToRemove.append(Locations.ChunkyAztecPotion)
+        elif sharedMoveShop == Locations.SharedAztecGun:
+            locationsToRemove.append(Locations.DonkeyAztecGun)
+            locationsToRemove.append(Locations.DiddyAztecGun)
+            locationsToRemove.append(Locations.LankyAztecGun)
+            locationsToRemove.append(Locations.TinyAztecGun)
+            locationsToRemove.append(Locations.ChunkyAztecGun)
+        elif sharedMoveShop == Locations.SharedAztecInstrument:
+            locationsToRemove.append(Locations.Bongos)
+            locationsToRemove.append(Locations.Guitar)
+            locationsToRemove.append(Locations.Trombone)
+            locationsToRemove.append(Locations.Saxophone)
+            locationsToRemove.append(Locations.Triangle)
+        # Factory Shops
+        elif sharedMoveShop == Locations.SharedFactoryPotion:
+            locationsToRemove.append(Locations.GorillaGrab)
+            locationsToRemove.append(Locations.SimianSpring)
+            locationsToRemove.append(Locations.BaboonBalloon)
+            locationsToRemove.append(Locations.PonyTailTwirl)
+            locationsToRemove.append(Locations.PrimatePunch)
+        elif sharedMoveShop == Locations.AmmoBelt1:
+            locationsToRemove.append(Locations.DonkeyFactoryGun)
+            locationsToRemove.append(Locations.DiddyFactoryGun)
+            locationsToRemove.append(Locations.LankyFactoryGun)
+            locationsToRemove.append(Locations.TinyFactoryGun)
+            locationsToRemove.append(Locations.ChunkyFactoryGun)
+        elif sharedMoveShop == Locations.SharedFactoryInstrument:
+            locationsToRemove.append(Locations.DonkeyFactoryInstrument)
+            locationsToRemove.append(Locations.DiddyFactoryInstrument)
+            locationsToRemove.append(Locations.LankyFactoryInstrument)
+            locationsToRemove.append(Locations.TinyFactoryInstrument)
+            locationsToRemove.append(Locations.ChunkyFactoryInstrument)
+        # Galleon Shops
+        elif sharedMoveShop == Locations.SharedGalleonPotion:
+            locationsToRemove.append(Locations.DonkeyGalleonPotion)
+            locationsToRemove.append(Locations.DiddyGalleonPotion)
+            locationsToRemove.append(Locations.LankyGalleonPotion)
+            locationsToRemove.append(Locations.TinyGalleonPotion)
+            locationsToRemove.append(Locations.ChunkyGalleonPotion)
+        elif sharedMoveShop == Locations.SharedGalleonGun:
+            locationsToRemove.append(Locations.DonkeyGalleonGun)
+            locationsToRemove.append(Locations.DiddyGalleonGun)
+            locationsToRemove.append(Locations.LankyGalleonGun)
+            locationsToRemove.append(Locations.TinyGalleonGun)
+            locationsToRemove.append(Locations.ChunkyGalleonGun)
+        elif sharedMoveShop == Locations.MusicUpgrade1:
+            locationsToRemove.append(Locations.DonkeyGalleonInstrument)
+            locationsToRemove.append(Locations.DiddyGalleonInstrument)
+            locationsToRemove.append(Locations.LankyGalleonInstrument)
+            locationsToRemove.append(Locations.TinyGalleonInstrument)
+            locationsToRemove.append(Locations.ChunkyGalleonInstrument)
+        # Forest Shops
+        elif sharedMoveShop == Locations.SuperSimianSlam:
+            locationsToRemove.append(Locations.DonkeyForestPotion)
+            locationsToRemove.append(Locations.DiddyForestPotion)
+            locationsToRemove.append(Locations.LankyForestPotion)
+            locationsToRemove.append(Locations.TinyForestPotion)
+            locationsToRemove.append(Locations.ChunkyForestPotion)
+        elif sharedMoveShop == Locations.HomingAmmo:
+            locationsToRemove.append(Locations.DonkeyForestGun)
+            locationsToRemove.append(Locations.DiddyForestGun)
+            locationsToRemove.append(Locations.LankyForestGun)
+            locationsToRemove.append(Locations.TinyForestGun)
+            locationsToRemove.append(Locations.ChunkyForestGun)
+        # Caves Shops
+        elif sharedMoveShop == Locations.SharedCavesPotion:
+            locationsToRemove.append(Locations.DonkeyCavesPotion)
+            locationsToRemove.append(Locations.DiddyCavesPotion)
+            locationsToRemove.append(Locations.OrangstandSprint)
+            locationsToRemove.append(Locations.Monkeyport)
+            locationsToRemove.append(Locations.GorillaGone)
+        elif sharedMoveShop == Locations.AmmoBelt2:
+            locationsToRemove.append(Locations.DonkeyCavesGun)
+            locationsToRemove.append(Locations.DiddyCavesGun)
+            locationsToRemove.append(Locations.LankyCavesGun)
+            locationsToRemove.append(Locations.TinyCavesGun)
+            locationsToRemove.append(Locations.ChunkyCavesGun)
+        elif sharedMoveShop == Locations.ThirdMelon:
+            locationsToRemove.append(Locations.DonkeyCavesInstrument)
+            locationsToRemove.append(Locations.DiddyCavesInstrument)
+            locationsToRemove.append(Locations.LankyCavesInstrument)
+            locationsToRemove.append(Locations.TinyCavesInstrument)
+            locationsToRemove.append(Locations.ChunkyCavesInstrument)
+        # Castle Shops
+        elif sharedMoveShop == Locations.SuperDuperSimianSlam:
+            locationsToRemove.append(Locations.DonkeyCastlePotion)
+            locationsToRemove.append(Locations.DiddyCastlePotion)
+            locationsToRemove.append(Locations.LankyCastlePotion)
+            locationsToRemove.append(Locations.TinyCastlePotion)
+            locationsToRemove.append(Locations.ChunkyCastlePotion)
+        elif sharedMoveShop == Locations.SniperSight:
+            locationsToRemove.append(Locations.DonkeyCastleGun)
+            locationsToRemove.append(Locations.DiddyCastleGun)
+            locationsToRemove.append(Locations.LankyCastleGun)
+            locationsToRemove.append(Locations.TinyCastleGun)
+            locationsToRemove.append(Locations.ChunkyCastleGun)
+        elif sharedMoveShop == Locations.MusicUpgrade2:
+            locationsToRemove.append(Locations.DonkeyCastleInstrument)
+            locationsToRemove.append(Locations.DiddyCastleInstrument)
+            locationsToRemove.append(Locations.LankyCastleInstrument)
+            locationsToRemove.append(Locations.TinyCastleInstrument)
+            locationsToRemove.append(Locations.ChunkyCastleInstrument)
+    return set(locationsToRemove)
+
+
+DonkeyMoveLocations = {
+    Locations.BaboonBlast,
+    Locations.StrongKong,
+    Locations.GorillaGrab,
+    Locations.CoconutGun,
+    Locations.Bongos,
+    Locations.DonkeyGalleonPotion,
+    Locations.DonkeyForestPotion,
+    Locations.DonkeyCavesPotion,
+    Locations.DonkeyCastlePotion,
+    Locations.DonkeyAztecGun,
+    Locations.DonkeyFactoryGun,
+    Locations.DonkeyGalleonGun,
+    Locations.DonkeyForestGun,
+    Locations.DonkeyCavesGun,
+    Locations.DonkeyCastleGun,
+    Locations.DonkeyFactoryInstrument,
+    Locations.DonkeyGalleonInstrument,
+    Locations.DonkeyCavesInstrument,
+    Locations.DonkeyCastleInstrument,
+}
+DiddyMoveLocations = {
+    Locations.ChimpyCharge,
+    Locations.RocketbarrelBoost,
+    Locations.SimianSpring,
+    Locations.PeanutGun,
+    Locations.Guitar,
+    Locations.DiddyGalleonPotion,
+    Locations.DiddyForestPotion,
+    Locations.DiddyCavesPotion,
+    Locations.DiddyCastlePotion,
+    Locations.DiddyAztecGun,
+    Locations.DiddyFactoryGun,
+    Locations.DiddyGalleonGun,
+    Locations.DiddyForestGun,
+    Locations.DiddyCavesGun,
+    Locations.DiddyCastleGun,
+    Locations.DiddyFactoryInstrument,
+    Locations.DiddyGalleonInstrument,
+    Locations.DiddyCavesInstrument,
+    Locations.DiddyCastleInstrument,
+}
+LankyMoveLocations = {
+    Locations.Orangstand,
+    Locations.BaboonBalloon,
+    Locations.OrangstandSprint,
+    Locations.GrapeGun,
+    Locations.Trombone,
+    Locations.LankyAztecPotion,
+    Locations.LankyGalleonPotion,
+    Locations.LankyForestPotion,
+    Locations.LankyCastlePotion,
+    Locations.LankyAztecGun,
+    Locations.LankyFactoryGun,
+    Locations.LankyGalleonGun,
+    Locations.LankyForestGun,
+    Locations.LankyCavesGun,
+    Locations.LankyCastleGun,
+    Locations.LankyFactoryInstrument,
+    Locations.LankyGalleonInstrument,
+    Locations.LankyCavesInstrument,
+    Locations.LankyCastleInstrument,
+}
+TinyMoveLocations = {
+    Locations.MiniMonkey,
+    Locations.PonyTailTwirl,
+    Locations.Monkeyport,
+    Locations.FeatherGun,
+    Locations.Saxophone,
+    Locations.TinyAztecPotion,
+    Locations.TinyGalleonPotion,
+    Locations.TinyForestPotion,
+    Locations.TinyCastlePotion,
+    Locations.TinyAztecGun,
+    Locations.TinyFactoryGun,
+    Locations.TinyGalleonGun,
+    Locations.TinyForestGun,
+    Locations.TinyCavesGun,
+    Locations.TinyCastleGun,
+    Locations.TinyFactoryInstrument,
+    Locations.TinyGalleonInstrument,
+    Locations.TinyCavesInstrument,
+    Locations.TinyCastleInstrument,
+}
+ChunkyMoveLocations = {
+    Locations.HunkyChunky,
+    Locations.PrimatePunch,
+    Locations.GorillaGone,
+    Locations.PineappleGun,
+    Locations.Triangle,
+    Locations.ChunkyAztecPotion,
+    Locations.ChunkyGalleonPotion,
+    Locations.ChunkyForestPotion,
+    Locations.ChunkyCastlePotion,
+    Locations.ChunkyAztecGun,
+    Locations.ChunkyFactoryGun,
+    Locations.ChunkyGalleonGun,
+    Locations.ChunkyForestGun,
+    Locations.ChunkyCavesGun,
+    Locations.ChunkyCastleGun,
+    Locations.ChunkyFactoryInstrument,
+    Locations.ChunkyGalleonInstrument,
+    Locations.ChunkyCavesInstrument,
+    Locations.ChunkyCastleInstrument,
+}
+SharedMoveLocations = {
+    Locations.SuperSimianSlam,
+    Locations.SuperDuperSimianSlam,
+    Locations.SniperSight,
+    Locations.HomingAmmo,
+    Locations.AmmoBelt1,
+    Locations.AmmoBelt2,
+    Locations.MusicUpgrade1,
+    Locations.ThirdMelon,
+    Locations.MusicUpgrade2,
+    Locations.SharedJapesPotion,
+    Locations.SharedJapesGun,
+    Locations.SharedAztecPotion,
+    Locations.SharedAztecGun,
+    Locations.SharedAztecInstrument,
+    Locations.SharedFactoryPotion,
+    Locations.SharedFactoryInstrument,
+    Locations.SharedGalleonPotion,
+    Locations.SharedGalleonGun,
+    Locations.SharedCavesPotion,
+}
+DonkeyMoves = [
+    Items.Coconut,
+    Items.Bongos,
+    Items.BaboonBlast,
+    Items.StrongKong,
+    Items.GorillaGrab,
+]
+DiddyMoves = [
+    Items.Peanut,
+    Items.Guitar,
+    Items.ChimpyCharge,
+    Items.RocketbarrelBoost,
+    Items.SimianSpring,
+]
+LankyMoves = [
+    Items.Grape,
+    Items.Trombone,
+    Items.Orangstand,
+    Items.BaboonBalloon,
+    Items.OrangstandSprint,
+]
+TinyMoves = [
+    Items.Feather,
+    Items.Saxophone,
+    Items.MiniMonkey,
+    Items.PonyTailTwirl,
+    Items.Monkeyport,
+]
+ChunkyMoves = [
+    Items.Pineapple,
+    Items.Triangle,
+    Items.HunkyChunky,
+    Items.PrimatePunch,
+    Items.GorillaGone,
+]
+ImportantSharedMoves = [
+    Items.ProgressiveSlam,
+    Items.ProgressiveSlam,
+    Items.SniperSight,
+    Items.HomingAmmo,
+]
+JunkSharedMoves = [
+    Items.ProgressiveAmmoBelt,
+    Items.ProgressiveAmmoBelt,
+    Items.ProgressiveInstrumentUpgrade,
+    Items.ProgressiveInstrumentUpgrade,
+    Items.ProgressiveInstrumentUpgrade,
+]

@@ -1,1 +1,1 @@
-'Logic file location data.'
+"""Logic file location data."""
