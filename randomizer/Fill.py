@@ -213,19 +213,19 @@ def Fill(spoiler):
 	'Fully randomizes and places all items. Currently theoretical.';A=spoiler;B=0
 	while _B:
 		try:
-			ItemPool.PlaceConstants(A.settings);D=PlaceItems(A.settings,A.settings.algorithm,ItemPool.HighPriorityItems(A.settings),ItemPool.HighPriorityAssumedItems(A.settings))
-			if D>0:raise Ex.ItemPlacementException(str(D)+' unplaced high priority items.')
-			Reset();E=PlaceItems(A.settings,A.settings.algorithm,ItemPool.Blueprints(A.settings),ItemPool.BlueprintAssumedItems(A.settings))
-			if E>0:raise Ex.ItemPlacementException(str(E)+' unplaced blueprints.')
-			Reset();F=PlaceItems(A.settings,A.settings.algorithm,ItemPool.LowPriorityItems(A.settings),ItemPool.ExcessItems(A.settings))
-			if F>0:raise Ex.ItemPlacementException(str(F)+' unplaced low priority items.')
-			J=ItemPool.ExcessItems(A.settings);G=PlaceItems(A.settings,_E,ItemPool.ExcessItems(A.settings))
-			if G>0:raise Ex.ItemPlacementException(str(G)+' unplaced excess items.')
+			ItemPool.PlaceConstants(A.settings);C=PlaceItems(A.settings,A.settings.algorithm,ItemPool.HighPriorityItems(A.settings),ItemPool.HighPriorityAssumedItems(A.settings))
+			if C>0:raise Ex.ItemPlacementException(str(C)+' unplaced high priority items.')
+			Reset();D=PlaceItems(A.settings,A.settings.algorithm,ItemPool.Blueprints(A.settings),ItemPool.BlueprintAssumedItems(A.settings))
+			if D>0:raise Ex.ItemPlacementException(str(D)+' unplaced blueprints.')
+			Reset();E=PlaceItems(A.settings,A.settings.algorithm,ItemPool.LowPriorityItems(A.settings),ItemPool.ExcessItems(A.settings))
+			if E>0:raise Ex.ItemPlacementException(str(E)+' unplaced low priority items.')
+			H=ItemPool.ExcessItems(A.settings);F=PlaceItems(A.settings,_E,ItemPool.ExcessItems(A.settings))
+			if F>0:raise Ex.ItemPlacementException(str(F)+' unplaced excess items.')
 			Reset()
 			if not GetAccessibleLocations(A.settings,[],SearchMode.CheckBeatable):raise Ex.GameNotBeatableException(_F)
-			Reset();C=GetAccessibleLocations(A.settings,[],SearchMode.GeneratePlaythrough);ParePlaythrough(A.settings,C);H=PareWoth(A.settings,C);A.UpdateLocations(LocationList);A.UpdatePlaythrough(LocationList,C);A.UpdateWoth(LocationList,H);return A
-		except Ex.FillException as I:
-			if B==4:js.postMessage(_G);raise I
+			return
+		except Ex.FillException as G:
+			if B==4:js.postMessage(_G);raise G
 			else:B+=1;js.postMessage(_H+str(B));Reset();Logic.ClearAllLocations()
 def ShuffleSharedMoves(spoiler):
 	'Shuffles shared kong moves and then returns the remaining ones and their valid locations.';B=spoiler;ItemPool.PlaceConstants(B.settings);A=[];A.extend(ItemPool.DonkeyMoves);A.extend(ItemPool.DiddyMoves);A.extend(ItemPool.LankyMoves);A.extend(ItemPool.TinyMoves);A.extend(ItemPool.ChunkyMoves);C=PlaceItems(B.settings,_D,ItemPool.ImportantSharedMoves.copy(),[A for A in ItemPool.AllItems(B.settings)if A not in ItemPool.ImportantSharedMoves],ItemPool.SharedMoveLocations)
@@ -240,15 +240,16 @@ def ShuffleSharedMoves(spoiler):
 		for L in J[H]:G[L]=K[H]-I
 	return A,G
 def ShuffleMisc(spoiler):
-	'Facilitate shuffling individual pools of items in lieu of full item rando.';A=spoiler;B=0
+	'Facilitate shuffling individual pools of items in lieu of full item rando.';B=spoiler;A=0
 	while _B:
 		try:
-			FillKongsAndMoves(A);Reset()
-			if not GetAccessibleLocations(A.settings,[],SearchMode.CheckBeatable):raise Ex.GameNotBeatableException(_F)
-			Reset();C=GetAccessibleLocations(A.settings,[],SearchMode.GeneratePlaythrough);ParePlaythrough(A.settings,C);D=PareWoth(A.settings,C);A.UpdateLocations(LocationList);A.UpdatePlaythrough(LocationList,C);A.UpdateWoth(LocationList,D);return A
-		except Ex.FillException as E:
-			if B==20:js.postMessage(_G);raise E
-			else:B+=1;js.postMessage(_H+str(B));Reset();Logic.ClearAllLocations()
+			FillKongsAndMoves(B);Reset()
+			if not GetAccessibleLocations(B.settings,[],SearchMode.CheckBeatable):raise Ex.GameNotBeatableException(_F)
+			return
+		except Ex.FillException as C:
+			if A==20:js.postMessage(_G);raise C
+			else:A+=1;js.postMessage(_H+str(A));Reset();Logic.ClearAllLocations()
+def GeneratePlaythrough(spoiler):'Generate playthrough and way of the hoard and update spoiler.';A=spoiler;Reset();B=GetAccessibleLocations(A.settings,[],SearchMode.GeneratePlaythrough);ParePlaythrough(A.settings,B);C=PareWoth(A.settings,B);A.UpdateLocations(LocationList);A.UpdatePlaythrough(LocationList,B);A.UpdateWoth(LocationList,C)
 def FillKongsAndMoves(spoiler):
 	'Fill shared moves, then kongs, then rest of moves.';A=spoiler;C=[];D={}
 	if A.settings.shuffle_items==_I:G,H=ShuffleSharedMoves(A);C.extend(G);D.update(H)
@@ -263,11 +264,11 @@ def ShuffleKongsAndLevels(spoiler):
 	'Shuffle Kongs and Levels simultaneously accounting for restrictions.';A=spoiler;ShuffleExits.ShuffleLevelOrderWithRestrictions(A.settings);A.UpdateExits();print('Starting Kong: '+A.settings.starting_kong.name);ItemPool.PlaceConstants(A.settings);B=0
 	while _B:
 		try:
-			WipeProgressionRequirements(A.settings);FillKongsAndMoves(A);SetNewProgressionRequirements(A.settings);Reset()
+			WipeProgressionRequirements(A.settings);FillKongsAndMoves(A);Reset()
 			if not GetAccessibleLocations(A.settings,[],SearchMode.CheckBeatable):raise Ex.GameNotBeatableException(_F)
-			Reset();C=GetAccessibleLocations(A.settings,[],SearchMode.GeneratePlaythrough);ParePlaythrough(A.settings,C);D=PareWoth(A.settings,C);A.UpdateLocations(LocationList);A.UpdatePlaythrough(LocationList,C);A.UpdateWoth(LocationList,D);return A
-		except Ex.FillException as E:
-			if B==20:js.postMessage(_G);raise E
+			return
+		except Ex.FillException as C:
+			if B==20:js.postMessage(_G);raise C
 			else:B+=1;js.postMessage(_H+str(B));Reset();Logic.ClearAllLocations()
 def GetAccessibleKongLocations(levels,ownedKongs):
 	'Get all kong locations within the provided levels which are reachable by owned kongs.';A=ownedKongs;B=[]
@@ -301,7 +302,7 @@ def Generate_Spoiler(spoiler):
 	'Generate a complete spoiler based on input settings.';A=spoiler;global LogicVariables;LogicVariables=LogicVarHolder(A.settings);KasplatShuffle(LogicVariables);A.human_kasplats={};A.UpdateKasplats(LogicVariables.kasplat_map)
 	if A.settings.bonus_barrels==_E:BarrelShuffle(A.settings);A.UpdateBarrels()
 	if A.settings.bananaport_rando:B=[];C={};ShuffleWarps(B,C);A.bananaport_replacements=B.copy();A.human_warp_locations=C
-	if A.settings.shuffle_loading_zones=='levels'and A.settings.kong_rando:
+	if A.settings.kongs_for_progression:
 		if not A.settings.unlock_all_moves:A.settings.shuffle_items=_I
 		A.settings.boss_location_rando=_B;A.settings.boss_kong_rando=_B;ShuffleKongsAndLevels(A)
 	else:
@@ -311,4 +312,5 @@ def Generate_Spoiler(spoiler):
 		else:
 			ItemPool.PlaceConstants(A.settings)
 			if not GetAccessibleLocations(A.settings,[],SearchMode.CheckBeatable):raise Ex.VanillaItemsGameNotBeatableException('Game unbeatable.')
-	Reset();ShuffleExits.Reset();return A
+	if A.settings.kongs_for_progression:SetNewProgressionRequirements(A.settings)
+	GeneratePlaythrough(A);Reset();ShuffleExits.Reset();return A
