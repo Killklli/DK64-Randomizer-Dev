@@ -20,7 +20,7 @@ def find_list_resources(tag,attribute,soup):
 	return list
 for f in [*get_files(os.getcwd(),'html.jinja2',recursive=_A),*get_files(os.getcwd(),'html',recursive=_A)]:
 	with open(f,'r')as reader:
-		html=reader.read();soup=BeautifulSoup(html,features='html.parser');image_src=find_list_resources('img','src',soup);script_src=find_list_resources('script','src',soup);css_link=find_list_resources('link','href',soup)
+		html=reader.read();soup=BeautifulSoup(html,features='html.parser');image_src=find_list_resources('img','src',soup);script_src=[];css_link=find_list_resources('link','href',soup)
 		for link in [*(css_link),*(script_src),*(image_src)]:
 			if'http://'in link or'https://'in link:
 				file_name='/web_cache'+urlparse(link).path+urlparse(link).query;Path(os.getcwd()+os.path.dirname(file_name)).mkdir(parents=_A,exist_ok=_A);req=requests.get(link,allow_redirects=False);open(f".{file_name}",'wb').write(req.content);html=html.replace(link,f".{file_name}")
