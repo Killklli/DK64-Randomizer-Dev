@@ -1,149 +1,29 @@
-"""Apply cosmetic elements of Kong Rando."""
+'Apply cosmetic elements of Kong Rando.'
 from imp import source_from_cache
 from random import shuffle
-
 import js
 from randomizer.Patching.Patcher import ROM
 from randomizer.Spoiler import Spoiler
 from randomizer.Lists.EnemyTypes import Enemies
-
-
-def apply_kongrando_cosmetic(spoiler: Spoiler):
-    """Rando write bananaport locations."""
-    if spoiler.settings.kong_rando:
-        gunswitches = [0x129, 0x126, 0x128, 0x127, 0x125]
-        greenslamswitches = [0x94, 0x93, 0x95, 0x96, 0x92]
-        instrumentpads = [0xA8, 0xA9, 0xAC, 0xAA, 0xAB]
-        forceSwitches = [0xE3, 0xE3, 0xE3, 0xE3, 0x70]
-        actors = [Enemies.CutsceneDK, Enemies.CutsceneDiddy, Enemies.CutsceneLanky, Enemies.CutsceneTiny, Enemies.CutsceneChunky]
-
-        llama_entrance_switch = []
-        # llama_kong = spoiler.shuffled_kong_placement["Llama Temple"]["puzzle"]["kong"]
-        # if llama_kong in [1, 4]:
-        #     llama_entrance_switch.append({"index": 0xD, "new_type": gunswitches[llama_kong]})
-
-        kongrando_changes = [
-            {
-                "map_index": 7,
-                "model2_changes": [
-                    {
-                        "index": 0x30,
-                        "new_type": gunswitches[spoiler.shuffled_kong_placement["Jungle Japes"]["puzzle"]["kong"]],
-                    },
-                    {
-                        "index": 0x31,
-                        "new_type": gunswitches[spoiler.shuffled_kong_placement["Jungle Japes"]["puzzle"]["kong"]],
-                    },
-                    {
-                        "index": 0x32,
-                        "new_type": gunswitches[spoiler.shuffled_kong_placement["Jungle Japes"]["puzzle"]["kong"]],
-                    },
-                ],
-                "charspawner_changes": [
-                    {"type": Enemies.CutsceneDiddy, "new_type": actors[spoiler.shuffled_kong_placement["Jungle Japes"]["locked"]["kong"]]},
-                ],
-            },
-            {"map_index": 0x26, "model2_changes": llama_entrance_switch, "charspawner_changes": []},
-            {
-                "map_index": 0x14,
-                "model2_changes": [
-                    {
-                        "index": 0x16,
-                        "new_type": instrumentpads[spoiler.shuffled_kong_placement["Llama Temple"]["puzzle"]["kong"]],
-                    },
-                    {
-                        "index": 0x12,
-                        "new_type": gunswitches[spoiler.shuffled_kong_placement["Llama Temple"]["puzzle"]["kong"]],
-                    },
-                ],
-                "charspawner_changes": [
-                    {"type": Enemies.CutsceneLanky, "new_type": actors[spoiler.shuffled_kong_placement["Llama Temple"]["locked"]["kong"]]},
-                ],
-            },
-            {
-                "map_index": 0x10,
-                "model2_changes": [
-                    # {
-                    #     "index": 0x0,
-                    #     "new_type": greenslamswitches[spoiler.shuffled_kong_placement["Tiny Temple"]["puzzle"]["kong"]],
-                    # },
-                    # {
-                    #     "index": 0x4,
-                    #     "new_type": instrumentpads[spoiler.shuffled_kong_placement["Tiny Temple"]["puzzle"]["kong"]],
-                    # },
-                    {"index": 0x14, "new_type": forceSwitches[spoiler.shuffled_kong_placement["Tiny Temple"]["puzzle"]["kong"]]}
-                ],
-                "charspawner_changes": [
-                    {"type": Enemies.CutsceneTiny, "new_type": actors[spoiler.shuffled_kong_placement["Tiny Temple"]["locked"]["kong"]]},
-                ],
-            },
-            {
-                "map_index": 0x1A,
-                "model2_changes": [
-                    {
-                        "index": 0x24,
-                        "new_type": greenslamswitches[spoiler.shuffled_kong_placement["Frantic Factory"]["puzzle"]["kong"]],
-                    },
-                ],
-                "charspawner_changes": [
-                    {"type": Enemies.CutsceneChunky, "new_type": actors[spoiler.shuffled_kong_placement["Frantic Factory"]["locked"]["kong"]]},
-                ],
-            },
-        ]
-
-        for kong_map in spoiler.shuffled_kong_placement.keys():
-            for link_type in spoiler.shuffled_kong_placement[kong_map].keys():
-                ROM().seek(0x1FED020 + spoiler.shuffled_kong_placement[kong_map][link_type]["write"])
-                ROM().writeMultipleBytes(spoiler.shuffled_kong_placement[kong_map][link_type]["kong"], 1)
-
-        for cont_map in kongrando_changes:
-            cont_map_id = int(cont_map["map_index"])
-            # Setup
-            cont_map_setup_address = js.pointer_addresses[9]["entries"][cont_map_id]["pointing_to"]
-            ROM().seek(cont_map_setup_address)
-            model2_count = int.from_bytes(ROM().readBytes(4), "big")
-            for x in range(model2_count):
-                start = cont_map_setup_address + 4 + (x * 0x30)
-                ROM().seek(start + 0x2A)
-                obj_id = int.from_bytes(ROM().readBytes(2), "big")
-                has_id = False
-                new_type = 0
-                for model2 in cont_map["model2_changes"]:
-                    if model2["index"] == obj_id:
-                        has_id = True
-                        new_type = model2["new_type"]
-                if has_id:
-                    ROM().seek(start + 0x28)
-                    ROM().writeMultipleBytes(new_type, 2)
-            # Character Spawners
-            cont_map_spawner_address = js.pointer_addresses[16]["entries"][cont_map_id]["pointing_to"]
-            ROM().seek(cont_map_spawner_address)
-            fence_count = int.from_bytes(ROM().readBytes(2), "big")
-            offset = 2
-            if fence_count > 0:
-                for x in range(fence_count):
-                    ROM().seek(cont_map_spawner_address + offset)
-                    point_count = int.from_bytes(ROM().readBytes(2), "big")
-                    offset += (point_count * 6) + 2
-                    ROM().seek(cont_map_spawner_address + offset)
-                    point0_count = int.from_bytes(ROM().readBytes(2), "big")
-                    offset += (point0_count * 10) + 6
-            ROM().seek(cont_map_spawner_address + offset)
-            spawner_count = int.from_bytes(ROM().readBytes(2), "big")
-            offset += 2
-            for x in range(spawner_count):
-                ROM().seek(cont_map_spawner_address + offset)
-                enemy_id = int.from_bytes(ROM().readBytes(1), "big")
-                init_offset = offset
-                ROM().seek(cont_map_spawner_address + offset + 0x11)
-                extra_count = int.from_bytes(ROM().readBytes(1), "big")
-                offset += 0x16 + (extra_count * 2)
-                has_id = False
-                new_type = 0
-                for char in cont_map["charspawner_changes"]:
-                    if char["type"] == enemy_id:
-                        has_id = True
-                        new_type = char["new_type"]
-                if has_id:
-                    ROM().seek(cont_map_spawner_address + init_offset)
-                    ROM().writeMultipleBytes(new_type, 1)
+def apply_kongrando_cosmetic(spoiler):
+	'Rando write bananaport locations.';h=False;g='pointing_to';f='entries';e='Frantic Factory';d='Tiny Temple';V='Llama Temple';R='locked';Q='Jungle Japes';N='type';K='charspawner_changes';J='model2_changes';I='map_index';H='puzzle';F='big';E='index';C='kong';B='new_type';A=spoiler
+	if A.settings.kong_rando:
+		O=[297,294,296,295,293];i=[148,147,149,150,146];j=[168,169,172,170,171];k=[227,227,227,227,112];P=[Enemies.CutsceneDK,Enemies.CutsceneDiddy,Enemies.CutsceneLanky,Enemies.CutsceneTiny,Enemies.CutsceneChunky];l=[];m=[{I:7,J:[{E:48,B:O[A.shuffled_kong_placement[Q][H][C]]},{E:49,B:O[A.shuffled_kong_placement[Q][H][C]]},{E:50,B:O[A.shuffled_kong_placement[Q][H][C]]}],K:[{N:Enemies.CutsceneDiddy,B:P[A.shuffled_kong_placement[Q][R][C]]}]},{I:38,J:l,K:[]},{I:20,J:[{E:22,B:j[A.shuffled_kong_placement[V][H][C]]},{E:18,B:O[A.shuffled_kong_placement[V][H][C]]}],K:[{N:Enemies.CutsceneLanky,B:P[A.shuffled_kong_placement[V][R][C]]}]},{I:16,J:[{E:20,B:k[A.shuffled_kong_placement[d][H][C]]}],K:[{N:Enemies.CutsceneTiny,B:P[A.shuffled_kong_placement[d][R][C]]}]},{I:26,J:[{E:36,B:i[A.shuffled_kong_placement[e][H][C]]}],K:[{N:Enemies.CutsceneChunky,B:P[A.shuffled_kong_placement[e][R][C]]}]}]
+		for S in A.shuffled_kong_placement.keys():
+			for W in A.shuffled_kong_placement[S].keys():ROM().seek(33476640+A.shuffled_kong_placement[S][W]['write']);ROM().writeMultipleBytes(A.shuffled_kong_placement[S][W][C],1)
+		for T in m:
+			X=int(T[I]);Y=js.pointer_addresses[9][f][X][g];ROM().seek(Y);n=int.from_bytes(ROM().readBytes(4),F)
+			for U in range(n):
+				Z=Y+4+U*48;ROM().seek(Z+42);o=int.from_bytes(ROM().readBytes(2),F);L=h;M=0
+				for a in T[J]:
+					if a[E]==o:L=True;M=a[B]
+				if L:ROM().seek(Z+40);ROM().writeMultipleBytes(M,2)
+			G=js.pointer_addresses[16][f][X][g];ROM().seek(G);b=int.from_bytes(ROM().readBytes(2),F);D=2
+			if b>0:
+				for U in range(b):ROM().seek(G+D);p=int.from_bytes(ROM().readBytes(2),F);D+=p*6+2;ROM().seek(G+D);q=int.from_bytes(ROM().readBytes(2),F);D+=q*10+6
+			ROM().seek(G+D);r=int.from_bytes(ROM().readBytes(2),F);D+=2
+			for U in range(r):
+				ROM().seek(G+D);s=int.from_bytes(ROM().readBytes(1),F);t=D;ROM().seek(G+D+17);u=int.from_bytes(ROM().readBytes(1),F);D+=22+u*2;L=h;M=0
+				for c in T[K]:
+					if c[N]==s:L=True;M=c[B]
+				if L:ROM().seek(G+t);ROM().writeMultipleBytes(M,1)

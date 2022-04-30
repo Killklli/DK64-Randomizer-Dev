@@ -1,18 +1,7 @@
-"""Convert PNG to RGBA32 binary."""
+'Convert PNG to RGBA32 binary.'
 from PIL import Image
-
-
 def convertToRGBA32(png_file):
-    """Convert PNG to RGBA32 binary."""
-    im = Image.open(png_file)
-    width, height = im.size
-    pix = im.load()
-    new_file = png_file.replace(".png", ".rgba32")
-    with open(new_file, "wb") as fh:
-        for y in range(height):
-            for x in range(width):
-                r, g, b, a = im.getpixel((x, y))
-                fh.write((r & 0xFF).to_bytes(1, "big"))
-                fh.write((g & 0xFF).to_bytes(1, "big"))
-                fh.write((b & 0xFF).to_bytes(1, "big"))
-                fh.write((a & 0xFF).to_bytes(1, "big"))
+	'Convert PNG to RGBA32 binary.';D=png_file;B='big';C=Image.open(D);E,F=C.size;N=C.load();G=D.replace('.png','.rgba32')
+	with open(G,'wb')as A:
+		for H in range(F):
+			for I in range(E):J,K,L,M=C.getpixel((I,H));A.write((J&255).to_bytes(1,B));A.write((K&255).to_bytes(1,B));A.write((L&255).to_bytes(1,B));A.write((M&255).to_bytes(1,B))

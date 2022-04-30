@@ -1,231 +1,35 @@
-"""Write new end sequence text credits."""
-header_length = 0x78
-names_length = 0xA0
-general_buffer = 0x9A
-end_buffer = 0xCC
-
-end_sequence_cards = [
-    {
-        "squish": {
-            "from": "top",
-            "duration": header_length,
-            "cooldown": general_buffer,
-        },
-        "text": [
-            "Developers",
-        ],
-    },
-    {
-        "squish": {
-            "from": "left",
-            "duration": names_length,
-            "cooldown": general_buffer,
-        },
-        "text": [
-            "2dos",
-            "Ballaam",
-        ],
-    },
-    {
-        "squish": {
-            "from": "right",
-            "duration": names_length,
-            "cooldown": general_buffer,
-        },
-        "text": ["Bismuth", "Cfox"],
-    },
-    {
-        "squish": {
-            "from": "left",
-            "duration": names_length,
-            "cooldown": general_buffer,
-        },
-        "text": [
-            "GloriousLiar",
-            "KillKlli",
-        ],
-    },
-    {
-        "squish": {
-            "from": "right",
-            "duration": names_length,
-            "cooldown": general_buffer,
-        },
-        "text": ["Mittenz", "Naramgamjan"],
-    },
-    {
-        "squish": {
-            "from": "left",
-            "duration": names_length,
-            "cooldown": end_buffer,
-        },
-        "text": ["Rain", "ShadowShine57", "Znernicus"],
-    },
-    {
-        "squish": {
-            "from": "top",
-            "duration": header_length,
-            "cooldown": general_buffer,
-        },
-        "text": ["Beta Testers"],
-    },
-    {
-        "squish": {
-            "from": "left",
-            "duration": names_length,
-            "cooldown": general_buffer,
-        },
-        "text": [
-            "Auphonium",
-            "ChelseyxLynn",
-        ],
-    },
-    {
-        "squish": {
-            "from": "top",
-            "duration": names_length,
-            "cooldown": general_buffer,
-        },
-        "text": [
-            "ChristianVega64",
-            "Connor75",
-        ],
-    },
-    {
-        "squish": {
-            "from": "left",
-            "duration": names_length,
-            "cooldown": general_buffer,
-        },
-        "text": [
-            "Fuzzyness",
-            "KaptainKohl",
-        ],
-    },
-    {
-        "squish": {
-            "from": "top",
-            "duration": names_length,
-            "cooldown": general_buffer,
-        },
-        "text": ["KiwiKiller67", "Nukkular Reaction"],
-    },
-    {
-        "squish": {
-            "from": "left",
-            "duration": names_length,
-            "cooldown": general_buffer,
-        },
-        "text": [
-            "Obiyo",
-            "Revven",
-        ],
-    },
-    {
-        "squish": {
-            "from": "bottom",
-            "duration": names_length,
-            "cooldown": general_buffer,
-        },
-        "text": ["Riley", "SirSmackStrikesBack"],
-    },
-    {
-        "squish": {
-            "from": "left",
-            "duration": names_length,
-            "cooldown": general_buffer,
-        },
-        "text": [
-            "UsedPizza",
-            "VidyaJames",
-        ],
-    },
-    {
-        "squish": {
-            "from": "right",
-            "duration": names_length,
-            "cooldown": end_buffer,
-        },
-        "text": ["Wex", "Zorulda"],
-    },
-    {
-        "squish": {
-            "from": "top",
-            "duration": header_length,
-            "cooldown": general_buffer,
-        },
-        "text": ["Additional Thanks"],
-    },
-    {
-        "squish": {
-            "from": "left",
-            "duration": names_length,
-            "cooldown": general_buffer,
-        },
-        "text": [
-            "Game Developers",
-            " ",
-            "Rareware Ltd",
-            "Nintendo",
-        ],
-    },
-    {
-        "squish": {
-            "from": "bottom",
-            "duration": names_length,
-            "cooldown": general_buffer,
-        },
-        "text": ["Crankys Lab Developer", "Isotarge"],
-    },
-    {
-        "squish": {
-            "from": "top",
-            "duration": names_length * 2,
-            "cooldown": general_buffer,
-        },
-        "text": ["You have been playing", "DK64 Randomizer", "dk64randomizer.com"],
-    },
-    {
-        "squish": {
-            "from": "bottom",
-            "duration": names_length * 2,
-            "cooldown": general_buffer,
-        },
-        "text": ["Discord", " ", "discord.dk64randomizer.com"],
-    },
-]
-
-
+'Write new end sequence text credits.'
+_J='ERROR: Too many cards'
+_I='bottom'
+_H='right'
+_G='top'
+_F='left'
+_E='cooldown'
+_D='duration'
+_C='from'
+_B='text'
+_A='squish'
+header_length=120
+names_length=160
+general_buffer=154
+end_buffer=204
+end_sequence_cards=[{_A:{_C:_G,_D:header_length,_E:general_buffer},_B:['Developers']},{_A:{_C:_F,_D:names_length,_E:general_buffer},_B:['2dos','Ballaam']},{_A:{_C:_H,_D:names_length,_E:general_buffer},_B:['Bismuth','Cfox']},{_A:{_C:_F,_D:names_length,_E:general_buffer},_B:['GloriousLiar','KillKlli']},{_A:{_C:_H,_D:names_length,_E:general_buffer},_B:['Mittenz','Naramgamjan']},{_A:{_C:_F,_D:names_length,_E:end_buffer},_B:['Rain','ShadowShine57','Znernicus']},{_A:{_C:_G,_D:header_length,_E:general_buffer},_B:['Beta Testers']},{_A:{_C:_F,_D:names_length,_E:general_buffer},_B:['Auphonium','ChelseyxLynn']},{_A:{_C:_G,_D:names_length,_E:general_buffer},_B:['ChristianVega64','Connor75']},{_A:{_C:_F,_D:names_length,_E:general_buffer},_B:['Fuzzyness','KaptainKohl']},{_A:{_C:_G,_D:names_length,_E:general_buffer},_B:['KiwiKiller67','Nukkular Reaction']},{_A:{_C:_F,_D:names_length,_E:general_buffer},_B:['Obiyo','Revven']},{_A:{_C:_I,_D:names_length,_E:general_buffer},_B:['Riley','SirSmackStrikesBack']},{_A:{_C:_F,_D:names_length,_E:general_buffer},_B:['UsedPizza','VidyaJames']},{_A:{_C:_H,_D:names_length,_E:end_buffer},_B:['Wex','Zorulda']},{_A:{_C:_G,_D:header_length,_E:general_buffer},_B:['Additional Thanks']},{_A:{_C:_F,_D:names_length,_E:general_buffer},_B:['Game Developers',' ','Rareware Ltd','Nintendo']},{_A:{_C:_I,_D:names_length,_E:general_buffer},_B:['Crankys Lab Developer','Isotarge']},{_A:{_C:_G,_D:names_length*2,_E:general_buffer},_B:['You have been playing','DK64 Randomizer','dk64randomizer.com']},{_A:{_C:_I,_D:names_length*2,_E:general_buffer},_B:['Discord',' ','discord.dk64randomizer.com']}]
 def createTextFile(directory):
-    """Create the text file associated with end sequence."""
-    if len(end_sequence_cards) > 21:
-        print("ERROR: Too many cards")
-        exit()
-    with open(f"{directory}/credits.bin", "wb") as fh:
-        for card in end_sequence_cards:
-            for item in card["text"]:
-                new_item = item.upper() + "\n"
-                fh.write(new_item.encode("ascii"))
-        terminator = "*\n"
-        fh.write(terminator.encode("ascii"))
-
-
+	'Create the text file associated with end sequence.';B='ascii'
+	if len(end_sequence_cards)>21:print(_J);exit()
+	with open(f"{directory}/credits.bin",'wb')as A:
+		for C in end_sequence_cards:
+			for D in C[_B]:E=D.upper()+'\n';A.write(E.encode(B))
+		F='*\n';A.write(F.encode(B))
 def createSquishFile(directory):
-    """Create the squish data associated with end sequence."""
-    if len(end_sequence_cards) > 21:
-        print("ERROR: Too many cards")
-        exit()
-    directions = ["top", "left", "bottom", "right"]
-    with open(f"{directory}/squish.bin", "wb") as fh:
-        for card in end_sequence_cards:
-            direction_index = 0
-            if card["squish"]["from"] in directions:
-                direction_index = directions.index(card["squish"]["from"])
-            fh.write(card["squish"]["duration"].to_bytes(2, "big"))
-            fh.write(card["squish"]["cooldown"].to_bytes(2, "big"))
-            fh.write(direction_index.to_bytes(1, "big"))
-            fh.write(len(card["text"]).to_bytes(1, "big"))
-        term = []
-        for x in range(6):
-            term.append(0xFF)
-        fh.write(bytearray(term))
+	'Create the squish data associated with end sequence.';C='big'
+	if len(end_sequence_cards)>21:print(_J);exit()
+	D=[_G,_F,_I,_H]
+	with open(f"{directory}/squish.bin",'wb')as A:
+		for B in end_sequence_cards:
+			E=0
+			if B[_A][_C]in D:E=D.index(B[_A][_C])
+			A.write(B[_A][_D].to_bytes(2,C));A.write(B[_A][_E].to_bytes(2,C));A.write(E.to_bytes(1,C));A.write(len(B[_B]).to_bytes(1,C))
+		F=[]
+		for G in range(6):F.append(255)
+		A.write(bytearray(F))

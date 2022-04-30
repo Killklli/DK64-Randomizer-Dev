@@ -1,87 +1,34 @@
-"""Update wrinkly hints compressed file."""
+'Update wrinkly hints compressed file.'
 import random
 from io import BytesIO
-
 import js
 from randomizer.Enums.WrinklyKong import WrinklyKong
-from randomizer.Lists.WrinklyHints import Hint, hints
+from randomizer.Lists.WrinklyHints import Hint,hints
 from randomizer.Patching.Patcher import ROM
-
-
-def writeWrinklyHints(file_start_offset, text):
-    """Write the text to ROM."""
-    ROM().seek(file_start_offset)
-    ROM().writeMultipleBytes(len(text), 1)
-    position = 0
-    offset = 1
-    for textbox in text:
-        ROM().seek(file_start_offset + offset)
-        ROM().writeMultipleBytes(1, 1)
-        ROM().seek(file_start_offset + offset + 1)
-        ROM().writeMultipleBytes(1, 1)
-        ROM().seek(file_start_offset + offset + 2)
-        ROM().writeMultipleBytes(len(textbox), 1)
-        offset += 3
-        for string in textbox:
-            ROM().seek(file_start_offset + offset)
-            ROM().writeMultipleBytes(position, 4)
-            ROM().seek(file_start_offset + offset + 4)
-            ROM().writeMultipleBytes(len(string), 2)
-            ROM().seek(file_start_offset + offset + 6)
-            ROM().writeMultipleBytes(0, 2)
-            offset += 8
-            position += len(string)
-        ROM().seek(file_start_offset + offset)
-        ROM().writeMultipleBytes(0, 4)
-        offset += 4
-    ROM().seek(file_start_offset + offset)
-    ROM().writeMultipleBytes(position, 2)
-    offset += 2
-    for textbox in text:
-        for string in textbox:
-            for x in range(len(string)):
-                ROM().seek(file_start_offset + offset + x)
-                ROM().writeMultipleBytes(int.from_bytes(string[x].encode("ascii"), "big"), 1)
-            offset += len(string)
-
-
-def UpdateHint(WrinklyHint: Hint, message: str):
-    """Update the wrinkly hint with the new string.
-
-    Args:
-        WrinklyHint (Hint): Wrinkly hint object.
-        message (str): Hint message to write.
-    """
-    # Seek to the wrinkly data
-    if len(message) <= 914:
-        # We're safely below the character limit
-        WrinklyHint.hint = message
-    else:
-        raise Exception("Hint message is longer than allowed.")
-
-
-def updateRandomHint(message: str):
-    """Update a random hint with the string specifed.
-
-    Args:
-        message (str): Hint message to write.
-    """
-    hint_pool = []
-    for x in range(len(hints)):
-        if hints[x].hint == "":
-            hint_pool.append(x)
-    if len(hint_pool) > 0:
-        selected = random.choice(hint_pool)
-        # print(f"Set {hints[selected].name} Wrinkly Text to {message}")
-        UpdateHint(hints[selected], message)
-
-
+def writeWrinklyHints(file_start_offset,text):
+	'Write the text to ROM.';E=text;B=file_start_offset;ROM().seek(B);ROM().writeMultipleBytes(len(E),1);F=0;A=1
+	for D in E:
+		ROM().seek(B+A);ROM().writeMultipleBytes(1,1);ROM().seek(B+A+1);ROM().writeMultipleBytes(1,1);ROM().seek(B+A+2);ROM().writeMultipleBytes(len(D),1);A+=3
+		for C in D:ROM().seek(B+A);ROM().writeMultipleBytes(F,4);ROM().seek(B+A+4);ROM().writeMultipleBytes(len(C),2);ROM().seek(B+A+6);ROM().writeMultipleBytes(0,2);A+=8;F+=len(C)
+		ROM().seek(B+A);ROM().writeMultipleBytes(0,4);A+=4
+	ROM().seek(B+A);ROM().writeMultipleBytes(F,2);A+=2
+	for D in E:
+		for C in D:
+			for G in range(len(C)):ROM().seek(B+A+G);ROM().writeMultipleBytes(int.from_bytes(C[G].encode('ascii'),'big'),1)
+			A+=len(C)
+def UpdateHint(WrinklyHint,message):
+	'Update the wrinkly hint with the new string.\n\n    Args:\n        WrinklyHint (Hint): Wrinkly hint object.\n        message (str): Hint message to write.\n    ';A=message
+	if len(A)<=914:WrinklyHint.hint=A
+	else:raise Exception('Hint message is longer than allowed.')
+def updateRandomHint(message):
+	'Update a random hint with the string specifed.\n\n    Args:\n        message (str): Hint message to write.\n    ';A=[]
+	for B in range(len(hints)):
+		if hints[B].hint=='':A.append(B)
+	if len(A)>0:C=random.choice(A);UpdateHint(hints[C],message)
 def PushHints():
-    """Update the ROM with all hints."""
-    hint_arr = []
-    for wrinkly_hint in hints:
-        replacement_hint = wrinkly_hint.hint
-        if replacement_hint == "":
-            replacement_hint = "PLACEHOLDER HINT"
-        hint_arr.append([replacement_hint.upper()])
-    writeWrinklyHints(js.pointer_addresses[12]["entries"][41]["pointing_to"], hint_arr)
+	'Update the ROM with all hints.';B=[]
+	for C in hints:
+		A=C.hint
+		if A=='':A='PLACEHOLDER HINT'
+		B.append([A.upper()])
+	writeWrinklyHints(js.pointer_addresses[12]['entries'][41]['pointing_to'],B)
