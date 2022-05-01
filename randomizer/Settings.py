@@ -1,4 +1,5 @@
 'Settings class and functions.'
+_F='level_order'
 _E='all'
 _D='none'
 _C=True
@@ -16,16 +17,18 @@ class Settings:
 		for (B,C) in form_data.items():setattr(A,B,C)
 		A.update_progression_totals();A.seed_id=str(A.seed);A.seed=str(A.seed)+A.__hash;A.set_seed();A.EntryGBs=[A.blocker_0,A.blocker_1,A.blocker_2,A.blocker_3,A.blocker_4,A.blocker_5,A.blocker_6,A.blocker_7];A.BossBananas=[A.troff_0,A.troff_1,A.troff_2,A.troff_3,A.troff_4,A.troff_5,A.troff_6];A.seed_hash=[random.randint(0,9)for A in range(5)];A.krool_keys_required=[];A.training_barrels='startwith';A.shuffle_items=_D;A.progressive_upgrades=_B;A.prices=VanillaPrices.copy();A.resolve_settings()
 	def update_progression_totals(A):
-		"Update the troff and blocker totals if we're randomly setting them."
-		if A.randomize_cb_required_amounts:D=random.sample(range(0,260),7);C=D;A.troff_0=C[0];A.troff_1=C[1];A.troff_2=C[2];A.troff_3=C[3];A.troff_4=C[4];A.troff_5=C[5];A.troff_6=C[6]
+		"Update the troff and blocker totals if we're randomly setting them.";A.troff_min=0;A.troff_max=260
+		if A.level_randomization==_F:A.troff_min=100;A.troff_max=300
+		A.troff_weight_0=0.7;A.troff_weight_1=0.8;A.troff_weight_2=0.9;A.troff_weight_3=1.0;A.troff_weight_4=1.1;A.troff_weight_5=1.2;A.troff_weight_6=1.3
+		if A.randomize_cb_required_amounts:D=random.sample(range(A.troff_min,A.troff_max),7);C=D;A.troff_0=round(C[0]*A.troff_weight_0);A.troff_1=round(C[1]*A.troff_weight_1);A.troff_2=round(C[2]*A.troff_weight_2);A.troff_3=round(C[3]*A.troff_weight_3);A.troff_4=round(C[4]*A.troff_weight_4);A.troff_5=round(C[5]*A.troff_weight_5);A.troff_6=round(C[6]*A.troff_weight_6)
 		if A.randomize_blocker_required_amounts:
-			D=random.sample(range(0,70),7);B=D;B.append(1)
+			D=random.sample(range(0,50),7);B=D;B.append(1)
 			if A.shuffle_loading_zones==_E:random.shuffle(B)
 			else:B.sort()
 			A.blocker_0=B[0];A.blocker_1=B[1];A.blocker_2=B[2];A.blocker_3=B[3];A.blocker_4=B[4];A.blocker_5=B[5];A.blocker_6=B[6];A.blocker_7=B[7]
 	def generate_main(A):'Set Default items on main page.';A.seed=_A;A.download_patch_file=_A;A.bonus_barrel_rando=_A;A.loading_zone_coupled=_A;A.shop_location_rando=_A;A.random_prices=_A;A.boss_location_rando=_A;A.boss_kong_rando=_A;A.kasplat_rando=_A
 	def set_seed(A):'Forcibly re-set the random seed to the seed set in the config.';random.seed(A.seed)
-	def generate_progression(A):'Set default items on progression page.';A.blocker_0=_A;A.blocker_1=_A;A.blocker_2=_A;A.blocker_3=_A;A.blocker_4=_A;A.blocker_5=_A;A.blocker_6=_A;A.blocker_7=_A;A.troff_0=_A;A.troff_1=_A;A.troff_2=_A;A.troff_3=_A;A.troff_4=_A;A.troff_5=_A;A.troff_6=_A
+	def generate_progression(A):'Set default items on progression page.';A.blocker_0=_A;A.blocker_1=_A;A.blocker_2=_A;A.blocker_3=_A;A.blocker_4=_A;A.blocker_5=_A;A.blocker_6=_A;A.blocker_7=_A;A.troff_0=_A;A.troff_1=_A;A.troff_2=_A;A.troff_3=_A;A.troff_4=_A;A.troff_5=_A;A.troff_6=_A;A.troff_min=_A;A.troff_max=_A
 	def generate_misc(A):'Set default items on misc page.';A.unlock_all_moves=_A;A.unlock_all_kongs=_A;A.crown_door_open=_A;A.coin_door_open=_A;A.unlock_fairy_shockwave=_A;A.krool_phase_count=5;A.krool_key_count=8;A.bonus_barrels='normal';A.hard_shooting=_B;A.shuffle_loading_zones=_D;A.decoupled_loading_zones=_B;A.music_bgm=_A;A.music_fanfares=_A;A.music_events=_A;A.generate_spoilerlog=_A;A.fast_start_beginning_of_game=_A;A.helm_setting=_A;A.quality_of_life=_A;A.enable_tag_anywhere=_A;A.random_krool_phase_order=_A;A.krool_access=_A;A.open_lobbies=_A;A.random_medal_requirement=_C;A.bananaport_rando=_B;A.shop_indicator=_B;A.randomize_cb_required_amounts=_B;A.randomize_blocker_required_amounts=_B;A.perma_death=_B;A.disable_tag_barrels=_B;A.level_randomization=_D;A.kong_rando=_B;A.kongs_for_progression=_B
 	def resolve_settings(A):
 		'Resolve settings which are not directly set through the UI.';L='levels';K='random';J='random_helm';F='vanilla';G=GetKongs()
@@ -50,7 +53,7 @@ class Settings:
 		else:A.BananaMedalsRequired=15
 		A.boss_maps=ShuffleBosses(A.boss_location_rando);A.boss_kongs=ShuffleBossKongs(A.boss_maps,A.boss_kong_rando);A.kutout_kongs=ShuffleKutoutKongs(A.boss_maps,A.boss_kongs,A.boss_kong_rando)
 		if A.bonus_barrel_rando:A.bonus_barrels=K
-		if A.level_randomization=='level_order':A.shuffle_loading_zones=L
+		if A.level_randomization==_F:A.shuffle_loading_zones=L
 		elif A.level_randomization=='loadingzone':A.shuffle_loading_zones=_E
 		elif A.level_randomization=='loadingzonesdecoupled':A.shuffle_loading_zones=_E;A.decoupled_loading_zones=_C
 		elif A.level_randomization==F:A.shuffle_loading_zones=_D

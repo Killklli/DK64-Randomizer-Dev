@@ -285,13 +285,13 @@ def WipeProgressionRequirements(settings):
 	for B in range(0,7):A.EntryGBs[B]=0;A.BossBananas[B]=0;A.boss_kongs[B]=A.starting_kong;A.boss_maps[B]=Maps.JapesBoss
 	A.diddy_freeing_kong=Kongs.any;A.lanky_freeing_kong=Kongs.any;A.tiny_freeing_kong=Kongs.any;A.chunky_freeing_kong=Kongs.any
 def SetNewProgressionRequirements(settings):
-	'Set new progression requirements based on what is owned or accessible heading into each level.';A=settings;B=[];C=[];G={};F={}
+	'Set new progression requirements based on what is owned or accessible heading into each level.';A=settings;B=[];C=[];I={};H={}
 	if A.unlock_all_moves:D=ItemPool.DonkeyMoves.copy();D.extend(ItemPool.DiddyMoves);D.extend(ItemPool.LankyMoves);D.extend(ItemPool.TinyMoves);D.extend(ItemPool.ChunkyMoves);D.extend(ItemPool.ImportantSharedMoves)
-	for H in range(1,8):
-		BlockAccessToLevel(A,H);Reset();I=GetAccessibleLocations(A,[]);E=GetLevelShuffledToIndex(H-1);B.append(LogicVariables.ColoredBananas[E]);C.append(LogicVariables.GoldenBananas);G[E]=LogicVariables.GetKongs()
-		if A.unlock_all_moves:F[E]=D
-		else:J=[LocationList[A].item for A in I if LocationList[A].type==Types.Shop and LocationList[A].item!=Items.NoItem and LocationList[A].item is not _A];F[E]=J
-	A.EntryGBs=[min(A.blocker_0,1),min(A.blocker_1,C[0]),min(A.blocker_2,C[1]),min(A.blocker_3,C[2]),min(A.blocker_4,C[3]),min(A.blocker_5,C[4]),min(A.blocker_6,C[5]),A.blocker_7];A.BossBananas=[min(A.troff_0,sum(B[0])),min(A.troff_1,sum(B[1])),min(A.troff_2,sum(B[2])),min(A.troff_3,sum(B[3])),min(A.troff_4,sum(B[4])),min(A.troff_5,sum(B[5])),min(A.troff_6,sum(B[6]))];ShuffleExits.UpdateLevelProgression(A);ShuffleBossesBasedOnOwnedItems(A,G,F)
+	for J in range(1,8):
+		BlockAccessToLevel(A,J);Reset();K=GetAccessibleLocations(A,[]);G=GetLevelShuffledToIndex(J-1);B.append(LogicVariables.ColoredBananas[G]);C.append(LogicVariables.GoldenBananas);I[G]=LogicVariables.GetKongs()
+		if A.unlock_all_moves:H[G]=D
+		else:L=[LocationList[A].item for A in K if LocationList[A].type==Types.Shop and LocationList[A].item!=Items.NoItem and LocationList[A].item is not _A];H[G]=L
+	E=0.4;F=0.7;A.EntryGBs=[min(A.blocker_0,1),min(A.blocker_1,round(random.uniform(E,F)*C[0])),min(A.blocker_2,round(random.uniform(E,F)*C[1])),min(A.blocker_3,round(random.uniform(E,F)*C[2])),min(A.blocker_4,round(random.uniform(E,F)*C[3])),min(A.blocker_5,round(random.uniform(E,F)*C[4])),min(A.blocker_6,round(random.uniform(E,F)*C[5])),A.blocker_7];A.BossBananas=[min(A.troff_0,round(A.troff_0/(A.troff_max*A.troff_weight_0)*sum(B[0]))),min(A.troff_1,round(A.troff_1/(A.troff_max*A.troff_weight_1)*sum(B[1]))),min(A.troff_2,round(A.troff_2/(A.troff_max*A.troff_weight_2)*sum(B[2]))),min(A.troff_3,round(A.troff_3/(A.troff_max*A.troff_weight_3)*sum(B[3]))),min(A.troff_4,round(A.troff_4/(A.troff_max*A.troff_weight_4)*sum(B[4]))),min(A.troff_5,round(A.troff_5/(A.troff_max*A.troff_weight_5)*sum(B[5]))),min(A.troff_6,round(A.troff_6/(A.troff_max*A.troff_weight_6)*sum(B[6])))];ShuffleExits.UpdateLevelProgression(A);ShuffleBossesBasedOnOwnedItems(A,I,H)
 def BlockAccessToLevel(settings,level):
 	'Assume the level index passed in is the furthest level you have access to in the level order.';A=settings
 	for B in range(0,7):
