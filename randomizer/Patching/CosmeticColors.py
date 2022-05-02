@@ -1,36 +1,43 @@
 'Apply cosmetic skins to kongs.'
 from randomizer.Patching.Patcher import ROM
 from randomizer.Spoiler import Spoiler
+from random import randint
 def apply_cosmetic_colors(spoiler):
-	'Apply cosmetic skins to kongs.';I='red';H='purple';G='green';F=True;E='vanilla';B=spoiler;C=False;D=33476640
-	if B.settings.dk_colors!=E:
-		C=F;A=0
-		if B.settings.dk_colors=='blue':A=1
-		elif B.settings.dk_colors==G:A=2
-		elif B.settings.dk_colors==H:A=3
-		ROM().seek(D+295);ROM().write(A)
-	if B.settings.diddy_colors!=E:
-		C=F;A=0
-		if B.settings.diddy_colors=='dark_blue':A=1
-		elif B.settings.diddy_colors=='yellow':A=2
-		elif B.settings.diddy_colors=='light_blue':A=3
-		ROM().seek(D+296);ROM().write(A)
-	if B.settings.lanky_colors!=E:
-		C=F;A=0
-		if B.settings.lanky_colors==G:A=1
-		elif B.settings.lanky_colors==H:A=2
-		elif B.settings.lanky_colors==I:A=3
-		ROM().seek(D+297);ROM().write(A)
-	if B.settings.tiny_colors!=E:
-		C=F;A=0
-		if B.settings.tiny_colors==G:A=1
-		elif B.settings.tiny_colors==H:A=2
-		elif B.settings.tiny_colors==I:A=3
-		ROM().seek(D+298);ROM().write(A)
-	if B.settings.chunky_colors!=E:
-		C=F;A=0
-		if B.settings.tiny_colors==I:A=1
-		elif B.settings.tiny_colors==H:A=2
-		elif B.settings.tiny_colors==G:A=3
-		ROM().seek(D+299);ROM().write(A)
-	if C:ROM().seek(D+294);ROM().write(1)
+	'Apply cosmetic skins to kongs.';J='red';I='purple';H='green';G=True;F='vanilla';C='randomized';A=spoiler;D=False;E=33476640
+	if A.settings.random_colors:A.settings.dk_colors=C;A.settings.diddy_colors=C;A.settings.lanky_colors=C;A.settings.tiny_colors=C;A.settings.chunky_colors=C
+	if A.settings.dk_colors!=F:
+		D=G;B=0
+		if A.settings.dk_colors==C:B=randint(0,3)
+		elif A.settings.dk_colors=='blue':B=1
+		elif A.settings.dk_colors==H:B=2
+		elif A.settings.dk_colors==I:B=3
+		ROM().seek(E+295);ROM().write(B)
+	if A.settings.diddy_colors!=F:
+		D=G;B=0
+		if A.settings.diddy_colors==C:B=randint(0,3)
+		elif A.settings.diddy_colors=='dark_blue':B=1
+		elif A.settings.diddy_colors=='yellow':B=2
+		elif A.settings.diddy_colors=='light_blue':B=3
+		ROM().seek(E+296);ROM().write(B)
+	if A.settings.lanky_colors!=F:
+		D=G;B=0
+		if A.settings.lanky_colors==C:B=randint(0,3)
+		elif A.settings.lanky_colors==H:B=1
+		elif A.settings.lanky_colors==I:B=2
+		elif A.settings.lanky_colors==J:B=3
+		ROM().seek(E+297);ROM().write(B)
+	if A.settings.tiny_colors!=F:
+		D=G;B=0
+		if A.settings.tiny_colors==C:B=randint(0,3)
+		elif A.settings.tiny_colors==H:B=1
+		elif A.settings.tiny_colors==I:B=2
+		elif A.settings.tiny_colors==J:B=3
+		ROM().seek(E+298);ROM().write(B)
+	if A.settings.chunky_colors!=F:
+		D=G;B=0
+		if A.settings.chunky_colors==C:B=randint(0,3)
+		elif A.settings.chunky_colors==J:B=1
+		elif A.settings.chunky_colors==I:B=2
+		elif A.settings.chunky_colors==H:B=3
+		ROM().seek(E+299);ROM().write(B)
+	if D:ROM().seek(E+294);ROM().write(1)

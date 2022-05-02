@@ -12,59 +12,60 @@ from randomizer.Patching.Patcher import ROM
 from randomizer.Settings import Settings
 from randomizer.Spoiler import Spoiler
 def randomize_music(spoiler):
-	'Randomize music passed from the misc music settings.\n\n    Args:\n        settings (Settings): Settings object from the windows form.\n    ';S='uploaded';O='randomized';G='default';F=spoiler;C=F.settings
-	if C.music_bgm!=G or C.music_events!=G or C.music_fanfares!=G:T=33476640;ROM().seek(T+287);ROM().write(1)
-	if C.music_bgm!=G:
-		if C.music_bgm==O:
+	'Randomize music passed from the misc music settings.\n\n    Args:\n        settings (Settings): Settings object from the windows form.\n    ';S='uploaded';H='default';G='randomized';E=spoiler;C=E.settings
+	if E.settings.random_music:C.music_bgm=G;C.music_fanfares=G;C.music_events=G
+	if C.music_bgm!=H or C.music_events!=H or C.music_fanfares!=H:T=33476640;ROM().seek(T+287);ROM().write(1)
+	if C.music_bgm!=H:
+		if C.music_bgm==G:
 			B=[]
-			for K in range(12):B.append([])
+			for L in range(12):B.append([])
 			for A in song_data:
 				if A.type==SongType.BGM:B[A.channel-1].append(js.pointer_addresses[0][_C][song_data.index(A)])
-			for K in range(12):H=B[K].copy();random.shuffle(H);shuffle_music(F,B[K],H)
+			for L in range(12):I=B[L].copy();random.shuffle(I);shuffle_music(E,B[L],I)
 		elif C.music_bgm=='chaos':
-			J=js.pointer_addresses[0][_C][song_data.index(next((A for A in song_data if A.name=='DK Rap'),None))];B=[]
+			K=js.pointer_addresses[0][_C][song_data.index(next((A for A in song_data if A.name=='DK Rap'),None))];B=[]
 			for A in song_data:
 				if A.type==SongType.BGM:B.append(js.pointer_addresses[0][_C][song_data.index(A)])
-			ROM().seek(J[_B]);U=ROM().readBytes(J[_D]);P=js.pointer_addresses[26][_C][0]
-			for A in B:ROM().seek(A[_B]);ROM().writeBytes(U);ROM().seek(P[_B]+4*B.index(A));V=ROM().readBytes(4);ROM().seek(P[_B]+4*B.index(J));ROM().writeBytes(V);ROM().seek(33550336+A[_A]*2);ROM().writeMultipleBytes(song_data[J[_A]].memory,2)
+			ROM().seek(K[_B]);U=ROM().readBytes(K[_D]);P=js.pointer_addresses[26][_C][0]
+			for A in B:ROM().seek(A[_B]);ROM().writeBytes(U);ROM().seek(P[_B]+4*B.index(A));V=ROM().readBytes(4);ROM().seek(P[_B]+4*B.index(K));ROM().writeBytes(V);ROM().seek(33550336+A[_A]*2);ROM().writeMultipleBytes(song_data[K[_A]].memory,2)
 		elif C.music_bgm==S:
 			B=[]
 			for A in song_data:
 				if A.type==SongType.BGM:B.append(js.pointer_addresses[0][_C][song_data.index(A)])
-			Q=list(js.cosmetics.bgm);random.shuffle(Q);E=[]
-			for L in Q:
-				def I():
+			Q=list(js.cosmetics.bgm);random.shuffle(Q);F=[]
+			for M in Q:
+				def J():
 					A=random.choice(B)
-					if len(E)>=len(B):return
-					if A not in E:ROM().seek(A[_B]);ROM().writeBytes(gzip.compress(bytes(L),compresslevel=9));E.append(A)
-					else:I()
-				I()
-			D=B.copy();random.shuffle(D);shuffle_music(F,B,D)
-	if C.music_fanfares!=G:
-		if C.music_fanfares==O:
-			M=[]
+					if len(F)>=len(B):return
+					if A not in F:ROM().seek(A[_B]);ROM().writeBytes(gzip.compress(bytes(M),compresslevel=9));F.append(A)
+					else:J()
+				J()
+			D=B.copy();random.shuffle(D);shuffle_music(E,B,D)
+	if C.music_fanfares!=H:
+		if C.music_fanfares==G:
+			N=[]
 			for A in song_data:
-				if A.type==SongType.Fanfare:M.append(js.pointer_addresses[0][_C][song_data.index(A)])
-			H=M.copy();random.shuffle(H);shuffle_music(F,M,H)
+				if A.type==SongType.Fanfare:N.append(js.pointer_addresses[0][_C][song_data.index(A)])
+			I=N.copy();random.shuffle(I);shuffle_music(E,N,I)
 		elif C.music_fanfares==S:
 			B=[]
 			for A in song_data:
 				if A.type==SongType.Fanfare:B.append(js.pointer_addresses[0][_C][song_data.index(A)])
-			R=list(js.cosmetics.fanfares);random.shuffle(R);E=[]
-			for L in R:
-				def I():
+			R=list(js.cosmetics.fanfares);random.shuffle(R);F=[]
+			for M in R:
+				def J():
 					A=random.choice(B)
-					if len(E)>=len(B):return
-					if A not in E:ROM().seek(A[_B]);ROM().writeBytes(gzip.compress(bytes(L),compresslevel=9));E.append(A)
-					else:I()
-				I()
-			D=B.copy();random.shuffle(D);shuffle_music(F,B,D)
-	if C.music_events!=G:
-		if C.music_events==O:
-			N=[]
+					if len(F)>=len(B):return
+					if A not in F:ROM().seek(A[_B]);ROM().writeBytes(gzip.compress(bytes(M),compresslevel=9));F.append(A)
+					else:J()
+				J()
+			D=B.copy();random.shuffle(D);shuffle_music(E,B,D)
+	if C.music_events!=H:
+		if C.music_events==G:
+			O=[]
 			for A in song_data:
-				if A.type==SongType.Event:N.append(js.pointer_addresses[0][_C][song_data.index(A)])
-			D=N.copy();random.shuffle(D);shuffle_music(F,N,D)
+				if A.type==SongType.Event:O.append(js.pointer_addresses[0][_C][song_data.index(A)])
+			D=O.copy();random.shuffle(D);shuffle_music(E,O,D)
 def ShuffleMusicWithSizeCheck(spoiler,song_list):
 	'Facilitate shuffling of music.';L=song_list;E=spoiler;C='uncompressed_size';J=0
 	while True:
