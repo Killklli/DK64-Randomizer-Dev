@@ -15,7 +15,7 @@ class Settings:
 	def __init__(A,form_data):
 		'Init all the settings using the form data to set the flags.\n\n        Args:\n            form_data (dict): Post data from the html form.\n        ';A.__hash=A.__get_hash();A.public_hash=A.__get_hash();A.algorithm='forward';A.generate_main();A.generate_progression();A.generate_misc()
 		for (B,C) in form_data.items():setattr(A,B,C)
-		A.update_progression_totals();A.seed_id=str(A.seed);A.seed=str(A.seed)+A.__hash;A.set_seed();A.EntryGBs=[A.blocker_0,A.blocker_1,A.blocker_2,A.blocker_3,A.blocker_4,A.blocker_5,A.blocker_6,A.blocker_7];A.BossBananas=[A.troff_0,A.troff_1,A.troff_2,A.troff_3,A.troff_4,A.troff_5,A.troff_6];A.seed_hash=[random.randint(0,9)for A in range(5)];A.krool_keys_required=[];A.training_barrels='startwith';A.shuffle_items=_D;A.progressive_upgrades=_B;A.prices=VanillaPrices.copy();A.resolve_settings()
+		A.seed_id=str(A.seed);A.seed=str(A.seed)+A.__hash;A.set_seed();A.update_progression_totals();A.EntryGBs=[A.blocker_0,A.blocker_1,A.blocker_2,A.blocker_3,A.blocker_4,A.blocker_5,A.blocker_6,A.blocker_7];A.BossBananas=[A.troff_0,A.troff_1,A.troff_2,A.troff_3,A.troff_4,A.troff_5,A.troff_6];A.seed_hash=[random.randint(0,9)for A in range(5)];A.krool_keys_required=[];A.training_barrels='startwith';A.shuffle_items=_D;A.progressive_upgrades=_B;A.prices=VanillaPrices.copy();A.resolve_settings()
 	def update_progression_totals(A):
 		"Update the troff and blocker totals if we're randomly setting them.";A.troff_min=0;A.troff_max=260
 		if A.level_randomization==_F:A.troff_min=100;A.troff_max=300
