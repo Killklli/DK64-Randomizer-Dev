@@ -141,53 +141,50 @@ def GetItemValidLocations(validLocations,item):
 			B=[A for A in LocationList]
 	return B
 def AssumedFill(settings,itemsToPlace,validLocations,ownedItems=[]):
-	'Assumed fill algorithm for item placement.';a=', due to no kongs being able to free them';V=' in location ';Q=ownedItems;P=validLocations;N='Failed placing item ';D=itemsToPlace;C=settings;R=GetMaxCoinsSpent(C,D+Q);random.shuffle(D)
+	'Assumed fill algorithm for item placement.';Z=' in location ';P=ownedItems;O=validLocations;N='Failed placing item ';D=itemsToPlace;C=settings;Q=GetMaxCoinsSpent(C,D+P);random.shuffle(D)
 	while len(D)>0:
-		A=D.pop(0);S=_C;B=D.copy();B.extend(Q);b=sum((1 for A in B if A==Items.ProgressiveSlam))+STARTING_SLAM;c=sum((1 for A in B if A==Items.ProgressiveAmmoBelt));d=sum((1 for A in B if A==Items.ProgressiveInstrumentUpgrade));e=GetItemValidLocations(P,A);Reset();O=GetAccessibleLocations(C,B);F=[A for A in O if LocationList[A].item is _A and A in e]
-		if len(F)==0:print(N+ItemList[A].name+', no valid reachable locations without this item.');W=[ItemList[A].name for A in B if ItemList[A].type==Types.Kong];W.insert(0,C.starting_kong.name);f=[ItemList[A].name for A in B if ItemList[A].type==Types.Shop];g=len([A for A in B if ItemList[A].type==Types.Banana]);js.postMessage('Current Moves owned at failure: '+str(f)+' with GB count: '+str(g)+' and kongs freed: '+str(W));return len(D)+1
+		A=D.pop(0);R=_C;B=D.copy();B.extend(P);a=sum((1 for A in B if A==Items.ProgressiveSlam))+STARTING_SLAM;b=sum((1 for A in B if A==Items.ProgressiveAmmoBelt));c=sum((1 for A in B if A==Items.ProgressiveInstrumentUpgrade));d=GetItemValidLocations(O,A);Reset();M=GetAccessibleLocations(C,B);F=[A for A in M if LocationList[A].item is _A and A in d]
+		if len(F)==0:print(N+ItemList[A].name+', no valid reachable locations without this item.');U=[ItemList[A].name for A in B if ItemList[A].type==Types.Kong];U.insert(0,C.starting_kong.name);e=[ItemList[A].name for A in B if ItemList[A].type==Types.Shop];f=len([A for A in B if ItemList[A].type==Types.Banana]);js.postMessage('Current Moves owned at failure: '+str(e)+' with GB count: '+str(f)+' and kongs freed: '+str(U));return len(D)+1
 		random.shuffle(F)
 		if ItemList[A].type==Types.Shop:
-			T=ItemList[A].kong;K=GetPriceOfMoveItem(A,C,b,c,d);U=[0,0,0,0,0]
-			if K is not _A:
-				if T==Kongs.any:
-					for X in range(5):R[X]-=K;U[X]=K
-				else:R[T]-=K;U[T]=K
+			S=ItemList[A].kong;J=GetPriceOfMoveItem(A,C,a,b,c);T=[0,0,0,0,0]
+			if J is not _A:
+				if S==Kongs.any:
+					for V in range(5):Q[V]-=J;T[V]=J
+				else:Q[S]-=J;T[S]=J
 		elif ItemList[A].type==Types.Kong:
-			G=[KongFromItem(A)for A in B if ItemList[A].type==Types.Kong];G.insert(0,C.starting_kong);Y=KongFromItem(A)
-			if Y in G:G.remove(Y)
+			G=[KongFromItem(A)for A in B if ItemList[A].type==Types.Kong];G.insert(0,C.starting_kong);W=KongFromItem(A)
+			if W in G:G.remove(W)
 			if C.kongs_for_progression:
-				h=GetShuffledLevelIndex(Levels.JungleJapes);i=GetShuffledLevelIndex(Levels.AngryAztec);j=GetShuffledLevelIndex(Levels.FranticFactory);L={}
+				g=GetShuffledLevelIndex(Levels.JungleJapes);h=GetShuffledLevelIndex(Levels.AngryAztec);i=GetShuffledLevelIndex(Levels.FranticFactory);K={}
 				for H in range(0,5):
-					if H==h:L[Locations.DiddyKong]=H
-					elif H==i:L[Locations.LankyKong]=H;L[Locations.TinyKong]=H
-					elif H==j:L[Locations.ChunkyKong]=H
-				F.sort(key=lambda x:L[x],reverse=_B)
+					if H==g:K[Locations.DiddyKong]=H
+					elif H==h:K[Locations.LankyKong]=H;K[Locations.TinyKong]=H
+					elif H==i:K[Locations.ChunkyKong]=H
+				F.sort(key=lambda x:K[x],reverse=_B)
 		for E in F:
 			LocationList[E].PlaceItem(A)
 			if ItemList[A].type==Types.Kong:
 				if E==Locations.DiddyKong:C.diddy_freeing_kong=random.choice(G)
-				elif E==Locations.LankyKong:
-					M=list(set(G).intersection([Kongs.donkey,Kongs.lanky,Kongs.tiny]))
-					if len(M)==0:js.postMessage(N+ItemList[A].name+V+LocationList[E].name+a);I=_C;break
-					C.lanky_freeing_kong=random.choice(M)
+				elif E==Locations.LankyKong:C.lanky_freeing_kong=random.choice(G)
 				elif E==Locations.TinyKong:
-					M=list(set(G).intersection([Kongs.diddy,Kongs.chunky]))
-					if len(M)==0:js.postMessage(N+ItemList[A].name+V+LocationList[E].name+a);I=_C;break
-					C.tiny_freeing_kong=random.choice(M)
+					X=list(set(G).intersection([Kongs.diddy,Kongs.chunky]))
+					if len(X)==0:js.postMessage(N+ItemList[A].name+Z+LocationList[E].name+', due to no kongs being able to free them');L=_C;break
+					C.tiny_freeing_kong=random.choice(X)
 				elif E==Locations.ChunkyKong:C.chunky_freeing_kong=random.choice(G)
-			B=D.copy();B.extend(Q);Reset();O=GetAccessibleLocations(C,B);I=_B
-			for k in D:
-				l=GetItemValidLocations(P,k);F=[A for A in O if A in l]
-				if len(F)==0:js.postMessage(N+ItemList[A].name+V+LocationList[E].name+', due to too few remaining locations in play');I=_C;break
-				O.remove(F[0])
-			if I and ItemList[A].type==Types.Shop:
-				Z=[0,0,0,0,0]
-				for J in range(5):Z[J]=LogicVariables.Coins[J]-R[J]
-				for J in range(5):
-					if Z[J]<U[J]:I=_C
-			if not I:LocationList[E].item=_A;S=_C;continue
-			else:S=_B;break
-		if not S:js.postMessage(N+ItemList[A].name+' in any of remaining '+str(len(P))+' possible locations');return len(D)+1
+			B=D.copy();B.extend(P);Reset();M=GetAccessibleLocations(C,B);L=_B
+			for j in D:
+				k=GetItemValidLocations(O,j);F=[A for A in M if A in k]
+				if len(F)==0:js.postMessage(N+ItemList[A].name+Z+LocationList[E].name+', due to too few remaining locations in play');L=_C;break
+				M.remove(F[0])
+			if L and ItemList[A].type==Types.Shop:
+				Y=[0,0,0,0,0]
+				for I in range(5):Y[I]=LogicVariables.Coins[I]-Q[I]
+				for I in range(5):
+					if Y[I]<T[I]:L=_C
+			if not L:LocationList[E].item=_A;R=_C;continue
+			else:R=_B;break
+		if not R:js.postMessage(N+ItemList[A].name+' in any of remaining '+str(len(O))+' possible locations');return len(D)+1
 	return 0
 def GetMaxCoinsSpent(settings,ownedItems):
 	'Calculate the max number of coins each kong could have spent given the ownedItems and the price settings.';B=ownedItems;C=[0,0,0,0,0];E=sum((1 for A in B if A==Items.ProgressiveSlam))+STARTING_SLAM;F=sum((1 for A in B if A==Items.ProgressiveAmmoBelt));G=sum((1 for A in B if A==Items.ProgressiveInstrumentUpgrade))

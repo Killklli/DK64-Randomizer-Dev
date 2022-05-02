@@ -81,21 +81,23 @@ def ShuffleLevelExits(newLevelOrder=_A):
 	else:random.shuffle(D)
 	while len(A)>0:E=A.pop();I=ShufflableExits[E];J=D.pop();B=ShufflableExits[J];B.shuffled=_B;B.shuffledId=E;F=ShufflableExits[I.back.reverse];F.shuffled=_B;F.shuffledId=B.back.reverse
 def ShuffleLevelOrderWithRestrictions(settings):
-	'Determine level order given starting kong and the need to find more kongs along the way.';H=settings;A={1,2,3,4,5,6,7}
-	if H.starting_kong==Kongs.diddy:C=random.randint(1,4)
+	'Determine level order given starting kong and the need to find more kongs along the way.';F=settings;A={1,2,3,4,5,6,7}
+	if F.starting_kong==Kongs.diddy:C=random.randint(1,4)
 	else:C=random.randint(2,4)
-	A.remove(C);F=[]
-	if C==4:F=list(A.intersection({1,3}))
-	else:F=list(A.intersection({1,5}))
-	D=random.choice(F);A.remove(D);B=[]
-	if H.starting_kong==Kongs.chunky and D>2:B=list(A.intersection({1,2}))
-	elif C==4:B=list(A.intersection({1,3}))
+	A.remove(C);G=[]
+	if C==4:G=list(A.intersection({1,3}))
+	else:G=list(A.intersection({1,5}))
+	D=random.choice(G);A.remove(D);B=[]
+	if C==4:B=list(A.intersection({1,3}))
 	elif C==3:
 		if D<3:B=list(A.intersection({1,5}))
 		else:B=list(A.intersection({1,2}))
+	elif C==2 and F.starting_kong!=Kongs.diddy and F.starting_kong!=Kongs.chunky:
+		if D==1:B=list(A.intersection({3,5}))
+		else:B=list(A.intersection({1}))
 	elif D<5:B=list(A.intersection({1,5}))
 	else:B=list(A.intersection({1,4}))
-	I=random.choice(B);A.remove(I);E=list(A);random.shuffle(E);K=E.pop();L=E.pop();M=E.pop();N=E.pop();G={D:Levels.JungleJapes,C:Levels.AngryAztec,I:Levels.FranticFactory,K:Levels.GloomyGalleon,L:Levels.FungiForest,M:Levels.CrystalCaves,N:Levels.CreepyCastle};print('New Level Order:')
-	for J in range(1,8):print(str(J)+': '+G[J].name)
-	if len(G)<7:raise Ex.EntrancePlacementException('Invalid level order with fewer than the 7 required main levels.')
-	ShuffleLevelExits(G)
+	I=random.choice(B);A.remove(I);E=list(A);random.shuffle(E);K=E.pop();L=E.pop();M=E.pop();N=E.pop();H={D:Levels.JungleJapes,C:Levels.AngryAztec,I:Levels.FranticFactory,K:Levels.GloomyGalleon,L:Levels.FungiForest,M:Levels.CrystalCaves,N:Levels.CreepyCastle};print('New Level Order:')
+	for J in range(1,8):print(str(J)+': '+H[J].name)
+	if len(H)<7:raise Ex.EntrancePlacementException('Invalid level order with fewer than the 7 required main levels.')
+	ShuffleLevelExits(H)
