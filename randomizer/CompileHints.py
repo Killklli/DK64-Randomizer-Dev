@@ -5,7 +5,7 @@ from randomizer.Spoiler import Spoiler
 from randomizer.Patching.UpdateHints import updateRandomHint
 def compileHints(spoiler):
 	'Push hints to hint list based on settings.';j='Frantic Factory';i='Jungle Japes';h='Gorilla Gone';g='Their first special move';f='Their third special move';Q=True;P='name_cryptic';N='color';H=spoiler;G=False;F='important';E='key';D='shop';C='name';B='level';A='kong'
-	if H.settings.k_rool_phase_order:
+	if H.settings.krool_phase_order_rando:
 		R=f"K. Rool order is {NameFromKong(H.settings.krool_order[0])}"
 		for I in range(len(H.settings.krool_order)):
 			if I!=0:R+=f" then {NameFromKong(H.settings.krool_order[I])}"

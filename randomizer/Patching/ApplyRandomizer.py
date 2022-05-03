@@ -77,5 +77,6 @@ def patching_response(responded_data):
 	else:js.document.getElementById(R).style.display=U;js.document.getElementById(T).value='';js.document.getElementById(S).style.display=U
 	js.document.getElementById('generated_seed_id').innerHTML=A.settings.seed_id;d=json.loads(A.toJson())['Settings'];js.document.getElementById(V).innerHTML='';e=js.document.getElementById(V)
 	for (M,K) in d.items():
-		if M not in[Q,'krool_phases','blocker_golden_bananas','troff_n_scoff_bananas','krool_keys_required']:N=e.insertRow(-1);f=N.insertCell(0);g=N.insertCell(1);f.innerHTML=M;g.innerHTML=K
+		f=[Q,'algorithm','starting_kong','diddy_freeing_kong','tiny_freeing_kong','lanky_freeing_kong','chunky_freeing_kong','banana_medals_required','krool_phases','krool_keys_required','blocker_golden_bananas','troff_n_scoff_bananas']
+		if M not in f:N=e.insertRow(-1);g=N.insertCell(0);h=N.insertCell(1);g.innerHTML=M;h.innerHTML=K
 	ROM().fixSecurityValue();ROM().save(f"dk64-{A.settings.seed_id}.z64");ProgressBar().reset();js.jq('#nav-settings-tab').tab('show')

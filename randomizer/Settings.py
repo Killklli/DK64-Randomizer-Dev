@@ -29,12 +29,12 @@ class Settings:
 	def generate_main(A):'Set Default items on main page.';A.seed=_A;A.download_patch_file=_A;A.bonus_barrel_rando=_A;A.loading_zone_coupled=_A;A.shop_location_rando=_A;A.random_prices=_A;A.boss_location_rando=_A;A.boss_kong_rando=_A;A.kasplat_rando=_A
 	def set_seed(A):'Forcibly re-set the random seed to the seed set in the config.';random.seed(A.seed)
 	def generate_progression(A):'Set default items on progression page.';A.blocker_0=_A;A.blocker_1=_A;A.blocker_2=_A;A.blocker_3=_A;A.blocker_4=_A;A.blocker_5=_A;A.blocker_6=_A;A.blocker_7=_A;A.troff_0=_A;A.troff_1=_A;A.troff_2=_A;A.troff_3=_A;A.troff_4=_A;A.troff_5=_A;A.troff_6=_A;A.troff_min=_A;A.troff_max=_A
-	def generate_misc(A):'Set default items on misc page.';A.unlock_all_moves=_A;A.unlock_all_kongs=_A;A.crown_door_open=_A;A.coin_door_open=_A;A.unlock_fairy_shockwave=_A;A.krool_phase_count=5;A.krool_key_count=8;A.bonus_barrels='normal';A.hard_shooting=_B;A.shuffle_loading_zones=_D;A.decoupled_loading_zones=_B;A.music_bgm=_A;A.music_fanfares=_A;A.music_events=_A;A.generate_spoilerlog=_A;A.fast_start_beginning_of_game=_A;A.helm_setting=_A;A.quality_of_life=_A;A.enable_tag_anywhere=_A;A.random_krool_phase_order=_A;A.krool_access=_A;A.open_lobbies=_A;A.random_medal_requirement=_C;A.bananaport_rando=_B;A.shop_indicator=_B;A.randomize_cb_required_amounts=_B;A.randomize_blocker_required_amounts=_B;A.perma_death=_B;A.disable_tag_barrels=_B;A.level_randomization=_D;A.kong_rando=_B;A.kongs_for_progression=_B
+	def generate_misc(A):'Set default items on misc page.';A.unlock_all_moves=_A;A.unlock_all_kongs=_A;A.crown_door_open=_A;A.coin_door_open=_A;A.unlock_fairy_shockwave=_A;A.krool_phase_count=5;A.krool_key_count=8;A.bonus_barrels='normal';A.hard_shooting=_B;A.shuffle_loading_zones=_D;A.decoupled_loading_zones=_B;A.music_bgm=_A;A.music_fanfares=_A;A.music_events=_A;A.generate_spoilerlog=_A;A.fast_start_beginning_of_game=_A;A.helm_setting=_A;A.quality_of_life=_A;A.enable_tag_anywhere=_A;A.krool_phase_order_rando=_A;A.krool_access=_A;A.open_lobbies=_A;A.random_medal_requirement=_C;A.bananaport_rando=_B;A.shop_indicator=_B;A.randomize_cb_required_amounts=_B;A.randomize_blocker_required_amounts=_B;A.perma_death=_B;A.disable_tag_barrels=_B;A.level_randomization=_D;A.kong_rando=_B;A.kongs_for_progression=_B
 	def resolve_settings(A):
 		'Resolve settings which are not directly set through the UI.';L='levels';K='random';J='random_helm';F='vanilla';G=GetKongs()
 		if A.random_prices!=F:A.prices=RandomizePrices(A.random_prices)
 		A.krool_donkey=_B;A.krool_diddy=_B;A.krool_lanky=_B;A.krool_tiny=_B;A.krool_chunky=_C;C=[A for A in G if A!=Kongs.chunky]
-		if A.random_krool_phase_order:random.shuffle(C)
+		if A.krool_phase_order_rando:random.shuffle(C)
 		if A.krool_phase_count<5:C=random.sample(C,A.krool_phase_count-1)
 		B=[]
 		for D in C:
