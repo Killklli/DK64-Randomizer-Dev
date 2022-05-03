@@ -60,6 +60,7 @@ def patching_response(responded_data):
 	if A.settings.warp_to_isles:ROM().seek(B+293);ROM().write(1)
 	if A.settings.shop_indicator:ROM().seek(B+292);ROM().write(1)
 	if A.settings.perma_death:ROM().seek(B+317);ROM().write(1);ROM().seek(B+318);ROM().write(1)
+	if A.settings.open_lobbies:ROM().seek(B+316);ROM().write(255)
 	if A.settings.disable_tag_barrels:ROM().seek(B+319);ROM().write(1)
 	F=[0,1,2,3,4,5,6,7]
 	if len(A.settings.krool_keys_required)>0:
