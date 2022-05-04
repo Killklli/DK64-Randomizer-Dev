@@ -2,42 +2,43 @@
 from randomizer.Patching.Patcher import ROM
 from randomizer.Spoiler import Spoiler
 from random import randint
+import js
 def apply_cosmetic_colors(spoiler):
-	'Apply cosmetic skins to kongs.';J='red';I='purple';H='green';G=True;F='vanilla';C='randomized';A=spoiler;D=False;E=33476640
-	if A.settings.random_colors:A.settings.dk_colors=C;A.settings.diddy_colors=C;A.settings.lanky_colors=C;A.settings.tiny_colors=C;A.settings.chunky_colors=C
-	if A.settings.dk_colors!=F:
-		D=G;B=0
-		if A.settings.dk_colors==C:B=randint(0,3)
-		elif A.settings.dk_colors=='blue':B=1
-		elif A.settings.dk_colors==H:B=2
-		elif A.settings.dk_colors==I:B=3
-		ROM().seek(E+295);ROM().write(B)
-	if A.settings.diddy_colors!=F:
-		D=G;B=0
-		if A.settings.diddy_colors==C:B=randint(0,3)
-		elif A.settings.diddy_colors=='dark_blue':B=1
-		elif A.settings.diddy_colors=='yellow':B=2
-		elif A.settings.diddy_colors=='light_blue':B=3
-		ROM().seek(E+296);ROM().write(B)
-	if A.settings.lanky_colors!=F:
-		D=G;B=0
-		if A.settings.lanky_colors==C:B=randint(0,3)
-		elif A.settings.lanky_colors==H:B=1
-		elif A.settings.lanky_colors==I:B=2
-		elif A.settings.lanky_colors==J:B=3
-		ROM().seek(E+297);ROM().write(B)
-	if A.settings.tiny_colors!=F:
-		D=G;B=0
-		if A.settings.tiny_colors==C:B=randint(0,3)
-		elif A.settings.tiny_colors==H:B=1
-		elif A.settings.tiny_colors==I:B=2
-		elif A.settings.tiny_colors==J:B=3
-		ROM().seek(E+298);ROM().write(B)
-	if A.settings.chunky_colors!=F:
-		D=G;B=0
-		if A.settings.chunky_colors==C:B=randint(0,3)
-		elif A.settings.chunky_colors==J:B=1
-		elif A.settings.chunky_colors==I:B=2
-		elif A.settings.chunky_colors==H:B=3
-		ROM().seek(E+299);ROM().write(B)
-	if D:ROM().seek(E+294);ROM().write(1)
+	'Apply cosmetic skins to kongs.';N='red';M='purple';L='green';K=True;J='vanilla';I='chunky_colors';H='tiny_colors';G='lanky_colors';F='diddy_colors';E='dk_colors';B='randomized';C=False;D=33476640
+	if js.document.getElementById('random_colors').value=='True':js.document.getElementById(E).value=B;js.document.getElementById(F).value=B;js.document.getElementById(G).value=B;js.document.getElementById(H).value=B;js.document.getElementById(I).value=B
+	if js.document.getElementById(E).value!=J:
+		C=K;A=0
+		if js.document.getElementById(E).value==B:A=randint(0,3)
+		elif js.document.getElementById(E).value=='blue':A=1
+		elif js.document.getElementById(E).value==L:A=2
+		elif js.document.getElementById(E).value==M:A=3
+		ROM().seek(D+295);ROM().write(A)
+	if js.document.getElementById(F).value!=J:
+		C=K;A=0
+		if js.document.getElementById(F).value==B:A=randint(0,3)
+		elif js.document.getElementById(F).value=='dark_blue':A=1
+		elif js.document.getElementById(F).value=='yellow':A=2
+		elif js.document.getElementById(F).value=='light_blue':A=3
+		ROM().seek(D+296);ROM().write(A)
+	if js.document.getElementById(G).value!=J:
+		C=K;A=0
+		if js.document.getElementById(G).value==B:A=randint(0,3)
+		elif js.document.getElementById(G).value==L:A=1
+		elif js.document.getElementById(G).value==M:A=2
+		elif js.document.getElementById(G).value==N:A=3
+		ROM().seek(D+297);ROM().write(A)
+	if js.document.getElementById(H).value!=J:
+		C=K;A=0
+		if js.document.getElementById(H).value==B:A=randint(0,3)
+		elif js.document.getElementById(H).value==L:A=1
+		elif js.document.getElementById(H).value==M:A=2
+		elif js.document.getElementById(H).value==N:A=3
+		ROM().seek(D+298);ROM().write(A)
+	if js.document.getElementById(I).value!=J:
+		C=K;A=0
+		if js.document.getElementById(I).value==B:A=randint(0,3)
+		elif js.document.getElementById(I).value==N:A=1
+		elif js.document.getElementById(I).value==M:A=2
+		elif js.document.getElementById(I).value==L:A=3
+		ROM().seek(D+299);ROM().write(A)
+	if C:ROM().seek(D+294);ROM().write(1)

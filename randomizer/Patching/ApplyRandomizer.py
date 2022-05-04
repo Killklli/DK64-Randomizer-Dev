@@ -1,5 +1,5 @@
 'Apply Patch data to the ROM.'
-import codecs,json,pickle,js
+import codecs,json,pickle,random,js
 from randomizer.Patching.BananaPortRando import randomize_bananaport
 from randomizer.Patching.BarrelRando import randomize_barrels
 from randomizer.Patching.BossRando import randomize_bosses
@@ -69,7 +69,7 @@ def patching_response(responded_data):
 			if L in F:F.remove(L)
 	G=0
 	for E in F:G=G|1<<E
-	ROM().seek(B+280);ROM().write(G);ROM().seek(B+320);ROM().write(A.jetpac_medals_required);randomize_dktv();randomize_music(A);randomize_entrances(A);randomize_moves(A);randomize_prices(A);randomize_bosses(A);randomize_krool(A);randomize_barrels(A);randomize_bananaport(A);randomize_enemies(A);apply_cosmetic_colors(A);apply_kongrando_cosmetic(A);randomize_puzzles()
+	ROM().seek(B+280);ROM().write(G);ROM().seek(B+320);ROM().write(A.jetpac_medals_required);randomize_dktv();randomize_entrances(A);randomize_moves(A);randomize_prices(A);randomize_bosses(A);randomize_krool(A);randomize_barrels(A);randomize_bananaport(A);randomize_enemies(A);apply_kongrando_cosmetic(A);randomize_puzzles();random.seed(None);randomize_music(A);apply_cosmetic_colors(A);random.seed(A.settings.seed)
 	if A.settings.wrinkly_hints:compileHints(A);PushHints()
 	C=0;c=get_hash_images()
 	for D in A.settings.seed_hash:ROM().seek(B+282+C);ROM().write(D);js.document.getElementById('hash'+str(C)).src='data:image/jpeg;base64,'+c[D];C+=1
