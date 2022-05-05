@@ -13,7 +13,7 @@ from randomizer.Settings import Settings
 from randomizer.Spoiler import Spoiler
 def randomize_music(spoiler):
 	'Randomize music passed from the misc music settings.\n\n    Args:\n        settings (Settings): Settings object from the windows form.\n    ';U='uploaded';M='music_events';K='music_fanfares';H='default';G='randomized';F='music_bgm';E=spoiler;Y=E.settings
-	if js.document.getElementById('random_music').value=='True':js.document.getElementById(F).value=G;js.document.getElementById(K).value=G;js.document.getElementById(M).value=G
+	if js.document.getElementById('random_music').checked:js.document.getElementById(F).value=G;js.document.getElementById(K).value=G;js.document.getElementById(M).value=G
 	if js.document.getElementById(F).value!=H or js.document.getElementById(M).value!=H or js.document.getElementById(K).value!=H:V=33476640;ROM().seek(V+287);ROM().write(1)
 	if js.document.getElementById(F).value!=H:
 		if js.document.getElementById(F).value==G:

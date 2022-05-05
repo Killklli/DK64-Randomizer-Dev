@@ -5,7 +5,7 @@ from random import randint
 import js
 def apply_cosmetic_colors(spoiler):
 	'Apply cosmetic skins to kongs.';N='red';M='purple';L='green';K=True;J='vanilla';I='chunky_colors';H='tiny_colors';G='lanky_colors';F='diddy_colors';E='dk_colors';B='randomized';C=False;D=33476640
-	if js.document.getElementById('random_colors').value=='True':js.document.getElementById(E).value=B;js.document.getElementById(F).value=B;js.document.getElementById(G).value=B;js.document.getElementById(H).value=B;js.document.getElementById(I).value=B
+	if js.document.getElementById('random_colors').checked:js.document.getElementById(E).value=B;js.document.getElementById(F).value=B;js.document.getElementById(G).value=B;js.document.getElementById(H).value=B;js.document.getElementById(I).value=B
 	if js.document.getElementById(E).value!=J:
 		C=K;A=0
 		if js.document.getElementById(E).value==B:A=randint(0,3)
