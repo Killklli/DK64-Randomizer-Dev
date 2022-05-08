@@ -102,8 +102,7 @@ class LogicVarHolder:
 		if B.item is not _C and B.item is not Items.NoItem:
 			C=GetPriceOfMoveItem(B.item,A.settings,A.Slam,A.AmmoBelts,A.InstUpgrades)
 			if B.kong==Kongs.any:
-				for D in A.GetKongs():
-					if A.Coins[D]>=C:A.Coins[D]-=C
+				for D in range(0,5):A.Coins[D]-=C
 			else:A.Coins[B.kong]-=C
 	def HasAccess(A,region,kong):"Check if a certain kong has access to a certain region.\n\n        Usually the region's own HasAccess function is used, but this is necessary for checking access for other regions in logic files.\n        ";return Regions[region].HasAccess(kong)
 	def KasplatAccess(A,location):
