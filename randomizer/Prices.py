@@ -5,7 +5,8 @@ import random
 from randomizer.Enums.Items import Items
 from randomizer.Enums.Kongs import Kongs
 from randomizer.Enums.Locations import Locations
-from randomizer.ItemPool import ChunkyMoveLocations,DiddyMoveLocations,DonkeyMoveLocations,LankyMoveLocations,SharedMoveLocations,TinyMoveLocations
+from randomizer.ItemPool import ChunkyMoveLocations,DiddyMoveLocations,DonkeyMoveLocations,LankyMoveLocations,TinyMoveLocations
+from randomizer.ItemPool import DonkeyMoves,DiddyMoves,LankyMoves,TinyMoves,ChunkyMoves
 from randomizer.Lists.Location import LocationList
 VanillaPrices={Items.BaboonBlast:3,Items.StrongKong:5,Items.GorillaGrab:7,Items.ChimpyCharge:3,Items.RocketbarrelBoost:5,Items.SimianSpring:7,Items.Orangstand:3,Items.BaboonBalloon:5,Items.OrangstandSprint:7,Items.MiniMonkey:3,Items.PonyTailTwirl:5,Items.Monkeyport:7,Items.HunkyChunky:3,Items.PrimatePunch:5,Items.GorillaGone:7,Items.Coconut:3,Items.Peanut:3,Items.Grape:3,Items.Feather:3,Items.Pineapple:3,Items.HomingAmmo:5,Items.SniperSight:7,Items.Bongos:3,Items.Guitar:3,Items.Trombone:3,Items.Saxophone:3,Items.Triangle:3,Items.ProgressiveSlam:[5,7],Items.ProgressiveAmmoBelt:[3,5],Items.ProgressiveInstrumentUpgrade:[5,7,9]}
 ProgressiveMoves={Items.ProgressiveSlam:2,Items.ProgressiveAmmoBelt:2,Items.ProgressiveInstrumentUpgrade:3}
@@ -28,12 +29,14 @@ def GenerateRandomPrice(weight,avg,stddev):
 		elif A>C:A=C
 	return A
 def GetMaxForKong(settings,kong):
-	'Get the maximum amount of coins the given kong can spend.';C=kong;A=settings;B=sum([C for(B,C)in A.prices.items()if B in SharedMoveLocations])
-	if C==Kongs.donkey:B+=sum([C for(B,C)in A.prices.items()if B in DonkeyMoveLocations])
-	elif C==Kongs.diddy:B+=sum([C for(B,C)in A.prices.items()if B in DiddyMoveLocations])
-	elif C==Kongs.lanky:B+=sum([C for(B,C)in A.prices.items()if B in LankyMoveLocations])
-	elif C==Kongs.tiny:B+=sum([C for(B,C)in A.prices.items()if B in TinyMoveLocations])
-	else:B+=sum([C for(B,C)in A.prices.items()if B in ChunkyMoveLocations])
+	'Get the maximum amount of coins the given kong can spend.';C=kong;A=settings;B=sum([C for(B,C)in A.prices.items()if B in[Items.HomingAmmo,Items.SniperSight]])
+	for D in ProgressiveMoves.keys():
+		for E in range(ProgressiveMoves[D]):B+=A.prices[D][E]
+	if C==Kongs.donkey:B+=sum([C for(B,C)in A.prices.items()if B in DonkeyMoves])
+	elif C==Kongs.diddy:B+=sum([C for(B,C)in A.prices.items()if B in DiddyMoves])
+	elif C==Kongs.lanky:B+=sum([C for(B,C)in A.prices.items()if B in LankyMoves])
+	elif C==Kongs.tiny:B+=sum([C for(B,C)in A.prices.items()if B in TinyMoves])
+	else:B+=sum([C for(B,C)in A.prices.items()if B in ChunkyMoves])
 	return B
 SlamProgressiveSequence=[Locations.SuperSimianSlam,Locations.SuperDuperSimianSlam]
 FunkySequence=[[Locations.CoconutGun,Locations.PeanutGun,Locations.GrapeGun,Locations.FeatherGun,Locations.PineappleGun],Locations.AmmoBelt1,Locations.HomingAmmo,Locations.AmmoBelt2,Locations.SniperSight]
