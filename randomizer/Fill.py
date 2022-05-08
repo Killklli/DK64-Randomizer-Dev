@@ -41,60 +41,87 @@ def GetExitLevelExit(region):
 	elif A==Levels.FungiForest:return ShuffleExits.ShufflableExits[Transitions.ForestToIsles].shuffledId
 	elif A==Levels.CrystalCaves:return ShuffleExits.ShufflableExits[Transitions.CavesToIsles].shuffledId
 	elif A==Levels.CreepyCastle:return ShuffleExits.ShufflableExits[Transitions.CastleToIsles].shuffledId
-def GetAccessibleLocations(settings,ownedItems,searchType=SearchMode.GetReachable):
-	'Search to find all reachable locations given owned items.';R=ownedItems;Q=settings;D=searchType;F=[];G=[];S=[];N=_B
-	while len(G)>0 or N:
-		H=[]
-		for L in G:
-			F.append(L);A=LocationList[L]
+def GetAccessibleLocations(settings,ownedItems,searchType=SearchMode.GetReachable,purchaseOrder=[]):
+	'Search to find all reachable locations given owned items.';S=ownedItems;R=settings;C=searchType;H=[];I=[];T=[];O=_B;F=purchaseOrder.copy();U=[]
+	while len(I)>0 or O:
+		J=[]
+		for E in I:
+			H.append(E);A=LocationList[E]
 			if A.item is not _A:
-				R.append(A.item)
-				if D==SearchMode.GeneratePlaythrough and ItemList[A.item].playthrough:
-					if A.item==Items.BananaHoard:H=[L];break
-					H.append(L)
-				if D==SearchMode.CheckBeatable and A.item==Items.BananaHoard:return _B
-		if len(H)>0:
-			S.append(H)
-			if LocationList[H[0]].item==Items.BananaHoard:break
-		N=_C;G=[];LogicVariables.Update(R)
-		for M in LogicVariables.GetKongs():
-			LogicVariables.SetKong(M);T=Logic.Regions[Regions.IslesMain];T.id=Regions.IslesMain;I=[T];E=[Regions.IslesMain];U=[(A,B)for(A,B)in Logic.Regions.items()if B.HasAccess(M)and A not in E];E.extend([A[0]for A in U]);I.extend([A[1]for A in U])
-			while len(I)>0:
-				B=I.pop();B.UpdateAccess(M,LogicVariables);LogicVariables.UpdateCurrentRegionAccess(B)
-				for O in B.events:
-					if O.name not in LogicVariables.Events and O.logic(LogicVariables):N=_B;LogicVariables.Events.append(O.name)
+				if A.type==Types.Shop and E!=Locations.SimianSlam and C==SearchMode.GetReachableWithControlledPurchases:
+					if len(F)>0 and E==F[0]:F.pop(0);U.append(E)
+					else:continue
+				S.append(A.item)
+				if C==SearchMode.GeneratePlaythrough and ItemList[A.item].playthrough:
+					if A.item==Items.BananaHoard:J=[E];break
+					J.append(E)
+				if C==SearchMode.CheckBeatable and A.item==Items.BananaHoard:return _B
+		if len(J)>0:
+			T.append(J)
+			if LocationList[J[0]].item==Items.BananaHoard:break
+		O=_C;I=[];LogicVariables.Update(S)
+		for N in LogicVariables.GetKongs():
+			LogicVariables.SetKong(N);V=Logic.Regions[Regions.IslesMain];V.id=Regions.IslesMain;K=[V];G=[Regions.IslesMain];W=[(A,B)for(A,B)in Logic.Regions.items()if B.HasAccess(N)and A not in G];G.extend([A[0]for A in W]);K.extend([A[1]for A in W])
+			while len(K)>0:
+				B=K.pop();B.UpdateAccess(N,LogicVariables);LogicVariables.UpdateCurrentRegionAccess(B)
+				for P in B.events:
+					if P.name not in LogicVariables.Events and P.logic(LogicVariables):O=_B;LogicVariables.Events.append(P.name)
 				if B.id in Logic.CollectibleRegions.keys():
-					for J in Logic.CollectibleRegions[B.id]:
-						if not J.added and(M==J.kong or J.kong==Kongs.any)and J.logic(LogicVariables):LogicVariables.AddCollectible(J,B.level)
+					for L in Logic.CollectibleRegions[B.id]:
+						if not L.added and(N==L.kong or L.kong==Kongs.any)and L.logic(LogicVariables):LogicVariables.AddCollectible(L,B.level)
 				for A in B.locations:
-					if A.logic(LogicVariables)and A.id not in G and A.id not in F:
-						if A.bonusBarrel and Q.bonus_barrels!='skip':
-							X=BarrelMetaData[A.id].minigame
-							if not MinigameRequirements[X].logic(LogicVariables):continue
+					if A.logic(LogicVariables)and A.id not in I:
+						if A.id in H and(A.id in U or A.id not in F):continue
+						if A.bonusBarrel and R.bonus_barrels!='skip':
+							Z=BarrelMetaData[A.id].minigame
+							if not MinigameRequirements[Z].logic(LogicVariables):continue
 						elif LocationList[A.id].type==Types.Blueprint:
 							if not LogicVariables.KasplatAccess(A.id):continue
-						elif LocationList[A.id].type==Types.Shop and A.id!=Locations.SimianSlam:LogicVariables.PurchaseShopItem(LocationList[A.id])
-						G.append(A.id)
-				V=B.exits.copy()
-				if Q.shuffle_loading_zones and B.level!=Levels.DKIsles and B.level!=Levels.Shops:
-					W=GetExitLevelExit(B)
-					if W is not _A:Y=ShuffleExits.ShufflableExits[W].back.regionId;V.append(TransitionFront(Y,lambda l:_B))
-				for exit in V:
-					C=exit.dest
+						elif LocationList[A.id].type==Types.Shop and A.id!=Locations.SimianSlam:
+							if C!=SearchMode.GetReachableWithControlledPurchases or len(F)>0 and A.id==F[0]:LogicVariables.PurchaseShopItem(LocationList[A.id])
+						I.append(A.id)
+				X=B.exits.copy()
+				if R.shuffle_loading_zones and B.level!=Levels.DKIsles and B.level!=Levels.Shops:
+					Y=GetExitLevelExit(B)
+					if Y is not _A:a=ShuffleExits.ShufflableExits[Y].back.regionId;X.append(TransitionFront(a,lambda l:_B))
+				for exit in X:
+					D=exit.dest
 					if exit.exitShuffleId is not _A and not exit.assumed:
-						P=ShuffleExits.ShufflableExits[exit.exitShuffleId]
-						if P.shuffled:C=ShuffleExits.ShufflableExits[P.shuffledId].back.regionId
-						elif P.toBeShuffled and not exit.assumed:continue
-					if C not in E and exit.logic(LogicVariables):E.append(C);K=Logic.Regions[C];K.id=C;I.append(K)
+						Q=ShuffleExits.ShufflableExits[exit.exitShuffleId]
+						if Q.shuffled:D=ShuffleExits.ShufflableExits[Q.shuffledId].back.regionId
+						elif Q.toBeShuffled and not exit.assumed:continue
+					if D not in G and exit.logic(LogicVariables):G.append(D);M=Logic.Regions[D];M.id=D;K.append(M)
 				if B.deathwarp is not _A:
-					C=B.deathwarp.dest
-					if C not in E and B.deathwarp.logic(LogicVariables):E.append(C);K=Logic.Regions[C];K.id=C;I.append(K)
-	if D==SearchMode.GetReachable:return F
-	elif D==SearchMode.CheckBeatable:return _C
-	elif D==SearchMode.GeneratePlaythrough:return S
-	elif D==SearchMode.CheckAllReachable:return len(F)==len(LocationList)
-	elif D==SearchMode.GetUnreachable:return[A for A in LocationList if A not in F]
+					D=B.deathwarp.dest
+					if D not in G and B.deathwarp.logic(LogicVariables):G.append(D);M=Logic.Regions[D];M.id=D;K.append(M)
+	if C==SearchMode.GetReachable or C==SearchMode.GetReachableWithControlledPurchases:return H
+	elif C==SearchMode.CheckBeatable:return _C
+	elif C==SearchMode.GeneratePlaythrough:return T
+	elif C==SearchMode.CheckAllReachable:return len(H)==len(LocationList)
+	elif C==SearchMode.GetUnreachable:return[A for A in LocationList if A not in H]
 def VerifyWorld(settings):'Make sure all item locations are reachable on current world graph with constant items placed and all other items owned.';A=settings;ItemPool.PlaceConstants(A);B=GetAccessibleLocations(A,ItemPool.AllItems(A),SearchMode.GetUnreachable);C=len(B)==0;Reset();return C
+def VerifyWorldWithWorstCoinUsage(settings):
+	'Make sure the game is beatable without it being possible to run out of coins for required moves.';J=settings;C=[];E=[]
+	while _B:
+		Reset();E=GetAccessibleLocations(J,[],SearchMode.GetReachableWithControlledPurchases,C)
+		if len([A for A in E if LocationList[A].item==Items.BananaHoard])>0:print('Seed is valid with worst purchase order: '+str([LocationList[A].name+': '+LocationList[A].item.name+', 'for A in C]));Reset();return _B
+		G=[A for A in E if LocationList[A].type==Types.Shop and LocationList[A].item is not _A and LocationList[A].item!=Items.NoItem and A not in C];F={};D={}
+		if len(G)==0:print('Seed is invalid, coin locked with purchase order: '+str([LocationList[A].name+': '+LocationList[A].item.name+', 'for A in C]));Reset();return _C
+		B=_A;L=LogicVariables.Coins.copy();print('Accessible Shops: '+str([LocationList[A].name for A in G]))
+		for A in G:
+			print('Check buying '+LocationList[A].item.name+' from location '+LocationList[A].name);K=C.copy();K.append(A);Reset();M=GetAccessibleLocations(J,[],SearchMode.GetReachableWithControlledPurchases,K);N=LogicVariables.Coins.copy();H=[0,0,0,0,0]
+			for I in LogicVariables.GetKongs():H[I]=N[I]-L[I]
+			print('Coin differential: '+str(H));F[A]=H;D[A]=[LocationList[A].item for A in M if A not in E and LocationList[A].item is not _A]
+			if LocationList[A].item in[Items.ProgressiveAmmoBelt,Items.ProgressiveInstrumentUpgrade]:B=A;break
+			if B is _A:B=A;continue
+			if len([B for B in F[A]if B<0])==0:continue
+			O=len([A for A in D[B]if ItemList[A].type==Types.Kong]);P=len([B for B in D[A]if ItemList[B].type==Types.Kong])
+			if P>O:continue
+			Q=len([A for A in D[B]if ItemList[A].type==Types.Key]);R=len([B for B in D[A]if ItemList[B].type==Types.Key])
+			if R>Q:continue
+			S=sum([A for A in F[B]]);T=sum([B for B in F[A]])
+			if T<S:B=A
+		print('Choosing to buy '+LocationList[B].item.name+' from '+LocationList[B].name);C.append(B)
 def Reset():'Reset logic variables and region info that should be reset before a search.';LogicVariables.Reset();Logic.ResetRegionAccess();Logic.ResetCollectibleRegions()
 def ParePlaythrough(settings,PlaythroughLocations):
 	'Pare playthrough down to only the essential elements.';A=PlaythroughLocations;F=[]
@@ -241,7 +268,7 @@ def ShuffleMisc(spoiler):
 	while _B:
 		try:
 			FillKongsAndMoves(B);Reset()
-			if not GetAccessibleLocations(B.settings,[],SearchMode.CheckBeatable):raise Ex.GameNotBeatableException(_F)
+			if not VerifyWorldWithWorstCoinUsage(B.settings):raise Ex.GameNotBeatableException(_F)
 			return
 		except Ex.FillException as C:
 			if A==20:js.postMessage(_G);raise C
@@ -261,8 +288,8 @@ def ShuffleKongsAndLevels(spoiler):
 	'Shuffle Kongs and Levels simultaneously accounting for restrictions.';A=spoiler;ShuffleExits.ShuffleLevelOrderWithRestrictions(A.settings);A.UpdateExits();print('Starting Kong: '+A.settings.starting_kong.name);ItemPool.PlaceConstants(A.settings);B=0
 	while _B:
 		try:
-			WipeProgressionRequirements(A.settings);FillKongsAndMoves(A);Reset()
-			if not GetAccessibleLocations(A.settings,[],SearchMode.CheckBeatable):raise Ex.GameNotBeatableException(_F)
+			WipeProgressionRequirements(A.settings);FillKongsAndMoves(A);SetNewProgressionRequirements(A.settings)
+			if not VerifyWorldWithWorstCoinUsage(A.settings):raise Ex.GameNotBeatableException(_F)
 			return
 		except Ex.FillException as C:
 			if B==20:js.postMessage(_G);raise C
@@ -309,5 +336,4 @@ def Generate_Spoiler(spoiler):
 		else:
 			ItemPool.PlaceConstants(A.settings)
 			if not GetAccessibleLocations(A.settings,[],SearchMode.CheckBeatable):raise Ex.VanillaItemsGameNotBeatableException('Game unbeatable.')
-	if A.settings.kongs_for_progression:SetNewProgressionRequirements(A.settings)
 	GeneratePlaythrough(A);Reset();ShuffleExits.Reset();return A

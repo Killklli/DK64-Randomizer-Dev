@@ -80,4 +80,4 @@ def CanBuy(location,coins,settings,slamLevel,ammoBelts,instUpgrades):
 	elif A in LankyMoveLocations:return KongCanBuy(A,B,C,Kongs.lanky,D,E,F)
 	elif A in TinyMoveLocations:return KongCanBuy(A,B,C,Kongs.tiny,D,E,F)
 	elif A in ChunkyMoveLocations:return KongCanBuy(A,B,C,Kongs.chunky,D,E,F)
-	else:return EveryKongCanBuy(A,B,C,D,E,F)
+	else:return AnyKongCanBuy(A,B,C,D,E,F)
