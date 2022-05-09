@@ -76,6 +76,7 @@ def GetAccessibleLocations(settings,ownedItems,searchType=SearchMode.GetReachabl
 							if not LogicVariables.KasplatAccess(A.id):continue
 						elif LocationList[A.id].type==Types.Shop and A.id!=Locations.SimianSlam:
 							if C!=SearchMode.GetReachableWithControlledPurchases or A.id in S:LogicVariables.PurchaseShopItem(LocationList[A.id])
+						elif A.id==Locations.NintendoCoin:LogicVariables.Coins[Kongs.donkey]-=2
 						H.append(A.id)
 				W=B.exits.copy()
 				if Q.shuffle_loading_zones and B.level!=Levels.DKIsles and B.level!=Levels.Shops:

@@ -29,15 +29,15 @@ def GenerateRandomPrice(weight,avg,stddev):
 		elif A>C:A=C
 	return A
 def GetMaxForKong(settings,kong):
-	'Get the maximum amount of coins the given kong can spend.';C=kong;A=settings;B=sum([C for(B,C)in A.prices.items()if B in[Items.HomingAmmo,Items.SniperSight]])
+	'Get the maximum amount of coins the given kong can spend.';C=kong;B=settings;A=sum([C for(A,C)in B.prices.items()if A in[Items.HomingAmmo,Items.SniperSight]])
 	for D in ProgressiveMoves.keys():
-		for E in range(ProgressiveMoves[D]):B+=A.prices[D][E]
-	if C==Kongs.donkey:B+=sum([C for(B,C)in A.prices.items()if B in DonkeyMoves])
-	elif C==Kongs.diddy:B+=sum([C for(B,C)in A.prices.items()if B in DiddyMoves])
-	elif C==Kongs.lanky:B+=sum([C for(B,C)in A.prices.items()if B in LankyMoves])
-	elif C==Kongs.tiny:B+=sum([C for(B,C)in A.prices.items()if B in TinyMoves])
-	else:B+=sum([C for(B,C)in A.prices.items()if B in ChunkyMoves])
-	return B
+		for E in range(ProgressiveMoves[D]):A+=B.prices[D][E]
+	if C==Kongs.donkey:A+=sum([C for(A,C)in B.prices.items()if A in DonkeyMoves]);A+=2
+	elif C==Kongs.diddy:A+=sum([C for(A,C)in B.prices.items()if A in DiddyMoves])
+	elif C==Kongs.lanky:A+=sum([C for(A,C)in B.prices.items()if A in LankyMoves])
+	elif C==Kongs.tiny:A+=sum([C for(A,C)in B.prices.items()if A in TinyMoves])
+	else:A+=sum([C for(A,C)in B.prices.items()if A in ChunkyMoves])
+	return A
 SlamProgressiveSequence=[Locations.SuperSimianSlam,Locations.SuperDuperSimianSlam]
 FunkySequence=[[Locations.CoconutGun,Locations.PeanutGun,Locations.GrapeGun,Locations.FeatherGun,Locations.PineappleGun],Locations.AmmoBelt1,Locations.HomingAmmo,Locations.AmmoBelt2,Locations.SniperSight]
 CandySequence=[[Locations.Bongos,Locations.Guitar,Locations.Trombone,Locations.Saxophone,Locations.Triangle],Locations.MusicUpgrade1,Locations.ThirdMelon,Locations.MusicUpgrade2]
