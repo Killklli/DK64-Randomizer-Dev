@@ -111,7 +111,6 @@ def VerifyWorldWithWorstCoinUsage(settings):
 			L=D.copy();L.append(A);Reset();Q=GetAccessibleLocations(B,[],SearchMode.GetReachableWithControlledPurchases,L);R=LogicVariables.Coins.copy();M=[0,0,0,0,0]
 			for J in LogicVariables.GetKongs():M[J]=R[J]-E[J]
 			I[A]=M;G[A]=[LocationList[A].item for A in Q if A not in H and LocationList[A].item is not _A]
-			if LocationList[A].item in[Items.ProgressiveAmmoBelt,Items.ProgressiveInstrumentUpgrade]:C=A;break
 			if C is _A:C=A;continue
 			if len([B for B in I[A]if B<0])==0:continue
 			S=len([A for A in G[C]if ItemList[A].type==Types.Kong]);T=len([B for B in G[A]if ItemList[B].type==Types.Kong])
