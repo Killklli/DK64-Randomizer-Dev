@@ -30,11 +30,11 @@ class Settings:
 	def generate_main(A):'Set Default items on main page.';A.seed=_A;A.download_patch_file=_A;A.bonus_barrel_rando=_A;A.loading_zone_coupled=_A;A.shop_location_rando=_A;A.random_prices=_A;A.boss_location_rando=_A;A.boss_kong_rando=_A;A.kasplat_rando=_A
 	def set_seed(A):'Forcibly re-set the random seed to the seed set in the config.';random.seed(A.seed)
 	def generate_progression(A):'Set default items on progression page.';A.blocker_0=_A;A.blocker_1=_A;A.blocker_2=_A;A.blocker_3=_A;A.blocker_4=_A;A.blocker_5=_A;A.blocker_6=_A;A.blocker_7=_A;A.troff_0=_A;A.troff_1=_A;A.troff_2=_A;A.troff_3=_A;A.troff_4=_A;A.troff_5=_A;A.troff_6=_A;A.troff_min=_A;A.troff_max=_A;A.blocker_text=_A;A.troff_text=_A
-	def generate_misc(A):'Set default items on misc page.';A.unlock_all_moves=_A;A.unlock_all_kongs=_A;A.crown_door_open=_A;A.coin_door_open=_A;A.unlock_fairy_shockwave=_A;A.krool_phase_count=5;A.krool_key_count=8;A.bonus_barrels='normal';A.hard_shooting=_B;A.shuffle_loading_zones=_D;A.decoupled_loading_zones=_B;A.music_bgm=_A;A.music_fanfares=_A;A.music_events=_A;A.generate_spoilerlog=_A;A.fast_start_beginning_of_game=_A;A.helm_setting=_A;A.quality_of_life=_A;A.enable_tag_anywhere=_A;A.krool_phase_order_rando=_A;A.krool_access=_A;A.open_lobbies=_A;A.random_medal_requirement=_C;A.bananaport_rando=_B;A.shop_indicator=_B;A.randomize_cb_required_amounts=_B;A.randomize_blocker_required_amounts=_B;A.perma_death=_B;A.disable_tag_barrels=_B;A.level_randomization=_D;A.kong_rando=_B;A.kongs_for_progression=_B
+	def generate_misc(A):'Set default items on misc page.';A.unlock_all_moves=_A;A.unlock_all_kongs=_A;A.crown_door_open=_A;A.coin_door_open=_A;A.unlock_fairy_shockwave=_A;A.krool_phase_count=5;A.krool_key_count=8;A.bonus_barrels='normal';A.hard_shooting=_B;A.shuffle_loading_zones=_D;A.decoupled_loading_zones=_B;A.music_bgm=_A;A.music_fanfares=_A;A.music_events=_A;A.generate_spoilerlog=_A;A.fast_start_beginning_of_game=_A;A.helm_setting=_A;A.quality_of_life=_A;A.enable_tag_anywhere=_A;A.krool_phase_order_rando=_A;A.krool_access=_B;A.open_lobbies=_A;A.random_medal_requirement=_C;A.bananaport_rando=_B;A.shop_indicator=_B;A.randomize_cb_required_amounts=_B;A.randomize_blocker_required_amounts=_B;A.perma_death=_B;A.disable_tag_barrels=_B;A.level_randomization=_D;A.kong_rando=_B;A.kongs_for_progression=_B
 	def resolve_settings(A):
-		'Resolve settings which are not directly set through the UI.';L='levels';K='random';J='random_helm';F='vanilla';G=GetKongs()
-		if A.random_prices!=F:A.prices=RandomizePrices(A.random_prices)
-		A.update_progression_totals();A.krool_donkey=_B;A.krool_diddy=_B;A.krool_lanky=_B;A.krool_tiny=_B;A.krool_chunky=_C;C=[A for A in G if A!=Kongs.chunky]
+		'Resolve settings which are not directly set through the UI.';I='levels';H='vanilla';F=GetKongs()
+		if A.random_prices!=H:A.prices=RandomizePrices(A.random_prices)
+		A.update_progression_totals();A.krool_donkey=_B;A.krool_diddy=_B;A.krool_lanky=_B;A.krool_tiny=_B;A.krool_chunky=_C;C=[A for A in F if A!=Kongs.chunky]
 		if A.krool_phase_order_rando:random.shuffle(C)
 		if A.krool_phase_count<5:C=random.sample(C,A.krool_phase_count-1)
 		B=[]
@@ -43,24 +43,21 @@ class Settings:
 			if D==Kongs.diddy:A.krool_diddy=_C;B.append(Kongs.diddy)
 			if D==Kongs.lanky:A.krool_lanky=_C;B.append(Kongs.lanky)
 			if D==Kongs.tiny:A.krool_tiny=_C;B.append(Kongs.tiny)
-		B.append(Kongs.chunky);A.krool_order=B;H=[Events.JapesKeyTurnedIn,Events.AztecKeyTurnedIn,Events.FactoryKeyTurnedIn,Events.GalleonKeyTurnedIn,Events.ForestKeyTurnedIn,Events.CavesKeyTurnedIn,Events.CastleKeyTurnedIn,Events.HelmKeyTurnedIn];E=H.copy();I=A.krool_key_count
-		if A.krool_access==J:A.krool_keys_required.append(Events.HelmKeyTurnedIn);E.remove(Events.HelmKeyTurnedIn);I-=1
-		if A.krool_access==F:A.krool_keys_required.extend([Events.FactoryKeyTurnedIn,Events.HelmKeyTurnedIn])
-		elif A.krool_access==_E:A.krool_keys_required.extend(H)
-		elif A.krool_access==K or A.krool_access==J:
-			random.shuffle(E)
-			for M in range(I):A.krool_keys_required.append(E[M])
+		B.append(Kongs.chunky);A.krool_order=B;J=[Events.JapesKeyTurnedIn,Events.AztecKeyTurnedIn,Events.FactoryKeyTurnedIn,Events.GalleonKeyTurnedIn,Events.ForestKeyTurnedIn,Events.CavesKeyTurnedIn,Events.CastleKeyTurnedIn,Events.HelmKeyTurnedIn];E=J.copy();G=A.krool_key_count
+		if A.krool_access:A.krool_keys_required.append(Events.HelmKeyTurnedIn);E.remove(Events.HelmKeyTurnedIn);G-=1
+		random.shuffle(E)
+		for K in range(G):A.krool_keys_required.append(E[K])
 		if A.random_medal_requirement:A.BananaMedalsRequired=round(random.normalvariate(10,1.5))
 		else:A.BananaMedalsRequired=15
 		A.boss_maps=ShuffleBosses(A.boss_location_rando);A.boss_kongs=ShuffleBossKongs(A.boss_maps,A.boss_kong_rando);A.kutout_kongs=ShuffleKutoutKongs(A.boss_maps,A.boss_kongs,A.boss_kong_rando)
-		if A.bonus_barrel_rando:A.bonus_barrels=K
-		if A.level_randomization=='level_order':A.shuffle_loading_zones=L
+		if A.bonus_barrel_rando:A.bonus_barrels='random'
+		if A.level_randomization=='level_order':A.shuffle_loading_zones=I
 		elif A.level_randomization==_F:A.shuffle_loading_zones=_E
 		elif A.level_randomization==_G:A.shuffle_loading_zones=_E;A.decoupled_loading_zones=_C
-		elif A.level_randomization==F:A.shuffle_loading_zones=_D
+		elif A.level_randomization==H:A.shuffle_loading_zones=_D
 		if A.kong_rando:
-			A.starting_kong=random.choice(G)
-			if A.shuffle_loading_zones==L:A.kongs_for_progression=_C
+			A.starting_kong=random.choice(F)
+			if A.shuffle_loading_zones==I:A.kongs_for_progression=_C
 			A.diddy_freeing_kong=Kongs.any;A.lanky_freeing_kong=Kongs.any;A.tiny_freeing_kong=Kongs.any;A.chunky_freeing_kong=Kongs.any
 		else:A.starting_kong=Kongs.donkey;A.diddy_freeing_kong=Kongs.donkey;A.lanky_freeing_kong=Kongs.donkey;A.tiny_freeing_kong=Kongs.diddy;A.chunky_freeing_kong=Kongs.lanky
 		if A.shop_location_rando:A.shuffle_items='moves'
