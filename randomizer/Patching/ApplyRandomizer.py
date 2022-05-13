@@ -43,6 +43,7 @@ def patching_response(responded_data):
 	if A.settings.fast_start_beginning_of_game:ROM().seek(B+46);ROM().write(1)
 	if A.settings.unlock_fairy_shockwave:ROM().seek(B+47);ROM().write(1)
 	if A.settings.enable_tag_anywhere:ROM().seek(B+48);ROM().write(1)
+	if A.settings.fps_display:ROM().seek(B+150);ROM().write(1)
 	if A.settings.helm_setting=='skip_start':ROM().seek(B+49);ROM().write(1)
 	elif A.settings.helm_setting=='skip_all':ROM().seek(B+49);ROM().write(2)
 	if A.settings.crown_door_open:ROM().seek(B+50);ROM().write(1)
