@@ -11,22 +11,22 @@ from randomizer.Lists.Location import LocationList
 VanillaPrices={Items.BaboonBlast:3,Items.StrongKong:5,Items.GorillaGrab:7,Items.ChimpyCharge:3,Items.RocketbarrelBoost:5,Items.SimianSpring:7,Items.Orangstand:3,Items.BaboonBalloon:5,Items.OrangstandSprint:7,Items.MiniMonkey:3,Items.PonyTailTwirl:5,Items.Monkeyport:7,Items.HunkyChunky:3,Items.PrimatePunch:5,Items.GorillaGone:7,Items.Coconut:3,Items.Peanut:3,Items.Grape:3,Items.Feather:3,Items.Pineapple:3,Items.HomingAmmo:5,Items.SniperSight:7,Items.Bongos:3,Items.Guitar:3,Items.Trombone:3,Items.Saxophone:3,Items.Triangle:3,Items.ProgressiveSlam:[5,7],Items.ProgressiveAmmoBelt:[3,5],Items.ProgressiveInstrumentUpgrade:[5,7,9]}
 ProgressiveMoves={Items.ProgressiveSlam:2,Items.ProgressiveAmmoBelt:2,Items.ProgressiveInstrumentUpgrade:3}
 def RandomizePrices(weight):
-	'Generate randomized prices based on given weight (free, low, medium, or high).';C=weight;A=VanillaPrices.copy();D=4.5;E=2
-	if C=='high':D=6.5;E=3
-	elif C=='low':D=2.5;E=1
+	'Generate randomized prices based on given weight (free, low, medium, or high).';C=weight;A=VanillaPrices.copy();D=4.5;E=2;F=9
+	if C=='high':D=6.5;E=3;F=12
+	elif C=='low':D=2.5;E=1;F=6
 	for B in A.keys():
 		if B in ProgressiveMoves.keys():
 			A[B]=[]
-			for F in range(ProgressiveMoves[B]):A[B].append(GenerateRandomPrice(C,D,E))
-		else:A[B]=GenerateRandomPrice(C,D,E)
+			for G in range(ProgressiveMoves[B]):A[B].append(GenerateRandomPrice(C,D,E,F))
+		else:A[B]=GenerateRandomPrice(C,D,E,F)
 	return A
-def GenerateRandomPrice(weight,avg,stddev):
-	'Generate a random price to assign.';B=1;C=12
+def GenerateRandomPrice(weight,avg,stddev,upperLimit):
+	'Generate a random price to assign.';B=upperLimit;C=1
 	if weight=='free':A=0
 	else:
 		A=round(random.normalvariate(avg,stddev))
-		if A<B:A=B
-		elif A>C:A=C
+		if A<C:A=C
+		elif A>B:A=B
 	return A
 def GetMaxForKong(settings,kong):
 	'Get the maximum amount of coins the given kong can spend.';C=kong;B=settings;A=sum([C for(A,C)in B.prices.items()if A in[Items.HomingAmmo,Items.SniperSight]])
