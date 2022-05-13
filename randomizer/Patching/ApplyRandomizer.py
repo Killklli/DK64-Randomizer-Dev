@@ -38,7 +38,7 @@ def patching_response(responded_data):
 	for D in A.settings.BossBananas:ROM().seek(B+8+C);ROM().writeMultipleBytes(D,2);C+=2
 	C=0
 	for D in A.settings.EntryGBs:ROM().seek(B+22+C);ROM().writeMultipleBytes(D,1);C+=1
-	if A.settings.unlock_all_kongs:ROM().seek(B+44);ROM().write(1)
+	if A.settings.unlock_all_kongs:ROM().seek(B+44);ROM().write(31)
 	if A.settings.unlock_all_moves:ROM().seek(B+45);ROM().write(1)
 	if A.settings.fast_start_beginning_of_game:ROM().seek(B+46);ROM().write(1)
 	if A.settings.unlock_fairy_shockwave:ROM().seek(B+47);ROM().write(1)

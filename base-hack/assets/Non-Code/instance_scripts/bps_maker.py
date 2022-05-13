@@ -7,7 +7,7 @@ instance_name='instance_script_maps.py'
 instance_copy=f"../../../Build/{instance_name}"
 shutil.copyfile(instance_copy,instance_name)
 maps=instance_script_maps.copy()
-script_dir='../../../../../map_script_stuff/map_scripts_us/'
+script_dir='../../../../../map_scripts/map_scripts/'
 files=[A for A in os.listdir('.')if os.path.isfile(A)]
 printed=False
 file_total=0

@@ -9,18 +9,20 @@ _D='duration'
 _C='from'
 _B='text'
 _A='squish'
+import os
 header_length=120
 names_length=160
 general_buffer=154
 end_buffer=204
 end_sequence_cards=[{_A:{_C:_G,_D:header_length,_E:general_buffer},_B:['Developers']},{_A:{_C:_F,_D:names_length,_E:general_buffer},_B:['2dos','Ballaam']},{_A:{_C:_H,_D:names_length,_E:general_buffer},_B:['Bismuth','Cfox']},{_A:{_C:_F,_D:names_length,_E:general_buffer},_B:['GloriousLiar','KillKlli']},{_A:{_C:_H,_D:names_length,_E:general_buffer},_B:['Mittenz','Naramgamjan']},{_A:{_C:_F,_D:names_length,_E:end_buffer},_B:['Rain','ShadowShine57','Znernicus']},{_A:{_C:_G,_D:header_length,_E:general_buffer},_B:['Beta Testers']},{_A:{_C:_F,_D:names_length,_E:general_buffer},_B:['Adam Whitmore','Auphonium','CandyBoots']},{_A:{_C:_G,_D:names_length,_E:general_buffer},_B:['ChelseyXLynn','ChristianVega64','Connor75']},{_A:{_C:_F,_D:names_length,_E:general_buffer},_B:['CornCobx0','Fuzzyness','KaptainKohl']},{_A:{_C:_G,_D:names_length,_E:general_buffer},_B:['KiwiKiller67','Nukkuler']},{_A:{_C:_F,_D:names_length,_E:general_buffer},_B:['Obiyo','Revven']},{_A:{_C:_I,_D:names_length,_E:general_buffer},_B:['Riley','SirSmackStrikesBack']},{_A:{_C:_F,_D:names_length,_E:general_buffer},_B:['UsedPizza','VidyaJames']},{_A:{_C:_H,_D:names_length,_E:end_buffer},_B:['Wex','Zorulda']},{_A:{_C:_G,_D:header_length,_E:general_buffer},_B:['Additional Thanks']},{_A:{_C:_F,_D:names_length,_E:general_buffer},_B:['Game Developers',' ','Rareware Ltd','Nintendo']},{_A:{_C:_I,_D:names_length,_E:general_buffer},_B:['Crankys Lab Developer','Isotarge']},{_A:{_C:_G,_D:names_length*2,_E:general_buffer},_B:['You have been playing','DK64 Randomizer','dk64randomizer.com']},{_A:{_C:_I,_D:names_length*2,_E:general_buffer},_B:['Discord',' ','discord.dk64randomizer.com']}]
 def createTextFile(directory):
-	'Create the text file associated with end sequence.';B='ascii'
+	'Create the text file associated with end sequence.';C='ascii';A=directory
+	if not os.path.exists(A):os.mkdir(A)
 	if len(end_sequence_cards)>21:print(_J);exit()
-	with open(f"{directory}/credits.bin",'wb')as A:
-		for C in end_sequence_cards:
-			for D in C[_B]:E=D.upper()+'\n';A.write(E.encode(B))
-		F='*\n';A.write(F.encode(B))
+	with open(f"{A}/credits.bin",'wb')as B:
+		for D in end_sequence_cards:
+			for E in D[_B]:F=E.upper()+'\n';B.write(F.encode(C))
+		G='*\n';B.write(G.encode(C))
 def createSquishFile(directory):
 	'Create the squish data associated with end sequence.';C='big'
 	if len(end_sequence_cards)>21:print(_J);exit()

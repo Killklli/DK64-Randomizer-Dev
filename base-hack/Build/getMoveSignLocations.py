@@ -17,9 +17,9 @@ def getMoveSignData(map_index,base_stream):
 	for D in sign_data:
 		if D[_C]==map_index:
 			for A in D[_D]:
-				B=40
-				if A[_B]==_E:B=40
-				elif A[_B]==_F:B=40
-				elif A[_B]==_G:B=40
-				C.append({'base_byte_stream':base_stream,'type':70-16,'x':convertCoord(A[_A][0]),'y':convertCoord(A[_A][1]+B*A[_A][4]),'z':convertCoord(A[_A][2]),'rx':0,'ry':(convertAngle(A[_A][3])+2048)%4096,'rz':0,'scale':int(float_to_hex(0.25),16)})
+				B=40;id=256
+				if A[_B]==_E:B=40;id=256
+				elif A[_B]==_F:B=40;id=257
+				elif A[_B]==_G:B=40;id=258
+				C.append({'base_byte_stream':base_stream,'type':70-16,'x':convertCoord(A[_A][0]),'y':convertCoord(A[_A][1]+B*A[_A][4]),'z':convertCoord(A[_A][2]),'rx':0,'ry':(convertAngle(A[_A][3])+2048)%4096,'rz':0,'scale':int(float_to_hex(0.25),16),'id':id})
 	return C

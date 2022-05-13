@@ -28,7 +28,7 @@ for file_info in number_crop:
 		if key_num>=1 and key_num<=8:
 			base_dir=getDir(_D)
 			if not os.path.exists(base_dir):os.mkdir(base_dir)
-			file_dir=f"{base_dir}{file_info[_E]}";key_dir=f"{base_dir}boss_key.png";num_im=Image.open(file_dir);key_im=Image.open(key_dir);key_im=key_im.rotate(45,PIL.Image.NEAREST,expand=1);num_im=num_im.crop(num_info[_B]);Image.Image.paste(key_im,num_im,(40,10));bbox=key_im.getbbox();key_im=key_im.crop(bbox);key_im=key_im.resize((32,32));key_im.save(f"{getDir('assets/Non-Code/file_screen/key')}{key_num}.png")
+			file_dir=f"{base_dir}{file_info[_E]}";key_dir=f"{base_dir}boss_key.png";num_im=Image.open(file_dir);key_im=Image.open(key_dir);key_im=key_im.rotate(45,PIL.Image.Resampling.NEAREST,expand=1);num_im=num_im.crop(num_info[_B]);Image.Image.paste(key_im,num_im,(40,10));bbox=key_im.getbbox();key_im=key_im.crop(bbox);key_im=key_im.resize((32,32));key_im.save(f"{getDir('assets/Non-Code/file_screen/key')}{key_num}.png")
 kong_res=32,32
 for kong in kongs:
 	base_dir=getDir(_I)

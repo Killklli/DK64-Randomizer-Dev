@@ -37,6 +37,6 @@ with open('rom/dk64.z64','rb')as fh:
 			if x[_C]==_J:start=pixel*2;end=start+2;pixel_data=int.from_bytes(dec[start:end],_L);red=pixel_data>>11&31;green=pixel_data>>6&31;blue=pixel_data>>1&31;alpha=pixel_data&1;red=int(red/31*255);green=int(green/31*255);blue=int(blue/31*255);alpha=alpha*255
 			elif x[_C]==_M:start=pixel*4;end=start+4;pixel_data=int.from_bytes(dec[start:end],_L);red=pixel_data>>24&255;green=pixel_data>>16&255;blue=pixel_data>>8&255;alpha=pixel_data&255
 			pix_x=pixel%x[_A];pix_y=int(pixel/x[_A]);pix[(pix_x,pix_y)]=red,green,blue,alpha
-		if x[_I]:im=im.transpose(Image.FLIP_TOP_BOTTOM)
+		if x[_I]:im=im.transpose(Image.Transpose.FLIP_TOP_BOTTOM)
 		if x[_H]:im=im.resize((32,32))
 		im.save(img_name)
