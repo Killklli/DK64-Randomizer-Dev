@@ -25,8 +25,7 @@ def ShuffleKasplats(LogicVariables):
 		if not H:raise Ex.KasplatOutOfKongs
 def KasplatShuffle(LogicVariables):
 	'Facilitate the shuffling of kasplat types.';A=LogicVariables
-	if not A.settings.kasplat_rando:A.kasplat_map={};A.kasplat_map.update(shufflable);A.kasplat_map.update(constants)
-	else:
+	if A.settings.kasplat_rando:
 		B=0
 		while True:
 			try:
@@ -36,3 +35,4 @@ def KasplatShuffle(LogicVariables):
 			except Ex.KasplatPlacementException:
 				if B==5:js.postMessage('Kasplat placement failed, out of retries.');raise Ex.KasplatAttemptCountExceeded
 				else:B+=1;js.postMessage('Kasplat placement failed. Retrying. Tries: '+str(B))
+def InitKasplatMap(LogicVariables):'Initialize kasplat_map in logic variables with default values.';A=LogicVariables;A.kasplat_map={};A.kasplat_map.update(shufflable);A.kasplat_map.update(constants)

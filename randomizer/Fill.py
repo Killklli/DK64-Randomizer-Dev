@@ -29,7 +29,7 @@ from randomizer.Logic import LogicVarHolder,LogicVariables,STARTING_SLAM
 from randomizer.LogicClasses import TransitionFront
 from randomizer.Prices import GetMaxForKong,GetPriceOfMoveItem
 from randomizer.ShuffleBarrels import BarrelShuffle
-from randomizer.ShuffleKasplats import KasplatShuffle
+from randomizer.ShuffleKasplats import InitKasplatMap,KasplatShuffle
 from randomizer.ShuffleWarps import ShuffleWarps
 from randomizer.ShuffleBosses import ShuffleBossesBasedOnOwnedItems
 def GetExitLevelExit(region):
@@ -261,7 +261,7 @@ def ShuffleSharedMoves(spoiler):
 	for H in range(5):
 		for L in J[H]:G[L]=K[H]-I
 	return A,G
-def ShuffleMisc(spoiler):
+def FillKongsAndMovesGeneric(spoiler):
 	'Facilitate shuffling individual pools of items in lieu of full item rando.';B=spoiler;A=0
 	while _B:
 		try:
@@ -282,8 +282,8 @@ def FillKongsAndMoves(spoiler):
 		if B>0:raise Ex.ItemPlacementException(str(B)+' unplaced kongs.')
 	Reset();B=PlaceItems(A.settings,_D,C,validLocations=D)
 	if B>0:raise Ex.ItemPlacementException(str(B)+' unplaced items.')
-def ShuffleKongsAndLevels(spoiler):
-	'Shuffle Kongs and Levels simultaneously accounting for restrictions.';A=spoiler;ShuffleExits.ShuffleLevelOrderWithRestrictions(A.settings);A.UpdateExits();print('Starting Kong: '+A.settings.starting_kong.name);ItemPool.PlaceConstants(A.settings);B=0
+def FillKongsAndMovesForLevelRando(spoiler):
+	'Shuffle Kongs and Moves accounting for level order restrictions.';A=spoiler;print('Starting Kong: '+A.settings.starting_kong.name);ItemPool.PlaceConstants(A.settings);B=0
 	while _B:
 		try:
 			WipeProgressionRequirements(A.settings);FillKongsAndMoves(A);SetNewProgressionRequirements(A.settings)
@@ -321,17 +321,20 @@ def BlockAccessToLevel(settings,level):
 		else:A.EntryGBs[B]=0;A.BossBananas[B]=0
 	ShuffleExits.UpdateLevelProgression(A)
 def Generate_Spoiler(spoiler):
-	'Generate a complete spoiler based on input settings.';A=spoiler;global LogicVariables;LogicVariables=LogicVarHolder(A.settings);KasplatShuffle(LogicVariables);A.human_kasplats={};A.UpdateKasplats(LogicVariables.kasplat_map)
-	if A.settings.bonus_barrels==_E:BarrelShuffle(A.settings);A.UpdateBarrels()
-	if A.settings.bananaport_rando:B=[];C={};ShuffleWarps(B,C);A.bananaport_replacements=B.copy();A.human_warp_locations=C
+	'Generate a complete spoiler based on input settings.';A=spoiler;global LogicVariables;LogicVariables=LogicVarHolder(A.settings);InitKasplatMap(LogicVariables)
 	if A.settings.kongs_for_progression:
 		if not A.settings.unlock_all_moves:A.settings.shuffle_items=_I
-		A.settings.boss_location_rando=_B;A.settings.boss_kong_rando=_B;ShuffleKongsAndLevels(A)
+		A.settings.boss_location_rando=_B;A.settings.boss_kong_rando=_B;ShuffleExits.ShuffleLevelOrderWithRestrictions(A.settings);A.UpdateExits();ShuffleMisc(A);FillKongsAndMovesForLevelRando(A)
 	else:
 		if A.settings.shuffle_loading_zones!='none':ShuffleExits.ExitShuffle(A.settings);A.UpdateExits()
+		ShuffleMisc(A)
 		if A.settings.shuffle_items=='all':Fill(A)
-		elif A.settings.shuffle_items==_I or A.settings.kong_rando:ShuffleMisc(A)
+		elif A.settings.shuffle_items==_I or A.settings.kong_rando:FillKongsAndMovesGeneric(A)
 		else:
 			ItemPool.PlaceConstants(A.settings)
 			if not GetAccessibleLocations(A.settings,[],SearchMode.CheckBeatable):raise Ex.VanillaItemsGameNotBeatableException('Game unbeatable.')
 	GeneratePlaythrough(A);Reset();ShuffleExits.Reset();return A
+def ShuffleMisc(spoiler):
+	'Shuffle miscellaneous objects outside of main fill algorithm, including Kasplats, Bonus barrels, and bananaport warps.';A=spoiler;KasplatShuffle(LogicVariables);A.human_kasplats={};A.UpdateKasplats(LogicVariables.kasplat_map)
+	if A.settings.bonus_barrels==_E:BarrelShuffle(A.settings);A.UpdateBarrels()
+	if A.settings.bananaport_rando:B=[];C={};ShuffleWarps(B,C);A.bananaport_replacements=B.copy();A.human_warp_locations=C
