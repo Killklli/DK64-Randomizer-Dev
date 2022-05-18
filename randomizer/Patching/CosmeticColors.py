@@ -29,7 +29,7 @@ def apply_cosmetic_colors(spoiler):
 		ROM().seek(D+297);ROM().write(A)
 	if js.document.getElementById(H).value!=J:
 		C=K;A=0
-		if js.document.getElementById(H).value==B:A=randint(0,3)
+		if js.document.getElementById(H).value==B:A=randint(0,2)
 		elif js.document.getElementById(H).value==L:A=1
 		elif js.document.getElementById(H).value==M:A=2
 		elif js.document.getElementById(H).value==N:A=3
