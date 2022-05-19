@@ -10,6 +10,7 @@ from randomizer.Enums.Items import Items
 from randomizer.Enums.Kongs import Kongs
 from randomizer.Enums.Levels import Levels
 from randomizer.Enums.Locations import Locations
+from randomizer.Enums.Time import Time
 from randomizer.Lists.Location import Location,LocationList
 from randomizer.Lists.MapsAndExits import Maps
 from randomizer.Prices import CanBuy,GetPriceOfMoveItem
@@ -105,6 +106,11 @@ class LogicVarHolder:
 				for D in range(0,5):A.Coins[D]-=C
 			else:A.Coins[B.kong]-=C
 	def HasAccess(A,region,kong):"Check if a certain kong has access to a certain region.\n\n        Usually the region's own HasAccess function is used, but this is necessary for checking access for other regions in logic files.\n        ";return Regions[region].HasAccess(kong)
+	def TimeAccess(B,region,time):
+		'Check if a certain region has the given time of day access.';A=region
+		if time==Time.Day:return Regions[A].dayAccess
+		elif time==Time.Night:return Regions[A].nightAccess
+		else:return Regions[A].dayAccess or Regions[A].nightAccess
 	def KasplatAccess(A,location):
 		'Use the kasplat map to check kasplat logic for blueprint locations.';C=location;B=A.kasplat_map[C]
 		if C==Locations.GalleonKasplatGoldTower:

@@ -5,6 +5,7 @@ _A=False
 from randomizer.Enums.Kongs import Kongs
 from randomizer.Enums.Levels import Levels
 from randomizer.Enums.Regions import Regions
+from randomizer.Enums.Time import Time
 from randomizer.Enums.Transitions import Transitions
 class LocationLogic:
 	'Logic for a location.'
@@ -18,7 +19,7 @@ class Collectible:
 class Region:
 	'Region contains shufflable locations, events, and transitions to other regions.'
 	def __init__(A,name,level,tagbarrel,deathwarp,locations,events,transitionFronts,restart=_C):
-		'Initialize with given parameters.';B=deathwarp;A.name=name;A.level=level;A.tagbarrel=tagbarrel;A.deathwarp=_C;A.locations=locations;A.events=events;A.exits=transitionFronts;A.restart=restart
+		'Initialize with given parameters.';B=deathwarp;A.name=name;A.level=level;A.tagbarrel=tagbarrel;A.deathwarp=_C;A.locations=locations;A.events=events;A.exits=transitionFronts;A.restart=restart;A.dayAccess=_A;A.nightAccess=_A
 		if B is not _C:
 			if isinstance(B,TransitionFront):A.deathwarp=B
 			else:
@@ -42,7 +43,7 @@ class Region:
 		elif B==Kongs.tiny:return A.tinyAccess
 		elif B==Kongs.chunky:return A.chunkyAccess
 		else:return A.donkeyAccess or A.diddyAccess or A.lankyAccess or A.tinyAccess or A.chunkyAccess
-	def ResetAccess(A):'Clear access for all kongs.';A.donkeyAccess=_A;A.diddyAccess=_A;A.lankyAccess=_A;A.tinyAccess=_A;A.chunkyAccess=_A
+	def ResetAccess(A):'Clear access variables set during search.';A.donkeyAccess=_A;A.diddyAccess=_A;A.lankyAccess=_A;A.tinyAccess=_A;A.chunkyAccess=_A;A.dayAccess=_A;A.nightAccess=_A
 	def GetDefaultDeathwarp(A):
 		"Get the default deathwarp depending on the region's level."
 		if A.level==Levels.DKIsles:return Regions.IslesMain
@@ -59,4 +60,4 @@ class TransitionBack:
 	def __init__(A,regionId,exitName,spoilerName,reverse=_C):'Initialize with given parameters.';A.regionId=regionId;A.name=exitName;A.spoilerName=spoilerName;A.reverse=reverse
 class TransitionFront:
 	'The entered side of a transition between regions.'
-	def __init__(A,dest,logic,exitShuffleId=_C,assumed=_A):'Initialize with given parameters.';A.dest=dest;A.logic=logic;A.exitShuffleId=exitShuffleId;A.assumed=assumed
+	def __init__(A,dest,logic,exitShuffleId=_C,assumed=_A,time=Time.Both):'Initialize with given parameters.';A.dest=dest;A.logic=logic;A.exitShuffleId=exitShuffleId;A.time=time;A.assumed=assumed
