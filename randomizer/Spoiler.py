@@ -64,7 +64,7 @@ class Spoiler:
 			C['Shuffled Boss Kongs']=N;J=''
 			for W in A.settings.kutout_kongs:J=J+Kongs(W).name+', '
 			C['Shuffled Kutout Kong Order']=J.removesuffix(', ')
-		if A.settings.bonus_barrels=='random':
+		if A.settings.bonus_barrels=='random'or A.settings.bonus_barrels=='all_beaver_bother':
 			O=OrderedDict()
 			for (I,X) in A.shuffled_barrel_data.items():O[LocationList[I].name]=MinigameRequirements[X].name
 			C['Shuffled Bonus Barrels']=O
