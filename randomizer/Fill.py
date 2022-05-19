@@ -324,7 +324,7 @@ def Generate_Spoiler(spoiler):
 	'Generate a complete spoiler based on input settings.';A=spoiler;global LogicVariables;LogicVariables=LogicVarHolder(A.settings);InitKasplatMap(LogicVariables)
 	if A.settings.kongs_for_progression:
 		if not A.settings.unlock_all_moves:A.settings.shuffle_items=_I
-		A.settings.boss_location_rando=_B;A.settings.boss_kong_rando=_B;ShuffleExits.ShuffleLevelOrderWithRestrictions(A.settings);A.UpdateExits();ShuffleMisc(A);FillKongsAndMovesForLevelRando(A)
+		A.settings.boss_location_rando=_B;A.settings.boss_kong_rando=_B;ShuffleExits.ShuffleLevelOrderWithRestrictions(A.settings);A.UpdateExits();WipeProgressionRequirements(A.settings);ShuffleMisc(A);FillKongsAndMovesForLevelRando(A)
 	else:
 		if A.settings.shuffle_loading_zones!='none':ShuffleExits.ExitShuffle(A.settings);A.UpdateExits()
 		ShuffleMisc(A)
