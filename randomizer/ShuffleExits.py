@@ -1,4 +1,5 @@
 'File that shuffles loading zone exits.'
+_D='levels'
 _C=False
 _B=True
 _A=None
@@ -56,10 +57,10 @@ def AssumeExits(settings,frontpool,backpool,newpool):
 		if not settings.decoupled_loading_zones and exit.back.reverse is _A:continue
 		frontpool.append(A);backpool.append(A);exit.shuffledId=_A;exit.toBeShuffled=_B;D=TransitionFront(exit.back.regionId,lambda l:_B,A,_B);AddRootExit(D)
 def ShuffleExits(settings):
-	'Shuffle exit pools depending on settings.';D='levels';A=settings
-	if A.shuffle_loading_zones==D:ShuffleLevelExits()
+	'Shuffle exit pools depending on settings.';A=settings
+	if A.shuffle_loading_zones==_D:ShuffleLevelExits()
 	elif A.shuffle_loading_zones=='all':B=[];C=[];AssumeExits(A,B,C,[A for A in ShufflableExits.keys()]);ShuffleExitsInPool(A,B,C)
-	if A.shuffle_loading_zones==D:UpdateLevelProgression(A)
+	if A.shuffle_loading_zones==_D:UpdateLevelProgression(A)
 def ExitShuffle(settings):
 	'Facilitate shuffling of exits.';B=settings;A=0
 	while _B:
@@ -71,9 +72,12 @@ def ExitShuffle(settings):
 			if A==20:js.postMessage('Entrance placement failed, out of retries.');raise Ex.EntranceAttemptCountExceeded
 			else:A+=1;js.postMessage('Entrance placement failed. Retrying. Tries: '+str(A));Reset()
 def UpdateLevelProgression(settings):
-	'Update level progression.';A=settings;C=A.EntryGBs.copy();D=A.BossBananas.copy();E=[Regions.JungleJapesLobby,Regions.AngryAztecLobby,Regions.FranticFactoryLobby,Regions.GloomyGalleonLobby,Regions.FungiForestLobby,Regions.CrystalCavesLobby,Regions.CreepyCastleLobby]
-	for B in range(len(E)):G=ShufflableExits[LobbyEntrancePool[B]].shuffledId;H=ShufflableExits[G].back.regionId;F=E.index(H);C[F]=A.EntryGBs[B];D[F]=A.BossBananas[B]
-	A.EntryGBs=C;A.BossBananas=D
+	'Update level progression.';A=settings;D=A.EntryGBs.copy();E=A.BossBananas.copy();F=[Regions.JungleJapesLobby,Regions.AngryAztecLobby,Regions.FranticFactoryLobby,Regions.GloomyGalleonLobby,Regions.FungiForestLobby,Regions.CrystalCavesLobby,Regions.CreepyCastleLobby]
+	for B in range(len(F)):
+		C=B
+		if A.shuffle_loading_zones==_D:G=ShufflableExits[LobbyEntrancePool[B]].shuffledId;H=ShufflableExits[G].back.regionId;C=F.index(H)
+		D[C]=A.EntryGBs[B];E[C]=A.BossBananas[B]
+	A.EntryGBs=D;A.BossBananas=E
 def ShuffleLevelExits(newLevelOrder=_A):
 	'Shuffle level exits according to new level order if provided, otherwise shuffle randomly.';C=newLevelOrder;D=LobbyEntrancePool.copy();A=LobbyEntrancePool.copy()
 	if C is not _A:

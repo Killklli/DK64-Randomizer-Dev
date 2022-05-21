@@ -19,9 +19,7 @@ def ShuffleKasplats(LogicVariables):
 	A.kasplat_map.update(constants);G=[A for A in shufflable.keys()];random.shuffle(G)
 	while len(G)>0:
 		F=G.pop();E=FindLevel(F);C=B[E];random.shuffle(C);H=False
-		for D in C:
-			A.kasplat_map[F]=D
-			if Fill.VerifyWorld(A.settings):B[E].remove(D);H=True;break
+		for D in C:A.kasplat_map[F]=D;B[E].remove(D);H=True;break
 		if not H:raise Ex.KasplatOutOfKongs
 def KasplatShuffle(LogicVariables):
 	'Facilitate the shuffling of kasplat types.';A=LogicVariables

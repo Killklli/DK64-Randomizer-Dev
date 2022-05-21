@@ -292,11 +292,11 @@ def FillKongsAndMoves(spoiler):
 		if B>0:raise Ex.ItemPlacementException(str(B)+' unplaced kongs.')
 	Reset();B=PlaceItems(A.settings,_D,C,validLocations=D)
 	if B>0:raise Ex.ItemPlacementException(str(B)+' unplaced items.')
-def FillKongsAndMovesForLevelRando(spoiler):
+def FillKongsAndMovesForLevelOrder(spoiler):
 	'Shuffle Kongs and Moves accounting for level order restrictions.';A=spoiler;print('Starting Kong: '+A.settings.starting_kong.name);ItemPool.PlaceConstants(A.settings);B=0
 	while _A:
 		try:
-			WipeProgressionRequirements(A.settings);FillKongsAndMoves(A);SetNewProgressionRequirements(A.settings)
+			WipeProgressionRequirements(A.settings);A.settings.kongs_for_progression=_A;FillKongsAndMoves(A);SetNewProgressionRequirements(A.settings);A.settings.kongs_for_progression=_C
 			if not VerifyWorldWithWorstCoinUsage(A.settings):raise Ex.GameNotBeatableException(_F)
 			return
 		except Ex.FillException as C:
@@ -334,7 +334,9 @@ def Generate_Spoiler(spoiler):
 	'Generate a complete spoiler based on input settings.';A=spoiler;global LogicVariables;LogicVariables=LogicVarHolder(A.settings);InitKasplatMap(LogicVariables)
 	if A.settings.kongs_for_progression:
 		if not A.settings.unlock_all_moves:A.settings.shuffle_items=_I
-		A.settings.boss_location_rando=_A;A.settings.boss_kong_rando=_A;ShuffleExits.ShuffleLevelOrderWithRestrictions(A.settings);A.UpdateExits();WipeProgressionRequirements(A.settings);ShuffleMisc(A);FillKongsAndMovesForLevelRando(A)
+		A.settings.boss_location_rando=_A;A.settings.boss_kong_rando=_A
+		if A.settings.shuffle_loading_zones=='levels':ShuffleExits.ShuffleLevelOrderWithRestrictions(A.settings);A.UpdateExits()
+		WipeProgressionRequirements(A.settings);ShuffleMisc(A);FillKongsAndMovesForLevelOrder(A)
 	else:
 		if A.settings.shuffle_loading_zones!='none':ShuffleExits.ExitShuffle(A.settings);A.UpdateExits()
 		ShuffleMisc(A)
