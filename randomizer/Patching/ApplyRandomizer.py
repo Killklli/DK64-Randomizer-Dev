@@ -57,7 +57,7 @@ def patching_response(responded_data):
 	else:ROM().write(1)
 	if A.settings.no_healing:ROM().seek(B+166);ROM().write(1)
 	if A.settings.no_melons:ROM().seek(B+281);ROM().write(1)
-	if A.settings.bonus_barrel_auto_complete:ROM().seek(B+279);ROM().write(3)
+	if A.settings.bonus_barrel_auto_complete:ROM().seek(B+279);ROM().write(1)
 	if A.settings.warp_to_isles:ROM().seek(B+293);ROM().write(1)
 	if A.settings.shop_indicator:ROM().seek(B+292);ROM().write(1)
 	if A.settings.perma_death:ROM().seek(B+317);ROM().write(1);ROM().seek(B+318);ROM().write(1)

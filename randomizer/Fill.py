@@ -8,7 +8,9 @@ _D='assumed'
 _C=False
 _B=None
 _A=True
-import random,js,randomizer.ItemPool as ItemPool,randomizer.Lists.Exceptions as Ex
+import random,js
+from randomizer.Enums.MinigameType import MinigameType
+import randomizer.ItemPool as ItemPool,randomizer.Lists.Exceptions as Ex
 from randomizer.Lists.ShufflableExit import GetLevelShuffledToIndex,GetShuffledLevelIndex
 import randomizer.Logic as Logic
 from randomizer.Settings import Settings
@@ -44,7 +46,7 @@ def GetExitLevelExit(region):
 	elif A==Levels.CrystalCaves:return ShuffleExits.ShufflableExits[Transitions.CavesToIsles].shuffledId
 	elif A==Levels.CreepyCastle:return ShuffleExits.ShufflableExits[Transitions.CastleToIsles].shuffledId
 def GetAccessibleLocations(settings,ownedItems,searchType=SearchMode.GetReachable,purchaseList=[]):
-	'Search to find all reachable locations given owned items.';U=purchaseList;T=ownedItems;S=settings;D=searchType;G=[];H=[];V=[];I=_A
+	'Search to find all reachable locations given owned items.';Z='skip';U=purchaseList;T=ownedItems;Q=settings;D=searchType;G=[];H=[];V=[];I=_A
 	while len(H)>0 or I:
 		J=[]
 		for E in H:
@@ -72,9 +74,9 @@ def GetAccessibleLocations(settings,ownedItems,searchType=SearchMode.GetReachabl
 						if not M.added and(O==M.kong or M.kong==Kongs.any)and M.logic(LogicVariables):LogicVariables.AddCollectible(M,B.level)
 				for A in B.locations:
 					if A.logic(LogicVariables)and A.id not in H and A.id not in G:
-						if A.bonusBarrel and S.bonus_barrels!='skip':
-							Z=BarrelMetaData[A.id].minigame
-							if not MinigameRequirements[Z].logic(LogicVariables):continue
+						if A.bonusBarrel is MinigameType.BonusBarrel and Q.bonus_barrels!=Z or A.bonusBarrel is MinigameType.HelmBarrel and Q.helm_barrels!=Z:
+							a=BarrelMetaData[A.id].minigame
+							if not MinigameRequirements[a].logic(LogicVariables):continue
 						elif LocationList[A.id].type==Types.Blueprint:
 							if not LogicVariables.KasplatAccess(A.id):continue
 						elif LocationList[A.id].type==Types.Shop and A.id!=Locations.SimianSlam:
@@ -82,20 +84,20 @@ def GetAccessibleLocations(settings,ownedItems,searchType=SearchMode.GetReachabl
 						elif A.id==Locations.NintendoCoin:LogicVariables.Coins[Kongs.donkey]-=2
 						H.append(A.id)
 				X=B.exits.copy()
-				if S.shuffle_loading_zones and B.level!=Levels.DKIsles and B.level!=Levels.Shops:
+				if Q.shuffle_loading_zones and B.level!=Levels.DKIsles and B.level!=Levels.Shops:
 					Y=GetExitLevelExit(B)
-					if Y is not _B:a=ShuffleExits.ShufflableExits[Y].back.regionId;X.append(TransitionFront(a,lambda l:_A))
+					if Y is not _B:b=ShuffleExits.ShufflableExits[Y].back.regionId;X.append(TransitionFront(b,lambda l:_A))
 				for exit in X:
 					C=exit.dest
 					if exit.exitShuffleId is not _B and not exit.assumed:
-						Q=ShuffleExits.ShufflableExits[exit.exitShuffleId]
-						if Q.shuffled:C=ShuffleExits.ShufflableExits[Q.shuffledId].back.regionId
-						elif Q.toBeShuffled and not exit.assumed:continue
+						R=ShuffleExits.ShufflableExits[exit.exitShuffleId]
+						if R.shuffled:C=ShuffleExits.ShufflableExits[R.shuffledId].back.regionId
+						elif R.toBeShuffled and not exit.assumed:continue
 					if C not in F and exit.logic(LogicVariables):
-						R=_A
-						if exit.time==Time.Night and not B.nightAccess:R=_C
-						elif exit.time==Time.Day and not B.dayAccess:R=_C
-						if R:F.append(C);N=Logic.Regions[C];N.id=C;K.append(N)
+						S=_A
+						if exit.time==Time.Night and not B.nightAccess:S=_C
+						elif exit.time==Time.Day and not B.dayAccess:S=_C
+						if S:F.append(C);N=Logic.Regions[C];N.id=C;K.append(N)
 					if exit.logic(LogicVariables):
 						if B.dayAccess and exit.time!=Time.Night and not Logic.Regions[C].dayAccess:Logic.Regions[C].dayAccess=_A;I=_A
 						if B.nightAccess and exit.time!=Time.Day and not Logic.Regions[C].nightAccess:Logic.Regions[C].nightAccess=_A;I=_A
@@ -347,6 +349,5 @@ def Generate_Spoiler(spoiler):
 			if not GetAccessibleLocations(A.settings,[],SearchMode.CheckBeatable):raise Ex.VanillaItemsGameNotBeatableException('Game unbeatable.')
 	GeneratePlaythrough(A);Reset();ShuffleExits.Reset();return A
 def ShuffleMisc(spoiler):
-	'Shuffle miscellaneous objects outside of main fill algorithm, including Kasplats, Bonus barrels, and bananaport warps.';A=spoiler;KasplatShuffle(LogicVariables);A.human_kasplats={};A.UpdateKasplats(LogicVariables.kasplat_map)
-	if A.settings.bonus_barrels==_E or A.settings.bonus_barrels=='all_beaver_bother':BarrelShuffle(A.settings);A.UpdateBarrels()
+	'Shuffle miscellaneous objects outside of main fill algorithm, including Kasplats, Bonus barrels, and bananaport warps.';A=spoiler;KasplatShuffle(LogicVariables);A.human_kasplats={};A.UpdateKasplats(LogicVariables.kasplat_map);BarrelShuffle(A.settings);A.UpdateBarrels()
 	if A.settings.bananaport_rando:B=[];C={};ShuffleWarps(B,C);A.bananaport_replacements=B.copy();A.human_warp_locations=C
