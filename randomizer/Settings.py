@@ -58,11 +58,9 @@ class Settings:
 		elif A.level_randomization==_F:A.shuffle_loading_zones=_E
 		elif A.level_randomization==_G:A.shuffle_loading_zones=_E;A.decoupled_loading_zones=_C
 		elif A.level_randomization==H:A.shuffle_loading_zones=_D
-		if A.kong_rando:
-			A.starting_kong=random.choice(F)
-			if A.shuffle_loading_zones==K or A.shuffle_loading_zones==_D:A.kongs_for_progression=_C
-			A.diddy_freeing_kong=Kongs.any;A.lanky_freeing_kong=Kongs.any;A.tiny_freeing_kong=Kongs.any;A.chunky_freeing_kong=Kongs.any
+		if A.kong_rando:A.starting_kong=random.choice(F);A.diddy_freeing_kong=Kongs.any;A.lanky_freeing_kong=Kongs.any;A.tiny_freeing_kong=Kongs.any;A.chunky_freeing_kong=Kongs.any
 		else:A.starting_kong=Kongs.donkey;A.diddy_freeing_kong=Kongs.donkey;A.lanky_freeing_kong=Kongs.donkey;A.tiny_freeing_kong=Kongs.diddy;A.chunky_freeing_kong=Kongs.lanky
+		if not A.unlock_all_kongs and(A.shuffle_loading_zones==K or A.shuffle_loading_zones==_D):A.kongs_for_progression=_C
 		if A.shop_location_rando:A.shuffle_items='moves'
 	def __repr__(A):'Return printable version of the object as json.\n\n        Returns:\n            str: Json string of the dict.\n        ';return json.dumps(A.__dict__)
 	def __get_hash(D):
