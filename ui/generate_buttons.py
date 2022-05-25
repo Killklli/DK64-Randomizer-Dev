@@ -7,9 +7,9 @@ _D='click'
 _C='is-invalid'
 _B='patchfileloader'
 _A='input-file-rom'
-import json,random,js
-from randomizer.Patching.ApplyRandomizer import patching_response
+import asyncio,json,random,js
 from randomizer.BackgroundRandomizer import generate_playthrough
+from randomizer.Patching.ApplyRandomizer import patching_response
 from randomizer.Worker import background
 from ui.bindings import bind
 from ui.progress_bar import ProgressBar
@@ -33,31 +33,31 @@ def generate_seed_from_patch(event):
 	else:patching_response(str(js.loaded_patch))
 @bind(_D,_G)
 def generate_seed(event):
-	'Generate a seed based off the current settings.\n\n    Args:\n        event (event): Javascript click event.\n    ';H="'''";G='seed';F='input';D='disabled'
+	'Generate a seed based off the current settings.\n\n    Args:\n        event (event): Javascript click event.\n    ';I="'''";H='seed';G='input';D='disabled'
 	if len(str(js.document.getElementById(_A).value).strip())==0 or _E not in list(js.document.getElementById(_A).classList):
 		js.document.getElementById(_A).select()
 		if _C not in list(js.document.getElementById(_A).classList):js.document.getElementById(_A).classList.add(_C)
 	else:
-		ProgressBar().update_progress(0,'Initalizing');E=[]
-		for A in js.document.getElementsByTagName(F):
+		F=asyncio.get_event_loop();F.run_until_complete(ProgressBar().update_progress(0,'Initalizing'));E=[]
+		for A in js.document.getElementsByTagName(G):
 			if A.disabled:E.append(A);A.removeAttribute(D)
 		for A in js.document.getElementsByTagName('select'):
 			if A.disabled:E.append(A);A.removeAttribute(D)
-		I=js.jquery('#form').serializeArray();B={}
-		def J(s):
+		J=js.jquery('#form').serializeArray();B={}
+		def K(s):
 			'Check if a string is a number or not.'
 			try:int(s);return True
 			except ValueError:pass
-		for C in I:
+		for C in J:
 			if C.value.lower()in['true','false']:B[C.name]=bool(C.value)
-			elif J(C.value):B[C.name]=int(C.value)
+			elif K(C.value):B[C.name]=int(C.value)
 			else:B[C.name]=C.value
-		for A in js.document.getElementsByTagName(F):
+		for A in js.document.getElementsByTagName(G):
 			if A.type=='checkbox'and not A.checked:
 				if not B.get(A.name):B[A.name]=_F
 		for A in E:A.setAttribute(D,D)
-		if not B.get(G):B[G]=str(random.randint(100000,999999))
-		ProgressBar().update_progress(2,'Randomizing, this may take some time depending on settings.');background(generate_playthrough,[H+json.dumps(B)+H],patching_response)
+		if not B.get(H):B[H]=str(random.randint(100000,999999))
+		F.run_until_complete(ProgressBar().update_progress(2,'Randomizing, this may take some time depending on settings.'));background(generate_playthrough,[I+json.dumps(B)+I],patching_response)
 @bind(_D,_H)
 def update_seed_text(event):
 	'Set seed text based on the download_patch_file click event.\n\n    Args:\n        event (DOMEvent): Javascript dom click event.\n    '
