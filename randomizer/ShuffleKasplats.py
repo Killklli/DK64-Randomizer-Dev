@@ -11,12 +11,12 @@ def FindLevel(location):
 		for B in A.locations:
 			if B.id==location:return A.level
 def ShuffleKasplats(LogicVariables):
-	'Shuffles the kong assigned to each kasplat.';A=LogicVariables;global kasplat_map;B=[];C=GetKongs()
+	'Shuffles the kong assigned to each kasplat.';A=LogicVariables;B=[];C=GetKongs()
 	for J in range(len(Levels)-1):B.append(C.copy())
 	for (I,D) in constants.items():E=FindLevel(I);B[E].remove(D)
 	A.kasplat_map={}
 	for F in shufflable.keys():A.kasplat_map[F]=Kongs.any
-	A.kasplat_map.update(constants);G=[A for A in shufflable.keys()];random.shuffle(G)
+	A.kasplat_map.update(constants);G=list(shufflable.keys());random.shuffle(G)
 	while len(G)>0:
 		F=G.pop();E=FindLevel(F);C=B[E];random.shuffle(C);H=False
 		for D in C:A.kasplat_map[F]=D;B[E].remove(D);H=True;break
@@ -32,5 +32,5 @@ def KasplatShuffle(LogicVariables):
 				return
 			except Ex.KasplatPlacementException:
 				if B==5:js.postMessage('Kasplat placement failed, out of retries.');raise Ex.KasplatAttemptCountExceeded
-				else:B+=1;js.postMessage('Kasplat placement failed. Retrying. Tries: '+str(B))
+				B+=1;js.postMessage('Kasplat placement failed. Retrying. Tries: '+str(B))
 def InitKasplatMap(LogicVariables):'Initialize kasplat_map in logic variables with default values.';A=LogicVariables;A.kasplat_map={};A.kasplat_map.update(shufflable);A.kasplat_map.update(constants)

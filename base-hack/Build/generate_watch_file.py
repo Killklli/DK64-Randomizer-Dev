@@ -10,17 +10,17 @@ def read_h_file(symbols_data):
 	'Read the H file and update the externs.';G='extern ';E=[];F=[]
 	with open('include/dk64.h','r')as H:
 		I=H.readlines()
-		for D in symbols_data:
+		for C in symbols_data:
 			for A in I:
 				if G in A:
 					if'('not in A and')'not in A:
 						A=A.split(G)[1]
 						if'//'in A:A=A.split('//')[0]
-						B=A.split(' ');C='';J=B[len(B)-1].split(';')[0]
-						if J==list(D)[1]:
-							for K in range(len(B)-1):C+=B[K]+' '
-							if C not in F:F.append(C)
-							E.append([list(D)[0],list(D)[1],C])
+						D=A.split(' ');B='';J=D[-1].split(';')[-1]
+						if J==list(C)[1]:
+							for K in range(len(D)-1):B+=D[K]+' '
+							if B not in F:F.append(B)
+							E.append([list(C)[0],list(C)[1],B])
 	return E
 def create_wch_file(_data,watch_file_name):
 	'Create an update WCH file.';E='w';C='d';A='h';H=[['*',C,A],['float',C,'f'],['unsigned int',C,A],['int',C,A],['unsigned short',E,A],['short',E,A],['unsigned char','b',A],['char','b',A]]

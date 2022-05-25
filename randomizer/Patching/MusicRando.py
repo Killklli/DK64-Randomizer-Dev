@@ -94,11 +94,10 @@ def ShuffleMusicWithSizeCheck(spoiler,song_list):
 			print(G);print(H);shuffle_music(N,O);return
 		except Ex.MusicPlacementExceededMapThreshold:
 			if J==20:print('Music rando failed, out of retries.');raise Ex.MusicAttemptCountExceeded
-			else:
-				J+=1;print('Music rando failed. Retrying. Tries: '+str(J))
-				if A.type==SongType.BGM:E.music_bgm_data={}
-				elif A.type==SongType.Fanfare:E.music_fanfare_data={}
-				elif A.type==SongType.Event:E.music_event_data={}
+			J+=1;print('Music rando failed. Retrying. Tries: '+str(J))
+			if A.type==SongType.BGM:E.music_bgm_data={}
+			elif A.type==SongType.Fanfare:E.music_fanfare_data={}
+			elif A.type==SongType.Event:E.music_event_data={}
 def shuffle_music(spoiler,pool_to_shuffle,shuffled_list):
 	'Shuffle the music pool based on the OG list and the shuffled list.\n\n    Args:\n        pool_to_shuffle (list): Original pool to shuffle.\n        shuffled_list (list): Shuffled order list.\n    ';E=pool_to_shuffle;D=spoiler;G=js.pointer_addresses[26][_C][0];H={};I={}
 	for A in E:ROM().seek(A[_B]);J=ROM().readBytes(A[_D]);H[A[_A]]=J;ROM().seek(G[_B]+4*A[_A]);K=ROM().readBytes(4);I[A[_A]]=K

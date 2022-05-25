@@ -83,7 +83,7 @@ def addFileToDatabase(fh,absolute_address,absolute_size,pointer_table_index,file
 		if E[_K]==C:print('WARNING: POINTER TABLE '+str(E[_A])+' BEING USED AS FILE!');return
 	fh.seek(C);F=fh.read(absolute_size);B=hashlib.sha1(F).hexdigest();pointer_tables[A][_C][D][_R]=B;pointer_tables[A][_C][D][_L]=B;pointer_table_files[A][B]={_D:C,_M:F,_S:B,_T:getOriginalUncompressedSize(fh,A,D)};return pointer_table_files[A][B]
 def getFileInfo(pointer_table_index,file_index):
-	'Get the files info.';B=file_index;A=pointer_table_index;global pointer_tables;global pointer_table_files
+	'Get the files info.';B=file_index;A=pointer_table_index
 	if A not in range(len(pointer_tables)):return
 	if B not in range(len(pointer_tables[A][_C])):return
 	if not pointer_tables[A][_C][B][_L]in pointer_table_files[A]:return

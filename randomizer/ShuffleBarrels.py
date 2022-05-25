@@ -31,16 +31,14 @@ def ShuffleBarrels(settings,barrelLocations,minigamePool):
 			else:random.shuffle(A);F=True;break
 		if not F:raise Ex.BarrelOutOfMinigames
 def BarrelShuffle(settings):
-	'Facilitate shuffling of barrels.';E='random';A=settings
-	if A.bonus_barrels==E or A.bonus_barrels==_A or A.helm_barrels==E or A.helm_barrels==_A:
-		C=[A for A in BarrelMetaData.keys()];D=[A for A in MinigameRequirements.keys()if A!=Minigames.NoGame]
-		if A.bonus_barrels==_A or A.helm_barrels==_A:D=[A for A in MinigameRequirements.keys()if A==Minigames.BeaverBotherEasy or A==Minigames.BeaverBotherNormal or A==Minigames.BeaverBotherHard]
-		B=0
-		while True:
-			try:
-				Reset(C);ShuffleBarrels(A,C.copy(),D.copy())
-				if not Fill.VerifyWorld(A):raise Ex.BarrelPlacementException
-				return
-			except Ex.BarrelPlacementException:
-				if B==5:js.postMessage('Minigame placement failed, out of retries.');raise Ex.BarrelAttemptCountExceeded
-				else:B+=1;js.postMessage('Minigame placement failed. Retrying. Tries: '+str(B))
+	'Facilitate shuffling of barrels.';A=settings;C=list(BarrelMetaData.keys());D=[A for A in MinigameRequirements.keys()if A!=Minigames.NoGame]
+	if A.bonus_barrels==_A:D=[A for A in MinigameRequirements.keys()if A in(Minigames.BeaverBotherEasy,Minigames.BeaverBotherNormal,Minigames.BeaverBotherHard)]
+	B=0
+	while True:
+		try:
+			Reset(C);ShuffleBarrels(A,C.copy(),D.copy())
+			if not Fill.VerifyWorld(A):raise Ex.BarrelPlacementException
+			return
+		except Ex.BarrelPlacementException:
+			if B==5:js.postMessage('Minigame placement failed, out of retries.');raise Ex.BarrelAttemptCountExceeded
+			B+=1;js.postMessage('Minigame placement failed. Retrying. Tries: '+str(B))

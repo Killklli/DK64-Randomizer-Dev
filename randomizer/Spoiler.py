@@ -66,7 +66,7 @@ class Spoiler:
 			C['Shuffled Boss Kongs']=P;J=''
 			for Z in A.settings.kutout_kongs:J=J+Kongs(Z).name+', '
 			C['Shuffled Kutout Kong Order']=J.removesuffix(', ')
-		if A.settings.bonus_barrel_rando:
+		if A.settings.bonus_barrels in('random','all_beaver_bother'):
 			K=OrderedDict()
 			for (F,a) in A.shuffled_barrel_data.items():
 				if F in HelmMinigameLocations and A.settings.helm_barrels==R:continue
@@ -79,14 +79,14 @@ class Spoiler:
 		if A.settings.kasplat_rando:C['Shuffled Kasplats']=A.human_kasplats
 		return json.dumps(C,indent=4)
 	def UpdateKasplats(A,kasplat_map):
-		'Update kasplat data.';D='kasplat_swaps'
-		for (H,E) in kasplat_map.items():
-			B=LocationList[H];F=B.map;I=B.kong;A.human_kasplats[B.name]=NameFromKong(E);map=None
-			for G in A.enemy_replacements:
-				if G[_A]==F:map=G;break
-			if map is None:map={};map[_A]=F;A.enemy_replacements.append(map)
-			if D not in map:map[D]=[]
-			C={};C['vanilla_location']=I;C['replace_with']=E;map[D].append(C)
+		'Update kasplat data.';C='kasplat_swaps'
+		for (G,D) in kasplat_map.items():
+			B=LocationList[G];E=B.map;H=B.kong;A.human_kasplats[B.name]=NameFromKong(D);map=None
+			for F in A.enemy_replacements:
+				if F[_A]==E:map=F;break
+			if map is None:map={_A:E};A.enemy_replacements.append(map)
+			if C not in map:map[C]=[]
+			I={'vanilla_location':H,'replace_with':D};map[C].append(I)
 	def UpdateBarrels(A):
 		'Update list of shuffled barrel minigames.';A.shuffled_barrel_data={}
 		for (B,C) in [(A,B.minigame)for(A,B)in BarrelMetaData.items()]:A.shuffled_barrel_data[B]=C
@@ -101,24 +101,24 @@ class Spoiler:
 				except Exception as I:print(I)
 		for (F,J) in B.items():D.shuffled_exit_instructions.append(J)
 	def UpdateLocations(B,locations):
-		'Update location list for what was produced by the fill.';P='locked';M='write';L='kong';B.location_data={};B.shuffled_kong_placement={};G={};G[L]=B.settings.starting_kong;G[M]=321;N={};N[P]=G;B.shuffled_kong_placement['TrainingGrounds']=N
+		'Update location list for what was produced by the fill.';L='locked';J='write';I='kong';B.location_data={};B.shuffled_kong_placement={};M={I:B.settings.starting_kong,J:321};N={L:M};B.shuffled_kong_placement['TrainingGrounds']=N
 		for (id,A) in locations.items():
 			if A.item is not None and A.item is not Items.NoItem and not A.constant:
 				B.location_data[id]=A.item
 				if A.type==Types.Shop:
-					H=0
-					if A.movetype in[MoveTypes.Guns,MoveTypes.AmmoBelt]:H=1
-					elif A.movetype==MoveTypes.Instruments:H=2
-					O=[A.kong]
-					if A.kong==Kongs.any:O=[Kongs.donkey,Kongs.diddy,Kongs.lanky,Kongs.tiny,Kongs.chunky]
-					Q=A.level;R=ItemList[A.item].movetype<<4|ItemList[A.item].index
-					for S in O:B.move_data[H][S][Q]=R
+					G=0
+					if A.movetype in[MoveTypes.Guns,MoveTypes.AmmoBelt]:G=1
+					elif A.movetype==MoveTypes.Instruments:G=2
+					K=[A.kong]
+					if A.kong==Kongs.any:K=[Kongs.donkey,Kongs.diddy,Kongs.lanky,Kongs.tiny,Kongs.chunky]
+					O=A.level;P=ItemList[A.item].movetype<<4|ItemList[A.item].index
+					for Q in K:B.move_data[G][Q][O]=P
 				elif A.type==Types.Kong:
 					C='Jungle Japes';D=B.settings.diddy_freeing_kong;E=322;F=323
 					if id==Locations.LankyKong:C='Llama Temple';D=B.settings.lanky_freeing_kong;E=324;F=325
 					elif id==Locations.TinyKong:C='Tiny Temple';D=B.settings.tiny_freeing_kong;E=326;F=327
 					elif id==Locations.ChunkyKong:C='Frantic Factory';D=B.settings.chunky_freeing_kong;E=328;F=329
-					I={};I[L]=KongFromItem(A.item);I[M]=E;J={};J[L]=D;J[M]=F;K={};K[P]=I;K['puzzle']=J;B.shuffled_kong_placement[C]=K
+					H={};H[I]=KongFromItem(A.item);H[J]=E;R={I:D,J:F};S={L:H,'puzzle':R};B.shuffled_kong_placement[C]=S
 	def UpdatePlaythrough(A,locations,playthroughLocations):
 		'Write playthrough as a list of dicts of location/item pairs.';A.playthrough={};B=0
 		for E in playthroughLocations:
@@ -128,7 +128,8 @@ class Spoiler:
 	def UpdateWoth(A,locations,wothLocations):
 		'Write woth locations as a dict of location/item pairs.';A.woth={}
 		for C in wothLocations:B=locations[C];A.woth[B.name]=ItemList[B.item].name
-	def GetKroolKeysRequired(C,keyEvents):
+	@staticmethod
+	def GetKroolKeysRequired(keyEvents):
 		'Get key names from required key events to print in the spoiler.';B=keyEvents;A=[]
 		if Events.JapesKeyTurnedIn in B:A.append('Jungle Japes Key')
 		if Events.AztecKeyTurnedIn in B:A.append('Angry Aztec Key')

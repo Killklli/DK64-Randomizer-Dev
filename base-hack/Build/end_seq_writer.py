@@ -9,7 +9,7 @@ _D='duration'
 _C='from'
 _B='text'
 _A='squish'
-import os
+import os,sys
 header_length=120
 names_length=160
 general_buffer=154
@@ -18,14 +18,14 @@ end_sequence_cards=[{_A:{_C:_G,_D:header_length,_E:general_buffer},_B:['Develope
 def createTextFile(directory):
 	'Create the text file associated with end sequence.';C='ascii';A=directory
 	if not os.path.exists(A):os.mkdir(A)
-	if len(end_sequence_cards)>21:print(_J);exit()
+	if len(end_sequence_cards)>21:print(_J);sys.exit()
 	with open(f"{A}/credits.bin",'wb')as B:
 		for D in end_sequence_cards:
 			for E in D[_B]:F=E.upper()+'\n';B.write(F.encode(C))
 		G='*\n';B.write(G.encode(C))
 def createSquishFile(directory):
 	'Create the squish data associated with end sequence.';C='big'
-	if len(end_sequence_cards)>21:print(_J);exit()
+	if len(end_sequence_cards)>21:print(_J);sys.exit()
 	D=[_G,_F,_I,_H]
 	with open(f"{directory}/squish.bin",'wb')as A:
 		for B in end_sequence_cards:

@@ -11,13 +11,13 @@ def ShuffleBosses(boss_location_rando):
 	if boss_location_rando:random.shuffle(A)
 	return A
 def ShuffleBossKongs(boss_maps,boss_kong_rando):
-	'Shuffle the kongs required for the bosses.';A={};A[Maps.JapesBoss]=Kongs.donkey;A[Maps.AztecBoss]=Kongs.diddy;A[Maps.FactoryBoss]=Kongs.tiny;A[Maps.GalleonBoss]=Kongs.lanky;A[Maps.FungiBoss]=Kongs.chunky;A[Maps.CavesBoss]=Kongs.donkey;A[Maps.CastleBoss]=Kongs.lanky;B=[]
+	'Shuffle the kongs required for the bosses.';D={Maps.JapesBoss:Kongs.donkey,Maps.AztecBoss:Kongs.diddy,Maps.FactoryBoss:Kongs.tiny,Maps.GalleonBoss:Kongs.lanky,Maps.FungiBoss:Kongs.chunky,Maps.CavesBoss:Kongs.donkey,Maps.CastleBoss:Kongs.lanky};A=[]
 	for E in range(7):
-		C=boss_maps[E]
-		if boss_kong_rando:D=SelectRandomKongForBoss(C)
-		else:D=A[C]
-		B.append(D)
-	return B
+		B=boss_maps[E]
+		if boss_kong_rando:C=SelectRandomKongForBoss(B)
+		else:C=D[B]
+		A.append(C)
+	return A
 def SelectRandomKongForBoss(boss_map):
 	'Randomly choses from the allowed list for the boss.';A=boss_map
 	if A==Maps.JapesBoss:B=[Kongs.donkey,Kongs.diddy,Kongs.lanky,Kongs.tiny,Kongs.chunky]

@@ -13,7 +13,7 @@ import PIL,os
 pre='../'
 cwd=os.getcwd()
 cwd_split=cwd.split('\\')
-last_part=cwd_split[len(cwd_split)-1]
+last_part=cwd_split[-1]
 pre=''
 if last_part.upper()=='BUILD':pre='../'
 def getDir(directory):'Convert directory into the right format based on where the script is run.';return f"{pre}{directory}"
@@ -36,7 +36,7 @@ for kong in kongs:
 	im=Image.new(mode=_C,size=(64,64))
 	for x in range(2):
 		im1=Image.open(f"{hash_dir}{kong}_face_{x}.png");x_p=32*x
-		if kong=='dk'or kong=='tiny':x_p=32-x_p
+		if kong in('dk','tiny'):x_p=32-x_p
 		Image.Image.paste(im,im1,(x_p,0))
 	im=im.resize(kong_res);im.save(f"{base_dir}{kong}_face.png")
 im=Image.new(mode=_C,size=(64,64))

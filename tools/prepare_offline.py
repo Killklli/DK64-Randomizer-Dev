@@ -25,7 +25,4 @@ for f in [*get_files(os.getcwd(),'html.jinja2',recursive=_A),*get_files(os.getcw
 			if'http://'in link or'https://'in link:
 				file_name='/web_cache'+urlparse(link).path+urlparse(link).query;Path(os.getcwd()+os.path.dirname(file_name)).mkdir(parents=_A,exist_ok=_A);req=requests.get(link,allow_redirects=False);open(f".{file_name}",'wb').write(req.content);html=html.replace(link,f".{file_name}")
 				with open(f,'w')as writer:writer.write(html)
-for f in get_files(os.getcwd(),'py',recursive=_A):
-	with open(f,'r')as reader:
-		read_data=reader.read();minified=python_minifier.minify(read_data)
-		with open(f,'w')as writer:writer.write(minified)
+subprocess.run(['pyminify','-i','.'])

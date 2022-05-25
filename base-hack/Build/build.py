@@ -40,7 +40,7 @@ _D='file_index'
 _C='pointer_table_index'
 _B='name'
 _A='source_file'
-import gzip,os,shutil,subprocess,zlib,generate_watch_file,patch_text
+import gzip,os,shutil,subprocess,sys,zlib,generate_watch_file,patch_text
 from adjust_exits import adjustExits
 from convertPortalImage import convertPortalImage
 from convertSetup import convertSetup
@@ -226,4 +226,4 @@ with open(newROMName,'r+b')as fh:
 		if os.path.exists(pth):os.remove(pth)
 	if os.path.exists(_f):os.remove(_f)
 print('[7 / 7] - Generating BizHawk RAM watch')
-exit()
+sys.exit()

@@ -9,8 +9,10 @@ from randomizer.Enums.MoveTypes import MoveTypes
 from randomizer.Enums.Types import Types
 class Item:
 	'Stores information about an item.'
-	def __init__(A,name,playthrough,type,data=[]):
-		'Initialize with given parameters.';B=data;A.name=name;A.playthrough=playthrough;A.type=type
+	def __init__(A,name,playthrough,type,data=None):
+		'Initialize with given parameters.';B=data
+		if B is None:B=[]
+		A.name=name;A.playthrough=playthrough;A.type=type
 		if type==Types.Shop:A.kong=B[0];A.movetype=B[1];A.index=B[2]
 def ItemFromKong(kong):
 	'Get the item representation of a Kong enum.';A=kong

@@ -105,8 +105,10 @@ class LogicVarHolder:
 			if B.kong==Kongs.any:
 				for D in range(0,5):A.Coins[D]-=C
 			else:A.Coins[B.kong]-=C
-	def HasAccess(A,region,kong):"Check if a certain kong has access to a certain region.\n\n        Usually the region's own HasAccess function is used, but this is necessary for checking access for other regions in logic files.\n        ";return Regions[region].HasAccess(kong)
-	def TimeAccess(B,region,time):
+	@staticmethod
+	def HasAccess(region,kong):"Check if a certain kong has access to a certain region.\n\n        Usually the region's own HasAccess function is used, but this is necessary for checking access for other regions in logic files.\n        ";return Regions[region].HasAccess(kong)
+	@staticmethod
+	def TimeAccess(region,time):
 		'Check if a certain region has the given time of day access.';A=region
 		if time==Time.Day:return Regions[A].dayAccess
 		elif time==Time.Night:return Regions[A].nightAccess
@@ -118,11 +120,7 @@ class LogicVarHolder:
 			else:return Events.TreasureRoomTeleporterUnlocked in A.Events and A.HasAccess(randomizer.Enums.Regions.Regions.Shipyard,B)
 		return A.IsKong(B)
 	def CanBuy(A,location):'Check if there are enough coins to purchase this location.';return CanBuy(location,A.Coins,A.settings,A.Slam,A.AmmoBelts,A.InstUpgrades)
-	def CanAccessKRool(A):
-		'Make sure that each required key has been turned in.'
-		for B in A.settings.krool_keys_required:
-			if B not in A.Events:return _A
-		return _B
+	def CanAccessKRool(A):'Make sure that each required key has been turned in.';return all((not B not in A.Events for B in A.settings.krool_keys_required))
 	def IsBossReachable(A,level):'Check if the boss banana requirement is met.';B=level;return A.HasEnoughKongs(B)and sum(A.ColoredBananas[B])>=A.settings.BossBananas[B]
 	def HasEnoughKongs(B,level,forPreviousLevel=_A):
 		'Check if kongs are required for progression, do we have enough to reach the given level.';C=level

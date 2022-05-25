@@ -1,5 +1,4 @@
 'Functions and data for setting and calculating prices.'
-_B=False
 _A=None
 import random
 from randomizer.Enums.Items import Items
@@ -65,17 +64,9 @@ def KongCanBuy(location,coins,settings,kong,slamLevel,ammoBelts,instUpgrades):
 	if LocationList[A].item is _A or LocationList[A].item==Items.NoItem:return True
 	B=GetPriceOfMoveItem(LocationList[A].item,settings,slamLevel,ammoBelts,instUpgrades)
 	if B is not _A:return coins[kong]>=B
-	else:return _B
-def AnyKongCanBuy(location,coins,settings,slamLevel,ammoBelts,instUpgrades):
-	'Check if any kong can logically purchase this location.'
-	for A in [Kongs.donkey,Kongs.diddy,Kongs.lanky,Kongs.tiny,Kongs.chunky]:
-		if KongCanBuy(location,coins,settings,A,slamLevel,ammoBelts,instUpgrades):return True
-	return _B
-def EveryKongCanBuy(location,coins,settings,slamLevel,ammoBelts,instUpgrades):
-	'Check if any kong can logically purchase this location.'
-	for A in [Kongs.donkey,Kongs.diddy,Kongs.lanky,Kongs.tiny,Kongs.chunky]:
-		if not KongCanBuy(location,coins,settings,A,slamLevel,ammoBelts,instUpgrades):return _B
-	return True
+	else:return False
+def AnyKongCanBuy(location,coins,settings,slamLevel,ammoBelts,instUpgrades):'Check if any kong can logically purchase this location.';return any((KongCanBuy(location,coins,settings,A,slamLevel,ammoBelts,instUpgrades)for A in[Kongs.donkey,Kongs.diddy,Kongs.lanky,Kongs.tiny,Kongs.chunky]))
+def EveryKongCanBuy(location,coins,settings,slamLevel,ammoBelts,instUpgrades):'Check if any kong can logically purchase this location.';return all((KongCanBuy(location,coins,settings,A,slamLevel,ammoBelts,instUpgrades)for A in[Kongs.donkey,Kongs.diddy,Kongs.lanky,Kongs.tiny,Kongs.chunky]))
 def CanBuy(location,coins,settings,slamLevel,ammoBelts,instUpgrades):
 	'Check if an appropriate kong can logically purchase this location.';F=instUpgrades;E=ammoBelts;D=slamLevel;C=settings;B=coins;A=location
 	if A in DonkeyMoveLocations:return KongCanBuy(A,B,C,Kongs.donkey,D,E,F)
