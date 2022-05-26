@@ -21,7 +21,7 @@ def randomize_music(spoiler):
 			for N in range(12):B.append([])
 			for A in song_data:
 				if A.type==SongType.BGM:B[A.channel-1].append(js.pointer_addresses[0][_C][song_data.index(A)])
-			for N in range(12):I=B[N].copy();random.shuffle(I);shuffle_music(E,B[N],I)
+			for N in range(12):I=B[N].copy();random.shuffle(I);shuffle_music(E,B[N].copy(),I)
 		elif js.document.getElementById(F).value=='chaos':
 			L=js.pointer_addresses[0][_C][song_data.index(next((A for A in song_data if A.name=='DK Rap'),None))];B=[]
 			for A in song_data:
@@ -40,13 +40,13 @@ def randomize_music(spoiler):
 					if A not in D:ROM().seek(A[_B]);ROM().writeBytes(gzip.compress(bytes(O),compresslevel=9));D.append(A)
 					else:J()
 				J()
-			C=B.copy();random.shuffle(C);shuffle_music(E,B,C)
+			C=B.copy();random.shuffle(C);shuffle_music(E,B.copy(),C)
 	if js.document.getElementById(K).value!=H:
 		if js.document.getElementById(K).value==G:
 			P=[]
 			for A in song_data:
 				if A.type==SongType.Fanfare:P.append(js.pointer_addresses[0][_C][song_data.index(A)])
-			I=P.copy();random.shuffle(I);shuffle_music(E,P,I)
+			I=P.copy();random.shuffle(I);shuffle_music(E,P.copy(),I)
 		elif js.document.getElementById(K).value==U:
 			B=[]
 			for A in song_data:
@@ -59,13 +59,13 @@ def randomize_music(spoiler):
 					if A not in D:ROM().seek(A[_B]);ROM().writeBytes(gzip.compress(bytes(O),compresslevel=9));D.append(A)
 					else:J()
 				J()
-			C=B.copy();random.shuffle(C);shuffle_music(E,B,C)
+			C=B.copy();random.shuffle(C);shuffle_music(E,B.copy(),C)
 	if js.document.getElementById(M).value!=H:
 		if js.document.getElementById(M).value==G:
 			Q=[]
 			for A in song_data:
 				if A.type==SongType.Event:Q.append(js.pointer_addresses[0][_C][song_data.index(A)])
-			C=Q.copy();random.shuffle(C);shuffle_music(E,Q,C)
+			C=Q.copy();random.shuffle(C);shuffle_music(E,Q.copy(),C)
 def ShuffleMusicWithSizeCheck(spoiler,song_list):
 	'Facilitate shuffling of music.';L=song_list;E=spoiler;C='uncompressed_size';J=0
 	while True:

@@ -30,7 +30,7 @@ def generate_seed_from_patch(event):
 	elif len(str(js.document.getElementById(_B).value).strip())==0:
 		js.document.getElementById(_B).select()
 		if _C not in list(js.document.getElementById(_B).classList):js.document.getElementById(_B).classList.add(_C)
-	else:patching_response(str(js.loaded_patch))
+	else:js.apply_bps_javascript();patching_response(str(js.loaded_patch))
 @bind(_D,_G)
 def generate_seed(event):
 	'Generate a seed based off the current settings.\n\n    Args:\n        event (event): Javascript click event.\n    ';I="'''";H='seed';G='input';D='disabled'
@@ -57,7 +57,7 @@ def generate_seed(event):
 				if not B.get(A.name):B[A.name]=_F
 		for A in E:A.setAttribute(D,D)
 		if not B.get(H):B[H]=str(random.randint(100000,999999))
-		F.run_until_complete(ProgressBar().update_progress(2,'Randomizing, this may take some time depending on settings.'));background(generate_playthrough,[I+json.dumps(B)+I],patching_response)
+		js.apply_bps_javascript();F.run_until_complete(ProgressBar().update_progress(2,'Randomizing, this may take some time depending on settings.'));background(generate_playthrough,[I+json.dumps(B)+I],patching_response)
 @bind(_D,_H)
 def update_seed_text(event):
 	'Set seed text based on the download_patch_file click event.\n\n    Args:\n        event (DOMEvent): Javascript dom click event.\n    '
