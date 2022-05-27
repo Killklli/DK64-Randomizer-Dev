@@ -31,8 +31,8 @@ _M='target_compressed_size'
 _L='do_not_delete_source'
 _K='use_external_gzip'
 _J='rgba5551'
-_I='big'
-_H='index'
+_I='index'
+_H='big'
 _G='output_file'
 _F=True
 _E='texture_format'
@@ -67,7 +67,7 @@ createSquishFile(_j)
 generateYellowWrinkly()
 file_dict=[{_B:'Static ASM Code',_S:70640,_c:726500,_A:'StaticCode.bin',_K:_F,_Z:patchStaticCode},{_B:'Dolby Logo',_C:14,_D:176,_A:'assets/Non-Code/Dolby/DolbyThin.png',_E:_d},{_B:'Thumb Image',_C:14,_D:94,_A:'assets/Non-Code/Nintendo Logo/Nintendo.png',_E:_J},{_B:'DKTV Image',_C:14,_D:44,_A:'assets/Non-Code/DKTV/logo3.png',_E:_J},{_B:'Spin Transition Image',_C:14,_D:95,_A:'assets/Non-Code/transition/transition-body.png',_E:_d},{_B:'Moves Image',_C:14,_D:115,_A:'assets/Non-Code/file_screen/moves.png',_E:_J},{_B:'Blueprint Image',_C:14,_D:116,_A:'assets/Non-Code/file_screen/blueprint.png',_E:_J},{_B:'Tag Barrel Shell Texture',_C:25,_D:4938,_A:'assets/Non-Code/tagbarrel/shell.png',_E:_J},{_B:'Gong Geometry',_C:4,_D:195,_A:'assets/Non-Code/Gong/gong_geometry.bin',_e:'assets/Non-Code/Gong/gong_geometry.bps',_a:_F},{_B:'No Face',_C:14,_D:33,_A:'assets/Non-Code/displays/none.png',_E:_O},{_B:'DK Face',_C:14,_D:34,_A:'assets/Non-Code/displays/dk_face.png',_E:_O},{_B:'Diddy Face',_C:14,_D:35,_A:'assets/Non-Code/displays/diddy_face.png',_E:_O},{_B:'Lanky Face',_C:14,_D:36,_A:'assets/Non-Code/displays/lanky_face.png',_E:_O},{_B:'Tiny Face',_C:14,_D:37,_A:'assets/Non-Code/displays/tiny_face.png',_E:_O},{_B:'Chunky Face',_C:14,_D:38,_A:'assets/Non-Code/displays/chunky_face.png',_E:_O},{_B:'Shared Face',_C:14,_D:39,_A:'assets/Non-Code/displays/shared.png',_E:_O},{_B:'Sold Out Face',_C:14,_D:40,_A:'assets/Non-Code/displays/soldout32.png',_E:_O},{_B:'End Sequence Credits',_C:19,_D:7,_A:'assets/Non-Code/credits/credits.bin',_L:_F},{_B:'DK Wrinkly Door',_C:4,_D:240,_A:_f,_L:_F},{_B:'WXY_Slash',_C:14,_D:12,_A:'assets/Non-Code/displays/wxys.png',_E:_J}]
 map_replacements=[]
-song_replacements=[{_B:'baboon_balloon',_H:107},{_B:'bonus_minigames',_H:8},{_B:'dk_rap',_H:75},{_B:'failure_races_try_again',_H:87},{_B:'move_get',_H:114},{_B:'nintendo_logo',_H:174},{_B:'success_races',_H:86}]
+song_replacements=[{_B:'baboon_balloon',_I:107},{_B:'bonus_minigames',_I:8},{_B:'dk_rap',_I:75},{_B:'failure_races_try_again',_I:87},{_B:'move_get',_I:114},{_B:'nintendo_logo',_I:174},{_B:'success_races',_I:86}]
 changed_song_indexes=[]
 for x in instance_script_maps:file_dict.append({_B:f"{x[_B].replace('_',' ')} Instance Scripts",_C:10,_D:x['map'],_A:f"assets/Non-Code/instance_scripts/{x[_B]}.bin",_e:f"assets/Non-Code/instance_scripts/{x[_B]}.bps",_a:_F})
 for x in range(175):
@@ -113,21 +113,21 @@ with open(ROMName,_X)as fh:
 				if _h in y and callable(y[_h]):
 					if _i in y and os.path.exists(x[_P]+y[_i]):y[_h](x[_P]+y[_i],x[_P]+y[_T])
 				if os.path.exists(x[_P]+y[_T]):
-					if y[_H]==1:
+					if y[_I]==1:
 						with open(x[_P]+y[_T],_X)as fg:byte_read=fg.read(10);should_compress_walls=byte_read[9]&1!=0;should_compress_floors=byte_read[9]&2!=0
 						found_geometry=_F
-					elif y[_H]==2:found_walls=_F
-					elif y[_H]==3:found_floors=_F
+					elif y[_I]==2:found_walls=_F
+					elif y[_I]==3:found_floors=_F
 			walls_floors_geometry_valid=found_geometry==found_walls and found_geometry==found_floors
 			if not walls_floors_geometry_valid:print('  - WARNING: In map replacement: '+x[_B]);print('    - Need all 3 files present to replace walls, floors, and geometry.');print('    - Only found 1 or 2 of them out of 3. Make sure all 3 exist on disk.');print('    - Will skip replacing walls, floors, and geometry to prevent crashes.')
 			for y in pointer_tables:
 				if _T not in y:continue
 				if os.path.exists(x[_P]+y[_T]):
-					if y[_H]in[1,2,3]and not walls_floors_geometry_valid:continue
+					if y[_I]in[1,2,3]and not walls_floors_geometry_valid:continue
 					do_not_compress=_N in y and y[_N]
-					if y[_H]==2:do_not_compress=not should_compress_walls
-					elif y[_H]==3:do_not_compress=not should_compress_floors
-					print('  - Found '+x[_P]+y[_T]);file_dict.append({_B:x[_B]+y[_B],_C:y[_H],_D:x['map_index'],_A:x[_P]+y[_T],_Y:_F,_N:do_not_compress,_K:_K in y and y[_K]})
+					if y[_I]==2:do_not_compress=not should_compress_walls
+					elif y[_I]==3:do_not_compress=not should_compress_floors
+					print('  - Found '+x[_P]+y[_T]);file_dict.append({_B:x[_B]+y[_B],_C:y[_I],_D:x['map_index'],_A:x[_P]+y[_T],_Y:_F,_N:do_not_compress,_K:_K in y and y[_K]})
 	print('[2 / 7] - Extracting files from ROM')
 	for x in file_dict:
 		if _E in x:x[_Y]=_F;x[_G]=x[_A].replace(_b,'.'+x[_E])
@@ -161,11 +161,11 @@ with open(newROMName,'r+b')as fh:
 				compress=bytearray(byte_read)
 				if _W in x:
 					diff=x[_W]-len(byte_read);byte_append=0
-					if diff>0:byte_read+=byte_append.to_bytes(diff,_I)
+					if diff>0:byte_read+=byte_append.to_bytes(diff,_H)
 					compress=bytearray(byte_read);uncompressed_size=x[_W]
 			else:
 				precomp=gzip.compress(byte_read,compresslevel=9);byte_append=0;diff=x[_M]-len(precomp)
-				if diff>0:precomp+=byte_append.to_bytes(diff,_I)
+				if diff>0:precomp+=byte_append.to_bytes(diff,_H)
 				compress=bytearray(precomp);compress[4]=0;compress[5]=0;compress[6]=0;compress[7]=0
 			with open(x[_A],'wb')as fg:fg.write(compress)
 			x[_G]=x[_A]
@@ -200,16 +200,18 @@ with open(newROMName,'r+b')as fh:
 				if os.path.exists(x[_G])and x[_G]!=x[_A]:os.remove(x[_G])
 			if not(_L in x and x[_L]):
 				if os.path.exists(x[_A]):os.remove(x[_A])
-	print('[5 / 7] - Writing recomputed pointer tables to ROM');writeModifiedPointerTablesToROM(fh);writeModifiedOverlaysToROM(fh);print('[6 / 7] - Dumping details of all pointer tables to rom/build.log');dumpPointerTableDetails('rom/build.log',fh);fh.seek(33476640);arr=[]
+	print('[5 / 7] - Writing recomputed pointer tables to ROM');writeModifiedPointerTablesToROM(fh);writeModifiedOverlaysToROM(fh);print('[6 / 7] - Dumping details of all pointer tables to rom/build.log');dumpPointerTableDetails('rom/build.log',fh);main_pointer_table_offset=1055824;fh.seek(main_pointer_table_offset+12*4);text_table=main_pointer_table_offset+int.from_bytes(fh.read(4),_H);fh.seek(text_table+19*4);misc_text=main_pointer_table_offset+int.from_bytes(fh.read(4),_H);fh.seek(misc_text+1872);fh.write('?'.encode('ascii'))
+	for i in range(21):fh.write('\x00'.encode('ascii'))
+	fh.seek(33476640);arr=[]
 	for x in range(512):arr.append(0)
 	fh.write(bytearray(arr));writeVanillaMoveData(fh);adjustExits(fh);replaceSimSlam(fh);writeVanillaSongData(fh)
 	for x in portal_images:
 		for y in x:
 			if os.path.exists(y):os.remove(y)
-	fh.seek(33476640+321);fh.write((0).to_bytes(1,_I));fh.seek(33476640+322);fh.write((1).to_bytes(1,_I));fh.seek(33476640+323);fh.write((0).to_bytes(1,_I));fh.seek(33476640+324);fh.write((2).to_bytes(1,_I));fh.seek(33476640+325);fh.write((0).to_bytes(1,_I));fh.seek(33476640+326);fh.write((3).to_bytes(1,_I));fh.seek(33476640+327);fh.write((1).to_bytes(1,_I));fh.seek(33476640+328);fh.write((4).to_bytes(1,_I));fh.seek(33476640+329);fh.write((2).to_bytes(1,_I));fh.seek(33476640+315);fh.write((1).to_bytes(1,_I))
+	fh.seek(33476640+321);fh.write((0).to_bytes(1,_H));fh.seek(33476640+322);fh.write((1).to_bytes(1,_H));fh.seek(33476640+323);fh.write((0).to_bytes(1,_H));fh.seek(33476640+324);fh.write((2).to_bytes(1,_H));fh.seek(33476640+325);fh.write((0).to_bytes(1,_H));fh.seek(33476640+326);fh.write((3).to_bytes(1,_H));fh.seek(33476640+327);fh.write((1).to_bytes(1,_H));fh.seek(33476640+328);fh.write((4).to_bytes(1,_H));fh.seek(33476640+329);fh.write((2).to_bytes(1,_H));fh.seek(33476640+315);fh.write((1).to_bytes(1,_H))
 	with open('assets/Non-Code/credits/squish.bin',_X)as squish:fh.seek(33552384);fh.write(squish.read())
 	vanilla_coin_reqs=[{_Q:300,_R:50},{_Q:301,_R:50},{_Q:302,_R:10},{_Q:303,_R:10},{_Q:304,_R:10},{_Q:305,_R:50},{_Q:306,_R:50},{_Q:307,_R:25}]
-	for coinreq in vanilla_coin_reqs:fh.seek(33476640+coinreq[_Q]);fh.write(coinreq[_R].to_bytes(1,_I))
+	for coinreq in vanilla_coin_reqs:fh.seek(33476640+coinreq[_Q]);fh.write(coinreq[_R].to_bytes(1,_H))
 	for x in hash_icons:
 		pth=f"assets/Non-Code/hash/{x}"
 		if os.path.exists(pth):os.remove(pth)
