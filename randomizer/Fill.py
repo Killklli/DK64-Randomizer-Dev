@@ -37,7 +37,8 @@ from randomizer.ShuffleKasplats import InitKasplatMap,KasplatShuffle
 from randomizer.ShuffleWarps import ShuffleWarps
 from randomizer.ShuffleBosses import ShuffleBossesBasedOnOwnedItems
 def GetExitLevelExit(region):
-	'Get the exit that using the "Exit Level" button will take you to.';A=region.level
+	'Get the exit that using the "Exit Level" button will take you to.';B=region;A=B.level
+	if B.restart is not _A:return _A
 	if A==Levels.JungleJapes:return ShuffleExits.ShufflableExits[Transitions.JapesToIsles].shuffledId
 	elif A==Levels.AngryAztec:return ShuffleExits.ShufflableExits[Transitions.AztecToIsles].shuffledId
 	elif A==Levels.FranticFactory:return ShuffleExits.ShufflableExits[Transitions.FactoryToIsles].shuffledId
