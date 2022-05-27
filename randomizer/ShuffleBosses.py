@@ -36,18 +36,17 @@ def ShuffleKutoutKongs(boss_maps,boss_kongs,boss_kong_rando):
 def ShuffleBossesBasedOnOwnedItems(settings,ownedKongs,ownedMoves):
 	'Perform Boss Location & Boss Kong rando, ensuring each first boss can be beaten with an unlocked kong and owned moves.';I=ownedMoves;F=settings;A=ownedKongs
 	try:
-		C={0,1,2,3,4,5,6};Q=[B for B in C if Kongs.chunky in A[B]and Items.HunkyChunky in I[B]];L=random.choice(Q);R=Kongs.chunky;C.remove(L);S=[B for B in C if Kongs.donkey in A[B]or Kongs.chunky in A[B]or Kongs.tiny in A[B]and Items.PonyTailTwirl in I[B]];G=random.choice(S);M=set(A[G]).intersection({Kongs.donkey,Kongs.chunky})
+		B={0,1,2,3,4,5,6};Q=[C for C in B if Kongs.chunky in A[C]and Items.HunkyChunky in I[C]];L=random.choice(Q);R=Kongs.chunky;B.remove(L);S=[C for C in B if Kongs.donkey in A[C]or Kongs.chunky in A[C]or Kongs.tiny in A[C]and Items.PonyTailTwirl in I[C]];G=random.choice(S);M=set(A[G]).intersection({Kongs.donkey,Kongs.chunky})
 		if Kongs.tiny in A[G]and Items.PonyTailTwirl in I[G]:M.add(Kongs.tiny)
-		T=random.choice(list(M));C.remove(G);U=[B for B in C if Kongs.diddy in A[B]or Kongs.lanky in A[B]or Kongs.tiny in A[B]or Kongs.chunky in A[B]];J=random.choice(U);V=set(A[J]).intersection({Kongs.diddy,Kongs.lanky,Kongs.tiny,Kongs.chunky});W=random.choice(list(V));C.remove(J);X=[B for B in C if Kongs.donkey in A[B]or Kongs.diddy in A[B]or Kongs.lanky in A[B]or Kongs.chunky in A[B]];K=random.choice(X);Y=set(A[K]).intersection({Kongs.donkey,Kongs.diddy,Kongs.lanky,Kongs.chunky});Z=random.choice(list(Y));C.remove(K);H=list(C);random.shuffle(H);N=H.pop();a=random.choice(A[N]);O=H.pop();b=random.choice(A[O]);P=H.pop();c=random.choice(A[P]);B=[];D=[]
+		T=random.choice(list(M));B.remove(G);U=[C for C in B if Kongs.diddy in A[C]or Kongs.lanky in A[C]or Kongs.tiny in A[C]or Kongs.chunky in A[C]];J=random.choice(U);V=set(A[J]).intersection({Kongs.diddy,Kongs.lanky,Kongs.tiny,Kongs.chunky});W=random.choice(list(V));B.remove(J);X=[C for C in B if Kongs.donkey in A[C]or Kongs.diddy in A[C]or Kongs.lanky in A[C]or Kongs.chunky in A[C]];K=random.choice(X);Y=set(A[K]).intersection({Kongs.donkey,Kongs.diddy,Kongs.lanky,Kongs.chunky});Z=random.choice(list(Y));B.remove(K);H=list(B);random.shuffle(H);N=H.pop();a=random.choice(A[N]);O=H.pop();b=random.choice(A[O]);P=H.pop();c=random.choice(A[P]);C=[];D=[]
 		for E in range(0,7):
-			if E==N:B.append(Maps.JapesBoss);D.append(a)
-			elif E==O:B.append(Maps.AztecBoss);D.append(b)
-			elif E==G:B.append(Maps.FactoryBoss);D.append(T)
-			elif E==J:B.append(Maps.GalleonBoss);D.append(W)
-			elif E==L:B.append(Maps.FungiBoss);D.append(R)
-			elif E==K:B.append(Maps.CavesBoss);D.append(Z)
-			elif E==P:B.append(Maps.CastleBoss);D.append(c)
-		print('New Boss Order: '+str(B));print('New Boss Kongs: '+str(D))
-		if len(B)<7:raise FillException('Invalid boss order with fewer than the 7 required main levels.')
+			if E==N:C.append(Maps.JapesBoss);D.append(a)
+			elif E==O:C.append(Maps.AztecBoss);D.append(b)
+			elif E==G:C.append(Maps.FactoryBoss);D.append(T)
+			elif E==J:C.append(Maps.GalleonBoss);D.append(W)
+			elif E==L:C.append(Maps.FungiBoss);D.append(R)
+			elif E==K:C.append(Maps.CavesBoss);D.append(Z)
+			elif E==P:C.append(Maps.CastleBoss);D.append(c)
+		if len(C)<7:raise FillException('Invalid boss order with fewer than the 7 required main levels.')
 	except Exception as d:raise FillException(d)
-	F.boss_maps=B;F.boss_kongs=D;F.kutout_kongs=ShuffleKutoutKongs(F.boss_maps,F.boss_kongs,True)
+	F.boss_maps=C;F.boss_kongs=D;F.kutout_kongs=ShuffleKutoutKongs(F.boss_maps,F.boss_kongs,True)

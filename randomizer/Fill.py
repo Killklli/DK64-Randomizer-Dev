@@ -309,7 +309,7 @@ def FillKongsAndMoves(spoiler):
 	Reset();B=PlaceItems(A.settings,_D,C,validLocations=D)
 	if B>0:raise Ex.ItemPlacementException(str(B)+' unplaced items.')
 def FillKongsAndMovesForLevelOrder(spoiler):
-	'Shuffle Kongs and Moves accounting for level order restrictions.';A=spoiler;print('Starting Kong: '+A.settings.starting_kong.name);ItemPool.PlaceConstants(A.settings);B=0
+	'Shuffle Kongs and Moves accounting for level order restrictions.';A=spoiler;ItemPool.PlaceConstants(A.settings);B=0
 	while _B:
 		try:
 			WipeProgressionRequirements(A.settings);A.settings.kongs_for_progression=_B;FillKongsAndMoves(A);SetNewProgressionRequirements(A.settings);A.settings.kongs_for_progression=_C
