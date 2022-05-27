@@ -1,6 +1,6 @@
 'Module used to distribute items randomly.'
 _I='moves'
-_H='Fill failed. Retrying. Tries: '
+_H='Retrying fill. Tries: '
 _G='Fill failed, out of retries.'
 _F='Game unbeatable after placing all items.'
 _E='random'
