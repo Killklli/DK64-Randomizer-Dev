@@ -10,24 +10,26 @@ def ShuffleBosses(boss_location_rando):
 	'Shuffle boss locations.';A=BossMapList.copy()
 	if boss_location_rando:random.shuffle(A)
 	return A
-def ShuffleBossKongs(boss_maps,boss_kong_rando):
-	'Shuffle the kongs required for the bosses.';D={Maps.JapesBoss:Kongs.donkey,Maps.AztecBoss:Kongs.diddy,Maps.FactoryBoss:Kongs.tiny,Maps.GalleonBoss:Kongs.lanky,Maps.FungiBoss:Kongs.chunky,Maps.CavesBoss:Kongs.donkey,Maps.CastleBoss:Kongs.lanky};A=[]
-	for E in range(7):
-		B=boss_maps[E]
-		if boss_kong_rando:C=SelectRandomKongForBoss(B)
-		else:C=D[B]
-		A.append(C)
-	return A
-def SelectRandomKongForBoss(boss_map):
-	'Randomly choses from the allowed list for the boss.';A=boss_map
-	if A==Maps.JapesBoss:B=[Kongs.donkey,Kongs.diddy,Kongs.lanky,Kongs.tiny,Kongs.chunky]
-	elif A==Maps.AztecBoss:B=[Kongs.donkey,Kongs.diddy,Kongs.lanky,Kongs.tiny,Kongs.chunky]
-	elif A==Maps.FactoryBoss:B=[Kongs.donkey,Kongs.tiny,Kongs.chunky]
-	elif A==Maps.GalleonBoss:B=[Kongs.diddy,Kongs.lanky,Kongs.tiny,Kongs.chunky]
-	elif A==Maps.FungiBoss:B=[Kongs.chunky]
-	elif A==Maps.CavesBoss:B=[Kongs.donkey,Kongs.diddy,Kongs.lanky,Kongs.chunky]
-	elif A==Maps.CastleBoss:B=[Kongs.donkey,Kongs.diddy,Kongs.lanky,Kongs.tiny,Kongs.chunky]
-	return random.choice(B)
+def ShuffleBossKongs(settings):
+	'Shuffle the kongs required for the bosses.';A=settings;E={Maps.JapesBoss:Kongs.donkey,Maps.AztecBoss:Kongs.diddy,Maps.FactoryBoss:Kongs.tiny,Maps.GalleonBoss:Kongs.lanky,Maps.FungiBoss:Kongs.chunky,Maps.CavesBoss:Kongs.donkey,Maps.CastleBoss:Kongs.lanky};B=[]
+	for F in range(7):
+		C=A.boss_maps[F]
+		if A.boss_kong_rando:D=SelectRandomKongForBoss(C,A.hard_mad_jack)
+		else:D=E[C]
+		B.append(D)
+	return B
+def SelectRandomKongForBoss(boss_map,hard_mad_jack):
+	'Randomly choses from the allowed list for the boss.';B=boss_map;A=[]
+	if B==Maps.JapesBoss:A=[Kongs.donkey,Kongs.diddy,Kongs.lanky,Kongs.tiny,Kongs.chunky]
+	elif B==Maps.AztecBoss:A=[Kongs.donkey,Kongs.diddy,Kongs.lanky,Kongs.tiny,Kongs.chunky]
+	elif B==Maps.FactoryBoss:
+		if hard_mad_jack:A=[Kongs.donkey,Kongs.tiny,Kongs.chunky]
+		else:A=[Kongs.tiny]
+	elif B==Maps.GalleonBoss:A=[Kongs.diddy,Kongs.lanky,Kongs.tiny,Kongs.chunky]
+	elif B==Maps.FungiBoss:A=[Kongs.chunky]
+	elif B==Maps.CavesBoss:A=[Kongs.donkey,Kongs.diddy,Kongs.lanky,Kongs.chunky]
+	elif B==Maps.CastleBoss:A=[Kongs.donkey,Kongs.diddy,Kongs.lanky,Kongs.tiny,Kongs.chunky]
+	return random.choice(A)
 def ShuffleKutoutKongs(boss_maps,boss_kongs,boss_kong_rando):
 	'Shuffle the Kutout kong order.';C=[Kongs.lanky,Kongs.tiny,Kongs.chunky,Kongs.donkey,Kongs.diddy];A=[]
 	if boss_kong_rando:E=boss_maps.index(Maps.CastleBoss);D=boss_kongs[E];B=C.copy();B.remove(D);random.shuffle(B);A.append(D);A.extend(B)
