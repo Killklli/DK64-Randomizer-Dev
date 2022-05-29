@@ -10,6 +10,7 @@ import hashlib,inspect,json,random,sys
 from randomizer.ShuffleBosses import ShuffleBosses,ShuffleBossKongs,ShuffleKutoutKongs
 from randomizer.Enums.Events import Events
 from randomizer.Enums.Kongs import Kongs,GetKongs
+from randomizer.Enums.Locations import Locations
 from randomizer.Prices import RandomizePrices,VanillaPrices
 from random import randint
 class Settings:
@@ -65,10 +66,20 @@ class Settings:
 		elif A.level_randomization==H:A.shuffle_loading_zones=_D
 		if A.starting_random:A.starting_kongs_count=randint(1,5)
 		if A.starting_kongs_count==5:A.kong_rando=_B
-		if A.kong_rando:A.starting_kong_list=random.sample(E,A.starting_kongs_count);A.starting_kong=random.choice(A.starting_kong_list);A.diddy_freeing_kong=Kongs.any;A.lanky_freeing_kong=Kongs.any;A.tiny_freeing_kong=Kongs.any;A.chunky_freeing_kong=Kongs.any
-		else:A.possible_kong_list=E.copy();A.possible_kong_list.remove(0);A.starting_kong_list=random.sample(A.possible_kong_list,A.starting_kongs_count-1);A.starting_kong_list.append(Kongs.donkey);A.starting_kong=Kongs.donkey;A.diddy_freeing_kong=Kongs.donkey;A.lanky_freeing_kong=Kongs.donkey;A.tiny_freeing_kong=Kongs.diddy;A.chunky_freeing_kong=Kongs.lanky
+		if A.kong_rando:A.starting_kong_list=random.sample(E,A.starting_kongs_count);A.starting_kong=random.choice(A.starting_kong_list);A.diddy_freeing_kong=Kongs.any;A.lanky_freeing_kong=Kongs.any;A.tiny_freeing_kong=Kongs.any;A.chunky_freeing_kong=Kongs.any;A.kong_locations=A.SelectKongLocations()
+		else:
+			A.possible_kong_list=E.copy();A.possible_kong_list.remove(0);A.starting_kong_list=random.sample(A.possible_kong_list,A.starting_kongs_count-1);A.starting_kong_list.append(Kongs.donkey);A.starting_kong=Kongs.donkey;A.diddy_freeing_kong=Kongs.donkey;A.lanky_freeing_kong=Kongs.donkey;A.tiny_freeing_kong=Kongs.diddy;A.chunky_freeing_kong=Kongs.lanky;A.kong_locations=[Locations.DiddyKong,Locations.LankyKong,Locations.TinyKong,Locations.ChunkyKong]
+			if Kongs.diddy in A.starting_kong_list:A.kong_locations.remove(Locations.DiddyKong)
+			if Kongs.lanky in A.starting_kong_list:A.kong_locations.remove(Locations.LankyKong)
+			if Kongs.tiny in A.starting_kong_list:A.kong_locations.remove(Locations.TinyKong)
+			if Kongs.chunky in A.starting_kong_list:A.kong_locations.remove(Locations.ChunkyKong)
 		if A.starting_kongs_count<5 and(A.shuffle_loading_zones==K or A.shuffle_loading_zones==_D):A.kongs_for_progression=_C
 		if A.shop_location_rando:A.shuffle_items='moves'
+	def SelectKongLocations(B):
+		'Select which random kong locations to use depending on number of starting kongs.';A=[Locations.DiddyKong,Locations.LankyKong,Locations.TinyKong,Locations.ChunkyKong]
+		for D in range(0,B.starting_kongs_count-1):C=random.choice(A);A.remove(C)
+		if B.starting_kongs_count==4 and Kongs.diddy not in B.starting_kong_list and Locations.LankyKong in A:A.remove(Locations.LankyKong);A.append(random.choice(Locations.DiddyKong,Locations.TinyKong,Locations.ChunkyKong))
+		return A
 	def __repr__(A):'Return printable version of the object as json.\n\n        Returns:\n            str: Json string of the dict.\n        ';return json.dumps(A.__dict__)
 	@staticmethod
 	def __get_hash():

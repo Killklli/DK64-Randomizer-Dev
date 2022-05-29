@@ -1,4 +1,7 @@
 'Spoiler class and functions.'
+_D='locked'
+_C='write'
+_B='kong'
 _A='container_map'
 import json
 from typing import OrderedDict
@@ -101,24 +104,26 @@ class Spoiler:
 				except Exception as I:print(I)
 		for (F,J) in B.items():D.shuffled_exit_instructions.append(J)
 	def UpdateLocations(B,locations):
-		'Update location list for what was produced by the fill.';L='locked';J='write';I='kong';B.location_data={};B.shuffled_kong_placement={};M={I:B.settings.starting_kong,J:321};N={L:M};B.shuffled_kong_placement['TrainingGrounds']=N
+		'Update location list for what was produced by the fill.';B.location_data={};B.shuffled_kong_placement={};E={_B:B.settings.starting_kong,_C:321};F={_D:E};B.shuffled_kong_placement['TrainingGrounds']=F;G=[A for A in[Locations.DiddyKong,Locations.LankyKong,Locations.TinyKong,Locations.ChunkyKong]if A not in B.settings.kong_locations]
+		for H in G:B.WriteKongPlacement(H,Items.NoItem)
 		for (id,A) in locations.items():
 			if A.item is not None and A.item is not Items.NoItem and not A.constant:
 				B.location_data[id]=A.item
 				if A.type==Types.Shop:
-					G=0
-					if A.movetype in[MoveTypes.Guns,MoveTypes.AmmoBelt]:G=1
-					elif A.movetype==MoveTypes.Instruments:G=2
-					K=[A.kong]
-					if A.kong==Kongs.any:K=[Kongs.donkey,Kongs.diddy,Kongs.lanky,Kongs.tiny,Kongs.chunky]
-					O=A.level;P=ItemList[A.item].movetype<<4|ItemList[A.item].index
-					for Q in K:B.move_data[G][Q][O]=P
-				elif A.type==Types.Kong:
-					C='Jungle Japes';D=B.settings.diddy_freeing_kong;E=322;F=323
-					if id==Locations.LankyKong:C='Llama Temple';D=B.settings.lanky_freeing_kong;E=324;F=325
-					elif id==Locations.TinyKong:C='Tiny Temple';D=B.settings.tiny_freeing_kong;E=326;F=327
-					elif id==Locations.ChunkyKong:C='Frantic Factory';D=B.settings.chunky_freeing_kong;E=328;F=329
-					H={};H[I]=KongFromItem(A.item);H[J]=E;R={I:D,J:F};S={L:H,'puzzle':R};B.shuffled_kong_placement[C]=S
+					C=0
+					if A.movetype in[MoveTypes.Guns,MoveTypes.AmmoBelt]:C=1
+					elif A.movetype==MoveTypes.Instruments:C=2
+					D=[A.kong]
+					if A.kong==Kongs.any:D=[Kongs.donkey,Kongs.diddy,Kongs.lanky,Kongs.tiny,Kongs.chunky]
+					I=A.level;J=ItemList[A.item].movetype<<4|ItemList[A.item].index
+					for K in D:B.move_data[C][K][I]=J
+				elif A.type==Types.Kong:B.WriteKongPlacement(id,A.item)
+	def WriteKongPlacement(A,locationId,item):
+		'Write kong placement information for the given kong cage location.';F=locationId;B='Jungle Japes';C=A.settings.diddy_freeing_kong;D=322;E=323
+		if F==Locations.LankyKong:B='Llama Temple';C=A.settings.lanky_freeing_kong;D=324;E=325
+		elif F==Locations.TinyKong:B='Tiny Temple';C=A.settings.tiny_freeing_kong;D=326;E=327
+		elif F==Locations.ChunkyKong:B='Frantic Factory';C=A.settings.chunky_freeing_kong;D=328;E=329
+		G={};G[_B]=KongFromItem(item);G[_C]=D;H={_B:C,_C:E};I={_D:G,'puzzle':H};A.shuffled_kong_placement[B]=I
 	def UpdatePlaythrough(A,locations,playthroughLocations):
 		'Write playthrough as a list of dicts of location/item pairs.';A.playthrough={};B=0
 		for E in playthroughLocations:
