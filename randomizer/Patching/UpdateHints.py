@@ -32,3 +32,7 @@ def PushHints():
 		if A=='':A='PLACEHOLDER HINT'
 		B.append([A.upper()])
 	writeWrinklyHints(js.pointer_addresses[12]['entries'][41]['pointing_to'],B)
+def wipeHints():
+	'Wipe the hint block.'
+	for A in range(len(hints)):
+		if hints[A].kong!=WrinklyKong.ftt:hints[A].hint=''

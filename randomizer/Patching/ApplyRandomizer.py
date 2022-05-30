@@ -17,7 +17,7 @@ from randomizer.Patching.MusicRando import randomize_music
 from randomizer.Patching.Patcher import ROM
 from randomizer.Patching.PriceRando import randomize_prices
 from randomizer.Patching.PuzzleRando import randomize_puzzles
-from randomizer.Patching.UpdateHints import PushHints
+from randomizer.Patching.UpdateHints import PushHints,wipeHints
 from randomizer.Settings import Settings
 from ui.progress_bar import ProgressBar
 def patching_response(responded_data):
@@ -76,7 +76,7 @@ def patching_response(responded_data):
 	H=0
 	for F in G:H=H|1<<F
 	ROM().seek(B+280);ROM().write(H);ROM().seek(B+320);ROM().write(A.jetpac_medals_required);randomize_dktv();randomize_entrances(A);randomize_moves(A);randomize_prices(A);randomize_bosses(A);randomize_krool(A);randomize_barrels(A);randomize_bananaport(A);randomize_enemies(A);apply_kongrando_cosmetic(A);randomize_puzzles();random.seed(A.settings.seed);randomize_music(A);apply_cosmetic_colors(A);random.seed(A.settings.seed)
-	if A.settings.wrinkly_hints in['standard','cryptic']:compileHints(A);PushHints()
+	if A.settings.wrinkly_hints in['standard','cryptic']:wipeHints();compileHints(A);PushHints()
 	C=0;f=get_hash_images()
 	for D in A.settings.seed_hash:ROM().seek(B+282+C);ROM().write(D);js.document.getElementById('hash'+str(C)).src='data:image/jpeg;base64,'+f[D];C+=1
 	E.run_until_complete(ProgressBar().update_progress(10,'Seed Generated.'))

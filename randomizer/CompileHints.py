@@ -11,7 +11,7 @@ from randomizer.Lists.ShufflableExit import ShufflableExits
 from randomizer.Spoiler import Spoiler
 from randomizer.Patching.UpdateHints import updateRandomHint
 def compileHints(spoiler):
-	'Push hints to hint list based on settings.';w='Candy';v='Funky';u='Cranky';t='Their first special move';s='Their third special move';r='Frantic Factory';q='Jungle Japes';p='Chunky';o='Tiny';n='Lanky';m='Diddy';l='Donkey';R='name_cryptic';O='color';N='cryptic';G='important';F='key';E='shop';D=spoiler;C='name';B='level';A='kong'
+	'Push hints to hint list based on settings.';w='Candy';v='Funky';u='Cranky';t='Their first special move';s='Their third special move';r='Frantic Factory';q='Jungle Japes';p='Chunky';o='Tiny';n='Lanky';m='Diddy';l='Donkey';S='name_cryptic';O='color';N='cryptic';G='important';F='key';E='shop';D=spoiler;C='name';B='level';A='kong'
 	if D.settings.krool_phase_order_rando:
 		T=f"K. Rool order is {NameFromKong(D.settings.krool_order[0])}"
 		for H in range(len(D.settings.krool_order)):
@@ -21,7 +21,7 @@ def compileHints(spoiler):
 	if D.settings.shuffle_items=='moves'and D.move_data is not _C:
 		x=[0,2,1,1,4];y=0
 		for H in D.settings.krool_order:y+=x[H]
-		W=[{C:'Monkeyport',R:s,F:3,A:3,B:0,E:0,G:_B},{C:'Mini Monkey',R:t,F:1,A:3,B:0,E:0,G:_B},{C:'Coconut Gun',R:'Their gun',F:33,A:0,B:0,E:0,G:_B},{C:'Chimpy Charge',R:t,F:1,A:1,B:0,E:0,G:_B},{C:'Gorilla Gone',R:s,F:3,A:4,B:0,E:0,G:_B},{C:'Ponytail Twirl',F:2,A:3,B:0,E:0,G:_A},{C:'Baboon Blast',F:1,A:0,B:0,E:0,G:_A},{C:'Strong Kong',F:2,A:0,B:0,E:0,G:_A},{C:'Gorilla Grab',F:3,A:0,B:0,E:0,G:_A},{C:'Rocketbarrel Boost',F:2,A:1,B:0,E:0,G:_A},{C:'Simian Spring',F:3,A:1,B:0,E:0,G:_A},{C:'Orangstand',F:1,A:2,B:0,E:0,G:_A},{C:'Baboon Balloon',F:2,A:2,B:0,E:0,G:_A},{C:'Orangstand Sprint',F:3,A:2,B:0,E:0,G:_A},{C:'Hunky Chunky',F:1,A:4,B:0,E:0,G:_A},{C:'Primate Punch',F:2,A:4,B:0,E:0,G:_A},{C:'Peanut Popguns',F:33,A:1,B:0,E:0,G:_A},{C:'Grape Shooter',F:33,A:2,B:0,E:0,G:_A},{C:'Feather Bow',F:33,A:3,B:0,E:0,G:_A},{C:'Pineapple Launcher',F:33,A:4,B:0,E:0,G:_A},{C:'Bongo Blast',F:65,A:0,B:0,E:0,G:_A},{C:'Guitar Gazump',F:65,A:1,B:0,E:0,G:_A},{C:'Trombone Tremor',F:65,A:2,B:0,E:0,G:_A},{C:'Saxophone Slam',F:65,A:3,B:0,E:0,G:_A},{C:'Triangle Trample',F:65,A:4,B:0,E:0,G:_A}];z=[u,v,w];AA=[['The shop owner with a walking stick','The shop owner who is old','The shop owner who is persistently grumpy','The shop owner who resides near your Treehouse'],['The shop owner who has an armory','The shop owner who has a banana on his shop','The shop owner with sunglasses','The shop owner who calls everyone Dude'],['The shop owner who is flirtatious','The shop owner who is not present in Fungi Forest','The shop owner who is not present in Jungle Japes','The shop owner with blonde hair']]
+		W=[{C:'Monkeyport',S:s,F:3,A:3,B:0,E:0,G:_B},{C:'Mini Monkey',S:t,F:1,A:3,B:0,E:0,G:_B},{C:'Coconut Gun',S:'Their gun',F:33,A:0,B:0,E:0,G:_B},{C:'Chimpy Charge',S:t,F:1,A:1,B:0,E:0,G:_B},{C:'Gorilla Gone',S:s,F:3,A:4,B:0,E:0,G:_B},{C:'Ponytail Twirl',F:2,A:3,B:0,E:0,G:_A},{C:'Baboon Blast',F:1,A:0,B:0,E:0,G:_A},{C:'Strong Kong',F:2,A:0,B:0,E:0,G:_A},{C:'Gorilla Grab',F:3,A:0,B:0,E:0,G:_A},{C:'Rocketbarrel Boost',F:2,A:1,B:0,E:0,G:_A},{C:'Simian Spring',F:3,A:1,B:0,E:0,G:_A},{C:'Orangstand',F:1,A:2,B:0,E:0,G:_A},{C:'Baboon Balloon',F:2,A:2,B:0,E:0,G:_A},{C:'Orangstand Sprint',F:3,A:2,B:0,E:0,G:_A},{C:'Hunky Chunky',F:1,A:4,B:0,E:0,G:_A},{C:'Primate Punch',F:2,A:4,B:0,E:0,G:_A},{C:'Peanut Popguns',F:33,A:1,B:0,E:0,G:_A},{C:'Grape Shooter',F:33,A:2,B:0,E:0,G:_A},{C:'Feather Bow',F:33,A:3,B:0,E:0,G:_A},{C:'Pineapple Launcher',F:33,A:4,B:0,E:0,G:_A},{C:'Bongo Blast',F:65,A:0,B:0,E:0,G:_A},{C:'Guitar Gazump',F:65,A:1,B:0,E:0,G:_A},{C:'Trombone Tremor',F:65,A:2,B:0,E:0,G:_A},{C:'Saxophone Slam',F:65,A:3,B:0,E:0,G:_A},{C:'Triangle Trample',F:65,A:4,B:0,E:0,G:_A}];z=[u,v,w];AA=[['The shop owner with a walking stick','The shop owner who is old','The shop owner who is persistently grumpy','The shop owner who resides near your Treehouse'],['The shop owner who has an armory','The shop owner who has a banana on his shop','The shop owner with sunglasses','The shop owner who calls everyone Dude'],['The shop owner who is flirtatious','The shop owner who is not present in Fungi Forest','The shop owner who is not present in Jungle Japes','The shop owner with blonde hair']]
 		for X in range(3):
 			for Y in range(5):
 				for Z in range(7):
@@ -36,10 +36,14 @@ def compileHints(spoiler):
 	if D.settings.kong_rando:
 		A2=D.shuffled_kong_placement;A3=[{C:q,B:0},{C:'Llama Temple',B:1},{C:'Tiny Temple',B:1},{C:r,B:2}]
 		for b in A3:
-			S=A2[b[C]]['locked'][A];c=b[B]
-			if D.settings.wrinkly_hints==N:P=random.choice(V[S]);I=random.choice(M[c])
-			else:P=U[S];I=L[c]
-			if S==Kongs.any:P='An empty cage'
+			Q=A2[b[C]]['locked'][A];c=b[B]
+			if D.settings.wrinkly_hints==N:
+				if not Q==Kongs.any:P=random.choice(V[Q])
+				I=random.choice(M[c])
+			else:
+				if not Q==Kongs.any:P=U[Q]
+				I=L[c]
+			if Q==Kongs.any:P='An empty cage'
 			updateRandomHint(f"{P} can be found in {I}.")
 	if D.settings.shuffle_loading_zones=='all':AddLoadingZoneHints(D)
 	if D.settings.BananaMedalsRequired:updateRandomHint(f"{D.settings.BananaMedalsRequired} medals are required to access Jetpac.")
@@ -63,17 +67,17 @@ def compileHints(spoiler):
 		updateRandomHint(f"{A8} is on the Way of the Hoard.")
 	A9=[{A:l,O:'Yellow'},{A:m,O:'Red'},{A:n,O:'Blue'},{A:o,O:'Purple'},{A:p,O:'Green'}];K.append(f"You can find bananas in {L[random.randint(0,6)]}, but also in other levels.");h=random.choice(A9);K.append(f"{h[A]} can find {h[O]} bananas in {random.choice(L)}.")
 	for H in range(8):
-		Q=D.settings.EntryGBs[H];i='Golden Bananas'
-		if Q==1:i='Golden Banana'
+		R=D.settings.EntryGBs[H];i='Golden Bananas'
+		if R==1:i='Golden Banana'
 		if D.settings.wrinkly_hints==N:I=random.choice(M[H])
 		else:I=L[H]
-		K.append(f"The barrier to {I} can be cleared by obtaining {Q} {i}.")
+		K.append(f"The barrier to {I} can be cleared by obtaining {R} {i}.")
 	for H in range(7):
-		Q=D.settings.BossBananas[H];j='Small Bananas'
-		if Q==1:j='Small Banana'
+		R=D.settings.BossBananas[H];j='Small Bananas'
+		if R==1:j='Small Banana'
 		if D.settings.wrinkly_hints==N:I=random.choice(M[H])
 		else:I=L[H]
-		K.append(f"The barrier to the boss in {I} can be cleared by obtaining {Q} {j}.")
+		K.append(f"The barrier to the boss in {I} can be cleared by obtaining {R} {j}.")
 	k=35
 	if len(K)<35:k=len(K)
 	random.shuffle(K)
