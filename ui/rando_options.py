@@ -75,16 +75,25 @@ def set_preset_options():
 	js.jq('#presets').val('Suggested');toggle_counts_boxes(None);toggle_b_locker_boxes(None);js.load_cookies()
 @bind(_L,_K)
 def preset_select_changed(event):
-	'Trigger a change of the form via the JSON templates.';C='checked';E=document.getElementById(_K);B=None
-	for D in js.progression_presets:
-		if D.get(_J)==E.value:B=D
+	'Trigger a change of the form via the JSON templates.';U='in-selection';T='label-in-selection';S='label-is-selection';R='data-slider-value';I='checked';G='%';V=document.getElementById(_K);B=None
+	for J in js.progression_presets:
+		if J.get(_J)==V.value:B=J
 	for A in B:
 		try:
 			if type(B[A])is bool:
-				if B[A]is _B:document.getElementsByName(A)[0].removeAttribute(C)
-				else:document.getElementsByName(A)[0].setAttribute(C,C)
+				if B[A]is _B:document.getElementsByName(A)[0].removeAttribute(I)
+				else:document.getElementsByName(A)[0].setAttribute(I,I)
+			elif document.getElementsByName(A)[0].hasAttribute(R):
+				K=document.getElementsByName(A)[0];H=document.getElementById(A);W=H.parentElement;E=W.getElementsByClassName('slider')[0];L=int(K.getAttribute('data-slider-min'));X=int(K.getAttribute('data-slider-max'));Y=B[A]-L;Z=X-L;F=Y/Z*100;M=E.getElementsByClassName('slider-track')[0];M.getElementsByClassName('slider-selection')[0].style.width=str(F)+G;M.getElementsByClassName('slider-track-high')[0].style.width=str(100-F)+G;N=E.getElementsByClassName('tooltip-main')[0];N.style.left=str(F)+G;N.getElementsByClassName('tooltip-inner')[0].innerText=B[A];a=E.getElementsByClassName('slider-tick-label-container')[0];b=E.getElementsByClassName('slider-tick-container')[0];D=a.getElementsByClassName('slider-tick-label');O=b.getElementsByClassName('slider-tick')
+				for C in range(len(D)):
+					P=int(D[C].innerText)
+					if P==B[A]:D[C].classList.add(S)
+					else:D[C].classList.remove(S)
+					if P<=B[A]:D[C].classList.add(T);O[C].classList.add(U)
+					else:D[C].classList.remove(T);O[C].classList.remove(U)
+				Q=E.getElementsByClassName('min-slider-handle')[0];Q.setAttribute('aria-valuenow',str(B[A]));Q.style.left=str(F)+G;H.setAttribute('data-value',str(B[A]));H.setAttribute('value',str(B[A]));document.getElementsByName(A)[0].setAttribute(R,B[A])
 			else:js.jq(f"#{A}").val(B[A])
-		except Exception as F:pass
+		except Exception as c:pass
 @bind(_D,_S)
 def toggle_b_locker_boxes(event):
 	'Toggle the textboxes for BLockers.';A=_C
