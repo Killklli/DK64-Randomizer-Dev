@@ -39,6 +39,7 @@ class Settings:
 		A.update_progression_totals();A.krool_donkey=_B;A.krool_diddy=_B;A.krool_lanky=_B;A.krool_tiny=_B;A.krool_chunky=_C;C=[A for A in E if A!=Kongs.chunky]
 		if A.krool_phase_order_rando:random.shuffle(C)
 		if A.krool_random:A.krool_phase_count=randint(1,5)
+		if isinstance(A.krool_phase_count,str)is _C:A.krool_phase_count=5
 		if A.krool_phase_count<5:C=random.sample(C,A.krool_phase_count-1)
 		B=[]
 		for D in C:
