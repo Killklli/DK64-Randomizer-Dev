@@ -43,8 +43,7 @@ def patching_response(responded_data):
 		M=0
 		for c in A.settings.starting_kong_list:M|=1<<c
 		ROM().seek(B+44);ROM().write(M)
-	if A.settings.unlock_all_moves:ROM().seek(B+45);ROM().write(1)
-	if A.settings.fast_start_beginning_of_game:ROM().seek(B+46);ROM().write(1)
+	if A.settings.unlock_all_moves:ROM().seek(B+45);ROM().write(1);ROM().seek(B+46);ROM().write(1)
 	if A.settings.unlock_fairy_shockwave:ROM().seek(B+47);ROM().write(1)
 	if A.settings.enable_tag_anywhere:ROM().seek(B+48);ROM().write(1)
 	if A.settings.fps_display:ROM().seek(B+150);ROM().write(1)
