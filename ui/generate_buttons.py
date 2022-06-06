@@ -13,6 +13,7 @@ from randomizer.Patching.ApplyRandomizer import patching_response
 from randomizer.Worker import background
 from ui.bindings import bind
 from ui.progress_bar import ProgressBar
+from pyodide import create_proxy
 @bind('change',_B)
 def lanky_file_changed(event):
 	'On the event of a lanky file being loaded.\n\n    Args:\n        event (event): Javascript event.\n    '
@@ -20,7 +21,7 @@ def lanky_file_changed(event):
 	A=None
 	for D in js.document.getElementById(_B).files:A=D;break
 	B=js.FileReader.new()
-	if A is not None:B.readAsText(A);B.addEventListener('load',C)
+	if A is not None:B.readAsText(A);E=create_proxy(C);B.addEventListener('load',E)
 @bind(_D,'generate_lanky_seed')
 def generate_seed_from_patch(event):
 	'Generate a seed from a patch file.'
