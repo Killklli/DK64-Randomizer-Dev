@@ -1,5 +1,4 @@
 'Module used to distribute items randomly.'
-_I='moves'
 _H='Retrying fill. Tries: '
 _G='Fill failed, out of retries.'
 _F='Game unbeatable after placing all items.'
@@ -310,7 +309,7 @@ def FillKongsAndMovesGeneric(spoiler):
 def GeneratePlaythrough(spoiler):'Generate playthrough and way of the hoard and update spoiler.';A=spoiler;Reset();B=GetAccessibleLocations(A.settings,[],SearchMode.GeneratePlaythrough);ParePlaythrough(A.settings,B);C=PareWoth(A.settings,B);A.UpdateLocations(LocationList);A.UpdatePlaythrough(LocationList,B);A.UpdateWoth(LocationList,C)
 def FillKongsAndMoves(spoiler):
 	'Fill shared moves, then kongs, then rest of moves.';A=spoiler;C=[];D={}
-	if A.settings.shuffle_items==_I:G,H=ShuffleSharedMoves(A);C.extend(G);D.update(H)
+	if A.settings.shuffle_items=='moves':G,H=ShuffleSharedMoves(A);C.extend(G);D.update(H)
 	if A.settings.kong_rando:
 		E=ItemPool.Kongs(A.settings);F={};I=[Locations.DiddyKong,Locations.LankyKong,Locations.TinyKong,Locations.ChunkyKong]
 		for J in E:F[J]=I
@@ -359,15 +358,13 @@ def BlockAccessToLevel(settings,level):
 def Generate_Spoiler(spoiler):
 	'Generate a complete spoiler based on input settings.';A=spoiler;global LogicVariables;LogicVariables=LogicVarHolder(A.settings);InitKasplatMap(LogicVariables)
 	if A.settings.kongs_for_progression:
-		if not A.settings.unlock_all_moves:A.settings.shuffle_items=_I
-		A.settings.boss_location_rando=_B;A.settings.boss_kong_rando=_B
 		if A.settings.shuffle_loading_zones=='levels':ShuffleExits.ShuffleLevelOrderWithRestrictions(A.settings);A.UpdateExits()
 		WipeProgressionRequirements(A.settings);ShuffleMisc(A);FillKongsAndMovesForLevelOrder(A)
 	else:
 		if A.settings.shuffle_loading_zones!='none':ShuffleExits.ExitShuffle(A.settings);A.UpdateExits()
 		ShuffleMisc(A)
 		if A.settings.shuffle_items=='all':Fill(A)
-		elif A.settings.shuffle_items==_I or A.settings.kong_rando:FillKongsAndMovesGeneric(A)
+		elif A.settings.shuffle_items=='moves'or A.settings.kong_rando:FillKongsAndMovesGeneric(A)
 		else:
 			ItemPool.PlaceConstants(A.settings)
 			if not GetAccessibleLocations(A.settings,[],SearchMode.CheckBeatable):raise Ex.VanillaItemsGameNotBeatableException('Game unbeatable.')
