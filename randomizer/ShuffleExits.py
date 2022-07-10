@@ -89,7 +89,7 @@ def ShuffleLevelOrderWithRestrictions(settings):
 	'Determine level order given starting kong and the need to find more kongs along the way.';A=settings
 	if A.starting_kongs_count==1:B=ShuffleLevelOrderForOneStartingKong(A)
 	else:B=ShuffleLevelOrderForMultipleStartingKongs(A)
-	if len(B)<7:raise Ex.EntrancePlacementException('Invalid level order with fewer than the 7 required main levels.')
+	if _A in B.values():raise Ex.EntrancePlacementException('Invalid level order with fewer than the 7 required main levels.')
 	ShuffleLevelExits(B)
 def ShuffleLevelOrderForOneStartingKong(settings):
 	'Determine level order given only starting with one kong and the need to find more kongs along the way.';K='free';C=settings;A={1,2,3,4,5,6,7}
@@ -119,8 +119,8 @@ def ShuffleLevelOrderForOneStartingKong(settings):
 	else:H=list(A.intersection({1,7}))
 	J=random.choice(H);A.remove(J);G=list(A);random.shuffle(G);L=G.pop();M=G.pop();N=G.pop();O={E:Levels.JungleJapes,D:Levels.AngryAztec,I:Levels.FranticFactory,L:Levels.GloomyGalleon,M:Levels.FungiForest,J:Levels.CrystalCaves,N:Levels.CreepyCastle};return O
 def ShuffleLevelOrderForMultipleStartingKongs(settings):
-	'Determine level order given starting with 2 to 4 kongs and the need to find more kongs along the way.';A=settings;H={1,2,3,4,5,6,7};B={1:_A,2:_A,3:_A,4:_A,5:_A,6:_A,7:_A};D={Levels.JungleJapes:1 if Locations.DiddyKong in A.kong_locations else 0,Levels.AngryAztec:len([B for B in[Locations.LankyKong,Locations.TinyKong]if B in A.kong_locations]),Levels.FranticFactory:1 if Locations.ChunkyKong in A.kong_locations else 0,Levels.GloomyGalleon:0,Levels.FungiForest:0,Levels.CrystalCaves:0,Levels.CreepyCastle:0};L=[A[0]for A in sorted(D.items(),key=lambda x:x[1],reverse=_B)];F=sum(D.values())
-	for I in L:
+	'Determine level order given starting with 2 to 4 kongs and the need to find more kongs along the way.';A=settings;H={1,2,3,4,5,6,7};B={1:_A,2:_A,3:_A,4:_A,5:_A,6:_A,7:_A};D={Levels.JungleJapes:1 if Locations.DiddyKong in A.kong_locations else 0,Levels.AngryAztec:len([B for B in[Locations.LankyKong,Locations.TinyKong]if B in A.kong_locations]),Levels.FranticFactory:1 if Locations.ChunkyKong in A.kong_locations else 0,Levels.GloomyGalleon:0,Levels.FungiForest:0,Levels.CrystalCaves:0,Levels.CreepyCastle:0};M=[A[0]for A in sorted(D.items(),key=lambda x:x[1],reverse=_B)];F=sum(D.values())
+	for I in M:
 		F=F-D[I];G=A.starting_kongs_count;E=A.starting_kongs_count+F;J=[]
 		for C in range(1,8):
 			if E<5 and C>E+1:break
@@ -134,5 +134,7 @@ def ShuffleLevelOrderForMultipleStartingKongs(settings):
 				elif B[C]==Levels.CrystalCaves and Kongs.diddy not in A.starting_kong_list and Kongs.lanky not in A.starting_kong_list and Kongs.chunky not in A.starting_kong_list:break
 			J.append(C)
 			if B[C]is not _A:G=G+D[B[C]];E=E+D[B[C]]
-		M=list(H.intersection(J));K=random.choice(M);H.remove(K);B[K]=I
+		K=list(H.intersection(J))
+		if K==[]:return ShuffleLevelOrderForMultipleStartingKongs(A)
+		L=random.choice(K);H.remove(L);B[L]=I
 	return B

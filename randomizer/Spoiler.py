@@ -28,14 +28,14 @@ class Spoiler:
 			B=[]
 			for E in range(5):
 				C=[]
-				for F in range(7):C.append(0)
+				for F in range(7):C.append(-1)
 				B.append(C)
 			A.move_data.append(B)
-		A.jetpac_medals_required=A.settings.BananaMedalsRequired
+		A.jetpac_medals_required=A.settings.BananaMedalsRequired;A.hint_list={}
 	def toJson(A):
-		'Convert spoiler to JSON.';R='skip';Q='none';L='randomized';A.settings.verify_hash();C=OrderedDict();B=OrderedDict();B['seed']=A.settings.seed_id;B['algorithm']=A.settings.algorithm;B['shuffle_items']=A.settings.shuffle_items;B['shuffle_loading_zones']=A.settings.shuffle_loading_zones;B['decoupled_loading_zones']=A.settings.decoupled_loading_zones;B['unlock_all_moves']=A.settings.unlock_all_moves;B['starting_kong']=ItemList[ItemFromKong(A.settings.starting_kong)].name;M=[]
+		'Convert spoiler to JSON.';R='skip';Q='none';L='randomized';A.settings.verify_hash();C=OrderedDict();B=OrderedDict();B['seed']=A.settings.seed_id;B['algorithm']=A.settings.algorithm;B['move_rando']=A.settings.move_rando;B['shuffle_loading_zones']=A.settings.shuffle_loading_zones;B['decoupled_loading_zones']=A.settings.decoupled_loading_zones;B['starting_kongs_count']=A.settings.starting_kongs_count;M=[]
 		for S in A.settings.starting_kong_list:M.append(S.name.capitalize())
-		B['starting_kong_list']=M;B['diddy_freeing_kong']=ItemList[ItemFromKong(A.settings.diddy_freeing_kong)].name;B['tiny_freeing_kong']=ItemList[ItemFromKong(A.settings.tiny_freeing_kong)].name;B['lanky_freeing_kong']=ItemList[ItemFromKong(A.settings.lanky_freeing_kong)].name;B['chunky_freeing_kong']=ItemList[ItemFromKong(A.settings.chunky_freeing_kong)].name;B['open_lobbies']=A.settings.open_lobbies;B['crown_door_open']=A.settings.crown_door_open;B['coin_door_open']=A.settings.coin_door_open;B['unlock_fairy_shockwave']=A.settings.unlock_fairy_shockwave;B['random_medal_requirement']=A.settings.random_medal_requirement
+		B['starting_kong_list']=M;B['diddy_freeing_kong']=ItemList[ItemFromKong(A.settings.diddy_freeing_kong)].name;B['tiny_freeing_kong']=ItemList[ItemFromKong(A.settings.tiny_freeing_kong)].name;B['lanky_freeing_kong']=ItemList[ItemFromKong(A.settings.lanky_freeing_kong)].name;B['chunky_freeing_kong']=ItemList[ItemFromKong(A.settings.chunky_freeing_kong)].name;B['open_lobbies']=A.settings.open_lobbies;B['open_levels']=A.settings.open_levels;B['randomize_pickups']=A.settings.randomize_pickups;B['random_patches']=A.settings.random_patches;B['puzzle_rando']=A.settings.puzzle_rando;B['crown_door_open']=A.settings.crown_door_open;B['coin_door_open']=A.settings.coin_door_open;B['unlock_fairy_shockwave']=A.settings.unlock_fairy_shockwave;B['random_medal_requirement']=A.settings.random_medal_requirement
 		if A.settings.random_medal_requirement:B['banana_medals_required']=A.settings.BananaMedalsRequired
 		B['random_prices']=A.settings.random_prices;B['bananaport_rando']=A.settings.bananaport_rando;B['krool_phases']=A.settings.krool_order;B['krool_access']=A.settings.krool_access;B['krool_keys_required']=A.GetKroolKeysRequired(A.settings.krool_keys_required);B['music_bgm']=A.settings.music_bgm;B['music_fanfares']=A.settings.music_fanfares;B['music_events']=A.settings.music_events;B['fast_start_beginning_of_game']=A.settings.fast_start_beginning_of_game;B['helm_setting']=A.settings.helm_setting;B['quality_of_life']=A.settings.quality_of_life;B['enable_tag_anywhere']=A.settings.enable_tag_anywhere;B['blocker_golden_bananas']=A.settings.EntryGBs;B['troff_n_scoff_bananas']=A.settings.BossBananas;C['Settings']=B
 		if A.settings.shuffle_items!=Q:
@@ -80,6 +80,7 @@ class Spoiler:
 		if A.settings.music_fanfares==L:C['Shuffled Music Fanfares']=A.music_fanfare_data
 		if A.settings.music_events==L:C['Shuffled Music Events']=A.music_event_data
 		if A.settings.kasplat_rando:C['Shuffled Kasplats']=A.human_kasplats
+		if len(A.hint_list)>0:C['Wrinkly Hints']=A.hint_list
 		return json.dumps(C,indent=4)
 	def UpdateKasplats(A,kasplat_map):
 		'Update kasplat data.';C='kasplat_swaps'
@@ -104,19 +105,22 @@ class Spoiler:
 				except Exception as I:print(I)
 		for (F,J) in B.items():D.shuffled_exit_instructions.append(J)
 	def UpdateLocations(B,locations):
-		'Update location list for what was produced by the fill.';B.location_data={};B.shuffled_kong_placement={};E={_B:B.settings.starting_kong,_C:321};F={_D:E};B.shuffled_kong_placement['TrainingGrounds']=F;G=[A for A in[Locations.DiddyKong,Locations.LankyKong,Locations.TinyKong,Locations.ChunkyKong]if A not in B.settings.kong_locations]
-		for H in G:B.WriteKongPlacement(H,Items.NoItem)
+		'Update location list for what was produced by the fill.';B.location_data={};B.shuffled_kong_placement={};J={_B:B.settings.starting_kong,_C:321};K={_D:J};B.shuffled_kong_placement['TrainingGrounds']=K;L=[A for A in[Locations.DiddyKong,Locations.LankyKong,Locations.TinyKong,Locations.ChunkyKong]if A not in B.settings.kong_locations]
+		for M in L:B.WriteKongPlacement(M,Items.NoItem)
 		for (id,A) in locations.items():
 			if A.item is not None and A.item is not Items.NoItem and not A.constant:
 				B.location_data[id]=A.item
 				if A.type==Types.Shop:
-					C=0
-					if A.movetype in[MoveTypes.Guns,MoveTypes.AmmoBelt]:C=1
-					elif A.movetype==MoveTypes.Instruments:C=2
-					D=[A.kong]
-					if A.kong==Kongs.any:D=[Kongs.donkey,Kongs.diddy,Kongs.lanky,Kongs.tiny,Kongs.chunky]
-					I=A.level;J=ItemList[A.item].movetype<<4|ItemList[A.item].index
-					for K in D:B.move_data[C][K][I]=J
+					D=0
+					if A.movetype in[MoveTypes.Guns,MoveTypes.AmmoBelt]:D=1
+					elif A.movetype==MoveTypes.Instruments:D=2
+					H=[A.kong]
+					if A.kong==Kongs.any:H=[Kongs.donkey,Kongs.diddy,Kongs.lanky,Kongs.tiny,Kongs.chunky]
+					I=A.level;C=ItemList[A.item].movetype;E=ItemList[A.item].index-1;F=ItemList[A.item].kong
+					for G in H:
+						print(f"Shop {D}, Kong {G}, Level {I} | Move: {C} lvl {E} for kong {F}")
+						if C==1 or C==3 or C==2 and E>0 or C==4 and E>0:F=G
+						N=C<<5|E<<3|F;B.move_data[D][G][I]=N
 				elif A.type==Types.Kong:B.WriteKongPlacement(id,A.item)
 	def WriteKongPlacement(A,locationId,item):
 		'Write kong placement information for the given kong cage location.';F=locationId;B='Jungle Japes';C=A.settings.diddy_freeing_kong;D=322;E=323
@@ -124,12 +128,12 @@ class Spoiler:
 		elif F==Locations.TinyKong:B='Tiny Temple';C=A.settings.tiny_freeing_kong;D=326;E=327
 		elif F==Locations.ChunkyKong:B='Frantic Factory';C=A.settings.chunky_freeing_kong;D=328;E=329
 		G={};G[_B]=KongFromItem(item);G[_C]=D;H={_B:C,_C:E};I={_D:G,'puzzle':H};A.shuffled_kong_placement[B]=I
-	def UpdatePlaythrough(A,locations,playthroughLocations):
-		'Write playthrough as a list of dicts of location/item pairs.';A.playthrough={};B=0
-		for E in playthroughLocations:
-			C={}
-			for F in E:D=locations[F];C[D.name]=ItemList[D.item].name
-			A.playthrough[B]=C;B+=1
+	def UpdatePlaythrough(B,locations,playthroughLocations):
+		'Write playthrough as a list of dicts of location/item pairs.';B.playthrough={};C=0
+		for D in playthroughLocations:
+			A={};A['Available GBs']=D.availableGBs;E=list(map(lambda l:locations[l],D.locations));E.sort(key=lambda l:l.type==Types.Banana)
+			for F in E:A[F.name]=ItemList[F.item].name
+			B.playthrough[C]=A;C+=1
 	def UpdateWoth(A,locations,wothLocations):
 		'Write woth locations as a dict of location/item pairs.';A.woth={}
 		for C in wothLocations:B=locations[C];A.woth[B.name]=ItemList[B.item].name

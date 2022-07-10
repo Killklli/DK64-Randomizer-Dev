@@ -61,3 +61,6 @@ class TransitionBack:
 class TransitionFront:
 	'The entered side of a transition between regions.'
 	def __init__(A,dest,logic,exitShuffleId=_B,assumed=_A,time=Time.Both):'Initialize with given parameters.';A.dest=dest;A.logic=logic;A.exitShuffleId=exitShuffleId;A.time=time;A.assumed=assumed
+class Sphere:
+	"A randomizer concept often used in spoiler logs.\n\n    A 'sphere' is a collection of locations and items that are accessible\n    or obtainable with only the items available from earlier, smaller spheres.\n    Sphere 0 items are what you start with in a seed, sphere 1 items can be\n    obtained with those items, sphere 2 items can be obtained with sphere 0\n    and sphere 1 items, and so on.\n    "
+	def __init__(A):'Initialize with given parameters.';A.availableGBs=0;A.locations=[]

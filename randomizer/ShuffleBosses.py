@@ -25,7 +25,7 @@ def SelectRandomKongForBoss(boss_map,hard_mad_jack):
 	elif B==Maps.FactoryBoss:
 		if hard_mad_jack:A=[Kongs.donkey,Kongs.tiny,Kongs.chunky]
 		else:A=[Kongs.tiny]
-	elif B==Maps.GalleonBoss:A=[Kongs.diddy,Kongs.lanky,Kongs.tiny,Kongs.chunky]
+	elif B==Maps.GalleonBoss:A=[Kongs.donkey,Kongs.diddy,Kongs.lanky,Kongs.tiny,Kongs.chunky]
 	elif B==Maps.FungiBoss:A=[Kongs.chunky]
 	elif B==Maps.CavesBoss:A=[Kongs.donkey,Kongs.diddy,Kongs.lanky,Kongs.chunky]
 	elif B==Maps.CastleBoss:A=[Kongs.donkey,Kongs.diddy,Kongs.lanky,Kongs.tiny,Kongs.chunky]

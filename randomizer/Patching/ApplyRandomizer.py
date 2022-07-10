@@ -10,6 +10,7 @@ from randomizer.Patching.DKTV import randomize_dktv
 from randomizer.Patching.EnemyRando import randomize_enemies
 from randomizer.Patching.EntranceRando import randomize_entrances
 from randomizer.Patching.Hash import get_hash_images
+from randomizer.Patching.KasplatLocationRando import randomize_kasplat_locations
 from randomizer.Patching.KongRando import apply_kongrando_cosmetic
 from randomizer.Patching.KRoolRando import randomize_krool
 from randomizer.Patching.MoveLocationRando import randomize_moves
@@ -18,31 +19,33 @@ from randomizer.Patching.Patcher import ROM
 from randomizer.Patching.PriceRando import randomize_prices
 from randomizer.Patching.PuzzleRando import randomize_puzzles
 from randomizer.Patching.UpdateHints import PushHints,wipeHints
+from randomizer.Patching.MiscSetupChanges import randomize_setup
+from GenTracker import generateTracker
 from randomizer.Settings import Settings
 from ui.progress_bar import ProgressBar
 def patching_response(responded_data):
-	'Response data from the background task.\n\n    Args:\n        responded_data (str): Pickled data (or json)\n    ';V='settings_table';U='spoiler_log_text';T='spoiler_log_block';S='seed';R='base64';Q='error';I=responded_data;E=asyncio.get_event_loop()
+	'Response data from the background task.\n\n    Args:\n        responded_data (str): Pickled data (or json)\n    ';X='settings_table';W='tracker_text';V='spoiler_log_text';U='spoiler_log_block';T='seed';S='base64';R='error';J=responded_data;G='';E=asyncio.get_event_loop()
 	try:
-		J=json.loads(I)
-		if J.get(Q):K=J.get(Q);ProgressBar().set_class('bg-danger');js.toast_alert(K);E.run_until_complete(ProgressBar().update_progress(10,f"Error: {K}"));E.run_until_complete(ProgressBar().reset());return None
+		K=json.loads(J)
+		if K.get(R):L=K.get(R);ProgressBar().set_class('bg-danger');js.toast_alert(L);E.run_until_complete(ProgressBar().update_progress(10,f"Error: {L}"));E.run_until_complete(ProgressBar().reset());return None
 	except Exception:pass
-	E.run_until_complete(ProgressBar().update_progress(8,'Applying Patches'));A=pickle.loads(codecs.decode(I.encode(),R));A.settings.verify_hash();Settings({S:0}).compare_hash(A.settings.public_hash);A.settings.set_seed()
-	if A.settings.download_patch_file:A.settings.download_patch_file=False;js.save_text_as_file(codecs.encode(pickle.dumps(A),R).decode(),f"dk64-{A.settings.seed_id}.lanky")
+	E.run_until_complete(ProgressBar().update_progress(8,'Applying Patches'));A=pickle.loads(codecs.decode(J.encode(),S));A.settings.verify_hash();Settings({T:0}).compare_hash(A.settings.public_hash);A.settings.set_seed()
+	if A.settings.download_patch_file:A.settings.download_patch_file=False;js.save_text_as_file(codecs.encode(pickle.dumps(A),S).decode(),f"dk64-{A.settings.seed_id}.lanky")
 	B=33476640
 	if A.settings.shuffle_loading_zones=='levels':
-		ROM().seek(B+0);ROM().write(1);W=[Transitions.IslesMainToJapesLobby,Transitions.IslesMainToAztecLobby,Transitions.IslesMainToFactoryLobby,Transitions.IslesMainToGalleonLobby,Transitions.IslesMainToForestLobby,Transitions.IslesMainToCavesLobby,Transitions.IslesMainToCastleLobby];X=[Transitions.IslesJapesLobbyToMain,Transitions.IslesAztecLobbyToMain,Transitions.IslesFactoryLobbyToMain,Transitions.IslesGalleonLobbyToMain,Transitions.IslesForestLobbyToMain,Transitions.IslesCavesLobbyToMain,Transitions.IslesCastleLobbyToMain];C=0
-		for Y in W:ROM().seek(B+1+C);ROM().write(X.index(A.shuffled_exit_data[int(Y)].reverse));C+=1
-		Z={Transitions.IslesMainToJapesLobby:Transitions.IslesJapesLobbyToMain,Transitions.IslesMainToAztecLobby:Transitions.IslesAztecLobbyToMain,Transitions.IslesMainToFactoryLobby:Transitions.IslesFactoryLobbyToMain,Transitions.IslesMainToGalleonLobby:Transitions.IslesGalleonLobbyToMain,Transitions.IslesMainToForestLobby:Transitions.IslesForestLobbyToMain,Transitions.IslesMainToCavesLobby:Transitions.IslesCavesLobbyToMain,Transitions.IslesMainToCastleLobby:Transitions.IslesCastleLobbyToMain};a={Transitions.IslesJapesLobbyToMain:26,Transitions.IslesAztecLobbyToMain:74,Transitions.IslesFactoryLobbyToMain:138,Transitions.IslesGalleonLobbyToMain:168,Transitions.IslesForestLobbyToMain:236,Transitions.IslesCavesLobbyToMain:292,Transitions.IslesCastleLobbyToMain:317};C=0
-		for (F,L) in Z.items():b=A.shuffled_exit_data.get(F).reverse;ROM().seek(B+30+C);ROM().writeMultipleBytes(a[int(b)],2);C+=2
+		ROM().seek(B+0);ROM().write(1);Y=[Transitions.IslesMainToJapesLobby,Transitions.IslesMainToAztecLobby,Transitions.IslesMainToFactoryLobby,Transitions.IslesMainToGalleonLobby,Transitions.IslesMainToForestLobby,Transitions.IslesMainToCavesLobby,Transitions.IslesMainToCastleLobby];Z=[Transitions.IslesJapesLobbyToMain,Transitions.IslesAztecLobbyToMain,Transitions.IslesFactoryLobbyToMain,Transitions.IslesGalleonLobbyToMain,Transitions.IslesForestLobbyToMain,Transitions.IslesCavesLobbyToMain,Transitions.IslesCastleLobbyToMain];C=0
+		for a in Y:ROM().seek(B+1+C);ROM().write(Z.index(A.shuffled_exit_data[int(a)].reverse));C+=1
+		b={Transitions.IslesMainToJapesLobby:Transitions.IslesJapesLobbyToMain,Transitions.IslesMainToAztecLobby:Transitions.IslesAztecLobbyToMain,Transitions.IslesMainToFactoryLobby:Transitions.IslesFactoryLobbyToMain,Transitions.IslesMainToGalleonLobby:Transitions.IslesGalleonLobbyToMain,Transitions.IslesMainToForestLobby:Transitions.IslesForestLobbyToMain,Transitions.IslesMainToCavesLobby:Transitions.IslesCavesLobbyToMain,Transitions.IslesMainToCastleLobby:Transitions.IslesCastleLobbyToMain};c={Transitions.IslesJapesLobbyToMain:26,Transitions.IslesAztecLobbyToMain:74,Transitions.IslesFactoryLobbyToMain:138,Transitions.IslesGalleonLobbyToMain:168,Transitions.IslesForestLobbyToMain:236,Transitions.IslesCavesLobbyToMain:292,Transitions.IslesCastleLobbyToMain:317};C=0
+		for (F,M) in b.items():d=A.shuffled_exit_data.get(F).reverse;ROM().seek(B+30+C);ROM().writeMultipleBytes(c[int(d)],2);C+=2
 	C=0
 	for D in A.settings.BossBananas:ROM().seek(B+8+C);ROM().writeMultipleBytes(D,2);C+=2
 	C=0
 	for D in A.settings.EntryGBs:ROM().seek(B+22+C);ROM().writeMultipleBytes(D,1);C+=1
 	if A.settings.starting_kongs_count==5:ROM().seek(B+44);ROM().write(31)
 	else:
-		M=0
-		for c in A.settings.starting_kong_list:M|=1<<c
-		ROM().seek(B+44);ROM().write(M)
+		N=0
+		for e in A.settings.starting_kong_list:N|=1<<e
+		ROM().seek(B+44);ROM().write(N)
 	if A.settings.unlock_all_moves:ROM().seek(B+45);ROM().write(1)
 	ROM().seek(B+46);ROM().write(1)
 	if A.settings.unlock_fairy_shockwave:ROM().seek(B+47);ROM().write(1)
@@ -67,23 +70,26 @@ def patching_response(responded_data):
 	if A.settings.perma_death:ROM().seek(B+317);ROM().write(1);ROM().seek(B+318);ROM().write(1)
 	if A.settings.open_lobbies:ROM().seek(B+316);ROM().write(255)
 	if A.settings.disable_tag_barrels:ROM().seek(B+319);ROM().write(1)
+	if A.settings.skip_arcader1:ROM().seek(B+294);ROM().write(1)
 	if A.settings.disable_shop_hints:ROM().seek(B+315);ROM().write(0)
-	G=[0,1,2,3,4,5,6,7]
+	if A.settings.open_levels:ROM().seek(B+295);ROM().write(1)
+	if A.settings.shorten_boss:ROM().seek(B+299);ROM().write(1)
+	H=[0,1,2,3,4,5,6,7]
 	if len(A.settings.krool_keys_required)>0:
 		for F in A.settings.krool_keys_required:
-			N=F-4
-			if N in G:G.remove(N)
-	H=0
-	for F in G:H=H|1<<F
-	ROM().seek(B+280);ROM().write(H);ROM().seek(B+320);ROM().write(A.jetpac_medals_required);randomize_dktv();randomize_entrances(A);randomize_moves(A);randomize_prices(A);randomize_bosses(A);randomize_krool(A);randomize_barrels(A);randomize_bananaport(A);randomize_enemies(A);apply_kongrando_cosmetic(A);randomize_puzzles();random.seed(A.settings.seed);randomize_music(A);apply_cosmetic_colors(A);random.seed(A.settings.seed)
+			O=F-4
+			if O in H:H.remove(O)
+	I=0
+	for F in H:I=I|1<<F
+	ROM().seek(B+280);ROM().write(I);ROM().seek(B+320);ROM().write(A.jetpac_medals_required);randomize_dktv();randomize_entrances(A);randomize_moves(A);randomize_prices(A);randomize_bosses(A);randomize_krool(A);randomize_barrels(A);randomize_bananaport(A);randomize_enemies(A);apply_kongrando_cosmetic(A);randomize_setup(A);randomize_puzzles(A);random.seed(A.settings.seed);randomize_music(A);apply_cosmetic_colors(A);random.seed(A.settings.seed)
 	if A.settings.wrinkly_hints in['standard','cryptic']:wipeHints();compileHints(A);PushHints()
-	C=0;d=get_hash_images()
-	for D in A.settings.seed_hash:ROM().seek(B+282+C);ROM().write(D);js.document.getElementById('hash'+str(C)).src='data:image/jpeg;base64,'+d[D];C+=1
-	E.run_until_complete(ProgressBar().update_progress(10,'Seed Generated.'));js.document.getElementById('nav-settings-tab').style.display=''
-	if A.settings.generate_spoilerlog is True:js.document.getElementById(T).style.display='';js.document.getElementById(U).value=A.toJson()
-	else:js.document.getElementById(U).value='';js.document.getElementById(T).style.display='none'
-	js.document.getElementById('generated_seed_id').innerHTML=A.settings.seed_id;e=json.loads(A.toJson())['Settings'];js.document.getElementById(V).innerHTML='';f=js.document.getElementById(V)
-	for (O,L) in e.items():
-		g=[S,'algorithm','starting_kong','starting_kong_list','diddy_freeing_kong','tiny_freeing_kong','lanky_freeing_kong','chunky_freeing_kong','banana_medals_required','krool_phases','krool_keys_required','blocker_golden_bananas','troff_n_scoff_bananas']
-		if O not in g:P=f.insertRow(-1);h=P.insertCell(0);i=P.insertCell(1);h.innerHTML=O;i.innerHTML=L
+	C=0;f=get_hash_images()
+	for D in A.settings.seed_hash:ROM().seek(B+282+C);ROM().write(D);js.document.getElementById('hash'+str(C)).src='data:image/jpeg;base64,'+f[D];C+=1
+	E.run_until_complete(ProgressBar().update_progress(10,'Seed Generated.'));js.document.getElementById('nav-settings-tab').style.display=G
+	if A.settings.generate_spoilerlog is True:js.document.getElementById(U).style.display=G;js.document.getElementById(V).value=A.toJson();js.document.getElementById(W).value=generateTracker(A.toJson())
+	else:js.document.getElementById(V).value=G;js.document.getElementById(W).value=G;js.document.getElementById(U).style.display='none'
+	js.document.getElementById('generated_seed_id').innerHTML=A.settings.seed_id;g=json.loads(A.toJson())['Settings'];js.document.getElementById(X).innerHTML=G;h=js.document.getElementById(X)
+	for (P,M) in g.items():
+		i=[T,'algorithm','starting_kong','starting_kong_list','diddy_freeing_kong','tiny_freeing_kong','lanky_freeing_kong','chunky_freeing_kong','banana_medals_required','krool_phases','krool_keys_required','blocker_golden_bananas','troff_n_scoff_bananas']
+		if P not in i:Q=h.insertRow(-1);j=Q.insertCell(0);k=Q.insertCell(1);j.innerHTML=P;k.innerHTML=M
 	ROM().fixSecurityValue();ROM().save(f"dk64-{A.settings.seed_id}.z64");E.run_until_complete(ProgressBar().reset());js.jq('#nav-settings-tab').tab('show')

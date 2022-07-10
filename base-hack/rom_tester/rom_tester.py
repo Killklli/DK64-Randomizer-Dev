@@ -23,9 +23,9 @@ def getKong(fh,offset):
 		if A<8:return kongs[A]
 	return f"Kong {hex(A)}"
 def getMove(fh,offset):
-	'Get the current move.';A=getValue(fh,offset,1);B=A>>4&15;C=A&15
-	if B==15:return'No Upgrade'
-	return f"{move_types[B]} level {str(C)}"
+	'Get the current move.';A=getValue(fh,offset,1);B=A>>5&7;C=(A>>3&3)+1;D=A&7
+	if B==5:return'No Upgrade'
+	return f"{move_types[B]} level {str(C)} (Kong {D})"
 output_file='output.txt'
 if os.path.exists(output_file):os.remove(output_file)
 with open(output_file,'w')as fh:print('Created File')

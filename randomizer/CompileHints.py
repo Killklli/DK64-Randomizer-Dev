@@ -5,9 +5,11 @@ _A=False
 import random
 from randomizer.Enums.Kongs import Kongs
 from randomizer.Enums.Regions import Regions
+from randomizer.Enums.WrinklyKong import WrinklyKong
 from randomizer.Lists.Item import NameFromKong
 from randomizer.Lists.MapsAndExits import GetMapId
 from randomizer.Lists.ShufflableExit import ShufflableExits
+from randomizer.Lists.WrinklyHints import hints
 from randomizer.Spoiler import Spoiler
 from randomizer.Patching.UpdateHints import updateRandomHint
 def compileHints(spoiler):
@@ -82,6 +84,7 @@ def compileHints(spoiler):
 	if len(K)<35:k=len(K)
 	random.shuffle(K)
 	for H in range(k):updateRandomHint(K[H])
+	UpdateSpoilerHintList(D);return _B
 def AddLoadingZoneHints(spoiler):
 	'Add hints for loading zone transitions and their destinations.';A=spoiler;G=[Regions.JungleJapesMain,Regions.JapesBeyondFeatherGate,Regions.TinyHive,Regions.JapesLankyCave,Regions.Mine];H=[Regions.AngryAztecStart,Regions.AngryAztecMain];I=[Regions.FranticFactoryStart,Regions.ChunkyRoomPlatform,Regions.PowerHut,Regions.BeyondHatch,Regions.InsideCore];B=[B for(B,C)in A.shuffled_exit_data.items()if C.regionId in G];random.shuffle(B);J=_A
 	while len(B)>0:
@@ -126,3 +129,7 @@ def TryAddingLoadingZoneHint(spoiler,transition,disallowedRegions=_C):
 	J=ShufflableExits[A].name;C=B.shuffled_exit_data[D].spoilerName;G=C.find(' from ')
 	if G!=-1:C=C[:G]
 	updateRandomHint(f"If you're looking for {C}, follow the path from {J}.");return _B
+def UpdateSpoilerHintList(spoiler):
+	'Write hints to spoiler object.'
+	for A in hints:
+		if A.kong!=WrinklyKong.ftt:spoiler.hint_list[A.name]=A.hint

@@ -4,7 +4,7 @@ import random
 from randomizer.Enums.Items import Items
 from randomizer.Enums.Kongs import Kongs
 from randomizer.Enums.Locations import Locations
-from randomizer.ItemPool import ChunkyMoveLocations,DiddyMoveLocations,DonkeyMoveLocations,LankyMoveLocations,TinyMoveLocations
+from randomizer.ItemPool import ChunkyMoveLocations,DiddyMoveLocations,DonkeyMoveLocations,LankyMoveLocations,SharedMoveLocations,TinyMoveLocations
 from randomizer.ItemPool import DonkeyMoves,DiddyMoves,LankyMoves,TinyMoves,ChunkyMoves
 from randomizer.Lists.Location import LocationList
 VanillaPrices={Items.BaboonBlast:3,Items.StrongKong:5,Items.GorillaGrab:7,Items.ChimpyCharge:3,Items.RocketbarrelBoost:5,Items.SimianSpring:7,Items.Orangstand:3,Items.BaboonBalloon:5,Items.OrangstandSprint:7,Items.MiniMonkey:3,Items.PonyTailTwirl:5,Items.Monkeyport:7,Items.HunkyChunky:3,Items.PrimatePunch:5,Items.GorillaGone:7,Items.Coconut:3,Items.Peanut:3,Items.Grape:3,Items.Feather:3,Items.Pineapple:3,Items.HomingAmmo:5,Items.SniperSight:7,Items.Bongos:3,Items.Guitar:3,Items.Trombone:3,Items.Saxophone:3,Items.Triangle:3,Items.ProgressiveSlam:[5,7],Items.ProgressiveAmmoBelt:[3,5],Items.ProgressiveInstrumentUpgrade:[5,7,9]}
@@ -59,19 +59,19 @@ def GetPriceOfMoveItem(item,settings,slamLevel,ammoBelts,instUpgrades):
 		if E in[0,1,2]:return B.prices[A][E]
 		else:return _A
 	else:return B.prices[A]
-def KongCanBuy(location,coins,settings,kong,slamLevel,ammoBelts,instUpgrades):
-	'Check if given kong can logically purchase the specified location.';A=location
-	if LocationList[A].item is _A or LocationList[A].item==Items.NoItem:return True
-	B=GetPriceOfMoveItem(LocationList[A].item,settings,slamLevel,ammoBelts,instUpgrades)
-	if B is not _A:return coins[kong]>=B
+def KongCanBuy(location,logic,kong):
+	'Check if given kong can logically purchase the specified location.';B=location;A=logic
+	if LocationList[B].item is _A or LocationList[B].item==Items.NoItem:return True
+	C=GetPriceOfMoveItem(LocationList[B].item,A.settings,A.Slam,A.AmmoBelts,A.InstUpgrades)
+	if C is not _A:return A.Coins[kong]>=C
 	else:return False
-def AnyKongCanBuy(location,coins,settings,slamLevel,ammoBelts,instUpgrades):'Check if any kong can logically purchase this location.';return any((KongCanBuy(location,coins,settings,A,slamLevel,ammoBelts,instUpgrades)for A in[Kongs.donkey,Kongs.diddy,Kongs.lanky,Kongs.tiny,Kongs.chunky]))
-def EveryKongCanBuy(location,coins,settings,slamLevel,ammoBelts,instUpgrades):'Check if any kong can logically purchase this location.';return all((KongCanBuy(location,coins,settings,A,slamLevel,ammoBelts,instUpgrades)for A in[Kongs.donkey,Kongs.diddy,Kongs.lanky,Kongs.tiny,Kongs.chunky]))
-def CanBuy(location,coins,settings,slamLevel,ammoBelts,instUpgrades):
-	'Check if an appropriate kong can logically purchase this location.';F=instUpgrades;E=ammoBelts;D=slamLevel;C=settings;B=coins;A=location
-	if A in DonkeyMoveLocations:return KongCanBuy(A,B,C,Kongs.donkey,D,E,F)
-	elif A in DiddyMoveLocations:return KongCanBuy(A,B,C,Kongs.diddy,D,E,F)
-	elif A in LankyMoveLocations:return KongCanBuy(A,B,C,Kongs.lanky,D,E,F)
-	elif A in TinyMoveLocations:return KongCanBuy(A,B,C,Kongs.tiny,D,E,F)
-	elif A in ChunkyMoveLocations:return KongCanBuy(A,B,C,Kongs.chunky,D,E,F)
-	else:return AnyKongCanBuy(A,B,C,D,E,F)
+def AnyKongCanBuy(location,logic):'Check if any kong can logically purchase this location.';return any((KongCanBuy(location,logic,A)for A in[Kongs.donkey,Kongs.diddy,Kongs.lanky,Kongs.tiny,Kongs.chunky]))
+def EveryKongCanBuy(location,logic):'Check if any kong can logically purchase this location.';return all((KongCanBuy(location,logic,A)for A in[Kongs.donkey,Kongs.diddy,Kongs.lanky,Kongs.tiny,Kongs.chunky]))
+def CanBuy(location,logic):
+	'Check if an appropriate kong can logically purchase this location.';B=logic;A=location
+	if B.settings.move_rando=='on_shared'or A in SharedMoveLocations:return AnyKongCanBuy(A,B)
+	elif A in DonkeyMoveLocations:return B.isdonkey and KongCanBuy(A,B,Kongs.donkey)
+	elif A in DiddyMoveLocations:return B.isdiddy and KongCanBuy(A,B,Kongs.diddy)
+	elif A in LankyMoveLocations:return B.islanky and KongCanBuy(A,B,Kongs.lanky)
+	elif A in TinyMoveLocations:return B.istiny and KongCanBuy(A,B,Kongs.tiny)
+	elif A in ChunkyMoveLocations:return B.ischunky and KongCanBuy(A,B,Kongs.chunky)

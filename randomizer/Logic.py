@@ -122,7 +122,7 @@ class LogicVarHolder:
 			if B==Kongs.diddy:return Events.WaterSwitch in A.Events and A.IsKong(Kongs.diddy)
 			else:return Events.TreasureRoomTeleporterUnlocked in A.Events and A.HasAccess(randomizer.Enums.Regions.Regions.Shipyard,B)
 		return A.IsKong(B)
-	def CanBuy(A,location):'Check if there are enough coins to purchase this location.';return CanBuy(location,A.Coins,A.settings,A.Slam,A.AmmoBelts,A.InstUpgrades)
+	def CanBuy(A,location):'Check if there are enough coins to purchase this location.';return CanBuy(location,A)
 	def CanAccessKRool(A):'Make sure that each required key has been turned in.';return all((not B not in A.Events for B in A.settings.krool_keys_required))
 	def IsBossReachable(A,level):'Check if the boss banana requirement is met.';B=level;return A.HasEnoughKongs(B)and sum(A.ColoredBananas[B])>=A.settings.BossBananas[B]
 	def HasEnoughKongs(B,level,forPreviousLevel=_A):
