@@ -300,7 +300,7 @@ def ShuffleSharedMoves(spoiler):
 	I=ItemPool.GetMoveLocationsToRemove(G);D={};L=[ItemPool.DonkeyMoves,ItemPool.DiddyMoves,ItemPool.LankyMoves,ItemPool.TinyMoves,ItemPool.ChunkyMoves];M=[ItemPool.DonkeyMoveLocations,ItemPool.DiddyMoveLocations,ItemPool.LankyMoveLocations,ItemPool.TinyMoveLocations,ItemPool.ChunkyMoveLocations];C=ItemPool.DonkeyMoveLocations.copy();C.update(ItemPool.DiddyMoveLocations.copy());C.update(ItemPool.LankyMoveLocations.copy());C.update(ItemPool.TinyMoveLocations.copy());C.update(ItemPool.ChunkyMoveLocations.copy())
 	for J in range(5):
 		for K in L[J]:
-			if B.settings.move_rando=='on_shared':D[K]=C-I
+			if B.settings.move_rando=='on_cross_purchase':D[K]=C-I
 			else:D[K]=M[J]-I
 	return A,D
 def FillKongsAndMovesGeneric(spoiler):

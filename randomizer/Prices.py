@@ -69,9 +69,9 @@ def AnyKongCanBuy(location,logic):'Check if any kong can logically purchase this
 def EveryKongCanBuy(location,logic):'Check if any kong can logically purchase this location.';return all((KongCanBuy(location,logic,A)for A in[Kongs.donkey,Kongs.diddy,Kongs.lanky,Kongs.tiny,Kongs.chunky]))
 def CanBuy(location,logic):
 	'Check if an appropriate kong can logically purchase this location.';B=logic;A=location
-	if B.settings.move_rando=='on_shared'or A in SharedMoveLocations:return AnyKongCanBuy(A,B)
-	elif A in DonkeyMoveLocations:return B.isdonkey and KongCanBuy(A,B,Kongs.donkey)
-	elif A in DiddyMoveLocations:return B.isdiddy and KongCanBuy(A,B,Kongs.diddy)
-	elif A in LankyMoveLocations:return B.islanky and KongCanBuy(A,B,Kongs.lanky)
-	elif A in TinyMoveLocations:return B.istiny and KongCanBuy(A,B,Kongs.tiny)
-	elif A in ChunkyMoveLocations:return B.ischunky and KongCanBuy(A,B,Kongs.chunky)
+	if A in SharedMoveLocations:return AnyKongCanBuy(A,B)
+	elif A in DonkeyMoveLocations:return KongCanBuy(A,B,Kongs.donkey)
+	elif A in DiddyMoveLocations:return KongCanBuy(A,B,Kongs.diddy)
+	elif A in LankyMoveLocations:return KongCanBuy(A,B,Kongs.lanky)
+	elif A in TinyMoveLocations:return KongCanBuy(A,B,Kongs.tiny)
+	elif A in ChunkyMoveLocations:return KongCanBuy(A,B,Kongs.chunky)
