@@ -2,8 +2,8 @@
 _H='Retrying fill. Tries: '
 _G='Fill failed, out of retries.'
 _F='Game unbeatable after placing all items.'
-_E='random'
-_D='assumed'
+_E='assumed'
+_D='random'
 _C=False
 _B=True
 _A=None
@@ -113,28 +113,33 @@ def GetAccessibleLocations(settings,ownedItems,searchType=SearchMode.GetReachabl
 	elif D==SearchMode.GeneratePlaythrough:return O
 	elif D==SearchMode.CheckAllReachable:return len(H)==len(LocationList)
 	elif D==SearchMode.GetUnreachable:return[A for A in LocationList if A not in H]
-def VerifyWorld(settings):'Make sure all item locations are reachable on current world graph with constant items placed and all other items owned.';A=settings;ItemPool.PlaceConstants(A);B=GetAccessibleLocations(A,ItemPool.AllItems(A),SearchMode.GetUnreachable);C=len(B)==0;Reset();return C
+def VerifyWorld(settings):
+	'Make sure all item locations are reachable on current world graph with constant items placed and all other items owned.';A=settings
+	if A.no_logic:return _B
+	ItemPool.PlaceConstants(A);B=GetAccessibleLocations(A,ItemPool.AllItems(A),SearchMode.GetUnreachable);C=len(B)==0;Reset();return C
 def VerifyWorldWithWorstCoinUsage(settings):
-	'Make sure the game is beatable without it being possible to run out of coins for required moves.';B=settings;D=[];H=[];N=[GetMaxForKong(B,Kongs.donkey),GetMaxForKong(B,Kongs.diddy),GetMaxForKong(B,Kongs.lanky),GetMaxForKong(B,Kongs.tiny),GetMaxForKong(B,Kongs.chunky)]
+	'Make sure the game is beatable without it being possible to run out of coins for required moves.';A=settings
+	if A.no_logic:return _B
+	D=[];H=[];N=[GetMaxForKong(A,Kongs.donkey),GetMaxForKong(A,Kongs.diddy),GetMaxForKong(A,Kongs.lanky),GetMaxForKong(A,Kongs.tiny),GetMaxForKong(A,Kongs.chunky)]
 	while _B:
-		Reset();H=GetAccessibleLocations(B,[],SearchMode.GetReachableWithControlledPurchases,D);O=[LocationList[A].item for A in D];P=GetMaxCoinsSpent(B,O);F=[N[A]-P[A]for A in range(0,5)];E=LogicVariables.Coins.copy()
+		Reset();H=GetAccessibleLocations(A,[],SearchMode.GetReachableWithControlledPurchases,D);O=[LocationList[A].item for A in D];P=GetMaxCoinsSpent(A,O);F=[N[A]-P[A]for A in range(0,5)];E=LogicVariables.Coins.copy()
 		if E[Kongs.donkey]>=F[Kongs.donkey]and E[Kongs.diddy]>=F[Kongs.diddy]and E[Kongs.lanky]>=F[Kongs.lanky]and E[Kongs.tiny]>=F[Kongs.tiny]and E[Kongs.chunky]>=F[Kongs.chunky]:Reset();return _B
 		if len([A for A in H if LocationList[A].item==Items.BananaHoard])>0:Reset();return _B
 		K=[A for A in H if LocationList[A].type==Types.Shop and LocationList[A].item is not _A and LocationList[A].item!=Items.NoItem and A not in D and LogicVariables.CanBuy(A)];I={};G={}
 		if len(K)==0:print('Seed is invalid, coin locked with purchase order: '+str([LocationList[A].name+': '+LocationList[A].item.name+', 'for A in D]));Reset();return _C
 		C=_A
-		for A in K:
-			L=D.copy();L.append(A);Reset();Q=GetAccessibleLocations(B,[],SearchMode.GetReachableWithControlledPurchases,L);R=LogicVariables.Coins.copy();M=[0,0,0,0,0]
+		for B in K:
+			L=D.copy();L.append(B);Reset();Q=GetAccessibleLocations(A,[],SearchMode.GetReachableWithControlledPurchases,L);R=LogicVariables.Coins.copy();M=[0,0,0,0,0]
 			for J in LogicVariables.GetKongs():M[J]=R[J]-E[J]
-			I[A]=M;G[A]=[LocationList[A].item for A in Q if A not in H and LocationList[A].item is not _A]
-			if C is _A:C=A;continue
-			if len([B for B in I[A]if B<0])==0:continue
-			S=len([A for A in G[C]if ItemList[A].type==Types.Kong]);T=len([B for B in G[A]if ItemList[B].type==Types.Kong])
+			I[B]=M;G[B]=[LocationList[A].item for A in Q if A not in H and LocationList[A].item is not _A]
+			if C is _A:C=B;continue
+			if len([A for A in I[B]if A<0])==0:continue
+			S=len([A for A in G[C]if ItemList[A].type==Types.Kong]);T=len([A for A in G[B]if ItemList[A].type==Types.Kong])
 			if T>S:continue
-			U=len([A for A in G[C]if ItemList[A].type==Types.Key]);V=len([B for B in G[A]if ItemList[B].type==Types.Key])
+			U=len([A for A in G[C]if ItemList[A].type==Types.Key]);V=len([A for A in G[B]if ItemList[A].type==Types.Key])
 			if V>U:continue
-			W=sum(list(I[C]));X=sum(list(I[A]))
-			if X<W:C=A
+			W=sum(list(I[C]));X=sum(list(I[B]))
+			if X<W:C=B
 		D.append(C)
 def Reset():'Reset logic variables and region info that should be reset before a search.';LogicVariables.Reset();Logic.ResetRegionAccess();Logic.ResetCollectibleRegions()
 def ParePlaythrough(settings,PlaythroughLocations):
@@ -162,13 +167,13 @@ def PareWoth(settings,PlaythroughLocations):
 		B.PlaceItem(G)
 	return A
 def RandomFill(itemsToPlace,validLocations):
-	'Randomly place given items in any location disregarding logic.';A=itemsToPlace;random.shuffle(A);B=[]
-	for (id,C) in LocationList.items():
-		if C.item is _A and id in validLocations:B.append(id)
-	random.shuffle(B)
+	'Randomly place given items in any location disregarding logic.';A=itemsToPlace;random.shuffle(A);C=[]
+	for (id,E) in LocationList.items():
+		if E.item is _A:C.append(id)
 	while len(A)>0:
+		D=A.pop();B=[A for A in C if A in GetItemValidLocations(validLocations,D)]
 		if len(B)==0:return len(A)
-		D=A.pop();E=B.pop();LocationList[E].PlaceItem(D)
+		random.shuffle(B);F=B.pop();LocationList[F].PlaceItem(D)
 	return 0
 def ForwardFill(settings,itemsToPlace,validLocations,ownedItems=_A):
 	'Forward fill algorithm for item placement.';C=itemsToPlace;A=ownedItems
@@ -264,13 +269,14 @@ def GetMaxCoinsSpent(settings,ownedItems):
 				else:C[H]+=D
 	return C
 def PlaceItems(settings,algorithm,itemsToPlace,ownedItems=_A,validLocations=_A):
-	'Places items using given algorithm.';E=settings;D=itemsToPlace;C=algorithm;B=ownedItems;A=validLocations
-	if B is _A:B=[]
+	'Places items using given algorithm.';E=itemsToPlace;D=settings;C=ownedItems;B=algorithm;A=validLocations
+	if C is _A:C=[]
 	if A is _A:A=[]
+	if D.no_logic:B=_D
 	if len(A)==0:A=list(LocationList)
-	if C==_D:return AssumedFill(E,D,A,B)
-	elif C=='forward':return ForwardFill(E,D,A,B)
-	elif C==_E:return RandomFill(D,A)
+	if B==_E:return AssumedFill(D,E,A,C)
+	elif B=='forward':return ForwardFill(D,E,A,C)
+	elif B==_D:return RandomFill(E,A)
 def Fill(spoiler):
 	'Fully randomizes and places all items. Currently theoretical.';A=spoiler;B=0
 	while _B:
@@ -281,7 +287,7 @@ def Fill(spoiler):
 			if D>0:raise Ex.ItemPlacementException(str(D)+' unplaced blueprints.')
 			Reset();E=PlaceItems(A.settings,A.settings.algorithm,ItemPool.LowPriorityItems(A.settings),ItemPool.ExcessItems(A.settings))
 			if E>0:raise Ex.ItemPlacementException(str(E)+' unplaced low priority items.')
-			H=ItemPool.ExcessItems(A.settings);F=PlaceItems(A.settings,_E,ItemPool.ExcessItems(A.settings))
+			H=ItemPool.ExcessItems(A.settings);F=PlaceItems(A.settings,_D,ItemPool.ExcessItems(A.settings))
 			if F>0:raise Ex.ItemPlacementException(str(F)+' unplaced excess items.')
 			Reset()
 			if not GetAccessibleLocations(A.settings,[],SearchMode.CheckBeatable):raise Ex.GameNotBeatableException(_F)
@@ -290,9 +296,9 @@ def Fill(spoiler):
 			if B==4:js.postMessage(_G);raise G
 			B+=1;js.postMessage(_H+str(B));Reset();Logic.ClearAllLocations()
 def ShuffleSharedMoves(spoiler):
-	'Shuffles shared kong moves and then returns the remaining ones and their valid locations.';B=spoiler;ItemPool.PlaceConstants(B.settings);A=[];A.extend(ItemPool.DonkeyMoves);A.extend(ItemPool.DiddyMoves);A.extend(ItemPool.LankyMoves);A.extend(ItemPool.TinyMoves);A.extend(ItemPool.ChunkyMoves);E=PlaceItems(B.settings,_D,ItemPool.ImportantSharedMoves.copy(),[A for A in ItemPool.AllItems(B.settings)if A not in ItemPool.ImportantSharedMoves],ItemPool.SharedMoveLocations)
+	'Shuffles shared kong moves and then returns the remaining ones and their valid locations.';B=spoiler;ItemPool.PlaceConstants(B.settings);A=[];A.extend(ItemPool.DonkeyMoves);A.extend(ItemPool.DiddyMoves);A.extend(ItemPool.LankyMoves);A.extend(ItemPool.TinyMoves);A.extend(ItemPool.ChunkyMoves);E=PlaceItems(B.settings,_E,ItemPool.ImportantSharedMoves.copy(),[A for A in ItemPool.AllItems(B.settings)if A not in ItemPool.ImportantSharedMoves],ItemPool.SharedMoveLocations)
 	if E>0:raise Ex.ItemPlacementException(str(E)+' unplaced shared important items.')
-	F=PlaceItems(B.settings,_E,ItemPool.JunkSharedMoves.copy(),validLocations=ItemPool.SharedMoveLocations)
+	F=PlaceItems(B.settings,_D,ItemPool.JunkSharedMoves.copy(),validLocations=ItemPool.SharedMoveLocations)
 	if F>0:raise Ex.ItemPlacementException(str(F)+' unplaced shared junk items.')
 	G=[]
 	for H in ItemPool.SharedMoveLocations:
@@ -320,9 +326,9 @@ def FillKongsAndMoves(spoiler):
 	if A.settings.kong_rando:
 		E=ItemPool.Kongs(A.settings);F={};I=[Locations.DiddyKong,Locations.LankyKong,Locations.TinyKong,Locations.ChunkyKong]
 		for J in E:F[J]=I
-		Reset();B=PlaceItems(A.settings,_D,E,ownedItems=C,validLocations=F)
+		Reset();B=PlaceItems(A.settings,_E,E,ownedItems=C,validLocations=F)
 		if B>0:raise Ex.ItemPlacementException(str(B)+' unplaced kongs.')
-	Reset();B=PlaceItems(A.settings,_D,C,validLocations=D)
+	Reset();B=PlaceItems(A.settings,_E,C,validLocations=D)
 	if B>0:raise Ex.ItemPlacementException(str(B)+' unplaced items.')
 def FillKongsAndMovesForLevelOrder(spoiler):
 	'Shuffle Kongs and Moves accounting for level order restrictions.';A=spoiler;ItemPool.PlaceConstants(A.settings);B=0
@@ -378,5 +384,5 @@ def Generate_Spoiler(spoiler):
 	GeneratePlaythrough(A);Reset();ShuffleExits.Reset();return A
 def ShuffleMisc(spoiler):
 	'Shuffle miscellaneous objects outside of main fill algorithm, including Kasplats, Bonus barrels, and bananaport warps.';A=spoiler;KasplatShuffle(LogicVariables);A.human_kasplats={};A.UpdateKasplats(LogicVariables.kasplat_map)
-	if A.settings.bonus_barrels in(_E,'all_beaver_bother'):BarrelShuffle(A.settings);A.UpdateBarrels()
+	if A.settings.bonus_barrels in(_D,'all_beaver_bother'):BarrelShuffle(A.settings);A.UpdateBarrels()
 	if A.settings.bananaport_rando:B=[];C={};ShuffleWarps(B,C);A.bananaport_replacements=B.copy();A.human_warp_locations=C

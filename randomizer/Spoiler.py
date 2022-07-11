@@ -33,7 +33,7 @@ class Spoiler:
 			A.move_data.append(B)
 		A.jetpac_medals_required=A.settings.BananaMedalsRequired;A.hint_list={}
 	def toJson(A):
-		'Convert spoiler to JSON.';R='skip';Q='none';L='randomized';A.settings.verify_hash();C=OrderedDict();B=OrderedDict();B['seed']=A.settings.seed_id;B['algorithm']=A.settings.algorithm;B['move_rando']=A.settings.move_rando;B['shuffle_loading_zones']=A.settings.shuffle_loading_zones;B['decoupled_loading_zones']=A.settings.decoupled_loading_zones;B['starting_kongs_count']=A.settings.starting_kongs_count;M=[]
+		'Convert spoiler to JSON.';R='skip';Q='none';L='randomized';A.settings.verify_hash();C=OrderedDict();B=OrderedDict();B['seed']=A.settings.seed_id;B['no_logic']=A.settings.no_logic;B['move_rando']=A.settings.move_rando;B['shuffle_loading_zones']=A.settings.shuffle_loading_zones;B['decoupled_loading_zones']=A.settings.decoupled_loading_zones;B['starting_kongs_count']=A.settings.starting_kongs_count;M=[]
 		for S in A.settings.starting_kong_list:M.append(S.name.capitalize())
 		B['starting_kong_list']=M;B['diddy_freeing_kong']=ItemList[ItemFromKong(A.settings.diddy_freeing_kong)].name;B['tiny_freeing_kong']=ItemList[ItemFromKong(A.settings.tiny_freeing_kong)].name;B['lanky_freeing_kong']=ItemList[ItemFromKong(A.settings.lanky_freeing_kong)].name;B['chunky_freeing_kong']=ItemList[ItemFromKong(A.settings.chunky_freeing_kong)].name;B['open_lobbies']=A.settings.open_lobbies;B['open_levels']=A.settings.open_levels;B['randomize_pickups']=A.settings.randomize_pickups;B['random_patches']=A.settings.random_patches;B['puzzle_rando']=A.settings.puzzle_rando;B['crown_door_open']=A.settings.crown_door_open;B['coin_door_open']=A.settings.coin_door_open;B['unlock_fairy_shockwave']=A.settings.unlock_fairy_shockwave;B['random_medal_requirement']=A.settings.random_medal_requirement
 		if A.settings.random_medal_requirement:B['banana_medals_required']=A.settings.BananaMedalsRequired
@@ -105,8 +105,8 @@ class Spoiler:
 				except Exception as I:print(I)
 		for (F,J) in B.items():D.shuffled_exit_instructions.append(J)
 	def UpdateLocations(B,locations):
-		'Update location list for what was produced by the fill.';B.location_data={};B.shuffled_kong_placement={};J={_B:B.settings.starting_kong,_C:321};K={_D:J};B.shuffled_kong_placement['TrainingGrounds']=K;L=[A for A in[Locations.DiddyKong,Locations.LankyKong,Locations.TinyKong,Locations.ChunkyKong]if A not in B.settings.kong_locations]
-		for M in L:B.WriteKongPlacement(M,Items.NoItem)
+		'Update location list for what was produced by the fill.';B.location_data={};B.shuffled_kong_placement={};I={_B:B.settings.starting_kong,_C:321};J={_D:I};B.shuffled_kong_placement['TrainingGrounds']=J;K=[A for A in[Locations.DiddyKong,Locations.LankyKong,Locations.TinyKong,Locations.ChunkyKong]if A not in B.settings.kong_locations]
+		for L in K:B.WriteKongPlacement(L,Items.NoItem)
 		for (id,A) in locations.items():
 			if A.item is not None and A.item is not Items.NoItem and not A.constant:
 				B.location_data[id]=A.item
@@ -114,13 +114,12 @@ class Spoiler:
 					D=0
 					if A.movetype in[MoveTypes.Guns,MoveTypes.AmmoBelt]:D=1
 					elif A.movetype==MoveTypes.Instruments:D=2
-					H=[A.kong]
-					if A.kong==Kongs.any:H=[Kongs.donkey,Kongs.diddy,Kongs.lanky,Kongs.tiny,Kongs.chunky]
-					I=A.level;C=ItemList[A.item].movetype;E=ItemList[A.item].index-1;F=ItemList[A.item].kong
-					for G in H:
-						print(f"Shop {D}, Kong {G}, Level {I} | Move: {C} lvl {E} for kong {F}")
-						if C==1 or C==3 or C==2 and E>0 or C==4 and E>0:F=G
-						N=C<<5|E<<3|F;B.move_data[D][G][I]=N
+					F=[A.kong]
+					if A.kong==Kongs.any:F=[Kongs.donkey,Kongs.diddy,Kongs.lanky,Kongs.tiny,Kongs.chunky]
+					M=A.level;C=ItemList[A.item].movetype;E=ItemList[A.item].index-1;G=ItemList[A.item].kong
+					for H in F:
+						if C==1 or C==3 or C==2 and E>0 or C==4 and E>0:G=H
+						N=C<<5|E<<3|G;B.move_data[D][H][M]=N
 				elif A.type==Types.Kong:B.WriteKongPlacement(id,A.item)
 	def WriteKongPlacement(A,locationId,item):
 		'Write kong placement information for the given kong cage location.';F=locationId;B='Jungle Japes';C=A.settings.diddy_freeing_kong;D=322;E=323
