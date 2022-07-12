@@ -1,4 +1,6 @@
 'Module used to distribute items randomly.'
+_J='on_cross_purchase'
+_I='levels'
 _H='Retrying fill. Tries: '
 _G='Fill failed, out of retries.'
 _F='Game unbeatable after placing all items.'
@@ -16,7 +18,7 @@ from randomizer.Settings import Settings
 import randomizer.ShuffleExits as ShuffleExits
 from randomizer.Enums.Events import Events
 from randomizer.Enums.Items import Items
-from randomizer.Enums.Kongs import Kongs
+from randomizer.Enums.Kongs import Kongs,GetKongs
 from randomizer.Enums.Levels import Levels
 from randomizer.Enums.Locations import Locations
 from randomizer.Enums.Regions import Regions
@@ -296,19 +298,22 @@ def Fill(spoiler):
 			if B==4:js.postMessage(_G);raise G
 			B+=1;js.postMessage(_H+str(B));Reset();Logic.ClearAllLocations()
 def ShuffleSharedMoves(spoiler):
-	'Shuffles shared kong moves and then returns the remaining ones and their valid locations.';B=spoiler;ItemPool.PlaceConstants(B.settings);A=[];A.extend(ItemPool.DonkeyMoves);A.extend(ItemPool.DiddyMoves);A.extend(ItemPool.LankyMoves);A.extend(ItemPool.TinyMoves);A.extend(ItemPool.ChunkyMoves);E=PlaceItems(B.settings,_E,ItemPool.ImportantSharedMoves.copy(),[A for A in ItemPool.AllItems(B.settings)if A not in ItemPool.ImportantSharedMoves],ItemPool.SharedMoveLocations)
-	if E>0:raise Ex.ItemPlacementException(str(E)+' unplaced shared important items.')
-	F=PlaceItems(B.settings,_D,ItemPool.JunkSharedMoves.copy(),validLocations=ItemPool.SharedMoveLocations)
-	if F>0:raise Ex.ItemPlacementException(str(F)+' unplaced shared junk items.')
-	G=[]
-	for H in ItemPool.SharedMoveLocations:
-		if LocationList[H].item is not _A:G.append(H)
-	I=ItemPool.GetMoveLocationsToRemove(G);D={};L=[ItemPool.DonkeyMoves,ItemPool.DiddyMoves,ItemPool.LankyMoves,ItemPool.TinyMoves,ItemPool.ChunkyMoves];M=[ItemPool.DonkeyMoveLocations,ItemPool.DiddyMoveLocations,ItemPool.LankyMoveLocations,ItemPool.TinyMoveLocations,ItemPool.ChunkyMoveLocations];C=ItemPool.DonkeyMoveLocations.copy();C.update(ItemPool.DiddyMoveLocations.copy());C.update(ItemPool.LankyMoveLocations.copy());C.update(ItemPool.TinyMoveLocations.copy());C.update(ItemPool.ChunkyMoveLocations.copy())
-	for J in range(5):
-		for K in L[J]:
-			if B.settings.move_rando=='on_cross_purchase':D[K]=C-I
-			else:D[K]=M[J]-I
-	return A,D
+	'Shuffles shared kong moves and then returns the remaining ones and their valid locations.';A=spoiler;ItemPool.PlaceConstants(A.settings);B=[];B.extend(ItemPool.DonkeyMoves);B.extend(ItemPool.DiddyMoves);B.extend(ItemPool.LankyMoves);B.extend(ItemPool.TinyMoves);B.extend(ItemPool.ChunkyMoves);C=ItemPool.SharedMoveLocations.copy();M=ItemPool.GetKongMoveOccupiedShops()
+	for N in M:C.remove(N)
+	if len(C)<len(ItemPool.ImportantSharedMoves)+len(ItemPool.JunkSharedMoves):raise Ex.ItemPlacementException('Too many kong moves placed before shared moves. Only '+len(C)+' available for all shared moves.')
+	F=PlaceItems(A.settings,_E,ItemPool.ImportantSharedMoves.copy(),[B for B in ItemPool.AllItems(A.settings)if B not in ItemPool.ImportantSharedMoves],C)
+	if F>0:raise Ex.ItemPlacementException(str(F)+' unplaced shared important items.')
+	G=PlaceItems(A.settings,_D,ItemPool.JunkSharedMoves.copy(),[B for B in ItemPool.AllItems(A.settings)if B not in ItemPool.JunkSharedMoves],validLocations=C)
+	if G>0:raise Ex.ItemPlacementException(str(G)+' unplaced shared junk items.')
+	H=[]
+	for I in C:
+		if LocationList[I].item is not _A:H.append(I)
+	J=ItemPool.GetMoveLocationsToRemove(H);E={};O=[ItemPool.DonkeyMoves,ItemPool.DiddyMoves,ItemPool.LankyMoves,ItemPool.TinyMoves,ItemPool.ChunkyMoves];P=[ItemPool.DonkeyMoveLocations,ItemPool.DiddyMoveLocations,ItemPool.LankyMoveLocations,ItemPool.TinyMoveLocations,ItemPool.ChunkyMoveLocations];D=ItemPool.DonkeyMoveLocations.copy();D.update(ItemPool.DiddyMoveLocations.copy());D.update(ItemPool.LankyMoveLocations.copy());D.update(ItemPool.TinyMoveLocations.copy());D.update(ItemPool.ChunkyMoveLocations.copy())
+	for K in range(5):
+		for L in O[K]:
+			if A.settings.move_rando==_J:E[L]=D-J
+			else:E[L]=P[K]-J
+	return B,E
 def FillKongsAndMovesGeneric(spoiler):
 	'Facilitate shuffling individual pools of items in lieu of full item rando.';B=spoiler;A=0
 	while _B:
@@ -320,16 +325,121 @@ def FillKongsAndMovesGeneric(spoiler):
 			if A==20:js.postMessage(_G);raise C
 			A+=1;js.postMessage(_H+str(A));Reset();Logic.ClearAllLocations()
 def GeneratePlaythrough(spoiler):'Generate playthrough and way of the hoard and update spoiler.';A=spoiler;Reset();B=GetAccessibleLocations(A.settings,[],SearchMode.GeneratePlaythrough);ParePlaythrough(A.settings,B);C=PareWoth(A.settings,B);A.UpdateLocations(LocationList);A.UpdatePlaythrough(LocationList,B);A.UpdateWoth(LocationList,C)
+def GetKongUnlockingMovesAndValidLocations(spoiler,location,ownedKongs=[]):
+	"Given the settings and a locked Kong's location, determine the moves needed to unlock them in preparation for PlaceItems. Note that `ownedKongs` is only needed for Locations.LankyKong.";G=location;D=spoiler;C={}
+	if G==Locations.DiddyKong:
+		B=Items.Coconut;A=ItemPool.DonkeyMoveLocations.copy()
+		if D.settings.diddy_freeing_kong==Kongs.diddy:B=Items.Peanut;A=ItemPool.DiddyMoveLocations.copy()
+		elif D.settings.diddy_freeing_kong==Kongs.lanky:B=Items.Grape;A=ItemPool.LankyMoveLocations.copy()
+		elif D.settings.diddy_freeing_kong==Kongs.tiny:B=Items.Feather;A=ItemPool.TinyMoveLocations.copy()
+		elif D.settings.diddy_freeing_kong==Kongs.chunky:B=Items.Pineapple;A=ItemPool.ChunkyMoveLocations.copy()
+		C[B]=A
+	elif G==Locations.LankyKong:
+		C[Items.Guitar]=ItemPool.DiddyMoveLocations.copy();C[Items.Guitar].remove(Locations.DiddyAztecGun);C[Items.Guitar].remove(Locations.RocketbarrelBoost);J=random.choice([A for A in ownedKongs if A in(Kongs.donkey,Kongs.lanky,Kongs.tiny)]);H=Items.Coconut;I=ItemPool.DonkeyMoveLocations
+		if J==Kongs.lanky:H=Items.Grape;I=ItemPool.LankyMoveLocations
+		elif J==Kongs.tiny:H=Items.Feather;I=ItemPool.TinyMoveLocations
+		C[H]=I;B=Items.Coconut;F=Items.Bongos;A=ItemPool.DonkeyMoveLocations
+		if D.settings.lanky_freeing_kong==Kongs.diddy:B=Items.Peanut;F=Items.Guitar;A=ItemPool.DiddyMoveLocations
+		elif D.settings.lanky_freeing_kong==Kongs.lanky:B=Items.Grape;F=Items.Trombone;A=ItemPool.LankyMoveLocations
+		elif D.settings.lanky_freeing_kong==Kongs.tiny:B=Items.Feather;F=Items.Saxophone;A=ItemPool.TinyMoveLocations
+		elif D.settings.lanky_freeing_kong==Kongs.chunky:B=Items.Pineapple;F=Items.Triangle;A=ItemPool.ChunkyMoveLocations
+		C[B]=A;C[F]=A
+	elif G==Locations.TinyKong:
+		B=Items.Peanut;K=Items.ChimpyCharge;A=ItemPool.DiddyMoveLocations
+		if D.settings.tiny_freeing_kong==Kongs.chunky:B=Items.Pineapple;K=Items.PrimatePunch;A=ItemPool.ChunkyMoveLocations
+		C[B]=A;C[K]=A
+	if D.settings.move_rando==_J:
+		E=ItemPool.DonkeyMoveLocations.copy();E.update(ItemPool.DiddyMoveLocations.copy());E.update(ItemPool.LankyMoveLocations.copy());E.update(ItemPool.TinyMoveLocations.copy());E.update(ItemPool.ChunkyMoveLocations.copy());E=list(E)
+		for L in C:C[L]=E
+	return C
+def GetLogicallyAccessibleKongLocations(spoiler,kongLocations,ownedKongs,latestLevel):
+	'Find the logically accessible Kong Locations given the current state of Kong unlocking.';D=kongLocations;B=spoiler;A=ownedKongs;C=[]
+	for E in range(1,latestLevel+1):
+		if B.settings.level_order[E]==Levels.JungleJapes and Locations.DiddyKong in D:C.append(Locations.DiddyKong)
+		if B.settings.level_order[E]==Levels.FranticFactory and Locations.ChunkyKong in D:C.append(Locations.ChunkyKong)
+		if B.settings.level_order[E]==Levels.AngryAztec and Locations.TinyKong in D and(Kongs.diddy in A or Kongs.chunky in A):C.append(Locations.TinyKong)
+		if B.settings.level_order[E]==Levels.AngryAztec and Locations.LankyKong in D and(Kongs.diddy in A or B.settings.open_levels)and(Kongs.donkey in A or Kongs.lanky in A or Kongs.tiny in A):C.append(Locations.LankyKong)
+	return C
+def PlaceKongs(spoiler,kongItems,kongLocations):
+	'For these settings, Kongs to place, and locations to place them in, place the Kongs in such a way the seed will never error.';G=kongItems;E=kongLocations;A=spoiler;B=[B for B in A.settings.starting_kong_list];F=len(B)+1;C=GetLogicallyAccessibleKongLocations(A,E,B,F)
+	while len(B)!=5:
+		if not any(C):raise Ex.EntrancePlacementException('Levels shuffled in a way that makes Kong unlocks impossible.')
+		D=random.choice(C);C.remove(D)
+		if D==Locations.DiddyKong:A.settings.diddy_freeing_kong=random.choice(B)
+		elif D==Locations.LankyKong:A.settings.lanky_freeing_kong=random.choice(B)
+		elif D==Locations.TinyKong:L=list(set(B).intersection([Kongs.diddy,Kongs.chunky]));A.settings.tiny_freeing_kong=random.choice(L)
+		elif D==Locations.ChunkyKong:A.settings.chunky_freeing_kong=random.choice(B)
+		E.remove(D);H=random.choice(G);F+=1
+		if len(C)==0 and len(G)>1:
+			C=GetLogicallyAccessibleKongLocations(A,E,B,F)
+			if not any(C):
+				I=[]
+				for J in G:
+					K=[A for A in B];K.append(ItemPool.GetKongForItem(J));M=GetLogicallyAccessibleKongLocations(A,E,K,F)
+					if any(M):I.append(J)
+				H=random.choice(I)
+		LocationList[D].PlaceItem(H);G.remove(H);B.append(ItemPool.GetKongForItem(H));C=GetLogicallyAccessibleKongLocations(A,E,B,F)
+	if A.settings.diddy_freeing_kong==Kongs.any:A.settings.diddy_freeing_kong=random.choice(GetKongs())
+	if A.settings.lanky_freeing_kong==Kongs.any:A.settings.lanky_freeing_kong=random.choice(GetKongs())
+	if A.settings.tiny_freeing_kong==Kongs.any:A.settings.tiny_freeing_kong=random.choice(GetKongs())
+	if A.settings.chunky_freeing_kong==Kongs.any:A.settings.chunky_freeing_kong=random.choice(GetKongs())
 def FillKongsAndMoves(spoiler):
-	'Fill shared moves, then kongs, then rest of moves.';A=spoiler;C=[];D={}
-	if A.settings.shuffle_items=='moves':G,H=ShuffleSharedMoves(A);C.extend(G);D.update(H)
+	'Fill kongs, then progression moves, then shared moves, then rest of moves.';A=spoiler;M=[];R={};D=[]
 	if A.settings.kong_rando:
-		E=ItemPool.Kongs(A.settings);F={};I=[Locations.DiddyKong,Locations.LankyKong,Locations.TinyKong,Locations.ChunkyKong]
-		for J in E:F[J]=I
-		Reset();B=PlaceItems(A.settings,_E,E,ownedItems=C,validLocations=F)
-		if B>0:raise Ex.ItemPlacementException(str(B)+' unplaced kongs.')
-	Reset();B=PlaceItems(A.settings,_E,C,validLocations=D)
-	if B>0:raise Ex.ItemPlacementException(str(B)+' unplaced items.')
+		I=ItemPool.Kongs(A.settings)
+		for S in I:
+			if ItemPool.GetKongForItem(S)in A.settings.starting_kong_list:I.remove(S)
+		T={};J=[Locations.DiddyKong,Locations.LankyKong,Locations.TinyKong,Locations.ChunkyKong]
+		if any(A.settings.kong_locations):
+			W=[B for B in J if B not in A.settings.kong_locations]
+			for U in W:LocationList[U].PlaceItem(Items.NoItem);J.remove(U)
+		for N in I:T[N]=J
+		Reset()
+		if A.settings.shuffle_loading_zones==_I:PlaceKongs(A,I,[A for A in J])
+		else:
+			G=PlaceItems(A.settings,_E,I,ownedItems=ItemPool.AllKongMoves(),validLocations=T)
+			if G>0:raise Ex.ItemPlacementException(str(G)+' unplaced kongs.')
+		if A.settings.kongs_for_progression:
+			E=[A for A in J];B=[B for B in A.settings.starting_kong_list];K=A.settings.starting_kongs_count+1;F=1;Q=_C
+			while len(B)!=5:
+				C={};H=_A
+				if A.settings.level_order[F]==Levels.FranticFactory and Locations.ChunkyKong in E and A.settings.chunky_freeing_kong in B:E.remove(Locations.ChunkyKong);H=ItemPool.GetKongForItem(LocationList[Locations.ChunkyKong].item)
+				if A.settings.level_order[F]==Levels.JungleJapes and Locations.DiddyKong in E and A.settings.diddy_freeing_kong in B:
+					E.remove(Locations.DiddyKong);C=GetKongUnlockingMovesAndValidLocations(A,Locations.DiddyKong)
+					for L in D:C.pop(L,_A)
+					H=ItemPool.GetKongForItem(LocationList[Locations.DiddyKong].item)
+				if A.settings.level_order[F]==Levels.AngryAztec and Locations.TinyKong in E and A.settings.tiny_freeing_kong in B:
+					E.remove(Locations.TinyKong);C=GetKongUnlockingMovesAndValidLocations(A,Locations.TinyKong)
+					for L in D:C.pop(L,_A)
+					H=ItemPool.GetKongForItem(LocationList[Locations.TinyKong].item)
+				elif A.settings.level_order[F]==Levels.AngryAztec and Locations.LankyKong in E and A.settings.lanky_freeing_kong in B and(Kongs.diddy in B or A.settings.open_levels)and(Kongs.donkey in B or Kongs.lanky in B or Kongs.tiny in B):
+					E.remove(Locations.LankyKong);C=GetKongUnlockingMovesAndValidLocations(A,Locations.LankyKong,B)
+					for L in D:C.pop(L,_A)
+					H=ItemPool.GetKongForItem(LocationList[Locations.LankyKong].item)
+				while any(C):
+					BlockAccessToLevel(A.settings,K);Reset();X=list(C.keys());G=PlaceItems(A.settings,_E,X,ownedItems=ItemPool.OwnedKongMoves(B),validLocations=C)
+					if G>0:raise Ex.ItemPlacementException('Failed to place items that would unlock Kong number '+str(len(B)+1)+', '+H.name)
+					D.extend(list(C.keys()));O={}
+					if not A.settings.open_levels:
+						for N in list(C.keys()):
+							P=_A
+							for V in C[N]:
+								if LocationList[V].item==N:P=V;break
+							if(P in ItemPool.AztecCrankyMoveLocations or P in ItemPool.AztecFunkyMoveLocations)and Items.Guitar not in D:Y=ItemPool.DiddyMoveLocations.copy();O[Items.Guitar]=Y
+							if P in ItemPool.ForestFunkyMoveLocations:
+								if len(B==1):raise Ex.ItemPlacementException('Fungi Funky logic issue - SEND THIS TO A DEV!')
+								if Items.Feather not in D:Z=ItemPool.TinyMoveLocations.copy();O[Items.Feather]=Z
+								if Items.Pineapple not in D:a=ItemPool.ChunkyMoveLocations.copy();O[Items.Pineapple]=a
+					C=O
+				if H is not _A:B.append(H);K=len(B)+1;Q=_C
+				else:
+					if F==K and Q:raise Ex.ItemPlacementException('Kongs logically locked behind themselves. Only '+str(len(B))+' kongs logically accessible.')
+					elif F==K:Q=_B
+					F=F%K+1
+			BlockAccessToLevel(A.settings,100)
+	if A.settings.shuffle_items=='moves':b,c=ShuffleSharedMoves(A);M.extend(b);R.update(c)
+	Reset();M=[A for A in M if A not in D];G=PlaceItems(A.settings,_E,M,[B for B in ItemPool.AllItems(A.settings)],validLocations=R)
+	if G>0:raise Ex.ItemPlacementException(str(G)+' unplaced items.')
 def FillKongsAndMovesForLevelOrder(spoiler):
 	'Shuffle Kongs and Moves accounting for level order restrictions.';A=spoiler;ItemPool.PlaceConstants(A.settings);B=0
 	while _B:
@@ -338,8 +448,12 @@ def FillKongsAndMovesForLevelOrder(spoiler):
 			if not VerifyWorldWithWorstCoinUsage(A.settings):raise Ex.GameNotBeatableException(_F)
 			return
 		except Ex.FillException as C:
+			Reset();Logic.ClearAllLocations();B+=1
 			if B==20:js.postMessage(_G);raise C
-			B+=1;js.postMessage(_H+str(B));Reset();Logic.ClearAllLocations()
+			if B%5==0:
+				js.postMessage('Retrying fill really hard. Tries: '+str(B));A.settings.shuffle_prices()
+				if A.settings.shuffle_loading_zones==_I:ShuffleExits.ShuffleLevelOrderWithRestrictions(A.settings);A.UpdateExits()
+			else:js.postMessage(_H+str(B))
 def GetAccessibleKongLocations(levels,ownedKongs):
 	'Get all kong locations within the provided levels which are reachable by owned kongs.';A=ownedKongs;B=[]
 	for C in levels:
@@ -371,7 +485,7 @@ def BlockAccessToLevel(settings,level):
 def Generate_Spoiler(spoiler):
 	'Generate a complete spoiler based on input settings.';A=spoiler;global LogicVariables;LogicVariables=LogicVarHolder(A.settings);InitKasplatMap(LogicVariables)
 	if A.settings.kongs_for_progression:
-		if A.settings.shuffle_loading_zones=='levels':ShuffleExits.ShuffleLevelOrderWithRestrictions(A.settings);A.UpdateExits()
+		if A.settings.shuffle_loading_zones==_I:ShuffleExits.ShuffleLevelOrderWithRestrictions(A.settings);A.UpdateExits()
 		WipeProgressionRequirements(A.settings);ShuffleMisc(A);FillKongsAndMovesForLevelOrder(A)
 	else:
 		if A.settings.shuffle_loading_zones!='none':ShuffleExits.ExitShuffle(A.settings);A.UpdateExits()
