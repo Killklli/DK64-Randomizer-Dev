@@ -14,3 +14,4 @@ class GameNotBeatableException(FillException):'Exception triggered when all item
 class VanillaItemsGameNotBeatableException(FillException):'Exception triggered when all locations have vanilla items but the game was not beatable.'
 class MusicPlacementExceededMapThreshold(Exception):'Exception triggered when shuffled music leads to a map having too big music files.'
 class MusicAttemptCountExceeded(Exception):'Exception triggered when too many attempts were made to place music.'
+class BossOutOfLocationsException(FillException):'Exception triggered when there are no valid levels to put a boss.'
