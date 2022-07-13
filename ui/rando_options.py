@@ -1,12 +1,13 @@
 'Options for the main rando tab.'
-_f='gnawty_barrels'
-_e='move_rando'
-_d='krool_random'
-_c='starting_kongs_count'
-_b='random_music'
-_a='enguarde'
-_Z='chunky'
-_Y='vanilla'
+_g='gnawty_barrels'
+_f='move_rando'
+_e='krool_random'
+_d='starting_kongs_count'
+_c='random_music'
+_b='enguarde'
+_a='chunky'
+_Z='vanilla'
+_Y='level_order'
 _X='boss_kong_rando'
 _W='boss_location_rando'
 _V='randomize_cb_required_amounts'
@@ -108,24 +109,24 @@ def toggle_counts_boxes(event):
 @bind(_E,_O)
 def update_boss_required(evt):
 	'Disable certain page flags depending on checkboxes.';E=document.getElementById(_O);A=document.getElementById(_W);B=document.getElementById(_X);C=document.getElementById(_M);D=document.getElementById('move_off')
-	if E.value=='level_order':
+	if E.value==_Y:
 		A.setAttribute(_A,_A);A.checked=_B;B.setAttribute(_A,_A);B.checked=_B;C.setAttribute(_A,_A);C.checked=_B
 		if D.selected is _B:document.getElementById('move_on').selected=_B
 		D.setAttribute(_A,_A)
-	elif E.value==_Y and C.checked:A.setAttribute(_A,_A);A.checked=_B;B.setAttribute(_A,_A);B.checked=_B;C.removeAttribute(_A);D.removeAttribute(_A)
+	elif E.value==_Z and C.checked:A.setAttribute(_A,_A);A.checked=_B;B.setAttribute(_A,_A);B.checked=_B;C.removeAttribute(_A);D.removeAttribute(_A)
 	else:
 		try:B.removeAttribute(_A);A.removeAttribute(_A);C.removeAttribute(_A);D.removeAttribute(_A)
 		except Exception:pass
 @bind(_F,_M)
 def disable_boss_rando(evt):
-	'Disable Boss Kong and Boss Location Rando if Vanilla levels and Kong Rando.';D=document.getElementById(_O);A=document.getElementById(_W);B=document.getElementById(_X);C=document.getElementById(_M)
-	if C.checked and D.value==_Y:A.setAttribute(_A,_A);A.checked=_B;B.setAttribute(_A,_A);B.checked=_B
-	else:B.removeAttribute(_A);A.removeAttribute(_A);C.removeAttribute(_A)
+	'Disable Boss Kong and Boss Location Rando if Vanilla levels and Kong Rando.';C=document.getElementById(_O);A=document.getElementById(_W);B=document.getElementById(_X);D=document.getElementById(_M)
+	if D.checked and C.value==_Z or C.value==_Y:A.setAttribute(_A,_A);A.checked=_B;B.setAttribute(_A,_A);B.checked=_B
+	else:B.removeAttribute(_A);A.removeAttribute(_A);D.removeAttribute(_A)
 @bind(_F,_P)
 def disable_colors(evt):
 	'Disable color options when Randomize All is selected.';A=_C
 	if js.document.getElementById(_P).checked:A=_B
-	for C in ['dk','diddy','tiny','lanky',_Z,'rambi',_a]:
+	for C in ['dk','diddy','tiny','lanky',_a,'rambi',_b]:
 		B=js.document.getElementById(f"{C}_colors")
 		try:
 			if A:B.setAttribute(_A,_A)
@@ -142,40 +143,40 @@ def disable_tag_spawn(evt):
 def enable_tag_anywhere(evt):
 	"Enable 'Tag Anywhere' if 'Disable Tag Spawn' option is on."
 	if js.document.getElementById(_J).checked:js.document.getElementById(_Q).checked=_B
-@bind(_F,_b)
+@bind(_F,_c)
 def disable_music(evt):
 	'Disable music options when Randomize All is selected.';A=_C
-	if js.document.getElementById(_b).checked:A=_B
+	if js.document.getElementById(_c).checked:A=_B
 	for C in ['bgm','fanfares','events']:
 		B=js.document.getElementById(f"music_{C}")
 		try:
 			if A:B.setAttribute(_A,_A)
 			else:B.removeAttribute(_A)
 		except AttributeError:pass
-@bind(_E,_c)
+@bind(_E,_d)
 def enable_kong_rando(evt):
 	'Enable Kong Rando if less than 5 starting kongs.';A=js.document.getElementById(_M)
-	if js.document.getElementById(_c).value=='5':A.checked=_C;A.setAttribute(_A,_A)
+	if js.document.getElementById(_d).value=='5':A.checked=_C;A.setAttribute(_A,_A)
 	else:A.removeAttribute(_A)
-@bind(_F,_d)
+@bind(_F,_e)
 def disable_krool_phases(evt):
 	'Disable K Rool options when Randomize All is selected.';A=_C;B=js.document.getElementById('krool_phase_count')
-	if js.document.getElementById(_d).checked:A=_B
+	if js.document.getElementById(_e).checked:A=_B
 	try:
 		if A:B.setAttribute(_A,_A)
 		else:B.removeAttribute(_A)
 	except AttributeError:pass
-@bind(_E,_e)
+@bind(_E,_f)
 def disable_prices(evt):
-	'Disable prices if move rando is set to start with all moves.';B=js.document.getElementById(_e);A=js.document.getElementById('random_prices')
+	'Disable prices if move rando is set to start with all moves.';B=js.document.getElementById(_f);A=js.document.getElementById('random_prices')
 	try:
 		if B.value=='start_with':A.setAttribute(_A,_A)
 		else:A.removeAttribute(_A)
 	except AttributeError:pass
-@bind(_F,_f)
+@bind(_F,_g)
 def disable_barrel_rando(evt):
 	'Disable Bonus Barrel Rando when Oops All Beaver Bother is selected.';B=_C;A=js.document.getElementById('bonus_barrel_rando')
-	if js.document.getElementById(_f).checked:B=_B
+	if js.document.getElementById(_g).checked:B=_B
 	try:
 		if B:A.setAttribute(_A,_A);A.checked=_C
 		else:A.removeAttribute(_A)
@@ -206,7 +207,7 @@ def preset_select_changed(event):
 @bind(_E,'enguarde_colors')
 def hide_rgb(event):
 	'Show RGB Selector if Custom Color is selected.'
-	for A in ['dk','diddy','lanky','tiny',_Z,'rambi',_a]:
+	for A in ['dk','diddy','lanky','tiny',_a,'rambi',_b]:
 		B=_B;C=js.document.getElementById(f"{A}_custom")
 		if js.document.getElementById(f"{A}_colors").value=='custom':B=_C
 		try:
