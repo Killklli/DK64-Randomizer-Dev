@@ -452,7 +452,7 @@ def FillKongsAndMoves(spoiler):
 					E=E%H+1
 			BlockAccessToLevel(A.settings,100)
 	if A.settings.shuffle_items=='moves':d,e=ShuffleSharedMoves(A);K.extend(d);S.update(e)
-	Reset();K=[A for A in K if A not in D];N=PlaceItems(A.settings,_E,K,[B for B in ItemPool.AllItems(A.settings)],validLocations=S)
+	Reset();K=[A for A in K if A not in D];N=PlaceItems(A.settings,_E,K,[],validLocations=S)
 	if N>0:raise Ex.ItemPlacementException(str(N)+' unplaced items.')
 def FillKongsAndMovesForLevelOrder(spoiler):
 	'Shuffle Kongs and Moves accounting for level order restrictions.';A=spoiler;ItemPool.PlaceConstants(A.settings);B=0
