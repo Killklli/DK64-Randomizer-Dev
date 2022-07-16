@@ -74,6 +74,7 @@ def patching_response(responded_data):
 	if A.settings.disable_shop_hints:ROM().seek(B+315);ROM().write(0)
 	if A.settings.open_levels:ROM().seek(B+295);ROM().write(1)
 	if A.settings.shorten_boss:ROM().seek(B+299);ROM().write(1)
+	if A.settings.fast_warps:ROM().seek(B+298);ROM().write(1)
 	H=[0,1,2,3,4,5,6,7]
 	if len(A.settings.krool_keys_required)>0:
 		for F in A.settings.krool_keys_required:
