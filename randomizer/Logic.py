@@ -116,12 +116,7 @@ class LogicVarHolder:
 		if time==Time.Day:return Regions[A].dayAccess
 		elif time==Time.Night:return Regions[A].nightAccess
 		else:return Regions[A].dayAccess or Regions[A].nightAccess
-	def KasplatAccess(A,location):
-		'Use the kasplat map to check kasplat logic for blueprint locations.';C=location;B=A.kasplat_map[C]
-		if C==Locations.GalleonKasplatGoldTower:
-			if B==Kongs.diddy:return Events.WaterSwitch in A.Events and A.IsKong(Kongs.diddy)
-			else:return Events.TreasureRoomTeleporterUnlocked in A.Events and A.HasAccess(randomizer.Enums.Regions.Regions.Shipyard,B)
-		return A.IsKong(B)
+	def KasplatAccess(A,location):'Use the kasplat map to check kasplat logic for blueprint locations.';B=A.kasplat_map[location];return A.IsKong(B)
 	def CanBuy(A,location):'Check if there are enough coins to purchase this location.';return CanBuy(location,A)
 	def CanAccessKRool(A):'Make sure that each required key has been turned in.';return all((not B not in A.Events for B in A.settings.krool_keys_required))
 	def IsBossReachable(A,level):'Check if the boss banana requirement is met.';B=level;return A.HasEnoughKongs(B)and sum(A.ColoredBananas[B])>=A.settings.BossBananas[B]
