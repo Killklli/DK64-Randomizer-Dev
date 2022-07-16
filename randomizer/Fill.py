@@ -515,14 +515,11 @@ def Generate_Spoiler(spoiler):
 def ShuffleMisc(spoiler):
 	'Shuffle miscellaneous objects outside of main fill algorithm, including Kasplats, Bonus barrels, and bananaport warps.';A=spoiler;KasplatShuffle(LogicVariables);A.human_kasplats={};A.UpdateKasplats(LogicVariables.kasplat_map)
 	if A.settings.bonus_barrels in(_D,'all_beaver_bother'):BarrelShuffle(A.settings);A.UpdateBarrels()
-	if A.settings.bananaport_rando:D=[];E={};ShuffleWarps(D,E);A.bananaport_replacements=D.copy();A.human_warp_locations=E
+	if A.settings.bananaport_rando:C=[];D={};ShuffleWarps(C,D);A.bananaport_replacements=C.copy();A.human_warp_locations=D
 	if A.settings.activate_all_bananaports:
-		I=set([BananaportVanilla[A].map_id for A in Warps])
-		for F in I:
-			J=[BananaportVanilla[A]for A in Warps if BananaportVanilla[A].map_id==F]
-			for B in J:
-				C=[BananaportVanilla[A]for A in Warps if BananaportVanilla[A].map_id==F and BananaportVanilla[A].new_warp==B.new_warp and BananaportVanilla[A].name!=B.name][0]
-				if B.region_id!=C.region_id and C.region_id!=Regions.TreasureRoomDiddyGoldTower and C.region_id!=Regions.AztecDonkeyQuicksandCave:
-					G=Logic.Regions[B.region_id];H=TransitionFront(C.region_id,lambda l:_B)
-					if G==Regions.JapesTopOfMountain:H.logic=lambda l:Events.JapesDiddySwitch2 in l.Events and l.diddy
-					G.exits.append(H)
+		G=set([BananaportVanilla[A].map_id for A in Warps])
+		for E in G:
+			H=[BananaportVanilla[A]for A in Warps if BananaportVanilla[A].map_id==E]
+			for B in H:
+				F=[BananaportVanilla[A]for A in Warps if BananaportVanilla[A].map_id==E and BananaportVanilla[A].new_warp==B.new_warp and BananaportVanilla[A].name!=B.name][0]
+				if B.region_id!=F.region_id:I=Logic.Regions[B.region_id];J=TransitionFront(F.region_id,lambda l:_B);I.exits.append(J)
