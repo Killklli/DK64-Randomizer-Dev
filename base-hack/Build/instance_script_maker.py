@@ -52,59 +52,61 @@ with open(base_rom,_D)as fh:
 								script_end=read_location;script_size=script_end-script_start;tp.seek(script_start);script_list.append({_B:id,_C:behav_9C,_F:tp.read(script_size)})
 					if os.path.exists(temp_file):os.remove(temp_file)
 					for file in files:
-						with open(f"{f}/{file}",'r')as script_file:
-							script_info=script_file.readlines();contains_code=_G;contains_data=_G;code_start=-1;data_end=len(script_info)-1;data_start=-1
-							for (line_index,script_line) in enumerate(script_info):
-								if'.code'in script_line:contains_code=_H;code_start=line_index+1;data_end=line_index
-								elif'.data'in script_line:contains_data=_H;data_start=line_index+1
-							script_data={_B:-1,_C:-1}
-							if contains_data and data_start>-1:
-								for data_line in script_info[data_start:data_end]:
-									data_line=data_line.replace('\n','')
-									for attr in [_B,_C]:
-										if f"{attr} = "in data_line:
-											val=data_line.split(f"{attr} = ")[1]
-											if'0x'in val:val=int(val,16)
-											else:val=int(val)
-											script_data[attr]=val
-							if contains_code and code_start>-1:
-								resetCond(_H)
-								for code_line in script_info[code_start:]:
-									code_line=code_line.replace('\n','');code_split=code_line.split(' ')
-									if'COND'in code_line.upper():
-										cond_or=0
-										if'CONDINV'in code_line.upper():cond_or=32768
-										arr=[int(code_split[1])|cond_or]
-										for i in range(3):arr.append(int(code_split[3+i]))
-										new_conds.append(arr);new_cond_count+=1
-									elif'EXEC'in code_line.upper():
-										arr=[int(code_split[1])]
-										for i in range(3):arr.append(int(code_split[3+i]))
-										new_execs.append(arr);new_exec_count+=1
-									elif'ENDBLOCK'in code_line.upper():
-										arr=[new_cond_count]
-										for x_i in new_conds:arr.extend(x_i)
-										arr.append(new_exec_count)
-										for x_i in new_execs:arr.extend(x_i)
-										new_blocks.append(arr);resetCond(_G);new_block_count+=1
-							if script_data[_B]>-1:
-								found_existing=_G;found_index=-1;found_9c=-1
-								for (script_index,script_item) in enumerate(script_list):
-									if script_item[_B]==script_data[_B]:found_index=script_index;found_9c=script_item[_C];found_existing=_H
-								if found_existing and found_index>-1:
-									data=[script_data[_B],new_block_count,found_9c]
-									for n in new_blocks:data.extend(n)
-									with open(temp_file,_E)as tp:
-										for d in data:d=d%65536;tp.write(d.to_bytes(2,_A))
-									with open(temp_file,_D)as tp:script_list[found_index][_F]=tp.read()
-									if os.path.exists(temp_file):os.remove(temp_file)
-								else:
-									data=[script_data[_B],new_block_count,script_data[_C]]
-									for n in new_blocks:data.extend(n)
-									with open(temp_file,_E)as tp:
-										for d in data:d=d%65536;tp.write(d.to_bytes(2,_A))
-									with open(temp_file,_D)as tp:script_list.append({_B:script_data[_B],_C:script_data[_C],_F:tp.read()})
-									if os.path.exists(temp_file):os.remove(temp_file)
+						if file!='.map':
+							with open(f"{f}/{file}",'r')as script_file:
+								script_info=script_file.readlines();contains_code=_G;contains_data=_G;code_start=-1;data_end=len(script_info)-1;data_start=-1
+								for (line_index,script_line) in enumerate(script_info):
+									if'.code'in script_line:contains_code=_H;code_start=line_index+1;data_end=line_index
+									elif'.data'in script_line:contains_data=_H;data_start=line_index+1
+								script_data={_B:-1,_C:-1}
+								if contains_data and data_start>-1:
+									for data_line in script_info[data_start:data_end]:
+										data_line=data_line.replace('\n','')
+										for attr in [_B,_C]:
+											if f"{attr} = "in data_line:
+												val=data_line.split(f"{attr} = ")[1]
+												if'0x'in val:val=int(val,16)
+												else:val=int(val)
+												script_data[attr]=val
+								print(f"Compiling {file.replace('.script','')} ({hex(script_data[_B])})")
+								if contains_code and code_start>-1:
+									resetCond(_H)
+									for code_line in script_info[code_start:]:
+										code_line=code_line.replace('\n','');code_split=code_line.split(' ')
+										if'COND'in code_line.upper():
+											cond_or=0
+											if'CONDINV'in code_line.upper():cond_or=32768
+											arr=[int(code_split[1])|cond_or]
+											for i in range(3):arr.append(int(code_split[3+i]))
+											new_conds.append(arr);new_cond_count+=1
+										elif'EXEC'in code_line.upper():
+											arr=[int(code_split[1])]
+											for i in range(3):arr.append(int(code_split[3+i]))
+											new_execs.append(arr);new_exec_count+=1
+										elif'ENDBLOCK'in code_line.upper():
+											arr=[new_cond_count]
+											for x_i in new_conds:arr.extend(x_i)
+											arr.append(new_exec_count)
+											for x_i in new_execs:arr.extend(x_i)
+											new_blocks.append(arr);resetCond(_G);new_block_count+=1
+								if script_data[_B]>-1:
+									found_existing=_G;found_index=-1;found_9c=-1
+									for (script_index,script_item) in enumerate(script_list):
+										if script_item[_B]==script_data[_B]:found_index=script_index;found_9c=script_item[_C];found_existing=_H
+									if found_existing and found_index>-1:
+										data=[script_data[_B],new_block_count,found_9c]
+										for n in new_blocks:data.extend(n)
+										with open(temp_file,_E)as tp:
+											for d in data:d=d%65536;tp.write(d.to_bytes(2,_A))
+										with open(temp_file,_D)as tp:script_list[found_index][_F]=tp.read()
+										if os.path.exists(temp_file):os.remove(temp_file)
+									else:
+										data=[script_data[_B],new_block_count,script_data[_C]]
+										for n in new_blocks:data.extend(n)
+										with open(temp_file,_E)as tp:
+											for d in data:d=d%65536;tp.write(d.to_bytes(2,_A))
+										with open(temp_file,_D)as tp:script_list.append({_B:script_data[_B],_C:script_data[_C],_F:tp.read()})
+										if os.path.exists(temp_file):os.remove(temp_file)
 					with open(f"{f.replace('./','')}.raw",_E)as new_raw:
 						new_raw.write(len(script_list).to_bytes(2,_A))
 						for script in script_list:new_raw.write(script[_F])
