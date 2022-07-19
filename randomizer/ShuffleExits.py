@@ -59,7 +59,9 @@ def AssumeExits(settings,frontpool,backpool,newpool):
 		frontpool.append(A);backpool.append(A);exit.shuffledId=_A;exit.toBeShuffled=_B;D=TransitionFront(exit.back.regionId,lambda l:_B,A,_B);AddRootExit(D)
 def ShuffleExits(settings):
 	'Shuffle exit pools depending on settings.';A=settings
-	if A.shuffle_loading_zones==_D:ShuffleLevelExits()
+	if A.shuffle_loading_zones==_D:
+		if A.kongs_for_progression:ShuffleLevelOrderWithRestrictions(A)
+		else:ShuffleLevelExits()
 	elif A.shuffle_loading_zones=='all':B=[];C=[];AssumeExits(A,B,C,list(ShufflableExits.keys()));ShuffleExitsInPool(A,B,C)
 	if A.shuffle_loading_zones==_D:UpdateLevelProgression(A)
 def ExitShuffle(settings):

@@ -433,7 +433,7 @@ def FillKongsAndMoves(spoiler):
 					for J in D:C.pop(J,_A)
 					G=ItemPool.GetKongForItem(LocationList[Locations.LankyKong].item)
 				while any(C):
-					BlockAccessToLevel(A.settings,H);Reset();Z=list(C.keys());N=PlaceItems(A.settings,_E,Z,ownedItems=ItemPool.OwnedKongMoves(B),validLocations=C)
+					BlockAccessToLevel(A.settings,H);Reset();Z=list(C.keys());N=PlaceItems(A.settings,_E,Z,ownedItems=[],validLocations=C)
 					if N>0:raise Ex.ItemPlacementException('Failed to place items that would unlock Kong number '+str(len(B)+1)+', '+G.name)
 					D.extend(list(C.keys()));O={}
 					if not A.settings.open_levels:
@@ -468,7 +468,7 @@ def FillKongsAndMovesForLevelOrder(spoiler):
 			if B==20:js.postMessage(_G);raise C
 			if B%5==0:
 				js.postMessage('Retrying fill really hard. Tries: '+str(B));A.settings.shuffle_prices()
-				if A.settings.shuffle_loading_zones==_J:ShuffleExits.ShuffleLevelOrderWithRestrictions(A.settings);A.UpdateExits()
+				if A.settings.shuffle_loading_zones==_J:ShuffleExits.ShuffleExits(A.settings);A.UpdateExits()
 			else:js.postMessage(_H+str(B))
 def GetAccessibleKongLocations(levels,ownedKongs):
 	'Get all kong locations within the provided levels which are reachable by owned kongs.';A=ownedKongs;B=[]
@@ -501,7 +501,7 @@ def BlockAccessToLevel(settings,level):
 def Generate_Spoiler(spoiler):
 	'Generate a complete spoiler based on input settings.';A=spoiler;global LogicVariables;LogicVariables=LogicVarHolder(A.settings);InitKasplatMap(LogicVariables)
 	if A.settings.kongs_for_progression:
-		if A.settings.shuffle_loading_zones==_J:ShuffleExits.ShuffleLevelOrderWithRestrictions(A.settings);A.UpdateExits()
+		if A.settings.shuffle_loading_zones==_J:ShuffleExits.ShuffleExits(A.settings);A.UpdateExits()
 		WipeProgressionRequirements(A.settings);ShuffleMisc(A);FillKongsAndMovesForLevelOrder(A)
 	else:
 		if A.settings.shuffle_loading_zones!='none':ShuffleExits.ExitShuffle(A.settings);A.UpdateExits()

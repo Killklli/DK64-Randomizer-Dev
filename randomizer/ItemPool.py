@@ -34,13 +34,6 @@ def AllItems(settings):
 	if B.kong_rando:A.extend(Kongs(B))
 	return A
 def AllKongMoves():'Return all moves.';A=[];A.extend(DonkeyMoves);A.extend(DiddyMoves);A.extend(LankyMoves);A.extend(TinyMoves);A.extend(ChunkyMoves);A.extend(ImportantSharedMoves);return A
-def OwnedKongMoves(kongs):
-	'Return all moves for the given list of Kongs.';A=kongs;B=[]
-	if KongObject.Kongs.donkey in A:B.extend(DonkeyMoves)
-	if KongObject.Kongs.diddy in A:B.extend(DiddyMoves)
-	if KongObject.Kongs.lanky in A:B.extend(LankyMoves)
-	if KongObject.Kongs.tiny in A:B.extend(TinyMoves)
-	if KongObject.Kongs.chunky in A:B.extend(ChunkyMoves)
 def Blueprints(settings):'Return all blueprint items.';A=[Items.DKIslesDonkeyBlueprint,Items.DKIslesDiddyBlueprint,Items.DKIslesLankyBlueprint,Items.DKIslesTinyBlueprint,Items.DKIslesChunkyBlueprint,Items.JungleJapesDonkeyBlueprint,Items.JungleJapesDiddyBlueprint,Items.JungleJapesLankyBlueprint,Items.JungleJapesTinyBlueprint,Items.JungleJapesChunkyBlueprint,Items.AngryAztecDonkeyBlueprint,Items.AngryAztecDiddyBlueprint,Items.AngryAztecLankyBlueprint,Items.AngryAztecTinyBlueprint,Items.AngryAztecChunkyBlueprint,Items.FranticFactoryDonkeyBlueprint,Items.FranticFactoryDiddyBlueprint,Items.FranticFactoryLankyBlueprint,Items.FranticFactoryTinyBlueprint,Items.FranticFactoryChunkyBlueprint,Items.GloomyGalleonDonkeyBlueprint,Items.GloomyGalleonDiddyBlueprint,Items.GloomyGalleonLankyBlueprint,Items.GloomyGalleonTinyBlueprint,Items.GloomyGalleonChunkyBlueprint,Items.FungiForestDonkeyBlueprint,Items.FungiForestDiddyBlueprint,Items.FungiForestLankyBlueprint,Items.FungiForestTinyBlueprint,Items.FungiForestChunkyBlueprint,Items.CrystalCavesDonkeyBlueprint,Items.CrystalCavesDiddyBlueprint,Items.CrystalCavesLankyBlueprint,Items.CrystalCavesTinyBlueprint,Items.CrystalCavesChunkyBlueprint,Items.CreepyCastleDonkeyBlueprint,Items.CreepyCastleDiddyBlueprint,Items.CreepyCastleLankyBlueprint,Items.CreepyCastleTinyBlueprint,Items.CreepyCastleChunkyBlueprint];return A
 def BlueprintAssumedItems(settings):'Items which are assumed to be owned while placing blueprints.';A=settings;return LowPriorityItems(A)+ExcessItems(A)
 def Keys():'Return all key items.';A=[Items.JungleJapesKey,Items.AngryAztecKey,Items.FranticFactoryKey,Items.GloomyGalleonKey,Items.FungiForestKey,Items.CrystalCavesKey,Items.CreepyCastleKey,Items.HideoutHelmKey];return A
