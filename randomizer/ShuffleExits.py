@@ -94,32 +94,29 @@ def ShuffleLevelOrderWithRestrictions(settings):
 	if _A in B.values():raise Ex.EntrancePlacementException('Invalid level order with fewer than the 7 required main levels.')
 	A.level_order=B;ShuffleLevelExits(B)
 def ShuffleLevelOrderForOneStartingKong(settings):
-	'Determine level order given only starting with one kong and the need to find more kongs along the way.';L='free';B=settings;A={1,2,3,4,5,6,7}
-	if B.starting_kong==Kongs.diddy:D=random.randint(1,4)
+	'Determine level order given only starting with one kong and the need to find more kongs along the way.';J='free';C=settings;A={1,2,3,4,5,6,7}
+	if C.starting_kong==Kongs.diddy:D=random.randint(1,4)
 	else:D=random.randint(2,4)
 	A.remove(D);F=[]
 	if D==4:
-		if B.starting_kong==Kongs.tiny and B.random_prices!=L:F=list(A.intersection({2,3}))
+		if C.starting_kong==Kongs.tiny and C.random_prices!=J:F=list(A.intersection({2,3}))
 		else:F=list(A.intersection({1,3}))
-	elif B.starting_kong==Kongs.tiny and B.random_prices!=L:F=list(A.intersection({2,3,4,5}))
+	elif C.starting_kong==Kongs.tiny and C.random_prices!=J:F=list(A.intersection({2,3,4,5}))
 	else:F=list(A.intersection({1,2,3,4,5}))
-	E=random.choice(F);A.remove(E);C=[]
-	if D==4:C=list(A.intersection({1,2,3}))
+	E=random.choice(F);A.remove(E);B=[]
+	if D==4:B=list(A.intersection({1,2,3}))
 	elif D==3:
-		if E<3:C=list(A.intersection({1,2,3,4,5}))
-		else:C=list(A.intersection({1,2}))
-	elif D==2 and B.starting_kong!=Kongs.diddy and B.starting_kong!=Kongs.chunky:
-		if E==1:C=list(A.intersection({3,4,5}))
-		else:C=list(A.intersection({1}))
-	elif D==2 and B.starting_kong==Kongs.chunky:
-		if E in(1,3):C=list(A.intersection({3,4,5}))
-		else:C=list(A.intersection({1,2,3}))
-	elif E<5:C=list(A.intersection({1,2,3,4,5}))
-	else:C=list(A.intersection({1,2,3,4}))
-	I=random.choice(C);A.remove(I);H=[]
-	if not B.open_levels and B.starting_kong in(Kongs.tiny,Kongs.donkey):H=list(A.intersection({2,3,4,5,6,7}))
-	else:H=list(A)
-	J=random.choice(H);A.remove(J);G=list(A);random.shuffle(G);M=G.pop();N=G.pop();O=G.pop();K={E:Levels.JungleJapes,D:Levels.AngryAztec,I:Levels.FranticFactory,M:Levels.GloomyGalleon,N:Levels.FungiForest,J:Levels.CrystalCaves,O:Levels.CreepyCastle};B.level_order=K;return K
+		if E<3:B=list(A.intersection({1,2,3,4,5}))
+		else:B=list(A.intersection({1,2}))
+	elif D==2 and C.starting_kong!=Kongs.diddy and C.starting_kong!=Kongs.chunky:
+		if E==1:B=list(A.intersection({3,4,5}))
+		else:B=list(A.intersection({1}))
+	elif D==2 and C.starting_kong==Kongs.chunky:
+		if E in(1,3):B=list(A.intersection({3,4,5}))
+		else:B=list(A.intersection({1,2,3}))
+	elif E<5:B=list(A.intersection({1,2,3,4,5}))
+	else:B=list(A.intersection({1,2,3,4}))
+	H=random.choice(B);A.remove(H);G=list(A);random.shuffle(G);K=G.pop();L=G.pop();M=G.pop();N=G.pop();I={E:Levels.JungleJapes,D:Levels.AngryAztec,H:Levels.FranticFactory,L:Levels.GloomyGalleon,M:Levels.FungiForest,K:Levels.CrystalCaves,N:Levels.CreepyCastle};C.level_order=I;return I
 def ShuffleLevelOrderForMultipleStartingKongs(settings):
 	'Determine level order given starting with 2 to 4 kongs and the need to find more kongs along the way.';A=settings;H={1,2,3,4,5,6,7};B={1:_A,2:_A,3:_A,4:_A,5:_A,6:_A,7:_A};D={Levels.JungleJapes:1 if Locations.DiddyKong in A.kong_locations else 0,Levels.AngryAztec:len([B for B in[Locations.LankyKong,Locations.TinyKong]if B in A.kong_locations]),Levels.FranticFactory:1 if Locations.ChunkyKong in A.kong_locations else 0,Levels.GloomyGalleon:0,Levels.FungiForest:0,Levels.CrystalCaves:0,Levels.CreepyCastle:0};M=[A[0]for A in sorted(D.items(),key=lambda x:x[1],reverse=_B)];F=sum(D.values())
 	for I in M:
@@ -133,7 +130,6 @@ def ShuffleLevelOrderForMultipleStartingKongs(settings):
 					elif Locations.LankyKong in A.kong_locations:
 						if Kongs.diddy not in A.starting_kong_list or Kongs.donkey not in A.starting_kong_list and Kongs.lanky not in A.starting_kong_list and Kongs.tiny not in A.starting_kong_list:break
 				elif B[C]==Levels.JungleJapes and D[Levels.JungleJapes]==0 and Kongs.donkey not in A.starting_kong_list and Kongs.diddy not in A.starting_kong_list and Kongs.chunky not in A.starting_kong_list:break
-				elif not A.open_levels and B[C]==Levels.CrystalCaves and Kongs.diddy not in A.starting_kong_list and Kongs.lanky not in A.starting_kong_list and Kongs.chunky not in A.starting_kong_list:break
 			J.append(C)
 			if B[C]is not _A:G=G+D[B[C]];E=E+D[B[C]]
 		K=list(H.intersection(J))
