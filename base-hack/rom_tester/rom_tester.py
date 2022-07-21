@@ -1,9 +1,10 @@
 "ROM TESTER.\n\nDisplays all values in the variable space in an easier-to-read format rather than a hex editor\n***PURELY*** for debugging purposes\nTo use:\n    - Place your modified Rando ROM in /rom_tester\n    - Run this script\n    - This script will spit out details for ALL .z64 files in /rom_tester, so if you only want data for a specific rom, make sure that's the only one in /rom_tester\n"
+_C='Factory'
 _B='map'
 _A='name'
 import os
 from typing import BinaryIO
-levels=['Japes','Aztec','Factory','Galleon','Fungi','Caves','Castle','Helm']
+levels=['Japes','Aztec',_C,'Galleon','Fungi','Caves','Castle','Helm']
 keys=[26,74,138,168,236,292,317]
 special_moves=['Baboon Blast','Strong Kong','Gorilla Grab','Chimpy Charge','Rocketbarrel','Simian Spring','Orangstand','Baboon Balloon','Orangstand Sprint','Mini Monkey','Pony Tail Twirl','Monkeyport','Hunky Chunky','Primate Punch','Gorilla Gone','Super Simian Slam','Super Duper Simian Slam','Coconut Gun','Peanut Popguns','Grape Shooter','Feather Bow','Pineapple Launcher','Bongo Blast','Guitar Gazump','Trombone Tremor','Saxaphone Slam','Triangle Trample','Homing Ammo','Sniper Scope','Ammo Belt 1','Ammo Belt 2','Instrument Upgrade 1','3rd Melon','Instrument Upgrade 2']
 kongs=['DK','Diddy','Lanky','Tiny','Chunky','Krusha','Rambi','Enguarde']
@@ -75,11 +76,20 @@ for f in files:
 			for x in range(8):output(f"\t\tKey {x+1}: {str(getValue(fh,280,1)>>x&1!=0)}")
 			output(f"\tDisable Drops: {str(getTrueFalse(fh,281,1))}");output(f"\tHash:")
 			for x in range(5):output(f"\t\t[{x}] - {str(getValue(fh,282+x,1))}")
-			output(f"\tMusic Rando On: {str(getTrueFalse(fh,287,1))}");output(f"\tShop Indicator On: {str(getTrueFalse(fh,292,1))}");output(f"\tWarp to Isles Enabled: {str(getTrueFalse(fh,293,1))}");output(f"\tColor Kongs: {str(getTrueFalse(fh,294,1))}");rgb_offset=295
-			for x in range(8):
-				if x!=5:output(f"\t\t{kongs[x]} RGB: {hex(getValue(fh,rgb_offset,3))}");rgb_offset+=3
-			output(f"\tLobbies Auto-opened:")
+			output(f"\tMusic Rando On: {str(getTrueFalse(fh,287,1))}");output(f"\tShop Indicator On: {str(getTrueFalse(fh,292,1))}");output(f"\tWarp to Isles Enabled: {str(getTrueFalse(fh,293,1))}");output(f"\tSkip Arcade Round 1: {str(getTrueFalse(fh,294,1))}");output(f"\tOpen Levels: {str(getTrueFalse(fh,295,1))}");output(f"\tActivate All Warps: {str(getTrueFalse(fh,296,1))}");output(f"\tD-Pad Visual Showed: {str(getTrueFalse(fh,297,1))}");output(f"\tFast Warps: {str(getTrueFalse(fh,298,1))}");output(f"\tShort Bosses: {str(getTrueFalse(fh,299,1))}");output(f"\tCoin Requirements")
+			for (x_i,x) in enumerate(['Caves Beetle Race','Aztec Beetle Race','Factory Car Race','Seal Race','Castle Car Race','Japes Minecart','Fungi Minecart','Castle Minecart']):output(f"\t\t{x}: {str(getValue(fh,300+x_i,1))}")
+			output(f"\tShop Hints: {str(getTrueFalse(fh,315,1))}");output(f"\tLobbies Auto-opened:")
 			for x in range(8):output(f"\t\t{levels[x]} Lobby Entrance: {str(getValue(fh,316,1)>>x&1!=0)}")
 			output(f"\tPerma-Lose Kongs: {str(getTrueFalse(fh,317,1))}");output(f"\tDisable Boss Kong Check: {str(getTrueFalse(fh,318,1))}");output(f"\tPrevent Tag Spawn: {str(getTrueFalse(fh,319,1))}");jetpac_req=getValue(fh,320,1)
 			if jetpac_req==0:output(f"\tJetpac Requirement: Vanilla")
 			else:output(f"\tJetpac Requirement: {jetpac_req} Medals")
+			output(f"\tStarting Kong: {str(getTrueFalse(fh,321,1))}");output(f"\tLocked Kongs:")
+			for (x_i,x) in enumerate(['Japes','Llama Temple','Dome Temple',_C]):
+				for (y_i,y) in enumerate(['Locked','Puzzle Solver']):output(f"\t\t{x} ({y}): {getKong(fh,322+x_i*2+y_i)}")
+			versions=['Live','Dev Site','Localhost'];output(f"\tVersion: {versions[getValue(fh,330,1)]}");output(f"\tAuto-Keys: {str(getTrueFalse(fh,331,1))}");output(f"\tMatching Game Sounds:")
+			for x in range(8):output(f"\t\tSound {x+1}: {getValue(fh,332+2*x,2)}")
+			piano_keys=['A','B','C','D','E','F'];piano_str=''
+			for x in range(7):
+				if x>0:piano_str+=f", {piano_keys[getValue(fh,348+x,1)]}"
+				else:piano_str+=piano_keys[getValue(fh,348+x,1)]
+			output(f"\tPiano Game Order: {piano_str}");output(f"\tRemove High Requirements: {str(getTrueFalse(fh,361,1))}");output(f"\tFast GBs: {str(getTrueFalse(fh,362,1))}")
