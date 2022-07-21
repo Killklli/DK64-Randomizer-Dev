@@ -76,9 +76,11 @@ def patching_response(responded_data):
 	if A.settings.shorten_boss:ROM().seek(B+299);ROM().write(1)
 	if A.settings.fast_warps:ROM().seek(B+298);ROM().write(1)
 	if A.settings.dpad_display:ROM().seek(B+297);ROM().write(1)
-	if A.settings.activate_all_bananaports:ROM().seek(B+296);ROM().write(1)
+	if A.settings.activate_all_bananaports=='all':ROM().seek(B+296);ROM().write(1)
+	if A.settings.activate_all_bananaports=='isles':ROM().seek(B+296);ROM().write(2)
 	if A.settings.high_req:ROM().seek(B+361);ROM().write(1)
 	if A.settings.fast_gbs:ROM().seek(B+362);ROM().write(1)
+	if A.settings.auto_keys:ROM().seek(B+331);ROM().write(1)
 	H=[0,1,2,3,4,5,6,7]
 	if len(A.settings.krool_keys_required)>0:
 		for F in A.settings.krool_keys_required:
