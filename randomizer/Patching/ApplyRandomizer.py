@@ -95,6 +95,6 @@ def patching_response(responded_data):
 	else:js.document.getElementById(V).value=G;js.document.getElementById(W).value=G;js.document.getElementById(U).style.display='none'
 	js.document.getElementById('generated_seed_id').innerHTML=A.settings.seed_id;g=json.loads(A.toJson())['Settings'];js.document.getElementById(X).innerHTML=G;h=js.document.getElementById(X)
 	for (P,M) in g.items():
-		i=[T,'algorithm','starting_kong','starting_kong_list','diddy_freeing_kong','tiny_freeing_kong','lanky_freeing_kong','chunky_freeing_kong','banana_medals_required','krool_phases','krool_keys_required','blocker_golden_bananas','troff_n_scoff_bananas']
+		i=[T,'algorithm','starting_kong','starting_kong_list','diddy_freeing_kong','tiny_freeing_kong','lanky_freeing_kong','chunky_freeing_kong','banana_medals_required','krool_phases','krool_keys_required','blocker_golden_bananas','troff_n_scoff_bananas','colors']
 		if P not in i:Q=h.insertRow(-1);j=Q.insertCell(0);k=Q.insertCell(1);j.innerHTML=P;k.innerHTML=M
 	ROM().fixSecurityValue();ROM().save(f"dk64-{A.settings.seed_id}.z64");E.run_until_complete(ProgressBar().reset());js.jq('#nav-settings-tab').tab('show')
