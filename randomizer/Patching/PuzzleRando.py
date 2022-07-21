@@ -13,4 +13,4 @@ def randomize_puzzles(spoiler):
 			ROM().seek(33476640+332+2*G);C=chooseSFX()
 			while C in E:C=chooseSFX()
 			E.append(C);ROM().writeMultipleBytes(C,2)
-		for H in range(7):ROM().seek(535625760+348+H);I=random.randint(0,5);ROM().writeMultipleBytes(I,1)
+		for H in range(7):ROM().seek(33476640+348+H);I=random.randint(0,5);ROM().writeMultipleBytes(I,1)
