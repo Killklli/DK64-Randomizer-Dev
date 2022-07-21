@@ -2,7 +2,7 @@
 import random
 from randomizer.Patching.Patcher import ROM
 from randomizer.Spoiler import Spoiler
-def chooseSFX():'Choose random SFX from bank of acceptable SFX.';B=[[98,138],[166,255],[398,411],[471,476],[519,535],[547,575],[614,631],[644,650]];A=random.choice(B);return random.randint(A[0],A[1])
+def chooseSFX():'Choose random SFX from bank of acceptable SFX.';B=[[98,138],[166,252],[398,411],[471,476],[519,535],[547,575],[614,631],[644,650]];A=random.choice(B);return random.randint(A[0],A[1])
 def randomize_puzzles(spoiler):
 	'Shuffle elements of puzzles. Currently limited to coin challenge requirements but will be extended in future.';B='coins';A='offset'
 	if spoiler.settings.puzzle_rando:

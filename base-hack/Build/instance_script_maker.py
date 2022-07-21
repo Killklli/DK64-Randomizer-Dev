@@ -1,4 +1,5 @@
 'Make Instance Scripts.'
+_I='ignore'
 _H=True
 _G=False
 _F='data'
@@ -58,17 +59,19 @@ with open(base_rom,_D)as fh:
 								for (line_index,script_line) in enumerate(script_info):
 									if'.code'in script_line:contains_code=_H;code_start=line_index+1;data_end=line_index
 									elif'.data'in script_line:contains_data=_H;data_start=line_index+1
-								script_data={_B:-1,_C:-1}
+								script_data={_B:-1,_C:-1,_I:0}
 								if contains_data and data_start>-1:
 									for data_line in script_info[data_start:data_end]:
 										data_line=data_line.replace('\n','')
-										for attr in [_B,_C]:
+										for attr in [_B,_C,_I]:
 											if f"{attr} = "in data_line:
 												val=data_line.split(f"{attr} = ")[1]
 												if'0x'in val:val=int(val,16)
 												else:val=int(val)
 												script_data[attr]=val
-								print(f"Compiling {file.replace('.script','')} ({hex(script_data[_B])})")
+								pre_message='Ignoring'
+								if script_data[_I]==0:pre_message='Compiling'
+								print(f"{pre_message} {file.replace('.script','')} ({hex(script_data[_B])})")
 								if contains_code and code_start>-1:
 									resetCond(_H)
 									for code_line in script_info[code_start:]:
@@ -89,7 +92,7 @@ with open(base_rom,_D)as fh:
 											arr.append(new_exec_count)
 											for x_i in new_execs:arr.extend(x_i)
 											new_blocks.append(arr);resetCond(_G);new_block_count+=1
-								if script_data[_B]>-1:
+								if script_data[_B]>-1 and script_data[_I]==0:
 									found_existing=_G;found_index=-1;found_9c=-1
 									for (script_index,script_item) in enumerate(script_list):
 										if script_item[_B]==script_data[_B]:found_index=script_index;found_9c=script_item[_C];found_existing=_H

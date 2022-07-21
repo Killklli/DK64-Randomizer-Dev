@@ -48,16 +48,17 @@ def randomize_enemies(spoiler):
 								B=T[k];k+=1
 								if B!=Enemies.Book or E not in(Maps.CavesDonkeyCabin,Maps.JapesLankyCave,Maps.AngryAztecLobby):
 									if B!=Enemies.Kosha or E!=Maps.CavesDiddyLowerCabin:
-										ROM().seek(C+A[D]);ROM().writeMultipleBytes(B,1)
-										if B in EnemyMetaData.keys():
-											ROM().seek(C+A[D]+16);ROM().writeMultipleBytes(EnemyMetaData[B].aggro,1)
-											if B==Enemies.RoboKremling:ROM().seek(C+A[D]+11);ROM().writeMultipleBytes(200,1)
-											ROM().seek(C+A[D]+15);P=int.from_bytes(ROM().readBytes(1),I)
-											if EnemyMetaData[B].size_cap>0:
-												if P>EnemyMetaData[B].size_cap:ROM().seek(C+A[D]+15);ROM().writeMultipleBytes(EnemyMetaData[B].size_cap,1)
-											if H.settings.enemy_speed_rando:
-												G=EnemyMetaData[B].min_speed;J=EnemyMetaData[B].max_speed
-												if G>0 and J>0:ROM().seek(C+A[D]+13);K=random.randint(G,J);ROM().writeMultipleBytes(K,1);ROM().seek(C+A[D]+12);ROM().writeMultipleBytes(random.randint(G,K),1)
+										if B!=Enemies.Guard or E not in(Maps.CavesDiddyLowerCabin,Maps.CavesTinyIgloo,Maps.CavesTinyCabin):
+											ROM().seek(C+A[D]);ROM().writeMultipleBytes(B,1)
+											if B in EnemyMetaData.keys():
+												ROM().seek(C+A[D]+16);ROM().writeMultipleBytes(EnemyMetaData[B].aggro,1)
+												if B==Enemies.RoboKremling:ROM().seek(C+A[D]+11);ROM().writeMultipleBytes(200,1)
+												ROM().seek(C+A[D]+15);P=int.from_bytes(ROM().readBytes(1),I)
+												if EnemyMetaData[B].size_cap>0:
+													if P>EnemyMetaData[B].size_cap:ROM().seek(C+A[D]+15);ROM().writeMultipleBytes(EnemyMetaData[B].size_cap,1)
+												if H.settings.enemy_speed_rando:
+													G=EnemyMetaData[B].min_speed;J=EnemyMetaData[B].max_speed
+													if G>0 and J>0:ROM().seek(C+A[D]+13);K=random.randint(G,J);ROM().writeMultipleBytes(K,1);ROM().seek(C+A[D]+12);ROM().writeMultipleBytes(random.randint(G,K),1)
 			if H.settings.enemy_rando and E in U:
 				Q=[]
 				if E in c:Q=e.copy()

@@ -33,7 +33,7 @@ def modify(file_name,map_index):
 				if G==72 and not l and H==38:
 					for a in range(2):m=50.167;Y.append({h:D,M:[684,683][a],Q:int(float_to_hex(120.997),16),R:[int(float_to_hex(m),16),int(float_to_hex(m-30),16)][a],S:int(float_to_hex(1182.974),16),b:0,T:int(float_to_hex(75.146),16),c:0,U:[368,N][a],V:[int(float_to_hex(1),16),int(float_to_hex(0.35),16)][a]})
 					N+=1;l=True
-				base_stream=D;n=int.from_bytes(F[B+0:B+4],_A);f=int.from_bytes(F[B+4:B+8],_A);v=int_to_float(f)-30;f=int(float_to_hex(v),16);o=int.from_bytes(F[B+8:B+12],_A);AB=int.from_bytes(F[B+24:B+28],_A);O=int.from_bytes(F[B+28:B+32],_A);AC=int.from_bytes(F[B+32:B+36],_A);H=int.from_bytes(F[B+42:B+44],_A)
+				base_stream=D;n=int.from_bytes(F[B+0:B+4],_A);f=int.from_bytes(F[B+4:B+8],_A);v=int_to_float(f)-30;f=int(float_to_hex(v),16);o=int.from_bytes(F[B+8:B+12],_A);AC=int.from_bytes(F[B+24:B+28],_A);O=int.from_bytes(F[B+28:B+32],_A);AD=int.from_bytes(F[B+32:B+36],_A);H=int.from_bytes(F[B+42:B+44],_A)
 				if G==7:
 					if N==544:n=int(float_to_hex(805.6618),16);o=int(float_to_hex(2226.797),16)
 				Y.append({h:D,M:683,Q:n,R:f,S:o,b:0,T:O,c:0,U:N,V:int(float_to_hex(0.35),16)});N+=1
@@ -76,7 +76,7 @@ def modify(file_name,map_index):
 			if G==26 and A6==13:
 				r=[]
 				for J in range(56):r.append(D[J])
-				D=r.copy();A7=1237.001;A8=840.569;writedatatoarr(D,int(float_to_hex(A7),16),4,0);writedatatoarr(D,int(float_to_hex(A8),16),4,8)
+				D=r.copy();A7=1237.001;A8=175;A9=840.569;writedatatoarr(D,int(float_to_hex(A7),16),4,0);writedatatoarr(D,int(float_to_hex(A8),16),4,4);writedatatoarr(D,int(float_to_hex(A9),16),4,8)
 			P={K:D};X.append(P);B+=56
 		for A in j:
 			C=[]
@@ -85,11 +85,11 @@ def modify(file_name,map_index):
 		for A in Y:
 			C=[]
 			for J in range(16):C.append(0)
-			A9=[255,251,0,0,21,0,0,0,64,192,0,0,67,179,0,0]
-			for J in A9:C.append(J)
-			for J in range(12):C.append(0)
-			AA=[0,1,0,0]
+			AA=[255,251,0,0,21,0,0,0,64,192,0,0,67,179,0,0]
 			for J in AA:C.append(J)
+			for J in range(12):C.append(0)
+			AB=[0,1,0,0]
+			for J in AB:C.append(J)
 			C=writedatatoarr(C,A[M],2,40);C=writedatatoarr(C,A[U],2,42);C=writedatatoarr(C,A[V],4,12);C=writedatatoarr(C,A[Q],4,0);C=writedatatoarr(C,A[R],4,4);C=writedatatoarr(C,A[S],4,8);C=writedatatoarr(C,A[b],4,24);C=writedatatoarr(C,A[T],4,28);C=writedatatoarr(C,A[c],4,32);W.append({K:C})
 		with open(i.replace(_B,_C),'wb')as L:
 			L.write(len(W).to_bytes(4,_A))
