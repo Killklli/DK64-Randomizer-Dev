@@ -40,6 +40,7 @@ from randomizer.ShuffleBarrels import BarrelShuffle
 from randomizer.ShuffleKasplats import InitKasplatMap,KasplatShuffle
 from randomizer.ShuffleWarps import ShuffleWarps
 from randomizer.ShuffleBosses import ShuffleBossesBasedOnOwnedItems
+from randomizer.ShufflePatches import ShufflePatches
 def GetExitLevelExit(region):
 	'Get the exit that using the "Exit Level" button will take you to.';B=region;A=B.level
 	if B.restart is not _A:return _A
@@ -51,16 +52,16 @@ def GetExitLevelExit(region):
 	elif A==Levels.CrystalCaves:return ShuffleExits.ShufflableExits[Transitions.CavesToIsles].shuffledId
 	elif A==Levels.CreepyCastle:return ShuffleExits.ShufflableExits[Transitions.CastleToIsles].shuffledId
 def GetAccessibleLocations(settings,ownedItems,searchType=SearchMode.GetReachable,purchaseList=_A):
-	'Search to find all reachable locations given owned items.';Z='skip';V=ownedItems;S=settings;N=purchaseList;D=searchType
-	if N is _A:N=[]
-	H=[];I=[];O=[];J=_B
+	'Search to find all reachable locations given owned items.';Z='skip';V=ownedItems;S=settings;O=purchaseList;D=searchType
+	if O is _A:O=[]
+	H=[];I=[];P=[];J=_B
 	while len(I)>0 or J:
 		E=Sphere()
-		if O:E.availableGBs=O[-1].availableGBs
+		if P:E.availableGBs=P[-1].availableGBs
 		for F in I:
 			H.append(F);A=LocationList[F]
 			if A.item is not _A:
-				if A.type==Types.Shop and F!=Locations.SimianSlam and D==SearchMode.GetReachableWithControlledPurchases and F not in N:continue
+				if A.type==Types.Shop and F!=Locations.SimianSlam and D==SearchMode.GetReachableWithControlledPurchases and F not in O:continue
 				V.append(A.item)
 				if D==SearchMode.GeneratePlaythrough and ItemList[A.item].playthrough:
 					if A.item==Items.BananaHoard:E.locations=[F];break
@@ -68,19 +69,19 @@ def GetAccessibleLocations(settings,ownedItems,searchType=SearchMode.GetReachabl
 					E.locations.append(F)
 				if D==SearchMode.CheckBeatable and A.item==Items.BananaHoard:return _B
 		if len(E.locations)>0:
-			O.append(E)
+			P.append(E)
 			if LocationList[E.locations[0]].item==Items.BananaHoard:break
 		J=_C;I=[];LogicVariables.Update(V)
-		for P in LogicVariables.GetKongs():
-			LogicVariables.SetKong(P);Q=Logic.Regions[Regions.IslesMain];Q.id=Regions.IslesMain;Q.dayAccess=_B;Q.nightAccess=Events.Night in LogicVariables.Events;K=[Q];G=[Regions.IslesMain];W=[(A,B)for(A,B)in Logic.Regions.items()if B.HasAccess(P)and A not in G];G.extend([A[0]for A in W]);K.extend([A[1]for A in W])
+		for Q in LogicVariables.GetKongs():
+			LogicVariables.SetKong(Q);R=Logic.Regions[Regions.IslesMain];R.id=Regions.IslesMain;R.dayAccess=_B;R.nightAccess=Events.Night in LogicVariables.Events;K=[R];G=[Regions.IslesMain];W=[(A,B)for(A,B)in Logic.Regions.items()if B.HasAccess(Q)and A not in G];G.extend([A[0]for A in W]);K.extend([A[1]for A in W])
 			while len(K)>0:
-				B=K.pop();B.UpdateAccess(P,LogicVariables);LogicVariables.UpdateCurrentRegionAccess(B)
+				B=K.pop();B.UpdateAccess(Q,LogicVariables);LogicVariables.UpdateCurrentRegionAccess(B)
 				for L in B.events:
 					if L.name not in LogicVariables.Events and L.logic(LogicVariables):J=_B;LogicVariables.Events.append(L.name)
 					if L.name==Events.Night and L.logic(LogicVariables):B.nightAccess=_B
 				if B.id in Logic.CollectibleRegions.keys():
-					for R in Logic.CollectibleRegions[B.id]:
-						if not R.added and R.kong in(P,Kongs.any)and R.logic(LogicVariables):LogicVariables.AddCollectible(R,B.level)
+					for M in Logic.CollectibleRegions[B.id]:
+						if not M.added and M.kong in(Q,Kongs.any)and M.logic(LogicVariables)and M.enabled:LogicVariables.AddCollectible(M,B.level)
 				for A in B.locations:
 					if A.logic(LogicVariables)and A.id not in I and A.id not in H:
 						if A.bonusBarrel is MinigameType.BonusBarrel and S.bonus_barrels!=Z or A.bonusBarrel is MinigameType.HelmBarrel and S.helm_barrels!=Z:
@@ -89,7 +90,7 @@ def GetAccessibleLocations(settings,ownedItems,searchType=SearchMode.GetReachabl
 						elif LocationList[A.id].type==Types.Blueprint:
 							if not LogicVariables.KasplatAccess(A.id):continue
 						elif LocationList[A.id].type==Types.Shop and A.id!=Locations.SimianSlam:
-							if D!=SearchMode.GetReachableWithControlledPurchases or A.id in N:LogicVariables.PurchaseShopItem(LocationList[A.id])
+							if D!=SearchMode.GetReachableWithControlledPurchases or A.id in O:LogicVariables.PurchaseShopItem(LocationList[A.id])
 						elif A.id==Locations.NintendoCoin:LogicVariables.Coins[Kongs.donkey]-=2
 						I.append(A.id)
 				X=B.exits.copy()
@@ -106,16 +107,16 @@ def GetAccessibleLocations(settings,ownedItems,searchType=SearchMode.GetReachabl
 						U=_B
 						if exit.time==Time.Night and not B.nightAccess:U=_C
 						elif exit.time==Time.Day and not B.dayAccess:U=_C
-						if U:G.append(C);M=Logic.Regions[C];M.id=C;K.append(M)
+						if U:G.append(C);N=Logic.Regions[C];N.id=C;K.append(N)
 					if exit.logic(LogicVariables):
 						if B.dayAccess and exit.time!=Time.Night and not Logic.Regions[C].dayAccess:Logic.Regions[C].dayAccess=_B;J=_B
 						if B.nightAccess and exit.time!=Time.Day and not Logic.Regions[C].nightAccess:Logic.Regions[C].nightAccess=_B;J=_B
 				if B.deathwarp is not _A:
 					C=B.deathwarp.dest
-					if C not in G and B.deathwarp.logic(LogicVariables):G.append(C);M=Logic.Regions[C];M.id=C;K.append(M)
+					if C not in G and B.deathwarp.logic(LogicVariables):G.append(C);N=Logic.Regions[C];N.id=C;K.append(N)
 	if D in(SearchMode.GetReachable,SearchMode.GetReachableWithControlledPurchases):return H
 	elif D==SearchMode.CheckBeatable:return _C
-	elif D==SearchMode.GeneratePlaythrough:return O
+	elif D==SearchMode.GeneratePlaythrough:return P
 	elif D==SearchMode.CheckAllReachable:return len(H)==len(LocationList)
 	elif D==SearchMode.GetUnreachable:return[A for A in LocationList if A not in H]
 def VerifyWorld(settings):
@@ -510,10 +511,11 @@ def ShuffleMisc(spoiler):
 	'Shuffle miscellaneous objects outside of main fill algorithm, including Kasplats, Bonus barrels, and bananaport warps.';A=spoiler;KasplatShuffle(LogicVariables);A.human_kasplats={};A.UpdateKasplats(LogicVariables.kasplat_map)
 	if A.settings.bonus_barrels in(_D,'all_beaver_bother'):BarrelShuffle(A.settings);A.UpdateBarrels()
 	if A.settings.bananaport_rando:C=[];D={};ShuffleWarps(C,D);A.bananaport_replacements=C.copy();A.human_warp_locations=D
+	if A.settings.random_patches:G=[];A.human_patches=ShufflePatches(A,G).copy()
 	if A.settings.activate_all_bananaports in[_E,'isles']:
-		G=set([BananaportVanilla[A].map_id for A in Warps])
-		for E in G:
-			H=[BananaportVanilla[A]for A in Warps if BananaportVanilla[A].map_id==E]
-			for B in H:
+		H=set([BananaportVanilla[A].map_id for A in Warps])
+		for E in H:
+			I=[BananaportVanilla[A]for A in Warps if BananaportVanilla[A].map_id==E]
+			for B in I:
 				F=[BananaportVanilla[A]for A in Warps if BananaportVanilla[A].map_id==E and BananaportVanilla[A].new_warp==B.new_warp and BananaportVanilla[A].name!=B.name][0]
-				if B.region_id!=F.region_id and(A.settings.activate_all_bananaports==_E or B.map_id==Maps.Isles):I=Logic.Regions[B.region_id];J=TransitionFront(F.region_id,lambda l:_B);I.exits.append(J)
+				if B.region_id!=F.region_id and(A.settings.activate_all_bananaports==_E or B.map_id==Maps.Isles):J=Logic.Regions[B.region_id];K=TransitionFront(F.region_id,lambda l:_B);J.exits.append(K)

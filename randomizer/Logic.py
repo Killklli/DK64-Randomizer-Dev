@@ -93,14 +93,15 @@ class LogicVarHolder:
 		return _A
 	def AddCollectible(B,collectible,level):
 		'Add a collectible.';C=level;A=collectible
-		if A.type==Collectibles.coin:
-			if A.kong==Kongs.any:
-				for D in range(5):B.Coins[D]+=A.amount*5
-			else:B.Coins[A.kong]+=A.amount
-		elif A.type==Collectibles.banana:B.ColoredBananas[C][A.kong]+=A.amount
-		elif A.type==Collectibles.bunch:B.ColoredBananas[C][A.kong]+=A.amount*5
-		elif A.type==Collectibles.balloon:B.ColoredBananas[C][A.kong]+=A.amount*10
-		A.added=_B
+		if A.enabled:
+			if A.type==Collectibles.coin:
+				if A.kong==Kongs.any:
+					for D in range(5):B.Coins[D]+=A.amount*5
+				else:B.Coins[A.kong]+=A.amount
+			elif A.type==Collectibles.banana:B.ColoredBananas[C][A.kong]+=A.amount
+			elif A.type==Collectibles.bunch:B.ColoredBananas[C][A.kong]+=A.amount*5
+			elif A.type==Collectibles.balloon:B.ColoredBananas[C][A.kong]+=A.amount*10
+			A.added=_B
 	def PurchaseShopItem(A,location):
 		'Purchase items from shops and subtract price from logical coin counts.';B=location
 		if B.item is not _C and B.item is not Items.NoItem:
