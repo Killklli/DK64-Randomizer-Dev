@@ -79,7 +79,7 @@ class Settings:
 			if Kongs.lanky in A.starting_kong_list:A.kong_locations.remove(Locations.LankyKong)
 			if Kongs.tiny in A.starting_kong_list:A.kong_locations.remove(Locations.TinyKong)
 			if Kongs.chunky in A.starting_kong_list:A.kong_locations.remove(Locations.ChunkyKong)
-		if A.starting_kongs_count<5 and(A.shuffle_loading_zones==J or A.shuffle_loading_zones==_D):A.kongs_for_progression=_C
+		if A.starting_kongs_count<5 and(A.shuffle_loading_zones==J or A.shuffle_loading_zones==_D)and not A.no_logic:A.kongs_for_progression=_C
 		if A.move_rando in['on','on_cross_purchase']:A.shuffle_items='moves'
 		elif A.move_rando=='start_with':A.unlock_all_moves=_C
 	def SelectKongLocations(B):

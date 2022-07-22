@@ -173,13 +173,13 @@ def PareWoth(settings,PlaythroughLocations):
 		B.PlaceItem(G)
 	return A
 def RandomFill(itemsToPlace,validLocations):
-	'Randomly place given items in any location disregarding logic.';A=itemsToPlace;random.shuffle(A);C=[]
-	for (id,E) in LocationList.items():
-		if E.item is _A:C.append(id)
+	'Randomly place given items in any location disregarding logic.';A=itemsToPlace;random.shuffle(A);B=[]
+	for (id,F) in LocationList.items():
+		if F.item is _A:B.append(id)
 	while len(A)>0:
-		D=A.pop();B=[A for A in C if A in GetItemValidLocations(validLocations,D)]
-		if len(B)==0:return len(A)
-		random.shuffle(B);F=B.pop();LocationList[F].PlaceItem(D)
+		D=A.pop();C=[A for A in B if A in GetItemValidLocations(validLocations,D)]
+		if len(C)==0:return len(A)
+		random.shuffle(C);E=C.pop();LocationList[E].PlaceItem(D);B.remove(E)
 	return 0
 def ForwardFill(settings,itemsToPlace,validLocations,ownedItems=_A):
 	'Forward fill algorithm for item placement.';C=itemsToPlace;A=ownedItems
@@ -366,12 +366,12 @@ def GetLogicallyAccessibleKongLocations(spoiler,kongLocations,ownedKongs,latestL
 	return C
 def PlaceKongs(spoiler,kongItems,kongLocations):
 	'For these settings, Kongs to place, and locations to place them in, place the Kongs in such a way the generation will never error here.';E=kongLocations;D=kongItems;A=spoiler;B=[B for B in A.settings.starting_kong_list]
-	if A.settings.shuffle_loading_zones==_E:
+	if A.settings.shuffle_loading_zones==_E or A.settings.no_logic:
 		random.shuffle(D)
 		if Locations.ChunkyKong in E:C=D.pop();LocationList[Locations.ChunkyKong].PlaceItem(C);A.settings.chunky_freeing_kong=random.choice(B);B.append(ItemPool.GetKongForItem(C))
 		if Locations.DiddyKong in E:C=D.pop();LocationList[Locations.DiddyKong].PlaceItem(C);A.settings.diddy_freeing_kong=random.choice(B);B.append(ItemPool.GetKongForItem(C))
 		if Locations.LankyKong in E:C=D.pop();LocationList[Locations.LankyKong].PlaceItem(C);A.settings.lanky_freeing_kong=random.choice(B);B.append(ItemPool.GetKongForItem(C))
-		if Locations.TinyKong in E:C=D.pop();LocationList[Locations.TinyKong].PlaceItem(C);J=list(set(B).intersection([Kongs.diddy,Kongs.chunky]));A.settings.tiny_freeing_kong=random.choice(B);B.append(ItemPool.GetKongForItem(C))
+		if Locations.TinyKong in E:C=D.pop();LocationList[Locations.TinyKong].PlaceItem(C);J=list(set(B).intersection([Kongs.diddy,Kongs.chunky]));A.settings.tiny_freeing_kong=random.choice(J);B.append(ItemPool.GetKongForItem(C))
 	elif A.settings.shuffle_loading_zones in(_J,'none'):
 		H=len(B)+1;F=GetLogicallyAccessibleKongLocations(A,E,B,H)
 		while len(B)!=5:
