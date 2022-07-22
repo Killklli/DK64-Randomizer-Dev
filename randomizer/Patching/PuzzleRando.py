@@ -7,7 +7,7 @@ def randomize_puzzles(spoiler):
 	'Shuffle elements of puzzles. Currently limited to coin challenge requirements but will be extended in future.';E=spoiler;C='coins';B='offset'
 	if E.settings.puzzle_rando:
 		A={'factory_race':[5,15],'castle_race':[5,15],'seal_race':[5,12]}
-		if E.setting.fast_gbs:A.factory_race=[3,8];A.castle_race=[5,12];A.seal_race=[5,10]
+		if E.settings.fast_gbs:A.factory_race=[3,8];A.castle_race=[5,12];A.seal_race=[5,10]
 		H=[{B:300,C:random.randint(10,50)},{B:301,C:random.randint(20,50)},{B:302,C:random.randint(A.factory_race[1],A.factory_race[2])},{B:303,C:random.randint(A.seal_race[1],A.seal_race[2])},{B:304,C:random.randint(A.castle_race[1],A.castle_race[2])},{B:305,C:random.randint(40,70)},{B:306,C:random.randint(25,55)},{B:307,C:random.randint(5,45)}]
 		for F in H:ROM().seek(33476640+F[B]);ROM().writeMultipleBytes(F[C],1)
 		G=[]
