@@ -49,7 +49,7 @@ def compileHints(spoiler):
 			if S==Kongs.any:R='An empty cage'
 			updateRandomHint(f"{R} can be found in {L}.")
 	if D.settings.shuffle_loading_zones=='all':AddLoadingZoneHints(D)
-	if D.settings.BananaMedalsRequired:updateRandomHint(f"{D.settings.BananaMedalsRequired} medals are required to access Jetpac.")
+	if D.settings.coin_door_open=='need_both'or D.settings.coin_door_open=='need_rw':updateRandomHint(f"{D.settings.medal_requirement} medals are required to access Jetpac.")
 	if D.settings.perma_death:updateRandomHint('The curse can only be removed upon disabling K. Rools machine.')
 	updateRandomHint(f"{D.settings.krool_key_count} Keys are required to turn in K. Rool.")
 	if D.settings.level_randomization!='level_order':

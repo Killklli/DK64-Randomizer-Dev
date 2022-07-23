@@ -54,7 +54,10 @@ def patching_response(responded_data):
 	if A.settings.helm_setting=='skip_start':ROM().seek(B+49);ROM().write(1)
 	elif A.settings.helm_setting=='skip_all':ROM().seek(B+49);ROM().write(2)
 	if A.settings.crown_door_open:ROM().seek(B+50);ROM().write(1)
-	if A.settings.coin_door_open:ROM().seek(B+51);ROM().write(1)
+	if A.settings.coin_door_open=='need_both':ROM().seek(B+51);ROM().write(0)
+	elif A.settings.coin_door_open=='need_zero':ROM().seek(B+51);ROM().write(1)
+	elif A.settings.coin_door_open=='need_nin':ROM().seek(B+51);ROM().write(2)
+	elif A.settings.coin_door_open=='need_rw':ROM().seek(B+51);ROM().write(3)
 	if A.settings.quality_of_life:ROM().seek(B+52);ROM().write(1)
 	ROM().seek(B+165)
 	if A.settings.damage_amount!='default':
@@ -87,7 +90,7 @@ def patching_response(responded_data):
 			if O in H:H.remove(O)
 	I=0
 	for F in H:I=I|1<<F
-	ROM().seek(B+280);ROM().write(I);ROM().seek(B+320);ROM().write(A.jetpac_medals_required);randomize_entrances(A);randomize_moves(A);randomize_prices(A);randomize_bosses(A);randomize_krool(A);randomize_barrels(A);randomize_bananaport(A);randomize_enemies(A);apply_kongrando_cosmetic(A);randomize_setup(A);randomize_puzzles(A);random.seed(A.settings.seed);randomize_music(A);apply_cosmetic_colors(A);random.seed(A.settings.seed)
+	ROM().seek(B+280);ROM().write(I);ROM().seek(B+320);ROM().write(A.settings.medal_requirement);randomize_entrances(A);randomize_moves(A);randomize_prices(A);randomize_bosses(A);randomize_krool(A);randomize_barrels(A);randomize_bananaport(A);randomize_enemies(A);apply_kongrando_cosmetic(A);randomize_setup(A);randomize_puzzles(A);random.seed(A.settings.seed);randomize_music(A);apply_cosmetic_colors(A);random.seed(A.settings.seed)
 	if A.settings.wrinkly_hints in['standard','cryptic']:wipeHints();compileHints(A);PushHints()
 	C=0;f=get_hash_images()
 	for D in A.settings.seed_hash:ROM().seek(B+282+C);ROM().write(D);js.document.getElementById('hash'+str(C)).src='data:image/jpeg;base64,'+f[D];C+=1
@@ -96,6 +99,6 @@ def patching_response(responded_data):
 	else:js.document.getElementById(V).value=G;js.document.getElementById(W).value=G;js.document.getElementById(U).style.display='none'
 	js.document.getElementById('generated_seed_id').innerHTML=A.settings.seed_id;g=json.loads(A.toJson())['Settings'];js.document.getElementById(X).innerHTML=G;h=js.document.getElementById(X)
 	for (P,M) in g.items():
-		i=[T,'algorithm','starting_kong','starting_kong_list','diddy_freeing_kong','tiny_freeing_kong','lanky_freeing_kong','chunky_freeing_kong','banana_medals_required','krool_phases','krool_keys_required','blocker_golden_bananas','troff_n_scoff_bananas','colors']
+		i=[T,'algorithm','starting_kong','starting_kong_list','diddy_freeing_kong','tiny_freeing_kong','lanky_freeing_kong','chunky_freeing_kong','medal_requirement','krool_phases','krool_keys_required','blocker_golden_bananas','troff_n_scoff_bananas','colors']
 		if P not in i:Q=h.insertRow(-1);j=Q.insertCell(0);k=Q.insertCell(1);j.innerHTML=P;k.innerHTML=M
 	ROM().fixSecurityValue();ROM().save(f"dk64-{A.settings.seed_id}.z64");E.run_until_complete(ProgressBar().reset());js.jq('#nav-settings-tab').tab('show')
