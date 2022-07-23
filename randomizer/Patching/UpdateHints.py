@@ -1,10 +1,11 @@
 'Update wrinkly hints compressed file.'
+_A=False
 import random
 from io import BytesIO
 import js
-from randomizer.Enums.WrinklyKong import WrinklyKong
-from randomizer.Lists.WrinklyHints import Hint,hints
+from randomizer.Lists.WrinklyHints import HintLocation,hints
 from randomizer.Patching.Patcher import ROM
+from randomizer.Enums.Kongs import Kongs
 def writeWrinklyHints(file_start_offset,text):
 	'Write the text to ROM.';E=text;B=file_start_offset;ROM().seek(B);ROM().writeMultipleBytes(len(E),1);F=0;A=1
 	for D in E:
@@ -18,13 +19,19 @@ def writeWrinklyHints(file_start_offset,text):
 			A+=len(C)
 def UpdateHint(WrinklyHint,message):
 	'Update the wrinkly hint with the new string.\n\n    Args:\n        WrinklyHint (Hint): Wrinkly hint object.\n        message (str): Hint message to write.\n    ';A=message
-	if len(A)<=914:WrinklyHint.hint=A
+	if len(A)<=914:WrinklyHint.hint=A;return True
 	else:raise Exception('Hint message is longer than allowed.')
-def updateRandomHint(message):
-	'Update a random hint with the string specifed.\n\n    Args:\n        message (str): Hint message to write.\n    ';A=[]
-	for B in range(len(hints)):
-		if hints[B].hint=='':A.append(B)
-	if len(A)>0:C=random.choice(A);UpdateHint(hints[C],message)
+	return _A
+def updateRandomHint(message,kongs_req=[],keywords=[],levels=[]):
+	'Update a random hint with the string specifed.\n\n    Args:\n        message (str): Hint message to write.\n    ';B=[]
+	for A in range(len(hints)):
+		if hints[A].hint==''and hints[A].kong in kongs_req and hints[A].level in levels:
+			C=_A
+			for D in hints[A].banned_keywords:
+				if D in keywords:C=True
+			if not C:B.append(A)
+	if len(B)>0:E=random.choice(B);return UpdateHint(hints[E],message)
+	return _A
 def PushHints():
 	'Update the ROM with all hints.';B=[]
 	for C in hints:
@@ -35,4 +42,4 @@ def PushHints():
 def wipeHints():
 	'Wipe the hint block.'
 	for A in range(len(hints)):
-		if hints[A].kong!=WrinklyKong.ftt:hints[A].hint=''
+		if hints[A].kong!=Kongs.any:hints[A].hint=''

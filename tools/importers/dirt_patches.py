@@ -19,5 +19,6 @@ with open('dirt_patches.csv',newline='')as csvfile:
 		subname=x[_E]
 		if _C in subname:pre=subname.split(_C)[0];post=subname.split(_C)[1].split(': ')[0];post=re.sub('((?<=[a-z])[A-Z]|(?<!\\A)[A-Z](?=[a-z]))',' \\1',post);subname=f"{pre} - {post}: "
 		name=f"{subname}{x['name']}"
-		if x[_A].strip()=='':x[_A]='True'
+		if x[_A].strip()=='':x[_A]='l.shockwave'
+		else:x[_A]+=' and l.shockwave'
 		x[_A]=x[_A].replace('|',',');logic=f"lambda l: {x[_A]}";print(f'DirtPatchData(name="{name}", level=Levels.{level_name}, map_id=Maps.{x["map"]}, x={x[_B][0]}, y={x[_B][1]}, z={x[_B][2]}, rotation={x["rot"]}{vanilla_text}, group={x["group"]}, logicregion=Regions.{x[_G]}, logic={logic}, resize="{x[_H]}"),')
