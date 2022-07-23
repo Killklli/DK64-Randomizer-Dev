@@ -106,7 +106,7 @@ def compileHints(spoiler):
 		for h in range(2):
 			for i in range(4):Am=AH[i+h*4];y=f"There is a dirt patch located at {Am}";hint_list.append(Hint(hint=y,priority=i+4,important=h==0))
 	if D.settings.shuffle_loading_zones=='all':AddLoadingZoneHints(D)
-	if D.settings.BananaMedalsRequired and D.settings.coin_door_open=='need_both'or D.settings.coin_door_open=='need_rw':hint_list.append(Hint(hint=f"{D.settings.BananaMedalsRequired} medals are required to access Jetpac.",priority=4))
+	if D.settings.coin_door_open=='need_both'or D.settings.coin_door_open=='need_rw':hint_list.append(Hint(hint=f"{D.settings.medal_requirement} medals are required to access Jetpac.",priority=4))
 	if D.settings.perma_death:hint_list.append(Hint(hint='The curse can only be removed upon disabling K. Rools machine.'))
 	if D.settings.level_randomization!='level_order':
 		for K in D.settings.krool_keys_required:
