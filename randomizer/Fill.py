@@ -438,7 +438,7 @@ def FillKongsAndMoves(spoiler):
 								if LocationList[V].item==E:P=V;break
 							if(P in ItemPool.AztecCrankyMoveLocations or P in ItemPool.AztecFunkyMoveLocations)and Items.Guitar not in D:Z=ItemPool.DiddyMoveLocations.copy();O[Items.Guitar]=Z
 							if P in ItemPool.ForestFunkyMoveLocations:
-								if len(B==1):raise Ex.ItemPlacementException('Fungi Funky logic issue - SEND THIS TO A DEV!')
+								if len(B)==1:raise Ex.ItemPlacementException('Fungi Funky logic issue - SEND THIS TO A DEV!')
 								if Items.Feather not in D:a=ItemPool.TinyMoveLocations.copy();O[Items.Feather]=a
 								if Items.Pineapple not in D:b=ItemPool.ChunkyMoveLocations.copy();O[Items.Pineapple]=b
 					C=O
