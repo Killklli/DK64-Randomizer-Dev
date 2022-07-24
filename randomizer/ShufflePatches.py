@@ -20,10 +20,16 @@ def removePatches():
 			for A in E:
 				if A.type==Collectibles.coin and A.kong==Kongs.any:A.enabled=_A
 def ShufflePatches(spoiler,human_spoiler):
-	'Shuffle Dirt Patch Locations.';E=human_spoiler;D=spoiler;removePatches();B=[];D.dirt_patch_placement=[]
-	for C in DirtPatchLocations:C.setPatch(_A);B.append(C.name)
-	for C in range(16):
-		F=random.choice(B)
+	'Shuffle Dirt Patch Locations.';C=human_spoiler;B=spoiler;removePatches();B.dirt_patch_placement=[];A={Levels.DKIsles:[],Levels.JungleJapes:[],Levels.AngryAztec:[],Levels.FranticFactory:[],Levels.GloomyGalleon:[],Levels.FungiForest:[],Levels.CrystalCaves:[],Levels.CreepyCastle:[]}
+	for D in DirtPatchLocations:D.setPatch(_A);A[D.level_name].append(D)
+	select_random_dirt_from_area(A[Levels.DKIsles],4,B,C);del A[Levels.DKIsles]
+	for D in range(5):E=random.choice(list(A.keys()));F=A[E];select_random_dirt_from_area(F,2,B,C);del A[E]
+	for E in A.keys():F=A[E];select_random_dirt_from_area(F,1,B,C)
+	return C.copy()
+def select_random_dirt_from_area(area_dirt,amount,spoiler,human_spoiler):
+	'Select <amount> random dirt patches from <area_dirt>, which is a list of dirt patches. Makes sure max 1 dirt patch per group is selected.';D=amount;B=area_dirt
+	for E in range(D):
+		C=random.choice(B)
 		for A in DirtPatchLocations:
-			if A.name==F:A.setPatch(True);addPatch(A);E.append(A.name);D.dirt_patch_placement.append(A.name);B.remove(F)
-	return E.copy()
+			if A.name==C.name:A.setPatch(True);addPatch(A);human_spoiler.append(A.name);spoiler.dirt_patch_placement.append(A.name);B.remove(C);break
+		if D>1:B=[A for A in B if A.group!=C.group]
