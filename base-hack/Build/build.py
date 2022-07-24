@@ -1,21 +1,22 @@
 'Build the ROM.'
-_A3='num_9_unlit'
-_A2='num_9_lit'
-_A1='num_6_unlit'
-_A0='num_6_lit'
-_z='do_not_delete_output'
-_y='do_not_delete'
-_x=') to ROM'
-_w='use_zlib'
-_v='.rgba32'
-_u='homing_crate'
-_t='standard_crate'
-_s='Chunky'
-_r='assets/Non-Code/hash/tiny_palette.png'
-_q='Tiny Overalls Palette'
-_p='assets/Non-Code/credits'
-_o='decoded_filename'
-_n='encoder'
+_A4='num_9_unlit'
+_A3='num_9_lit'
+_A2='num_6_unlit'
+_A1='num_6_lit'
+_A0='do_not_delete_output'
+_z='do_not_delete'
+_y=') to ROM'
+_x='use_zlib'
+_w='.rgba32'
+_v='homing_crate'
+_u='standard_crate'
+_t='Chunky'
+_s='assets/Non-Code/hash/tiny_palette.png'
+_r='Tiny Overalls Palette'
+_q='assets/Non-Code/credits'
+_p='decoded_filename'
+_o='encoder'
+_n='helm.bin'
 _m='assets/Non-Code/Gong/hint_door.bin'
 _l='bps_file'
 _k='ia4'
@@ -69,7 +70,7 @@ from vanilla_move_data import writeVanillaMoveData
 from image_converter import convertToRGBA32
 from end_seq_writer import createTextFile,createSquishFile
 from generate_yellow_wrinkly import generateYellowWrinkly
-import model_fix,instance_script_maker
+import model_fix,instance_script_maker,create_helm_geo
 ROMName='rom/dk64.z64'
 newROMName='rom/dk64-randomizer-base.z64'
 if os.path.exists(newROMName):os.remove(newROMName)
@@ -77,14 +78,14 @@ shutil.copyfile(ROMName,newROMName)
 portal_images=[]
 portal_images.append(convertPortalImage('assets/Non-Code/portals/DK_rando_portal_1.png'))
 portal_images.append(convertPortalImage('assets/Non-Code/portals/DK_rando_portal_2.png'))
-createTextFile(_p)
-createSquishFile(_p)
+createTextFile(_q)
+createSquishFile(_q)
 generateYellowWrinkly()
-file_dict=[{_B:'Static ASM Code',_V:70640,_j:726500,_A:'StaticCode.bin',_N:_E,_g:patchStaticCode},{_B:'Dolby Logo',_C:14,_D:176,_A:'assets/Non-Code/Dolby/DolbyThin.png',_F:_k},{_B:'Thumb Image',_C:14,_D:94,_A:'assets/Non-Code/Nintendo Logo/Nintendo4.png',_F:_G},{_B:'DKTV Image',_C:14,_D:44,_A:'assets/Non-Code/DKTV/logo3.png',_F:_G},{_B:'Spin Transition Image',_C:14,_D:95,_A:'assets/Non-Code/transition/transition-body.png',_F:_k},{_B:'Moves Image',_C:14,_D:115,_A:'assets/Non-Code/file_screen/moves.png',_F:_G},{_B:'Blueprint Image',_C:14,_D:116,_A:'assets/Non-Code/file_screen/blueprint.png',_F:_G},{_B:'Tag Barrel Shell Texture',_C:25,_D:4938,_A:'assets/Non-Code/tagbarrel/shell.png',_F:_G},{_B:'Gong Geometry',_C:4,_D:195,_A:'assets/Non-Code/Gong/gong_geometry.bin',_l:'assets/Non-Code/Gong/gong_geometry.bps',_h:_E},{_B:'No Face',_C:14,_D:33,_A:'assets/Non-Code/displays/none.png',_F:_d},{_B:'Shared Face',_C:14,_D:39,_A:'assets/Non-Code/displays/shared.png',_F:_d},{_B:'Sold Out Face',_C:14,_D:40,_A:'assets/Non-Code/displays/soldout32.png',_F:_d},{_B:'End Sequence Credits',_C:19,_D:7,_A:'assets/Non-Code/credits/credits.bin',_L:_E},{_B:'DK Wrinkly Door',_C:4,_D:240,_A:_m,_L:_E},{_B:'WXY_Slash',_C:14,_D:12,_A:'assets/Non-Code/displays/wxys.png',_F:_G},{_B:'DK Tie Palette',_C:25,_D:6013,_A:'assets/Non-Code/hash/dk_tie_palette.png',_O:_E,_F:_G,_J:32*32*2},{_B:_q,_C:25,_D:6014,_A:_r,_O:_E,_F:_G,_J:32*32*2},{_B:_q,_C:25,_D:6014,_A:_r,_O:_E,_F:_G,_J:32*32*2},{_B:'DPad Image',_C:14,_D:187,_A:'assets/Non-Code/displays/dpad.png',_F:_G}]
+file_dict=[{_B:'Static ASM Code',_V:70640,_j:726500,_A:'StaticCode.bin',_N:_E,_g:patchStaticCode},{_B:'Dolby Logo',_C:14,_D:176,_A:'assets/Non-Code/Dolby/DolbyThin.png',_F:_k},{_B:'Thumb Image',_C:14,_D:94,_A:'assets/Non-Code/Nintendo Logo/Nintendo4.png',_F:_G},{_B:'DKTV Image',_C:14,_D:44,_A:'assets/Non-Code/DKTV/logo3.png',_F:_G},{_B:'Spin Transition Image',_C:14,_D:95,_A:'assets/Non-Code/transition/transition-body.png',_F:_k},{_B:'Moves Image',_C:14,_D:115,_A:'assets/Non-Code/file_screen/moves.png',_F:_G},{_B:'Blueprint Image',_C:14,_D:116,_A:'assets/Non-Code/file_screen/blueprint.png',_F:_G},{_B:'Tag Barrel Shell Texture',_C:25,_D:4938,_A:'assets/Non-Code/tagbarrel/shell.png',_F:_G},{_B:'Gong Geometry',_C:4,_D:195,_A:'assets/Non-Code/Gong/gong_geometry.bin',_l:'assets/Non-Code/Gong/gong_geometry.bps',_h:_E},{_B:'No Face',_C:14,_D:33,_A:'assets/Non-Code/displays/none.png',_F:_d},{_B:'Shared Face',_C:14,_D:39,_A:'assets/Non-Code/displays/shared.png',_F:_d},{_B:'Sold Out Face',_C:14,_D:40,_A:'assets/Non-Code/displays/soldout32.png',_F:_d},{_B:'End Sequence Credits',_C:19,_D:7,_A:'assets/Non-Code/credits/credits.bin',_L:_E},{_B:'DK Wrinkly Door',_C:4,_D:240,_A:_m,_L:_E},{_B:'WXY_Slash',_C:14,_D:12,_A:'assets/Non-Code/displays/wxys.png',_F:_G},{_B:'DK Tie Palette',_C:25,_D:6013,_A:'assets/Non-Code/hash/dk_tie_palette.png',_O:_E,_F:_G,_J:32*32*2},{_B:_r,_C:25,_D:6014,_A:_s,_O:_E,_F:_G,_J:32*32*2},{_B:_r,_C:25,_D:6014,_A:_s,_O:_E,_F:_G,_J:32*32*2},{_B:'DPad Image',_C:14,_D:187,_A:'assets/Non-Code/displays/dpad.png',_F:_G},{_B:'Helm Geometry',_C:1,_D:17,_A:_n,_L:_E}]
 number_game_changes=[{_X:6,_Y:'unlit',_e:520},{_X:6,_Y:'lit',_e:521},{_X:9,_Y:'unlit',_e:526},{_X:9,_Y:'lit',_e:527}]
 for num in number_game_changes:file_dict.append({_B:f"Number Game ({num[_X]}, {num[_Y]})",_C:7,_D:num[_e],_A:f"assets/Non-Code/displays/num_{num[_X]}_{num[_Y]}.png",_F:_G,_M:_E})
-kong_names=['DK','Diddy','Lanky','Tiny',_s]
-ammo_names=[_t,_u]
+kong_names=['DK','Diddy','Lanky','Tiny',_t]
+ammo_names=[_u,_v]
 for (ammo_index,ammo) in enumerate(ammo_names):file_dict.append({_B:f"{ammo.replace('_',' ')} Image",_C:14,_D:188+ammo_index,_A:f"assets/Non-Code/displays/{ammo}.png",_F:_G})
 for (kong_index,kong) in enumerate(kong_names):
 	for (x_i,x) in enumerate([_d,_G]):file_dict.append({_B:f"{kong} Face ({x})",_C:14,_D:[34+kong_index,190+kong_index][x_i],_A:f"assets/Non-Code/displays/{kong.lower()}_face.png",_F:x})
@@ -115,8 +116,11 @@ for x in range(43):
 		if x!=32:
 			if x!=24:file_dict.append({_B:'Text '+str(x),_C:12,_D:x,_A:'text'+str(x)+_Z,_J:8192,_b:8192,_a:_E})
 for x in range(10):file_dict.append({_B:f"Tag Barrel Bottom Texture ({x+1})",_C:25,_D:4749+x,_A:'assets/Non-Code/tagbarrel/bottom.png',_F:_G})
-for x in range(4761,4768):file_dict.append({_B:f"Portal Ripple Texture ({x})",_C:25,_D:x,_A:'assets/Non-Code/displays/empty44.png',_F:_G})
-barrel_faces=['Dk','Diddy','Lanky','Tiny',_s]
+for x in range(4761,4768):
+	sz='44'
+	if x==4761:sz='3264'
+	file_dict.append({_B:f"Portal Ripple Texture ({x})",_C:25,_D:x,_A:f"assets/Non-Code/displays/empty{sz}.png",_F:_G})
+barrel_faces=['Dk','Diddy','Lanky','Tiny',_t]
 barrel_offsets=[4817,4815,4819,4769,4747]
 for x in range(5):
 	for y in range(2):file_dict.append({_B:f"{barrel_faces[x]} Transform Barrel Shell ({y+1})",_C:25,_D:barrel_offsets[x]+y,_A:f"assets/Non-Code/tagbarrel/{barrel_faces[x]} barrel {y}a.png",_F:_G})
@@ -150,8 +154,8 @@ with open(ROMName,_c)as fh:
 			found_geometry=_i;found_floors=_i;found_walls=_i;should_compress_walls=_E;should_compress_floors=_E
 			for y in pointer_tables:
 				if _W not in y:continue
-				if _n in y and callable(y[_n]):
-					if _o in y and os.path.exists(x[_S]+y[_o]):y[_n](x[_S]+y[_o],x[_S]+y[_W])
+				if _o in y and callable(y[_o]):
+					if _p in y and os.path.exists(x[_S]+y[_p]):y[_o](x[_S]+y[_p],x[_S]+y[_W])
 				if os.path.exists(x[_S]+y[_W]):
 					if y[_H]==1:
 						with open(x[_S]+y[_W],_c)as fg:byte_read=fg.read(10);should_compress_walls=byte_read[9]&1!=0;should_compress_floors=byte_read[9]&2!=0
@@ -197,7 +201,7 @@ with open(newROMName,'r+b')as fh:
 			if x[_F]in[_G,'i4',_k,'i8','ia8']:
 				result=subprocess.check_output(['./build/n64tex.exe',x[_F],x[_A]])
 				if _J in x:x[_A]=x[_A].replace(_f,f".{x[_F]}")
-			elif x[_F]==_d:convertToRGBA32(x[_A]);x[_A]=x[_A].replace(_f,_v)
+			elif x[_F]==_d:convertToRGBA32(x[_A]);x[_A]=x[_A].replace(_f,_w)
 			else:print(' - ERROR: Unsupported texture format '+x[_F])
 		if _J in x:
 			x[_M]=_E
@@ -228,17 +232,17 @@ with open(newROMName,'r+b')as fh:
 				if _J not in x:uncompressed_size=len(byte_read)
 			if _M in x and x[_M]:compress=bytearray(byte_read)
 			elif _N in x and x[_N]:compress=bytearray(byte_read)
-			elif _w in x and x[_w]:compressor=zlib.compressobj(zlib.Z_BEST_COMPRESSION,zlib.DEFLATED,25);compress=compressor.compress(byte_read);compress+=compressor.flush();compress=bytearray(compress);compress[4]=0;compress[5]=0;compress[6]=0;compress[7]=0
+			elif _x in x and x[_x]:compressor=zlib.compressobj(zlib.Z_BEST_COMPRESSION,zlib.DEFLATED,25);compress=compressor.compress(byte_read);compress+=compressor.flush();compress=bytearray(compress);compress[4]=0;compress[5]=0;compress[6]=0;compress[7]=0
 			else:compress=bytearray(gzip.compress(byte_read,compresslevel=9));compress[4]=0;compress[5]=0;compress[6]=0;compress[7]=0
-			print(' - Writing '+x[_I]+' ('+hex(len(compress))+_x)
+			print(' - Writing '+x[_I]+' ('+hex(len(compress))+_y)
 			if _C in x and _D in x:replaceROMFile(fh,x[_C],x[_D],compress,uncompressed_size)
 			elif _V in x:
 				if isROMAddressOverlay(x[_V]):replaceOverlayData(x[_V],compress)
 				else:fh.seek(x[_V]);fh.write(compress)
-			else:print("  - WARNING: Can't find address information in file_dict entry to write "+x[_I]+' ('+hex(len(compress))+_x)
+			else:print("  - WARNING: Can't find address information in file_dict entry to write "+x[_I]+' ('+hex(len(compress))+_y)
 		else:print(x[_I]+' does not exist')
-		if not(_y in x and x[_y]):
-			if not(_z in x and x[_z]):
+		if not(_z in x and x[_z]):
+			if not(_A0 in x and x[_A0]):
 				if os.path.exists(x[_I])and x[_I]!=x[_A]:os.remove(x[_I])
 			if not(_L in x and x[_L]):
 				if os.path.exists(x[_A]):os.remove(x[_A])
@@ -258,14 +262,14 @@ with open(newROMName,'r+b')as fh:
 	for x in hash_icons:
 		pth=f"assets/Non-Code/hash/{x}"
 		if os.path.exists(pth):os.remove(pth)
-	other_remove=[];displays=['dk_face','diddy_face','lanky_face','tiny_face','chunky_face','none','shared','soldout32','wxys','yellow_qmark_0','yellow_qmark_1','empty44',_u,_A0,_A1,_A2,_A3,_t]
+	other_remove=[];displays=['dk_face','diddy_face','lanky_face','tiny_face','chunky_face','none','shared','soldout32','wxys','yellow_qmark_0','yellow_qmark_1','empty44','empty3264',_v,_A1,_A2,_A3,_A4,_u]
 	for disp in displays:
-		for ext in [_f,_v]:other_remove.append(f"displays/{disp}{ext}")
+		for ext in [_f,_w]:other_remove.append(f"displays/{disp}{ext}")
 	for x in range(8):other_remove.append(f"file_screen/key{x+1}.png")
 	for x in other_remove:
 		pth=f"assets/Non-Code/{x}"
 		if os.path.exists(pth):os.remove(pth)
-	hash_items=['dk_tie_palette','homing_crate_0','homing_crate_1','num_1_lit','num_1_unlit',_A0,_A1,'num_7_lit','num_7_unlit',_A2,_A3,'standard_crate_0','standard_crate_1','tiny_palette']
+	hash_items=['dk_tie_palette','homing_crate_0','homing_crate_1','num_1_lit','num_1_unlit',_A1,_A2,'num_7_lit','num_7_unlit',_A3,_A4,'standard_crate_0','standard_crate_1','tiny_palette']
 	for hash_item in hash_items:
 		for f_t in [_G,'png']:
 			pth=f"assets/Non-Code/hash/{hash_item}.{f_t}"
@@ -278,5 +282,6 @@ with open(newROMName,'r+b')as fh:
 	for x in model_changes:
 		if os.path.exists(x[_P]):os.remove(x[_P])
 	if os.path.exists(new_coin_sfx):os.remove(new_coin_sfx)
+	if os.path.exists(_n):os.remove(_n)
 print('[7 / 7] - Generating BizHawk RAM watch')
 sys.exit()
