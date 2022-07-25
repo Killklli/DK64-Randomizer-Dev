@@ -407,7 +407,7 @@ def FillKongsAndMoves(spoiler):
 			for U in X:LocationList[U].PlaceItem(Items.NoItem);I.remove(U)
 		for E in M:W[E]=I
 		Reset();PlaceKongs(A,M,[A for A in I])
-		if A.settings.kongs_for_progression and A.settings.shuffle_loading_zones!=_E:
+		if A.settings.kongs_for_progression and A.settings.shuffle_loading_zones!=_E and A.settings.move_rando!='start_with':
 			F=[A for A in I];B=[B for B in A.settings.starting_kong_list];J=A.settings.starting_kongs_count+1;G=1;Q=_C
 			while len(B)!=5:
 				J=len(B)+1;C={};H=_A
@@ -499,8 +499,8 @@ def Generate_Spoiler(spoiler):
 		if A.settings.shuffle_loading_zones==_J:ShuffleExits.ShuffleExits(A.settings);A.UpdateExits()
 		WipeProgressionRequirements(A.settings);ShuffleMisc(A);FillKongsAndMovesForLevelOrder(A)
 	else:
-		if A.settings.shuffle_loading_zones!='none':ShuffleExits.ExitShuffle(A.settings);A.UpdateExits()
 		ShuffleMisc(A)
+		if A.settings.shuffle_loading_zones!='none':ShuffleExits.ExitShuffle(A.settings);A.UpdateExits()
 		if A.settings.shuffle_items==_E:Fill(A)
 		elif A.settings.shuffle_items=='moves'or A.settings.kong_rando:FillKongsAndMovesGeneric(A)
 		else:
@@ -508,7 +508,7 @@ def Generate_Spoiler(spoiler):
 			if not GetAccessibleLocations(A.settings,[],SearchMode.CheckBeatable):raise Ex.VanillaItemsGameNotBeatableException('Game unbeatable.')
 	GeneratePlaythrough(A);Reset();ShuffleExits.Reset();return A
 def ShuffleMisc(spoiler):
-	'Shuffle miscellaneous objects outside of main fill algorithm, including Kasplats, Bonus barrels, and bananaport warps.';A=spoiler;KasplatShuffle(LogicVariables);A.human_kasplats={};A.UpdateKasplats(LogicVariables.kasplat_map)
+	'Shuffle miscellaneous objects outside of main fill algorithm, including Kasplats, Bonus barrels, and bananaport warps.';A=spoiler;KasplatShuffle(A,LogicVariables);A.human_kasplats={};A.UpdateKasplats(LogicVariables.kasplat_map)
 	if A.settings.bonus_barrels in(_D,'all_beaver_bother'):BarrelShuffle(A.settings);A.UpdateBarrels()
 	if A.settings.bananaport_rando:C=[];D={};ShuffleWarps(C,D);A.bananaport_replacements=C.copy();A.human_warp_locations=D
 	if A.settings.random_patches:G=[];A.human_patches=ShufflePatches(A,G).copy()
