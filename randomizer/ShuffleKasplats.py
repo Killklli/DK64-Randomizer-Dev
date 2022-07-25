@@ -58,7 +58,8 @@ def KasplatShuffle(spoiler,LogicVariables):
 		B=0
 		while True:
 			try:
-				ShuffleKasplatsAndLocations(spoiler,A)
+				if A.settings.kasplat_location_rando:ShuffleKasplatsAndLocations(spoiler,A)
+				else:ShuffleKasplats(A)
 				if not Fill.VerifyWorld(A.settings):raise Ex.KasplatPlacementException
 				return
 			except Ex.KasplatPlacementException:

@@ -33,7 +33,7 @@ class Settings:
 			if A.maximize_helm_blocker:A.blocker_7=A.blocker_max
 			else:A.blocker_7=B[7]
 		A.EntryGBs=[A.blocker_0,A.blocker_1,A.blocker_2,A.blocker_3,A.blocker_4,A.blocker_5,A.blocker_6,A.blocker_7];A.BossBananas=[A.troff_0,A.troff_1,A.troff_2,A.troff_3,A.troff_4,A.troff_5,A.troff_6]
-	def generate_main(A):'Set Default items on main page.';A.seed=_A;A.download_patch_file=_A;A.bonus_barrel_rando=_A;A.loading_zone_coupled=_A;A.move_rando=_A;A.random_patches=_A;A.random_prices=_A;A.boss_location_rando=_A;A.boss_kong_rando=_A;A.kasplat_rando=_A;A.puzzle_rando=_A
+	def generate_main(A):'Set Default items on main page.';A.seed=_A;A.download_patch_file=_A;A.bonus_barrel_rando=_A;A.loading_zone_coupled=_A;A.move_rando=_A;A.random_patches=_A;A.random_prices=_A;A.boss_location_rando=_A;A.boss_kong_rando=_A;A.kasplat_rando_setting=_A;A.puzzle_rando=_A
 	def set_seed(A):'Forcibly re-set the random seed to the seed set in the config.';random.seed(A.seed)
 	def generate_progression(A):'Set default items on progression page.';A.blocker_0=_A;A.blocker_1=_A;A.blocker_2=_A;A.blocker_3=_A;A.blocker_4=_A;A.blocker_5=_A;A.blocker_6=_A;A.blocker_7=_A;A.troff_0=_A;A.troff_1=_A;A.troff_2=_A;A.troff_3=_A;A.troff_4=_A;A.troff_5=_A;A.troff_6=_A;A.troff_min=_A;A.troff_max=_A;A.blocker_text=_A;A.troff_text=_A
 	def generate_misc(A):'Set default items on misc page.';B='normal';A.crown_door_open=_A;A.coin_door_open=_A;A.unlock_fairy_shockwave=_A;A.krool_phase_count=5;A.krool_random=_B;A.krool_key_count=8;A.keys_random=_B;A.starting_kongs_count=5;A.starting_random=_B;A.bonus_barrels=B;A.helm_barrels=B;A.bonus_barrel_auto_complete=_B;A.gnawty_barrels=_B;A.hard_shooting=_B;A.hard_mad_jack=_B;A.damage_amount='default';A.no_logic=_B;A.shuffle_loading_zones=_D;A.decoupled_loading_zones=_B;A.music_bgm=_A;A.music_fanfares=_A;A.music_events=_A;A.colors={};A.generate_spoilerlog=_A;A.fast_start_beginning_of_game=_A;A.helm_setting=_A;A.quality_of_life=_A;A.shorten_boss=_B;A.enable_tag_anywhere=_A;A.krool_phase_order_rando=_A;A.krool_access=_B;A.open_lobbies=_A;A.open_levels=_A;A.randomize_pickups=_B;A.random_medal_requirement=_B;A.medal_requirement=0;A.bananaport_rando=_B;A.activate_all_bananaports=_B;A.shop_indicator=_B;A.randomize_cb_required_amounts=_B;A.randomize_blocker_required_amounts=_B;A.maximize_helm_blocker=_B;A.perma_death=_B;A.disable_tag_barrels=_B;A.level_randomization=_D;A.kong_rando=_B;A.kongs_for_progression=_B;A.wrinkly_hints='off';A.fast_warps=_B;A.dpad_display=_B;A.high_req=_B;A.fast_gbs=_B
@@ -81,6 +81,9 @@ class Settings:
 		if A.starting_kongs_count<5 and(A.shuffle_loading_zones==J or A.shuffle_loading_zones==_D)and not A.no_logic:A.kongs_for_progression=_C
 		if A.move_rando in['on','on_cross_purchase']:A.shuffle_items='moves'
 		elif A.move_rando=='start_with':A.unlock_all_moves=_C
+		A.kasplat_rando=_B;A.kasplat_location_rando=_B
+		if A.kasplat_rando_setting=='vanilla_locations':A.kasplat_rando=_C
+		if A.kasplat_rando_setting=='location_shuffle':A.kasplat_rando=_C;A.kasplat_location_rando=_C
 	def SelectKongLocations(B):
 		'Select which random kong locations to use depending on number of starting kongs.';A=[Locations.DiddyKong,Locations.LankyKong,Locations.TinyKong,Locations.ChunkyKong]
 		for D in range(0,B.starting_kongs_count-1):C=random.choice(A);A.remove(C)
