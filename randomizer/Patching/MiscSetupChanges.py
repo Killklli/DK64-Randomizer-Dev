@@ -13,7 +13,7 @@ def randomize_setup(spoiler):
 	'Randomize setup.';A6='coords';A5='corner';w='offset';v='center';u='item_list';t='map';h='rotation';g='numbers';f='subtype';S='offsets';R='item';O='weight';N='type';J='positions';D='big';C=spoiler;B='rot';A='number';A7=[{R:'orange',N:86,O:3},{R:'film',N:152,O:1},{R:'crystals',N:142,O:4},{R:'standard_crate',N:143,O:4},{R:'homing_crate',N:17,O:2}];i=[]
 	for x in A7:
 		for AR in range(x[O]):i.append(x[N])
-	A8=[C.settings.skip_arcader1,C.settings.randomize_pickups,C.settings.random_patches,C.settings.puzzle_rando];j=False
+	A8=[C.settings.fast_gbs,C.settings.randomize_pickups,C.settings.random_patches,C.settings.puzzle_rando];j=False
 	for A9 in A8:j=j or A9
 	AA=[{t:Maps.AztecLlamaTemple,u:[188,555,553,554]},{t:Maps.CastleMuseum,u:[23]}];AB=[{f:A5,g:[{A:12,B:0},{A:3,B:1},{A:5,B:2},{A:6,B:3}]},{f:'edge',g:[{A:8,B:0},{A:10,B:0},{A:7,B:1},{A:16,B:1},{A:14,B:2},{A:9,B:2},{A:4,B:3},{A:1,B:3}]},{f:v,g:[{A:13,B:0},{A:15,B:0},{A:11,B:0},{A:2,B:0}]}]
 	if j:
@@ -24,7 +24,7 @@ def randomize_setup(spoiler):
 				E=P+4+AC*48;ROM().seek(E+40);G=int.from_bytes(ROM().readBytes(2),D);y=False
 				for z in AA:
 					if z[t]==F and G in z[u]:y=True
-				if G==406 and C.settings.skip_arcader1 and F==Maps.FactoryBaboonBlast:ROM().seek(E+40);ROM().writeMultipleBytes(116,2);ROM().seek(E+12);ROM().writeMultipleBytes(1056964608,4)
+				if G==406 and C.settings.fast_gbs and F==Maps.FactoryBaboonBlast:ROM().seek(E+40);ROM().writeMultipleBytes(116,2);ROM().seek(E+12);ROM().writeMultipleBytes(1056964608,4)
 				elif G in i and C.settings.randomize_pickups:ROM().seek(E+40);ROM().writeMultipleBytes(random.choice(i),2)
 				elif y:
 					if C.settings.puzzle_rando:k.append(E);ROM().seek(E);Q=int.from_bytes(ROM().readBytes(4),D);l=int.from_bytes(ROM().readBytes(4),D);m=int.from_bytes(ROM().readBytes(4),D);U.append([Q,l,m])

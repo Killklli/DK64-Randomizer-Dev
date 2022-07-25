@@ -73,7 +73,6 @@ def patching_response(responded_data):
 	if A.settings.perma_death:ROM().seek(B+317);ROM().write(1);ROM().seek(B+318);ROM().write(1)
 	if A.settings.open_lobbies:ROM().seek(B+316);ROM().write(255)
 	if A.settings.disable_tag_barrels:ROM().seek(B+319);ROM().write(1)
-	if A.settings.skip_arcader1:ROM().seek(B+294);ROM().write(1)
 	if A.settings.disable_shop_hints:ROM().seek(B+315);ROM().write(0)
 	if A.settings.open_levels:ROM().seek(B+295);ROM().write(1)
 	if A.settings.shorten_boss:ROM().seek(B+299);ROM().write(1)
@@ -82,7 +81,7 @@ def patching_response(responded_data):
 	if A.settings.activate_all_bananaports=='all':ROM().seek(B+296);ROM().write(1)
 	if A.settings.activate_all_bananaports=='isles':ROM().seek(B+296);ROM().write(2)
 	if A.settings.high_req:ROM().seek(B+361);ROM().write(1)
-	if A.settings.fast_gbs:ROM().seek(B+362);ROM().write(1)
+	if A.settings.fast_gbs:ROM().seek(B+362);ROM().write(1);ROM().seek(B+294);ROM().write(1)
 	H=[0,1,2,3,4,5,6,7]
 	if len(A.settings.krool_keys_required)>0:
 		for F in A.settings.krool_keys_required:
