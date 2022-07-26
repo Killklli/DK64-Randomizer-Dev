@@ -76,7 +76,9 @@ for f in files:
 			for x in range(8):output(f"\t\tKey {x+1}: {str(getValue(fh,280,1)>>x&1!=0)}")
 			output(f"\tDisable Drops: {str(getTrueFalse(fh,281,1))}");output(f"\tHash:")
 			for x in range(5):output(f"\t\t[{x}] - {str(getValue(fh,282+x,1))}")
-			output(f"\tMusic Rando On: {str(getTrueFalse(fh,287,1))}");output(f"\tShop Indicator On: {str(getTrueFalse(fh,292,1))}");output(f"\tWarp to Isles Enabled: {str(getTrueFalse(fh,293,1))}");output(f"\tSkip Arcade Round 1: {str(getTrueFalse(fh,294,1))}");output(f"\tOpen Levels: {str(getTrueFalse(fh,295,1))}");output(f"\tActivate All Warps: {str(getTrueFalse(fh,296,1))}");output(f"\tD-Pad Visual Showed: {str(getTrueFalse(fh,297,1))}");output(f"\tFast Warps: {str(getTrueFalse(fh,298,1))}");output(f"\tShort Bosses: {str(getTrueFalse(fh,299,1))}");output(f"\tCoin Requirements")
+			output(f"\tMusic Rando On: {str(getTrueFalse(fh,287,1))}");output(f"\tShop Indicator On: {str(getTrueFalse(fh,292,1))}");output(f"\tWarp to Isles Enabled: {str(getTrueFalse(fh,293,1))}");klap_model=getValue(fh,294,1)
+			if klap_model==0:klap_model==33
+			output(f"\tKlaptrap Model: {hex(klap_model)}");output(f"\tOpen Levels: {str(getTrueFalse(fh,295,1))}");output(f"\tActivate All Warps: {str(getTrueFalse(fh,296,1))}");output(f"\tD-Pad Visual Showed: {str(getTrueFalse(fh,297,1))}");output(f"\tFast Warps: {str(getTrueFalse(fh,298,1))}");output(f"\tShort Bosses: {str(getTrueFalse(fh,299,1))}");output(f"\tCoin Requirements")
 			for (x_i,x) in enumerate(['Caves Beetle Race','Aztec Beetle Race','Factory Car Race','Seal Race','Castle Car Race','Japes Minecart','Fungi Minecart','Castle Minecart']):output(f"\t\t{x}: {str(getValue(fh,300+x_i,1))}")
 			output(f"\tShop Hints: {str(getTrueFalse(fh,315,1))}");output(f"\tLobbies Auto-opened:")
 			for x in range(8):output(f"\t\t{levels[x]} Lobby Entrance: {str(getValue(fh,316,1)>>x&1!=0)}")

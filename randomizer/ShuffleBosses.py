@@ -14,16 +14,16 @@ def ShuffleBossKongs(settings):
 	'Shuffle the kongs required for the bosses.';A=settings;E={Maps.JapesBoss:Kongs.donkey,Maps.AztecBoss:Kongs.diddy,Maps.FactoryBoss:Kongs.tiny,Maps.GalleonBoss:Kongs.lanky,Maps.FungiBoss:Kongs.chunky,Maps.CavesBoss:Kongs.donkey,Maps.CastleBoss:Kongs.lanky};B=[]
 	for F in range(7):
 		C=A.boss_maps[F]
-		if A.boss_kong_rando:D=SelectRandomKongForBoss(C,A.hard_mad_jack)
+		if A.boss_kong_rando:D=SelectRandomKongForBoss(C,A.hard_bosses)
 		else:D=E[C]
 		B.append(D)
 	return B
-def SelectRandomKongForBoss(boss_map,hard_mad_jack):
+def SelectRandomKongForBoss(boss_map,hard_bosses):
 	'Randomly choses from the allowed list for the boss.';B=boss_map;A=[]
 	if B==Maps.JapesBoss:A=[Kongs.donkey,Kongs.diddy,Kongs.lanky,Kongs.tiny,Kongs.chunky]
 	elif B==Maps.AztecBoss:A=[Kongs.donkey,Kongs.diddy,Kongs.lanky,Kongs.tiny,Kongs.chunky]
 	elif B==Maps.FactoryBoss:
-		if hard_mad_jack:A=[Kongs.donkey,Kongs.tiny,Kongs.chunky]
+		if hard_bosses:A=[Kongs.donkey,Kongs.tiny,Kongs.chunky]
 		else:A=[Kongs.tiny]
 	elif B==Maps.GalleonBoss:A=[Kongs.donkey,Kongs.diddy,Kongs.lanky,Kongs.tiny,Kongs.chunky]
 	elif B==Maps.FungiBoss:A=[Kongs.chunky]
@@ -35,11 +35,15 @@ def ShuffleKutoutKongs(boss_maps,boss_kongs,boss_kong_rando):
 	if boss_kong_rando:E=boss_maps.index(Maps.CastleBoss);D=boss_kongs[E];B=C.copy();B.remove(D);random.shuffle(B);A.append(D);A.extend(B)
 	else:A=C
 	return A
+def ShuffleKKOPhaseOrder(settings):
+	'Shuffle the phase order in King Kut Out.';A=[0,1,2,3];random.shuffle(A);B=[]
+	for C in range(3):B.append(A[C])
+	return B.copy()
 def ShuffleBossesBasedOnOwnedItems(settings,ownedKongs,ownedMoves):
 	'Perform Boss Location & Boss Kong rando, ensuring each first boss can be beaten with an unlocked kong and owned moves.';I=ownedMoves;F=settings;A=ownedKongs
 	try:
 		B={0,1,2,3,4,5,6};H='Dogadon 2';U=[C for C in B if Kongs.chunky in A[C]and Items.HunkyChunky in I[C]];N=random.choice(U);V=Kongs.chunky;B.remove(N);H='Mad Jack'
-		if F.hard_mad_jack:
+		if F.hard_bosses:
 			K=[C for C in B if Kongs.donkey in A[C]or Kongs.chunky in A[C]or Kongs.tiny in A[C]and Items.PonyTailTwirl in I[C]];G=random.choice(K);O=set(A[G]).intersection({Kongs.donkey,Kongs.chunky})
 			if Kongs.tiny in A[G]and Items.PonyTailTwirl in I[G]:O.add(Kongs.tiny)
 			P=random.choice(list(O))

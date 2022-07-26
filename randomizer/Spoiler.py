@@ -33,16 +33,16 @@ class Spoiler:
 			A.move_data.append(B)
 		A.hint_list={}
 	def toJson(A):
-		'Convert spoiler to JSON.';R='skip';Q='none';L='randomized';A.settings.verify_hash();C=OrderedDict();B=OrderedDict();B['seed']=A.settings.seed_id;B['no_logic']=A.settings.no_logic;B['move_rando']=A.settings.move_rando;B['shuffle_loading_zones']=A.settings.shuffle_loading_zones;B['decoupled_loading_zones']=A.settings.decoupled_loading_zones;B['starting_kongs_count']=A.settings.starting_kongs_count;M=[]
-		for S in A.settings.starting_kong_list:M.append(S.name.capitalize())
-		B['starting_kong_list']=M;B['colors']=A.settings.colors;B['diddy_freeing_kong']=ItemList[ItemFromKong(A.settings.diddy_freeing_kong)].name;B['tiny_freeing_kong']=ItemList[ItemFromKong(A.settings.tiny_freeing_kong)].name;B['lanky_freeing_kong']=ItemList[ItemFromKong(A.settings.lanky_freeing_kong)].name;B['chunky_freeing_kong']=ItemList[ItemFromKong(A.settings.chunky_freeing_kong)].name;B['open_lobbies']=A.settings.open_lobbies;B['open_levels']=A.settings.open_levels;B['randomize_pickups']=A.settings.randomize_pickups;B['random_patches']=A.settings.random_patches;B['puzzle_rando']=A.settings.puzzle_rando;B['crown_door_open']=A.settings.crown_door_open;B['coin_door_open']=A.settings.coin_door_open;B['unlock_fairy_shockwave']=A.settings.unlock_fairy_shockwave;B['random_medal_requirement']=A.settings.random_medal_requirement
+		'Convert spoiler to JSON.';T='skip';S='none';M='randomized';L=', ';A.settings.verify_hash();C=OrderedDict();B=OrderedDict();B['seed']=A.settings.seed_id;B['no_logic']=A.settings.no_logic;B['move_rando']=A.settings.move_rando;B['shuffle_loading_zones']=A.settings.shuffle_loading_zones;B['decoupled_loading_zones']=A.settings.decoupled_loading_zones;B['starting_kongs_count']=A.settings.starting_kongs_count;N=[]
+		for U in A.settings.starting_kong_list:N.append(U.name.capitalize())
+		B['starting_kong_list']=N;B['colors']=A.settings.colors;B['diddy_freeing_kong']=ItemList[ItemFromKong(A.settings.diddy_freeing_kong)].name;B['tiny_freeing_kong']=ItemList[ItemFromKong(A.settings.tiny_freeing_kong)].name;B['lanky_freeing_kong']=ItemList[ItemFromKong(A.settings.lanky_freeing_kong)].name;B['chunky_freeing_kong']=ItemList[ItemFromKong(A.settings.chunky_freeing_kong)].name;B['open_lobbies']=A.settings.open_lobbies;B['open_levels']=A.settings.open_levels;B['randomize_pickups']=A.settings.randomize_pickups;B['random_patches']=A.settings.random_patches;B['puzzle_rando']=A.settings.puzzle_rando;B['crown_door_open']=A.settings.crown_door_open;B['coin_door_open']=A.settings.coin_door_open;B['unlock_fairy_shockwave']=A.settings.unlock_fairy_shockwave;B['random_medal_requirement']=A.settings.random_medal_requirement
 		if A.settings.coin_door_open in['need_both','need_rw']:B['medal_requirement']=A.settings.medal_requirement
 		B['random_prices']=A.settings.random_prices;B['bananaport_rando']=A.settings.bananaport_rando;B['krool_phases']=A.settings.krool_order;B['krool_access']=A.settings.krool_access;B['krool_keys_required']=A.GetKroolKeysRequired(A.settings.krool_keys_required);B['music_bgm']=A.settings.music_bgm;B['music_fanfares']=A.settings.music_fanfares;B['music_events']=A.settings.music_events;B['fast_start_beginning_of_game']=A.settings.fast_start_beginning_of_game;B['helm_setting']=A.settings.helm_setting;B['quality_of_life']=A.settings.quality_of_life;B['enable_tag_anywhere']=A.settings.enable_tag_anywhere;B['fast_gbs']=A.settings.fast_gbs;B['high_req']=A.settings.high_req;B['blocker_golden_bananas']=A.settings.EntryGBs;B['troff_n_scoff_bananas']=A.settings.BossBananas;C['Settings']=B
-		if A.settings.shuffle_items!=Q:
-			C['Playthrough']=A.playthrough;C['Way_of_the_Hoard']=A.woth;N=OrderedDict()
+		if A.settings.shuffle_items!=S:
+			C['Playthrough']=A.playthrough;C['Way_of_the_Hoard']=A.woth;O=OrderedDict()
 			for (F,G) in A.location_data.items():
-				if not LocationList[F].constant:N[LocationList[F].name]=ItemList[G].name
-			C['Locations']=N
+				if not LocationList[F].constant:O[LocationList[F].name]=ItemList[G].name
+			C['Locations']=O
 		if A.settings.random_prices!='vanilla':
 			D=OrderedDict()
 			for (G,E) in A.settings.prices.items():
@@ -52,33 +52,37 @@ class Spoiler:
 				else:D[ItemList[G].name]=E
 			C['Prices']=D
 		if A.settings.shuffle_loading_zones=='levels':
-			H=OrderedDict();T={Transitions.IslesMainToJapesLobby:Levels.JungleJapes,Transitions.IslesMainToAztecLobby:Levels.AngryAztec,Transitions.IslesMainToFactoryLobby:Levels.FranticFactory,Transitions.IslesMainToGalleonLobby:Levels.GloomyGalleon,Transitions.IslesMainToForestLobby:Levels.FungiForest,Transitions.IslesMainToCavesLobby:Levels.CrystalCaves,Transitions.IslesMainToCastleLobby:Levels.CreepyCastle};U={Transitions.IslesJapesLobbyToMain:Levels.JungleJapes,Transitions.IslesAztecLobbyToMain:Levels.AngryAztec,Transitions.IslesFactoryLobbyToMain:Levels.FranticFactory,Transitions.IslesGalleonLobbyToMain:Levels.GloomyGalleon,Transitions.IslesForestLobbyToMain:Levels.FungiForest,Transitions.IslesCavesLobbyToMain:Levels.CrystalCaves,Transitions.IslesCastleLobbyToMain:Levels.CreepyCastle}
-			for (V,W) in T.items():X=U[A.shuffled_exit_data[V].reverse];H[W.name]=X.name
+			H=OrderedDict();V={Transitions.IslesMainToJapesLobby:Levels.JungleJapes,Transitions.IslesMainToAztecLobby:Levels.AngryAztec,Transitions.IslesMainToFactoryLobby:Levels.FranticFactory,Transitions.IslesMainToGalleonLobby:Levels.GloomyGalleon,Transitions.IslesMainToForestLobby:Levels.FungiForest,Transitions.IslesMainToCavesLobby:Levels.CrystalCaves,Transitions.IslesMainToCastleLobby:Levels.CreepyCastle};W={Transitions.IslesJapesLobbyToMain:Levels.JungleJapes,Transitions.IslesAztecLobbyToMain:Levels.AngryAztec,Transitions.IslesFactoryLobbyToMain:Levels.FranticFactory,Transitions.IslesGalleonLobbyToMain:Levels.GloomyGalleon,Transitions.IslesForestLobbyToMain:Levels.FungiForest,Transitions.IslesCavesLobbyToMain:Levels.CrystalCaves,Transitions.IslesCastleLobbyToMain:Levels.CreepyCastle}
+			for (X,Y) in V.items():Z=W[A.shuffled_exit_data[X].reverse];H[Y.name]=Z.name
 			C['Shuffled Level Order']=H
-		elif A.settings.shuffle_loading_zones!=Q:
+		elif A.settings.shuffle_loading_zones!=S:
 			H=OrderedDict()
-			for (exit,Y) in A.shuffled_exit_data.items():H[ShufflableExits[exit].name]=Y.spoilerName
+			for (exit,a) in A.shuffled_exit_data.items():H[ShufflableExits[exit].name]=a.spoilerName
 			C['Shuffled Exits']=H
 		if A.settings.boss_location_rando:
-			O=OrderedDict()
-			for I in range(7):O[Levels(I).name]=Maps(A.settings.boss_maps[I]).name
-			C['Shuffled Boss Order']=O
-		if A.settings.boss_kong_rando:
 			P=OrderedDict()
-			for I in range(7):P[Levels(I).name]=Kongs(A.settings.boss_kongs[I]).name
-			C['Shuffled Boss Kongs']=P;J=''
-			for Z in A.settings.kutout_kongs:J=J+Kongs(Z).name+', '
-			C['Shuffled Kutout Kong Order']=J.removesuffix(', ')
+			for I in range(7):P[Levels(I).name]=Maps(A.settings.boss_maps[I]).name
+			C['Shuffled Boss Order']=P
+		if A.settings.boss_kong_rando:
+			Q=OrderedDict()
+			for I in range(7):Q[Levels(I).name]=Kongs(A.settings.boss_kongs[I]).name
+			C['Shuffled Boss Kongs']=Q;J=''
+			for b in A.settings.kutout_kongs:J=J+Kongs(b).name+L
+			C['Shuffled Kutout Kong Order']=J.removesuffix(L)
+		if A.settings.hard_bosses:
+			R=[]
+			for c in A.settings.kko_phase_order:R.append(f"Phase {c+1}")
+			C['Shuffled Kutout Phases']=L.join(R)
 		if A.settings.bonus_barrels in('random','all_beaver_bother'):
 			K=OrderedDict()
-			for (F,a) in A.shuffled_barrel_data.items():
-				if F in HelmMinigameLocations and A.settings.helm_barrels==R:continue
-				if F not in HelmMinigameLocations and A.settings.bonus_barrels==R:continue
-				K[LocationList[F].name]=MinigameRequirements[a].name
+			for (F,d) in A.shuffled_barrel_data.items():
+				if F in HelmMinigameLocations and A.settings.helm_barrels==T:continue
+				if F not in HelmMinigameLocations and A.settings.bonus_barrels==T:continue
+				K[LocationList[F].name]=MinigameRequirements[d].name
 			if len(K)>0:C['Shuffled Bonus Barrels']=K
-		if A.settings.music_bgm==L:C['Shuffled Music (BGM)']=A.music_bgm_data
-		if A.settings.music_fanfares==L:C['Shuffled Music Fanfares']=A.music_fanfare_data
-		if A.settings.music_events==L:C['Shuffled Music Events']=A.music_event_data
+		if A.settings.music_bgm==M:C['Shuffled Music (BGM)']=A.music_bgm_data
+		if A.settings.music_fanfares==M:C['Shuffled Music Fanfares']=A.music_fanfare_data
+		if A.settings.music_events==M:C['Shuffled Music Events']=A.music_event_data
 		if A.settings.kasplat_rando:C['Shuffled Kasplats']=A.human_kasplats
 		if A.settings.random_patches:C['Shuffled Dirt Patches']=A.human_patches
 		if len(A.hint_list)>0:C['Wrinkly Hints']=A.hint_list
