@@ -18,7 +18,7 @@ def apply_kongrando_cosmetic(spoiler):
 		if V==Kongs.any:V=Kongs.chunky
 		t=[];u=[{H:7,I:[{E:48,B:N[R]},{E:49,B:N[R]},{E:50,B:N[R]}],J:[{M:Enemies.CutsceneDiddy,B:O[S]}]},{H:38,I:t,J:[]},{H:20,I:[{E:22,B:p[Z]},{E:18,B:N[Z]}],J:[{M:Enemies.CutsceneLanky,B:O[U]}]},{H:16,I:[{E:20,B:q[r]}],J:[{M:Enemies.CutsceneTiny,B:O[T]}]},{H:26,I:[{E:36,B:o[s]}],J:[{M:Enemies.CutsceneChunky,B:O[V]}]}]
 		for W in A.shuffled_kong_placement.keys():
-			for a in A.shuffled_kong_placement[W].keys():ROM().seek(33476640+A.shuffled_kong_placement[W][a]['write']);ROM().writeMultipleBytes(A.shuffled_kong_placement[W][a][D],1)
+			for a in A.shuffled_kong_placement[W].keys():ROM().seek(A.settings.rom_data+A.shuffled_kong_placement[W][a]['write']);ROM().writeMultipleBytes(A.shuffled_kong_placement[W][a][D],1)
 		for X in u:
 			b=int(X[H]);c=js.pointer_addresses[9][l][b][m];ROM().seek(c);v=int.from_bytes(ROM().readBytes(4),F)
 			for Y in range(v):

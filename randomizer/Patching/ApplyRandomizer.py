@@ -31,7 +31,7 @@ def patching_response(responded_data):
 	except Exception:pass
 	E.run_until_complete(ProgressBar().update_progress(8,'Applying Patches'));A=pickle.loads(codecs.decode(J.encode(),T));A.settings.verify_hash();Settings({U:0}).compare_hash(A.settings.public_hash);A.settings.set_seed()
 	if A.settings.download_patch_file:A.settings.download_patch_file=False;js.save_text_as_file(codecs.encode(pickle.dumps(A),T).decode(),f"dk64-{A.settings.seed_id}.lanky")
-	B=33476640
+	B=A.settings.rom_data
 	if A.settings.shuffle_loading_zones=='levels':
 		ROM().seek(B+0);ROM().write(1);b=[Transitions.IslesMainToJapesLobby,Transitions.IslesMainToAztecLobby,Transitions.IslesMainToFactoryLobby,Transitions.IslesMainToGalleonLobby,Transitions.IslesMainToForestLobby,Transitions.IslesMainToCavesLobby,Transitions.IslesMainToCastleLobby];c=[Transitions.IslesJapesLobbyToMain,Transitions.IslesAztecLobbyToMain,Transitions.IslesFactoryLobbyToMain,Transitions.IslesGalleonLobbyToMain,Transitions.IslesForestLobbyToMain,Transitions.IslesCavesLobbyToMain,Transitions.IslesCastleLobbyToMain];C=0
 		for d in b:ROM().seek(B+1+C);ROM().write(c.index(A.shuffled_exit_data[int(d)].reverse));C+=1
@@ -66,25 +66,25 @@ def patching_response(responded_data):
 		elif A.settings.damage_amount=='quad':ROM().write(4)
 	else:ROM().write(1)
 	if A.settings.no_healing:ROM().seek(B+166);ROM().write(1)
-	if A.settings.no_melons:ROM().seek(B+281);ROM().write(1)
-	if A.settings.bonus_barrel_auto_complete:ROM().seek(B+279);ROM().write(1)
-	if A.settings.warp_to_isles:ROM().seek(B+293);ROM().write(1)
-	if A.settings.shop_indicator:ROM().seek(B+292);ROM().write(1)
-	if A.settings.perma_death:ROM().seek(B+317);ROM().write(1);ROM().seek(B+318);ROM().write(1)
-	if A.settings.open_lobbies:ROM().seek(B+316);ROM().write(255)
-	if A.settings.disable_tag_barrels:ROM().seek(B+319);ROM().write(1)
-	if A.settings.disable_shop_hints:ROM().seek(B+315);ROM().write(0)
-	if A.settings.open_levels:ROM().seek(B+295);ROM().write(1)
-	if A.settings.shorten_boss:ROM().seek(B+299);ROM().write(1)
-	if A.settings.fast_warps:ROM().seek(B+298);ROM().write(1)
-	if A.settings.dpad_display:ROM().seek(B+297);ROM().write(1)
-	if A.settings.activate_all_bananaports=='all':ROM().seek(B+296);ROM().write(1)
-	if A.settings.activate_all_bananaports=='isles':ROM().seek(B+296);ROM().write(2)
-	if A.settings.high_req:ROM().seek(B+361);ROM().write(1)
-	if A.settings.fast_gbs:ROM().seek(B+362);ROM().write(1)
-	if A.settings.auto_keys:ROM().seek(B+331);ROM().write(1)
+	if A.settings.no_melons:ROM().seek(B+296);ROM().write(1)
+	if A.settings.bonus_barrel_auto_complete:ROM().seek(B+294);ROM().write(1)
+	if A.settings.warp_to_isles:ROM().seek(B+309);ROM().write(1)
+	if A.settings.shop_indicator:ROM().seek(B+308);ROM().write(1)
+	if A.settings.perma_death:ROM().seek(B+333);ROM().write(1);ROM().seek(B+334);ROM().write(1)
+	if A.settings.open_lobbies:ROM().seek(B+332);ROM().write(255)
+	if A.settings.disable_tag_barrels:ROM().seek(B+335);ROM().write(1)
+	if A.settings.disable_shop_hints:ROM().seek(B+331);ROM().write(0)
+	if A.settings.open_levels:ROM().seek(B+311);ROM().write(1)
+	if A.settings.shorten_boss:ROM().seek(B+315);ROM().write(1)
+	if A.settings.fast_warps:ROM().seek(B+314);ROM().write(1)
+	if A.settings.dpad_display:ROM().seek(B+313);ROM().write(1)
+	if A.settings.activate_all_bananaports=='all':ROM().seek(B+312);ROM().write(1)
+	if A.settings.activate_all_bananaports=='isles':ROM().seek(B+312);ROM().write(2)
+	if A.settings.high_req:ROM().seek(B+377);ROM().write(1)
+	if A.settings.fast_gbs:ROM().seek(B+378);ROM().write(1)
+	if A.settings.auto_keys:ROM().seek(B+347);ROM().write(1)
 	if A.settings.hard_bosses:
-		for O in range(3):ROM().seek(B+363+O);ROM().write(A.settings.kko_phase_order[O])
+		for O in range(3):ROM().seek(B+379+O);ROM().write(A.settings.kko_phase_order[O])
 	H=[0,1,2,3,4,5,6,7]
 	if len(A.settings.krool_keys_required)>0:
 		for F in A.settings.krool_keys_required:
@@ -92,12 +92,12 @@ def patching_response(responded_data):
 			if P in H:H.remove(P)
 	I=0
 	for F in H:I=I|1<<F
-	ROM().seek(B+280);ROM().write(I)
-	if A.settings.coin_door_open in[V,W]:ROM().seek(B+320);ROM().write(A.settings.medal_requirement)
+	ROM().seek(B+295);ROM().write(I)
+	if A.settings.coin_door_open in[V,W]:ROM().seek(B+336);ROM().write(A.settings.medal_requirement)
 	randomize_entrances(A);randomize_moves(A);randomize_prices(A);randomize_bosses(A);randomize_krool(A);randomize_barrels(A);randomize_bananaport(A);randomize_kasplat_locations(A);randomize_enemies(A);apply_kongrando_cosmetic(A);randomize_setup(A);randomize_puzzles(A);random.seed(A.settings.seed);randomize_music(A);apply_cosmetic_colors(A);random.seed(A.settings.seed)
 	if A.settings.wrinkly_hints in['standard','cryptic']:wipeHints();compileHints(A);PushHints()
 	C=0;i=get_hash_images()
-	for D in A.settings.seed_hash:ROM().seek(B+282+C);ROM().write(D);js.document.getElementById('hash'+str(C)).src='data:image/jpeg;base64,'+i[D];C+=1
+	for D in A.settings.seed_hash:ROM().seek(B+297+C);ROM().write(D);js.document.getElementById('hash'+str(C)).src='data:image/jpeg;base64,'+i[D];C+=1
 	E.run_until_complete(ProgressBar().update_progress(10,'Seed Generated.'));js.document.getElementById('nav-settings-tab').style.display=G
 	if A.settings.generate_spoilerlog is True:js.document.getElementById(X).style.display=G;js.document.getElementById(Y).value=A.toJson();js.document.getElementById(Z).value=generateTracker(A.toJson())
 	else:js.document.getElementById(Y).value=G;js.document.getElementById(Z).value=G;js.document.getElementById(X).style.display='none'

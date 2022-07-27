@@ -18,7 +18,7 @@ from random import randint
 class Settings:
 	'Class used to store settings for seed generation.'
 	def __init__(A,form_data):
-		'Init all the settings using the form data to set the flags.\n\n        Args:\n            form_data (dict): Post data from the html form.\n        ';A.__hash=A.__get_hash();A.public_hash=A.__get_hash();A.algorithm='forward';A.generate_main();A.generate_progression();A.generate_misc()
+		'Init all the settings using the form data to set the flags.\n\n        Args:\n            form_data (dict): Post data from the html form.\n        ';A.__hash=A.__get_hash();A.public_hash=A.__get_hash();A.algorithm='forward';A.generate_main();A.generate_progression();A.generate_misc();A.rom_data=33476640
 		for (B,C) in form_data.items():setattr(A,B,C)
 		A.seed_id=str(A.seed);A.seed=str(A.seed)+A.__hash;A.set_seed();A.seed_hash=[random.randint(0,9)for A in range(5)];A.krool_keys_required=[];A.blocker_max=A.blocker_text if A.blocker_text else 50;A.troff_max=A.troff_text if A.troff_text else 270;A.troff_min=round(A.troff_max/3);A.training_barrels='startwith';A.shuffle_items=_D;A.unlock_all_moves=_B;A.progressive_upgrades=_B;A.prices=VanillaPrices.copy();A.level_order={1:Levels.JungleJapes,2:Levels.AngryAztec,3:Levels.FranticFactory,4:Levels.GloomyGalleon,5:Levels.FungiForest,6:Levels.CrystalCaves,7:Levels.CreepyCastle};A.resolve_settings()
 	def update_progression_totals(A):

@@ -12,16 +12,16 @@ from randomizer.Patching.Patcher import ROM
 from randomizer.Settings import Settings
 from randomizer.Spoiler import Spoiler
 def randomize_music(spoiler):
-	'Randomize music passed from the misc music settings.\n\n    Args:\n        settings (Settings): Settings object from the windows form.\n    ';U='uploaded';M='music_events';K='music_fanfares';H='default';G='randomized';F='music_bgm';E=spoiler;Y=E.settings
+	'Randomize music passed from the misc music settings.\n\n    Args:\n        settings (Settings): Settings object from the windows form.\n    ';U='uploaded';M='music_events';K='music_fanfares';H='default';G='randomized';F='music_bgm';D=spoiler;Y=D.settings
 	if js.document.getElementById('random_music').checked:js.document.getElementById(F).value=G;js.document.getElementById(K).value=G;js.document.getElementById(M).value=G
-	if js.document.getElementById(F).value!=H or js.document.getElementById(M).value!=H or js.document.getElementById(K).value!=H:V=33476640;ROM().seek(V+287);ROM().write(1)
+	if js.document.getElementById(F).value!=H or js.document.getElementById(M).value!=H or js.document.getElementById(K).value!=H:V=D.settings.rom_data;ROM().seek(V+302);ROM().write(1)
 	if js.document.getElementById(F).value!=H:
 		if js.document.getElementById(F).value==G:
 			B=[]
 			for N in range(12):B.append([])
 			for A in song_data:
 				if A.type==SongType.BGM:B[A.channel-1].append(js.pointer_addresses[0][_C][song_data.index(A)])
-			for N in range(12):I=B[N].copy();random.shuffle(I);shuffle_music(E,B[N].copy(),I)
+			for N in range(12):I=B[N].copy();random.shuffle(I);shuffle_music(D,B[N].copy(),I)
 		elif js.document.getElementById(F).value=='chaos':
 			L=js.pointer_addresses[0][_C][song_data.index(next((A for A in song_data if A.name=='DK Rap'),None))];B=[]
 			for A in song_data:
@@ -32,40 +32,40 @@ def randomize_music(spoiler):
 			B=[]
 			for A in song_data:
 				if A.type==SongType.BGM:B.append(js.pointer_addresses[0][_C][song_data.index(A)])
-			S=list(js.cosmetics.bgm);random.shuffle(S);D=[]
+			S=list(js.cosmetics.bgm);random.shuffle(S);E=[]
 			for O in S:
 				def J():
 					A=random.choice(B)
-					if len(D)>=len(B):return
-					if A not in D:ROM().seek(A[_B]);ROM().writeBytes(gzip.compress(bytes(O),compresslevel=9));D.append(A)
+					if len(E)>=len(B):return
+					if A not in E:ROM().seek(A[_B]);ROM().writeBytes(gzip.compress(bytes(O),compresslevel=9));E.append(A)
 					else:J()
 				J()
-			C=B.copy();random.shuffle(C);shuffle_music(E,B.copy(),C)
+			C=B.copy();random.shuffle(C);shuffle_music(D,B.copy(),C)
 	if js.document.getElementById(K).value!=H:
 		if js.document.getElementById(K).value==G:
 			P=[]
 			for A in song_data:
 				if A.type==SongType.Fanfare:P.append(js.pointer_addresses[0][_C][song_data.index(A)])
-			I=P.copy();random.shuffle(I);shuffle_music(E,P.copy(),I)
+			I=P.copy();random.shuffle(I);shuffle_music(D,P.copy(),I)
 		elif js.document.getElementById(K).value==U:
 			B=[]
 			for A in song_data:
 				if A.type==SongType.Fanfare:B.append(js.pointer_addresses[0][_C][song_data.index(A)])
-			T=list(js.cosmetics.fanfares);random.shuffle(T);D=[]
+			T=list(js.cosmetics.fanfares);random.shuffle(T);E=[]
 			for O in T:
 				def J():
 					A=random.choice(B)
-					if len(D)>=len(B):return
-					if A not in D:ROM().seek(A[_B]);ROM().writeBytes(gzip.compress(bytes(O),compresslevel=9));D.append(A)
+					if len(E)>=len(B):return
+					if A not in E:ROM().seek(A[_B]);ROM().writeBytes(gzip.compress(bytes(O),compresslevel=9));E.append(A)
 					else:J()
 				J()
-			C=B.copy();random.shuffle(C);shuffle_music(E,B.copy(),C)
+			C=B.copy();random.shuffle(C);shuffle_music(D,B.copy(),C)
 	if js.document.getElementById(M).value!=H:
 		if js.document.getElementById(M).value==G:
 			Q=[]
 			for A in song_data:
 				if A.type==SongType.Event:Q.append(js.pointer_addresses[0][_C][song_data.index(A)])
-			C=Q.copy();random.shuffle(C);shuffle_music(E,Q.copy(),C)
+			C=Q.copy();random.shuffle(C);shuffle_music(D,Q.copy(),C)
 def ShuffleMusicWithSizeCheck(spoiler,song_list):
 	'Facilitate shuffling of music.';L=song_list;E=spoiler;C='uncompressed_size';J=0
 	while True:

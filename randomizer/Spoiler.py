@@ -5,7 +5,6 @@ _B='kong'
 _A='container_map'
 import json
 from typing import OrderedDict
-from randomizer import Logic
 from randomizer.Enums.Events import Events
 from randomizer.Enums.Items import Items
 from randomizer.Enums.Kongs import Kongs
@@ -28,7 +27,7 @@ class Spoiler:
 			B=[]
 			for E in range(5):
 				C=[]
-				for F in range(7):C.append(-1)
+				for F in range(8):C.append(-1)
 				B.append(C)
 			A.move_data.append(B)
 		A.hint_list={}
@@ -110,8 +109,8 @@ class Spoiler:
 				except Exception as I:print(I)
 		for (F,J) in B.items():D.shuffled_exit_instructions.append(J)
 	def UpdateLocations(B,locations):
-		'Update location list for what was produced by the fill.';B.location_data={};B.shuffled_kong_placement={};I={_B:B.settings.starting_kong,_C:321};J={_D:I};B.shuffled_kong_placement['TrainingGrounds']=J;K=[A for A in[Locations.DiddyKong,Locations.LankyKong,Locations.TinyKong,Locations.ChunkyKong]if A not in B.settings.kong_locations]
-		for L in K:B.WriteKongPlacement(L,Items.NoItem)
+		'Update location list for what was produced by the fill.';B.location_data={};B.shuffled_kong_placement={};J={_B:B.settings.starting_kong,_C:337};K={_D:J};B.shuffled_kong_placement['TrainingGrounds']=K;L=[A for A in[Locations.DiddyKong,Locations.LankyKong,Locations.TinyKong,Locations.ChunkyKong]if A not in B.settings.kong_locations]
+		for M in L:B.WriteKongPlacement(M,Items.NoItem)
 		for (id,A) in locations.items():
 			if A.item is not None and A.item is not Items.NoItem and not A.constant:
 				B.location_data[id]=A.item
@@ -119,18 +118,20 @@ class Spoiler:
 					D=0
 					if A.movetype in[MoveTypes.Guns,MoveTypes.AmmoBelt]:D=1
 					elif A.movetype==MoveTypes.Instruments:D=2
-					F=[A.kong]
-					if A.kong==Kongs.any:F=[Kongs.donkey,Kongs.diddy,Kongs.lanky,Kongs.tiny,Kongs.chunky]
-					M=A.level;C=ItemList[A.item].movetype;E=ItemList[A.item].index-1;G=ItemList[A.item].kong
-					for H in F:
-						if C==1 or C==3 or C==2 and E>0 or C==4 and E>0:G=H
-						N=C<<5|E<<3|G;B.move_data[D][H][M]=N
+					G=[A.kong]
+					if A.kong==Kongs.any:G=[Kongs.donkey,Kongs.diddy,Kongs.lanky,Kongs.tiny,Kongs.chunky]
+					E=A.level
+					if E==8:E=7
+					C=ItemList[A.item].movetype;F=ItemList[A.item].index-1;H=ItemList[A.item].kong
+					for I in G:
+						if C==1 or C==3 or C==2 and F>0 or C==4 and F>0:H=I
+						N=C<<5|F<<3|H;B.move_data[D][I][E]=N
 				elif A.type==Types.Kong:B.WriteKongPlacement(id,A.item)
 	def WriteKongPlacement(A,locationId,item):
-		'Write kong placement information for the given kong cage location.';F=locationId;B='Jungle Japes';C=A.settings.diddy_freeing_kong;D=322;E=323
-		if F==Locations.LankyKong:B='Llama Temple';C=A.settings.lanky_freeing_kong;D=324;E=325
-		elif F==Locations.TinyKong:B='Tiny Temple';C=A.settings.tiny_freeing_kong;D=326;E=327
-		elif F==Locations.ChunkyKong:B='Frantic Factory';C=A.settings.chunky_freeing_kong;D=328;E=329
+		'Write kong placement information for the given kong cage location.';F=locationId;B='Jungle Japes';C=A.settings.diddy_freeing_kong;D=338;E=339
+		if F==Locations.LankyKong:B='Llama Temple';C=A.settings.lanky_freeing_kong;D=340;E=341
+		elif F==Locations.TinyKong:B='Tiny Temple';C=A.settings.tiny_freeing_kong;D=342;E=343
+		elif F==Locations.ChunkyKong:B='Frantic Factory';C=A.settings.chunky_freeing_kong;D=344;E=345
 		G={};G[_B]=KongFromItem(item);G[_C]=D;H={_B:C,_C:E};I={_D:G,'puzzle':H};A.shuffled_kong_placement[B]=I
 	def UpdatePlaythrough(B,locations,playthroughLocations):
 		'Write playthrough as a list of dicts of location/item pairs.';B.playthrough={};C=0

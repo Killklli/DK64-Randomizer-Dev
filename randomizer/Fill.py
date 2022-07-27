@@ -54,45 +54,45 @@ def GetExitLevelExit(region):
 def GetAccessibleLocations(settings,ownedItems,searchType=SearchMode.GetReachable,purchaseList=_A):
 	'Search to find all reachable locations given owned items.';Z='skip';V=ownedItems;S=settings;O=purchaseList;D=searchType
 	if O is _A:O=[]
-	H=[];I=[];P=[];J=_B
-	while len(I)>0 or J:
+	G=[];H=[];P=[];I=_B
+	while len(H)>0 or I:
 		E=Sphere()
 		if P:E.availableGBs=P[-1].availableGBs
-		for F in I:
-			H.append(F);A=LocationList[F]
+		for J in H:
+			G.append(J);A=LocationList[J]
 			if A.item is not _A:
-				if A.type==Types.Shop and F!=Locations.SimianSlam and D==SearchMode.GetReachableWithControlledPurchases and F not in O:continue
+				if A.type==Types.Shop and D==SearchMode.GetReachableWithControlledPurchases and J not in O:continue
 				V.append(A.item)
 				if D==SearchMode.GeneratePlaythrough and ItemList[A.item].playthrough:
-					if A.item==Items.BananaHoard:E.locations=[F];break
+					if A.item==Items.BananaHoard:E.locations=[J];break
 					if A.item==Items.GoldenBanana:E.availableGBs+=1
-					E.locations.append(F)
+					E.locations.append(J)
 				if D==SearchMode.CheckBeatable and A.item==Items.BananaHoard:return _B
 		if len(E.locations)>0:
 			P.append(E)
 			if LocationList[E.locations[0]].item==Items.BananaHoard:break
-		J=_C;I=[];LogicVariables.Update(V)
+		I=_C;H=[];LogicVariables.Update(V)
 		for Q in LogicVariables.GetKongs():
-			LogicVariables.SetKong(Q);R=Logic.Regions[Regions.IslesMain];R.id=Regions.IslesMain;R.dayAccess=_B;R.nightAccess=Events.Night in LogicVariables.Events;K=[R];G=[Regions.IslesMain];W=[(A,B)for(A,B)in Logic.Regions.items()if B.HasAccess(Q)and A not in G];G.extend([A[0]for A in W]);K.extend([A[1]for A in W])
+			LogicVariables.SetKong(Q);R=Logic.Regions[Regions.IslesMain];R.id=Regions.IslesMain;R.dayAccess=_B;R.nightAccess=Events.Night in LogicVariables.Events;K=[R];F=[Regions.IslesMain];W=[(A,B)for(A,B)in Logic.Regions.items()if B.HasAccess(Q)and A not in F];F.extend([A[0]for A in W]);K.extend([A[1]for A in W])
 			while len(K)>0:
 				B=K.pop();B.UpdateAccess(Q,LogicVariables);LogicVariables.UpdateCurrentRegionAccess(B)
 				for L in B.events:
-					if L.name not in LogicVariables.Events and L.logic(LogicVariables):J=_B;LogicVariables.Events.append(L.name)
+					if L.name not in LogicVariables.Events and L.logic(LogicVariables):I=_B;LogicVariables.Events.append(L.name)
 					if L.name==Events.Night and L.logic(LogicVariables):B.nightAccess=_B
 				if B.id in Logic.CollectibleRegions.keys():
 					for M in Logic.CollectibleRegions[B.id]:
 						if not M.added and M.kong in(Q,Kongs.any)and M.logic(LogicVariables)and M.enabled:LogicVariables.AddCollectible(M,B.level)
 				for A in B.locations:
-					if A.logic(LogicVariables)and A.id not in I and A.id not in H:
+					if A.logic(LogicVariables)and A.id not in H and A.id not in G:
 						if A.bonusBarrel is MinigameType.BonusBarrel and S.bonus_barrels!=Z or A.bonusBarrel is MinigameType.HelmBarrel and S.helm_barrels!=Z:
 							a=BarrelMetaData[A.id].minigame
 							if not MinigameRequirements[a].logic(LogicVariables):continue
 						elif LocationList[A.id].type==Types.Blueprint:
 							if not LogicVariables.KasplatAccess(A.id):continue
-						elif LocationList[A.id].type==Types.Shop and A.id!=Locations.SimianSlam:
+						elif LocationList[A.id].type==Types.Shop:
 							if D!=SearchMode.GetReachableWithControlledPurchases or A.id in O:LogicVariables.PurchaseShopItem(LocationList[A.id])
 						elif A.id==Locations.NintendoCoin:LogicVariables.Coins[Kongs.donkey]-=2
-						I.append(A.id)
+						H.append(A.id)
 				X=B.exits.copy()
 				if S.shuffle_loading_zones and B.level!=Levels.DKIsles and B.level!=Levels.Shops:
 					Y=GetExitLevelExit(B)
@@ -103,22 +103,22 @@ def GetAccessibleLocations(settings,ownedItems,searchType=SearchMode.GetReachabl
 						T=ShuffleExits.ShufflableExits[exit.exitShuffleId]
 						if T.shuffled:C=ShuffleExits.ShufflableExits[T.shuffledId].back.regionId
 						elif T.toBeShuffled and not exit.assumed:continue
-					if C not in G and exit.logic(LogicVariables):
+					if C not in F and exit.logic(LogicVariables):
 						U=_B
 						if exit.time==Time.Night and not B.nightAccess:U=_C
 						elif exit.time==Time.Day and not B.dayAccess:U=_C
-						if U:G.append(C);N=Logic.Regions[C];N.id=C;K.append(N)
+						if U:F.append(C);N=Logic.Regions[C];N.id=C;K.append(N)
 					if exit.logic(LogicVariables):
-						if B.dayAccess and exit.time!=Time.Night and not Logic.Regions[C].dayAccess:Logic.Regions[C].dayAccess=_B;J=_B
-						if B.nightAccess and exit.time!=Time.Day and not Logic.Regions[C].nightAccess:Logic.Regions[C].nightAccess=_B;J=_B
+						if B.dayAccess and exit.time!=Time.Night and not Logic.Regions[C].dayAccess:Logic.Regions[C].dayAccess=_B;I=_B
+						if B.nightAccess and exit.time!=Time.Day and not Logic.Regions[C].nightAccess:Logic.Regions[C].nightAccess=_B;I=_B
 				if B.deathwarp is not _A:
 					C=B.deathwarp.dest
-					if C not in G and B.deathwarp.logic(LogicVariables):G.append(C);N=Logic.Regions[C];N.id=C;K.append(N)
-	if D in(SearchMode.GetReachable,SearchMode.GetReachableWithControlledPurchases):return H
+					if C not in F and B.deathwarp.logic(LogicVariables):F.append(C);N=Logic.Regions[C];N.id=C;K.append(N)
+	if D in(SearchMode.GetReachable,SearchMode.GetReachableWithControlledPurchases):return G
 	elif D==SearchMode.CheckBeatable:return _C
 	elif D==SearchMode.GeneratePlaythrough:return P
-	elif D==SearchMode.CheckAllReachable:return len(H)==len(LocationList)
-	elif D==SearchMode.GetUnreachable:return[A for A in LocationList if A not in H]
+	elif D==SearchMode.CheckAllReachable:return len(G)==len(LocationList)
+	elif D==SearchMode.GetUnreachable:return[A for A in LocationList if A not in G]
 def VerifyWorld(settings):
 	'Make sure all item locations are reachable on current world graph with constant items placed and all other items owned.';A=settings
 	if A.no_logic:return _B

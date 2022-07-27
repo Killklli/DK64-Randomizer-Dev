@@ -254,10 +254,10 @@ with open(newROMName,'r+b')as fh:
 	for x in portal_images:
 		for y in x:
 			if os.path.exists(y):os.remove(y)
-	fh.seek(33476640+321);fh.write((0).to_bytes(1,_K));fh.seek(33476640+322);fh.write((1).to_bytes(1,_K));fh.seek(33476640+323);fh.write((0).to_bytes(1,_K));fh.seek(33476640+324);fh.write((2).to_bytes(1,_K));fh.seek(33476640+325);fh.write((0).to_bytes(1,_K));fh.seek(33476640+326);fh.write((3).to_bytes(1,_K));fh.seek(33476640+327);fh.write((1).to_bytes(1,_K));fh.seek(33476640+328);fh.write((4).to_bytes(1,_K));fh.seek(33476640+329);fh.write((2).to_bytes(1,_K));fh.seek(33476640+315);fh.write((1).to_bytes(1,_K));piano_vanilla=[2,1,2,3,4,2,0]
-	for (piano_index,piano_key) in enumerate(piano_vanilla):fh.seek(33476640+348+piano_index);fh.write(piano_key.to_bytes(1,_K))
+	fh.seek(33476640+337);fh.write((0).to_bytes(1,_K));fh.seek(33476640+338);fh.write((1).to_bytes(1,_K));fh.seek(33476640+339);fh.write((0).to_bytes(1,_K));fh.seek(33476640+340);fh.write((2).to_bytes(1,_K));fh.seek(33476640+341);fh.write((0).to_bytes(1,_K));fh.seek(33476640+342);fh.write((3).to_bytes(1,_K));fh.seek(33476640+343);fh.write((1).to_bytes(1,_K));fh.seek(33476640+344);fh.write((4).to_bytes(1,_K));fh.seek(33476640+345);fh.write((2).to_bytes(1,_K));fh.seek(33476640+331);fh.write((1).to_bytes(1,_K));piano_vanilla=[2,1,2,3,4,2,0]
+	for (piano_index,piano_key) in enumerate(piano_vanilla):fh.seek(33476640+364+piano_index);fh.write(piano_key.to_bytes(1,_K))
 	with open('assets/Non-Code/credits/squish.bin',_c)as squish:fh.seek(33552384);fh.write(squish.read())
-	vanilla_coin_reqs=[{_T:300,_U:50},{_T:301,_U:50},{_T:302,_U:10},{_T:303,_U:10},{_T:304,_U:10},{_T:305,_U:50},{_T:306,_U:50},{_T:307,_U:25}]
+	vanilla_coin_reqs=[{_T:316,_U:50},{_T:317,_U:50},{_T:318,_U:10},{_T:319,_U:10},{_T:320,_U:10},{_T:321,_U:50},{_T:322,_U:50},{_T:323,_U:25}]
 	for coinreq in vanilla_coin_reqs:fh.seek(33476640+coinreq[_T]);fh.write(coinreq[_U].to_bytes(1,_K))
 	for x in hash_icons:
 		pth=f"assets/Non-Code/hash/{x}"

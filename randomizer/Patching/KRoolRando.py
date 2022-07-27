@@ -5,7 +5,7 @@ from randomizer.Lists.MapsAndExits import Maps
 from randomizer.Patching.Patcher import ROM
 from randomizer.Spoiler import Spoiler
 def randomize_krool(spoiler):
-	'Apply K Rool Phase order based on krool_order from spoiler.';E='big';A=spoiler;F=33476640;G=88;ROM().seek(F+G);H=len(A.settings.krool_order);ROM().writeBytes(bytearray(A.settings.krool_order))
+	'Apply K Rool Phase order based on krool_order from spoiler.';E='big';A=spoiler;F=A.settings.rom_data;G=88;ROM().seek(F+G);H=len(A.settings.krool_order);ROM().writeBytes(bytearray(A.settings.krool_order))
 	for O in range(5-H):ROM().write(-1)
 	C=A.settings.krool_order[0]
 	if C!=0:
