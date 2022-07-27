@@ -12,7 +12,7 @@ def apply_cosmetic_colors(spoiler):
 		elif N=='purple':M=34
 		elif N=='red':M=35
 		elif N=='random_klap':M=random.randint(33,35)
-		elif N=='random_model':i=[25,30,32,33,34,35,36,38,39,46,48,52,62,66,71,75,77,81,84,98,105,112,114,150,166,176,177,189];M=random.choice(i)
+		elif N=='random_model':i=[25,30,32,33,34,35,36,38,39,46,48,52,62,66,71,75,77,81,84,98,105,112,114,150,176,177,189];M=random.choice(i)
 		ROM().seek(33476640+294);ROM().writeMultipleBytes(M,1)
 	U=[];X={}
 	if js.document.getElementById('random_colors').checked:js.document.getElementById(Z).value=G;js.document.getElementById(a).value=G;js.document.getElementById(b).value=G;js.document.getElementById(c).value=G;js.document.getElementById(d).value=G;js.document.getElementById(e).value=G;js.document.getElementById(f).value=G
