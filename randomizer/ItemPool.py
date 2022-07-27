@@ -107,6 +107,7 @@ def GetMoveLocationsToRemove(sharedMoveShops):
 		elif B==Locations.SuperDuperSimianSlam:A.append(Locations.DonkeyCastlePotion);A.append(Locations.DiddyCastlePotion);A.append(Locations.LankyCastlePotion);A.append(Locations.TinyCastlePotion);A.append(Locations.ChunkyCastlePotion)
 		elif B==Locations.SniperSight:A.append(Locations.DonkeyCastleGun);A.append(Locations.DiddyCastleGun);A.append(Locations.LankyCastleGun);A.append(Locations.TinyCastleGun);A.append(Locations.ChunkyCastleGun)
 		elif B==Locations.MusicUpgrade2:A.append(Locations.DonkeyCastleInstrument);A.append(Locations.DiddyCastleInstrument);A.append(Locations.LankyCastleInstrument);A.append(Locations.TinyCastleInstrument);A.append(Locations.ChunkyCastleInstrument)
+		elif B==Locations.SimianSlam:A.append(Locations.DonkeyIslesPotion);A.append(Locations.DiddyIslesPotion);A.append(Locations.LankyIslesPotion);A.append(Locations.TinyIslesPotion);A.append(Locations.ChunkyIslesPotion)
 	return set(A)
 def GetKongMoveOccupiedShops():
 	'Return shop locations that already contain a kong move and are therefore unable to hold a shared move.';D=None;B=[];C=[]
