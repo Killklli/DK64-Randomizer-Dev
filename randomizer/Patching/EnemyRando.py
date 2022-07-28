@@ -1,56 +1,67 @@
 'Apply Boss Locations.'
+_B='medium'
+_A='off'
 from email.policy import default
 import random,js
 from randomizer.Lists.EnemyTypes import Enemies,EnemyMetaData
 from randomizer.Lists.MapsAndExits import Maps
 from randomizer.Patching.Patcher import ROM
 from randomizer.Spoiler import Spoiler
-def getBalancedCrownEnemyRando():
-	'Get array of weighted enemies.';B=[]
-	for A in EnemyMetaData.keys():
-		if EnemyMetaData[A].crown_enabled:
-			for C in range(EnemyMetaData[A].crown_weight):B.append(A)
-	return B
+def getBalancedCrownEnemyRando(crown_setting):
+	'Get array of weighted enemies.';G=False;B=crown_setting;E=[]
+	if B!=_A:
+		C=10;F=G;H=G
+		if B=='easy':C=10;F=True
+		elif B==_B:C=6
+		elif B=='hard':C=2
+		for A in EnemyMetaData.keys():
+			if EnemyMetaData[A].crown_enabled:
+				if not F or A!=Enemies.GetOut:
+					I=EnemyMetaData[A].crown_weight;J=abs(I-C);D=abs(10-J)
+					if H:D=10
+					if A==Enemies.GetOut:D=1
+					for K in range(D):E.append(A)
+	return E
 def randomize_enemies(spoiler):
-	'Write replaced enemies to ROM.';s='kasplat_swaps';r='container_map';c='index';T='replace_with';S='vanilla_location';N='enemy_id';I='big';F=spoiler;D='offset';A6=[{r:7,s:[{S:0,T:1},{S:1,T:3},{S:2,T:0},{S:3,T:2}]}];t=[Maps.JapesMountain,Maps.JungleJapes,Maps.JapesTinyHive,Maps.JapesLankyCave,Maps.AztecTinyTemple,Maps.HideoutHelm,Maps.AztecDonkey5DTemple,Maps.AztecDiddy5DTemple,Maps.AztecLanky5DTemple,Maps.AztecTiny5DTemple,Maps.AztecChunky5DTemple,Maps.AztecLlamaTemple,Maps.FranticFactory,Maps.FactoryPowerHut,Maps.GloomyGalleon,Maps.GalleonSickBay,Maps.JapesUnderGround,Maps.Isles,Maps.FactoryCrusher,Maps.AngryAztec,Maps.GalleonSealRace,Maps.JapesBaboonBlast,Maps.AztecBaboonBlast,Maps.Galleon2DShip,Maps.Galleon5DShipDiddyLankyChunky,Maps.Galleon5DShipDKTiny,Maps.GalleonTreasureChest,Maps.GalleonMermaidRoom,Maps.FungiForest,Maps.GalleonLighthouse,Maps.GalleonMechafish,Maps.ForestAnthill,Maps.GalleonBaboonBlast,Maps.ForestMinecarts,Maps.ForestMillAttic,Maps.ForestRafters,Maps.ForestMillAttic,Maps.ForestThornvineBarn,Maps.ForestSpider,Maps.ForestMillFront,Maps.ForestMillBack,Maps.ForestLankyMushroomsRoom,Maps.CrystalCaves,Maps.CavesDonkeyIgloo,Maps.CavesDiddyIgloo,Maps.CavesLankyIgloo,Maps.CavesTinyIgloo,Maps.CavesDonkeyCabin,Maps.CavesDiddyLowerCabin,Maps.CavesDiddyUpperCabin,Maps.CavesLankyCabin,Maps.CavesTinyCabin,Maps.CavesChunkyCabin,Maps.CreepyCastle,Maps.CastleBallroom,Maps.CavesRotatingCabin,Maps.CavesFrozenCastle,Maps.CastleCrypt,Maps.CastleMausoleum,Maps.CastleUpperCave,Maps.CastleLowerCave,Maps.CastleTower,Maps.CastleMinecarts,Maps.FactoryBaboonBlast,Maps.CastleMuseum,Maps.CastleLibrary,Maps.CastleDungeon,Maps.CastleTree,Maps.CastleShed,Maps.CastleTrashCan,Maps.JungleJapesLobby,Maps.AngryAztecLobby,Maps.FranticFactoryLobby,Maps.GloomyGalleonLobby,Maps.FungiForestLobby,Maps.CrystalCavesLobby,Maps.CreepyCastleLobby,Maps.HideoutHelmLobby,Maps.GalleonSubmarine,Maps.CavesBaboonBlast,Maps.CastleBaboonBlast,Maps.ForestBaboonBlast,Maps.IslesSnideRoom,Maps.ForestGiantMushroom,Maps.ForestLankyZingersRoom,Maps.CastleBoss];u=[Maps.JapesCrown,Maps.AztecCrown,Maps.FactoryCrown,Maps.GalleonCrown,Maps.ForestCrown,Maps.CavesCrown,Maps.CastleCrown,Maps.HelmCrown,Maps.SnidesCrown,Maps.LobbyCrown];d=[Maps.HelmBarrelChunkyHidden,Maps.HelmBarrelChunkyShooting];e=[Maps.MadMazeMaulEasy,Maps.MadMazeMaulNormal,Maps.MadMazeMaulHard,Maps.MadMazeMaulInsane];f=[Maps.HelmBarrelLankyMaze,Maps.StashSnatchEasy,Maps.StashSnatchNormal,Maps.StashSnatchHard,Maps.StashSnatchInsane];O=[];U=d.copy();U.extend(e);U.extend(f);U.extend(O);W={'ground_simple':[Enemies.BeaverBlue,Enemies.KlaptrapGreen,Enemies.BeaverGold,Enemies.MushroomMan,Enemies.Ruler,Enemies.Kremling,Enemies.Krossbones,Enemies.MrDice0,Enemies.MrDice1,Enemies.SirDomino,Enemies.FireballGlasses,Enemies.SpiderSmall,Enemies.Ghost],'air':[Enemies.ZingerCharger,Enemies.ZingerLime,Enemies.ZingerRobo,Enemies.Bat],'ground_beefyboys':[Enemies.Klump,Enemies.RoboKremling,Enemies.Kosha,Enemies.Klobber,Enemies.Kaboom,Enemies.KlaptrapPurple,Enemies.KlaptrapRed,Enemies.Guard],'water':[Enemies.Shuri,Enemies.Gimpfish,Enemies.Pufftup]};X=[]
-	if F.settings.enemy_rando or F.settings.kasplat_rando:
-		X=getBalancedCrownEnemyRando();g=[];h=[];i=[];j=[]
+	'Write replaced enemies to ROM.';t='kasplat_swaps';s='container_map';d='index';T='replace_with';S='vanilla_location';N='enemy_id';I='big';E=spoiler;D='offset';A7=[{s:7,t:[{S:0,T:1},{S:1,T:3},{S:2,T:0},{S:3,T:2}]}];u=[Maps.JapesMountain,Maps.JungleJapes,Maps.JapesTinyHive,Maps.JapesLankyCave,Maps.AztecTinyTemple,Maps.HideoutHelm,Maps.AztecDonkey5DTemple,Maps.AztecDiddy5DTemple,Maps.AztecLanky5DTemple,Maps.AztecTiny5DTemple,Maps.AztecChunky5DTemple,Maps.AztecLlamaTemple,Maps.FranticFactory,Maps.FactoryPowerHut,Maps.GloomyGalleon,Maps.GalleonSickBay,Maps.JapesUnderGround,Maps.Isles,Maps.FactoryCrusher,Maps.AngryAztec,Maps.GalleonSealRace,Maps.JapesBaboonBlast,Maps.AztecBaboonBlast,Maps.Galleon2DShip,Maps.Galleon5DShipDiddyLankyChunky,Maps.Galleon5DShipDKTiny,Maps.GalleonTreasureChest,Maps.GalleonMermaidRoom,Maps.FungiForest,Maps.GalleonLighthouse,Maps.GalleonMechafish,Maps.ForestAnthill,Maps.GalleonBaboonBlast,Maps.ForestMinecarts,Maps.ForestMillAttic,Maps.ForestRafters,Maps.ForestMillAttic,Maps.ForestThornvineBarn,Maps.ForestSpider,Maps.ForestMillFront,Maps.ForestMillBack,Maps.ForestLankyMushroomsRoom,Maps.CrystalCaves,Maps.CavesDonkeyIgloo,Maps.CavesDiddyIgloo,Maps.CavesLankyIgloo,Maps.CavesTinyIgloo,Maps.CavesDonkeyCabin,Maps.CavesDiddyLowerCabin,Maps.CavesDiddyUpperCabin,Maps.CavesLankyCabin,Maps.CavesTinyCabin,Maps.CavesChunkyCabin,Maps.CreepyCastle,Maps.CastleBallroom,Maps.CavesRotatingCabin,Maps.CavesFrozenCastle,Maps.CastleCrypt,Maps.CastleMausoleum,Maps.CastleUpperCave,Maps.CastleLowerCave,Maps.CastleTower,Maps.CastleMinecarts,Maps.FactoryBaboonBlast,Maps.CastleMuseum,Maps.CastleLibrary,Maps.CastleDungeon,Maps.CastleTree,Maps.CastleShed,Maps.CastleTrashCan,Maps.JungleJapesLobby,Maps.AngryAztecLobby,Maps.FranticFactoryLobby,Maps.GloomyGalleonLobby,Maps.FungiForestLobby,Maps.CrystalCavesLobby,Maps.CreepyCastleLobby,Maps.HideoutHelmLobby,Maps.GalleonSubmarine,Maps.CavesBaboonBlast,Maps.CastleBaboonBlast,Maps.ForestBaboonBlast,Maps.IslesSnideRoom,Maps.ForestGiantMushroom,Maps.ForestLankyZingersRoom,Maps.CastleBoss];v=[Maps.JapesCrown,Maps.AztecCrown,Maps.FactoryCrown,Maps.GalleonCrown,Maps.ForestCrown,Maps.CavesCrown,Maps.CastleCrown,Maps.HelmCrown,Maps.SnidesCrown,Maps.LobbyCrown];e=[Maps.HelmBarrelChunkyHidden,Maps.HelmBarrelChunkyShooting];f=[Maps.MadMazeMaulEasy,Maps.MadMazeMaulNormal,Maps.MadMazeMaulHard,Maps.MadMazeMaulInsane];g=[Maps.HelmBarrelLankyMaze,Maps.StashSnatchEasy,Maps.StashSnatchNormal,Maps.StashSnatchHard,Maps.StashSnatchInsane];O=[];U=e.copy();U.extend(f);U.extend(g);U.extend(O);X={'ground_simple':[Enemies.BeaverBlue,Enemies.KlaptrapGreen,Enemies.BeaverGold,Enemies.MushroomMan,Enemies.Ruler,Enemies.Kremling,Enemies.Krossbones,Enemies.MrDice0,Enemies.MrDice1,Enemies.SirDomino,Enemies.FireballGlasses,Enemies.SpiderSmall,Enemies.Ghost],'air':[Enemies.ZingerCharger,Enemies.ZingerLime,Enemies.ZingerRobo,Enemies.Bat],'ground_beefyboys':[Enemies.Klump,Enemies.RoboKremling,Enemies.Kosha,Enemies.Klobber,Enemies.Kaboom,Enemies.KlaptrapPurple,Enemies.KlaptrapRed,Enemies.Guard],'water':[Enemies.Shuri,Enemies.Gimpfish,Enemies.Pufftup]};Y=[]
+	if E.settings.enemy_rando or E.settings.kasplat_rando or E.settings.crown_enemy_rando!=_A:
+		Y=getBalancedCrownEnemyRando(E.settings.crown_enemy_rando);h=[];i=[];j=[];k=[]
 		for J in EnemyMetaData:
 			if EnemyMetaData[J].minigame_enabled:
-				i.append(J)
-				if EnemyMetaData[J].beaver:j.append(J)
+				j.append(J)
+				if EnemyMetaData[J].beaver:k.append(J)
 				if EnemyMetaData[J].killable:
-					h.append(J)
-					if EnemyMetaData[J].simple:g.append(J)
-		for E in range(216):
-			C=js.pointer_addresses[16]['entries'][E]['pointing_to'];P=[];ROM().seek(C);k=int.from_bytes(ROM().readBytes(2),I);G=2
-			if k>0:
-				for Y in range(k):ROM().seek(C+G);v=int.from_bytes(ROM().readBytes(2),I);G+=v*6+2;ROM().seek(C+G);w=int.from_bytes(ROM().readBytes(2),I);G+=w*10+6
-			ROM().seek(C+G);Z=int.from_bytes(ROM().readBytes(2),I);a={};l=[]
-			for Q in W:
+					i.append(J)
+					if EnemyMetaData[J].simple:h.append(J)
+		for F in range(216):
+			C=js.pointer_addresses[16]['entries'][F]['pointing_to'];P=[];ROM().seek(C);l=int.from_bytes(ROM().readBytes(2),I);G=2
+			if l>0:
+				for Z in range(l):ROM().seek(C+G);w=int.from_bytes(ROM().readBytes(2),I);G+=w*6+2;ROM().seek(C+G);x=int.from_bytes(ROM().readBytes(2),I);G+=x*10+6
+			ROM().seek(C+G);a=int.from_bytes(ROM().readBytes(2),I);b={};m=[]
+			for Q in X:
 				V=[]
-				for Y in range(Z):V.append(random.choice(W[Q]))
-				a[Q]=V
-			for Y in range(Z):l.append(random.choice(X))
+				for Z in range(a):V.append(random.choice(X[Q]))
+				b[Q]=V
+			for Z in range(a):m.append(random.choice(Y))
 			G+=2
-			for Y in range(Z):ROM().seek(C+G);x=int.from_bytes(ROM().readBytes(1),I);ROM().seek(C+G+19);y=int.from_bytes(ROM().readBytes(1),I);z=G;ROM().seek(C+G+17);A0=int.from_bytes(ROM().readBytes(1),I);G+=22+A0*2;P.append({N:x,D:z,c:y})
-			if F.settings.kasplat_rando and not F.settings.kasplat_location_rando:
-				for m in F.enemy_replacements:
-					if m[r]==E:
-						for n in m[s]:
-							A1=n[S]+Enemies.KasplatDK;A2=n[T]+Enemies.KasplatDK
+			for Z in range(a):ROM().seek(C+G);y=int.from_bytes(ROM().readBytes(1),I);ROM().seek(C+G+19);z=int.from_bytes(ROM().readBytes(1),I);A0=G;ROM().seek(C+G+17);A1=int.from_bytes(ROM().readBytes(1),I);G+=22+A1*2;P.append({N:y,D:A0,d:z})
+			if E.settings.kasplat_rando and not E.settings.kasplat_location_rando:
+				for n in E.enemy_replacements:
+					if n[s]==F:
+						for o in n[t]:
+							A2=o[S]+Enemies.KasplatDK;A3=o[T]+Enemies.KasplatDK
 							for A in P:
-								if A[N]==A1:ROM().seek(C+A[D]);ROM().writeMultipleBytes(A2,1)
-			if F.settings.enemy_rando and E in t:
-				for Q in a:
-					V=a[Q];A3=W[Q];o=0
+								if A[N]==A2:ROM().seek(C+A[D]);ROM().writeMultipleBytes(A3,1)
+			if E.settings.enemy_rando and F in u:
+				for Q in b:
+					V=b[Q];A4=X[Q];p=0
 					for A in P:
-						if A[N]in A3:
-							if E!=Maps.FranticFactory or A[c]<35 or A[c]>44:
-								B=V[o];o+=1
-								if B!=Enemies.Book or E not in(Maps.CavesDonkeyCabin,Maps.JapesLankyCave,Maps.AngryAztecLobby):
-									if B!=Enemies.Kosha or E!=Maps.CavesDiddyLowerCabin:
-										if B!=Enemies.Guard or E not in(Maps.CavesDiddyLowerCabin,Maps.CavesTinyIgloo,Maps.CavesTinyCabin):
+						if A[N]in A4:
+							if F!=Maps.FranticFactory or A[d]<35 or A[d]>44:
+								B=V[p];p+=1
+								if B!=Enemies.Book or F not in(Maps.CavesDonkeyCabin,Maps.JapesLankyCave,Maps.AngryAztecLobby):
+									if B!=Enemies.Kosha or F!=Maps.CavesDiddyLowerCabin:
+										if B!=Enemies.Guard or F not in(Maps.CavesDiddyLowerCabin,Maps.CavesTinyIgloo,Maps.CavesTinyCabin):
 											ROM().seek(C+A[D]);ROM().writeMultipleBytes(B,1)
 											if B in EnemyMetaData.keys():
 												ROM().seek(C+A[D]+16);ROM().writeMultipleBytes(EnemyMetaData[B].aggro,1)
@@ -58,21 +69,21 @@ def randomize_enemies(spoiler):
 												ROM().seek(C+A[D]+15);R=int.from_bytes(ROM().readBytes(1),I)
 												if EnemyMetaData[B].size_cap>0:
 													if R>EnemyMetaData[B].size_cap:ROM().seek(C+A[D]+15);ROM().writeMultipleBytes(EnemyMetaData[B].size_cap,1)
-												if F.settings.enemy_speed_rando:
+												if E.settings.enemy_speed_rando:
 													H=EnemyMetaData[B].min_speed;K=EnemyMetaData[B].max_speed
 													if H>0 and K>0:ROM().seek(C+A[D]+13);L=random.randint(H,K);ROM().writeMultipleBytes(L,1);ROM().seek(C+A[D]+12);ROM().writeMultipleBytes(random.randint(H,L),1)
-			if F.settings.enemy_rando and E in U:
+			if E.settings.enemy_rando and F in U:
 				M=[]
-				if E in d:M=g.copy()
-				elif E in e:M=h.copy()
-				elif E in f:M=i.copy()
-				elif E in O:M=j.copy()
+				if F in e:M=h.copy()
+				elif F in f:M=i.copy()
+				elif F in g:M=j.copy()
+				elif F in O:M=k.copy()
 				for A in P:
 					if A[N]in M:
 						B=random.choice(M)
-						if E in O:
-							A4=random.choice(M)
-							if B!=Enemies.BeaverGold or A4!=Enemies.BeaverGold:B=Enemies.BeaverBlue
+						if F in O:
+							A5=random.choice(M)
+							if B!=Enemies.BeaverGold or A5!=Enemies.BeaverGold:B=Enemies.BeaverBlue
 						ROM().seek(C+A[D]);ROM().writeMultipleBytes(B,1)
 						if B in EnemyMetaData.keys():
 							ROM().seek(C+A[D]+16);ROM().writeMultipleBytes(EnemyMetaData[B].aggro,1)
@@ -81,19 +92,19 @@ def randomize_enemies(spoiler):
 							ROM().seek(C+A[D]+15);R=int.from_bytes(ROM().readBytes(1),I)
 							if EnemyMetaData[B].size_cap>0:
 								if R>EnemyMetaData[B].size_cap:ROM().seek(C+A[D]+15);ROM().writeMultipleBytes(EnemyMetaData[B].size_cap,1)
-							if F.settings.enemy_speed_rando and E not in O:
+							if E.settings.enemy_speed_rando and F not in O:
 								H=EnemyMetaData[B].min_speed;K=EnemyMetaData[B].max_speed
 								if H>0 and K>0:ROM().seek(C+A[D]+13);L=random.randint(H,K);ROM().writeMultipleBytes(L,1);ROM().seek(C+A[D]+12);ROM().writeMultipleBytes(random.randint(H,L),1)
-							if B==Enemies.BeaverGold and E in O:
-								for p in [12,13]:
-									ROM().seek(C+A[D]+p);A5=int.from_bytes(ROM().readBytes(1),I);b=int(A5*1.1)
-									if b>255:b=255
-									ROM().seek(C+A[D]+p);ROM().writeMultipleBytes(b,1)
-			if F.settings.crown_enemy_rando and E in u:
-				q=0
+							if B==Enemies.BeaverGold and F in O:
+								for q in [12,13]:
+									ROM().seek(C+A[D]+q);A6=int.from_bytes(ROM().readBytes(1),I);c=int(A6*1.1)
+									if c>255:c=255
+									ROM().seek(C+A[D]+q);ROM().writeMultipleBytes(c,1)
+			if E.settings.crown_enemy_rando!=_A and F in v:
+				r=0
 				for A in P:
-					if A[N]in X:
-						B=l[q];ROM().seek(C+A[D]);ROM().writeMultipleBytes(B,1);q+=1
+					if A[N]in Y:
+						B=m[r];ROM().seek(C+A[D]);ROM().writeMultipleBytes(B,1);r+=1
 						if B in EnemyMetaData.keys():
 							ROM().seek(C+A[D]+16);ROM().writeMultipleBytes(EnemyMetaData[B].aggro,1)
 							if B==Enemies.RoboKremling:ROM().seek(C+A[D]+11);ROM().writeMultipleBytes(200,1)
@@ -101,7 +112,12 @@ def randomize_enemies(spoiler):
 							ROM().seek(C+A[D]+15);R=int.from_bytes(ROM().readBytes(1),I)
 							if EnemyMetaData[B].size_cap>0:
 								if R>EnemyMetaData[B].size_cap:ROM().seek(C+A[D]+15);ROM().writeMultipleBytes(EnemyMetaData[B].size_cap,1)
-							if F.settings.enemy_speed_rando:
+							if E.settings.enemy_speed_rando:
 								H=EnemyMetaData[B].min_speed;K=EnemyMetaData[B].max_speed
 								if H>0 and K>0:ROM().seek(C+A[D]+13);L=random.randint(H,K);ROM().writeMultipleBytes(L,1);ROM().seek(C+A[D]+12);ROM().writeMultipleBytes(random.randint(H,L),1)
-					elif A[N]==Enemies.BattleCrownController:ROM().seek(C+A[D]+11);ROM().writeMultipleBytes(random.randint(5,60),1)
+					elif A[N]==Enemies.BattleCrownController:
+						ROM().seek(C+A[D]+11);W=5
+						if E.settings.crown_enemy_rando=='easy':W=5
+						elif E.settings.crown_enemy_rando==_B:W=15
+						elif E.settings.crown_enemy_rando=='hard':W=30
+						ROM().writeMultipleBytes(random.randint(W,60),1)
