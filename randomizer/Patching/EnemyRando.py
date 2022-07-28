@@ -37,12 +37,14 @@ def randomize_enemies(spoiler):
 			C=js.pointer_addresses[16]['entries'][F]['pointing_to'];P=[];ROM().seek(C);l=int.from_bytes(ROM().readBytes(2),I);G=2
 			if l>0:
 				for Z in range(l):ROM().seek(C+G);w=int.from_bytes(ROM().readBytes(2),I);G+=w*6+2;ROM().seek(C+G);x=int.from_bytes(ROM().readBytes(2),I);G+=x*10+6
-			ROM().seek(C+G);a=int.from_bytes(ROM().readBytes(2),I);b={};m=[]
+			ROM().seek(C+G);a=int.from_bytes(ROM().readBytes(2),I);b={}
 			for Q in X:
 				V=[]
 				for Z in range(a):V.append(random.choice(X[Q]))
 				b[Q]=V
-			for Z in range(a):m.append(random.choice(Y))
+			if E.settings.crown_enemy_rando!=_A:
+				m=[]
+				for Z in range(a):m.append(random.choice(Y))
 			G+=2
 			for Z in range(a):ROM().seek(C+G);y=int.from_bytes(ROM().readBytes(1),I);ROM().seek(C+G+19);z=int.from_bytes(ROM().readBytes(1),I);A0=G;ROM().seek(C+G+17);A1=int.from_bytes(ROM().readBytes(1),I);G+=22+A1*2;P.append({N:y,D:A0,d:z})
 			if E.settings.kasplat_rando and not E.settings.kasplat_location_rando:
