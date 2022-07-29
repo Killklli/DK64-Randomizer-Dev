@@ -20,11 +20,14 @@ class Settings:
 	def __init__(A,form_data):
 		'Init all the settings using the form data to set the flags.\n\n        Args:\n            form_data (dict): Post data from the html form.\n        ';A.__hash=A.__get_hash();A.public_hash=A.__get_hash();A.algorithm='forward';A.generate_main();A.generate_progression();A.generate_misc();A.rom_data=33476640
 		for (B,C) in form_data.items():setattr(A,B,C)
-		A.seed_id=str(A.seed);A.seed=str(A.seed)+A.__hash;A.set_seed();A.seed_hash=[random.randint(0,9)for A in range(5)];A.krool_keys_required=[];A.blocker_max=A.blocker_text if A.blocker_text else 50;A.troff_max=A.troff_text if A.troff_text else 270;A.troff_min=round(A.troff_max/3);A.training_barrels='startwith';A.shuffle_items=_D;A.unlock_all_moves=_B;A.progressive_upgrades=_B;A.prices=VanillaPrices.copy();A.level_order={1:Levels.JungleJapes,2:Levels.AngryAztec,3:Levels.FranticFactory,4:Levels.GloomyGalleon,5:Levels.FungiForest,6:Levels.CrystalCaves,7:Levels.CreepyCastle};A.resolve_settings()
+		A.seed_id=str(A.seed);A.seed=str(A.seed)+A.__hash;A.set_seed();A.seed_hash=[random.randint(0,9)for A in range(5)];A.krool_keys_required=[];A.blocker_max=A.blocker_text if A.blocker_text else 50;A.troff_max=A.troff_text if A.troff_text else 270;A.troff_min=[0.25,0.3,0.35,0.4,0.45,0.5,0.6];A.training_barrels='startwith';A.shuffle_items=_D;A.unlock_all_moves=_B;A.progressive_upgrades=_B;A.prices=VanillaPrices.copy();A.level_order={1:Levels.JungleJapes,2:Levels.AngryAztec,3:Levels.FranticFactory,4:Levels.GloomyGalleon,5:Levels.FungiForest,6:Levels.CrystalCaves,7:Levels.CreepyCastle};A.resolve_settings()
 	def update_progression_totals(A):
 		"Update the troff and blocker totals if we're randomly setting them.";A.troff_weight_0=0.5;A.troff_weight_1=0.55;A.troff_weight_2=0.6;A.troff_weight_3=0.7;A.troff_weight_4=0.8;A.troff_weight_5=0.9;A.troff_weight_6=1.0
 		if A.level_randomization in(_F,_G):A.troff_weight_0=1;A.troff_weight_1=1;A.troff_weight_2=1;A.troff_weight_3=1;A.troff_weight_4=1;A.troff_weight_5=1;A.troff_weight_6=1
-		if A.randomize_cb_required_amounts:D=random.sample(range(A.troff_min,A.troff_max),7);C=D;A.troff_0=round(min(C[0]*A.troff_weight_0,500));A.troff_1=round(min(C[1]*A.troff_weight_1,500));A.troff_2=round(min(C[2]*A.troff_weight_2,500));A.troff_3=round(min(C[3]*A.troff_weight_3,500));A.troff_4=round(min(C[4]*A.troff_weight_4,500));A.troff_5=round(min(C[5]*A.troff_weight_5,500));A.troff_6=round(min(C[6]*A.troff_weight_6,500))
+		if A.randomize_cb_required_amounts:
+			D=[]
+			for E in A.troff_min:D.append(random.randint(round(A.troff_max*E),A.troff_max))
+			C=D;A.troff_0=round(min(C[0]*A.troff_weight_0,500));A.troff_1=round(min(C[1]*A.troff_weight_1,500));A.troff_2=round(min(C[2]*A.troff_weight_2,500));A.troff_3=round(min(C[3]*A.troff_weight_3,500));A.troff_4=round(min(C[4]*A.troff_weight_4,500));A.troff_5=round(min(C[5]*A.troff_weight_5,500));A.troff_6=round(min(C[6]*A.troff_weight_6,500))
 		if A.randomize_blocker_required_amounts:
 			D=random.sample(range(1,A.blocker_max),7);B=D;B.append(1)
 			if A.shuffle_loading_zones==_E:random.shuffle(B)
