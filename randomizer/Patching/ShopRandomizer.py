@@ -18,22 +18,23 @@ def ushort_to_short(ushort):
 	if A>32767:return A-65536
 	return A
 def ApplyShopRandomizer(spoiler):
-	'Write shop locations to ROM.';u='scale_factor';t='replace_zone';s='zone_index';r='model_index';q='pointing_to';p='entries';f=spoiler;e='angle_change';K='replace_model';B='big'
-	if f.settings.shuffle_shops:
-		v=f.shuffled_shop_locations;W=[]
+	'Write shop locations to ROM.';v='scale_factor';u='replace_zone';t='zone_index';s='model_index';r='pointing_to';q='entries';g=spoiler;f='angle_change';K='replace_model';B='big'
+	if g.settings.shuffle_shops:
+		h=g.shuffled_shop_locations;W=[]
 		for T in available_shops:
 			X=available_shops[T]
 			for C in X:
 				if C.map not in W:W.append(C.map)
 		for map in W:
-			Y=js.pointer_addresses[9][p][map][q];Z=js.pointer_addresses[18][p][map][q];g=[];h=0
+			Y=js.pointer_addresses[9][q][map][r];Z=js.pointer_addresses[18][q][map][r];i=[];a=0
 			for T in available_shops:
 				X=available_shops[T]
 				for C in X:
-					if C.map==map and not C.locked:g.append(C.shop);h=T
-			i=[]
-			for C in g:
-				D={};w=v[h][C];H=-1;I=-1;L=-1;E=-1;F=-1;J=-1;M=-1;N=-1;x=[C,w]
+					if C.map==map and not C.locked:i.append(C.shop);a=T
+			j=[]
+			for C in i:
+				if a not in h.keys():continue
+				D={};w=h[a][C];H=-1;I=-1;L=-1;E=-1;F=-1;J=-1;M=-1;N=-1;x=[C,w]
 				for (U,V) in enumerate(x):
 					if V==Regions.CrankyGeneric:
 						if U==0:F=115;J=Maps.Cranky;M=180;N=1
@@ -49,33 +50,33 @@ def ApplyShopRandomizer(spoiler):
 						else:H=121;I=Maps.Snide;L=270;E=3
 				if H>-1 and I>-1 and F>-1 and J>-1:
 					O=-1;P=-1;ROM().seek(Y);y=int.from_bytes(ROM().readBytes(4),B)
-					for j in range(y):
+					for k in range(y):
 						if O==-1:
-							z=Y+4+j*48;ROM().seek(z+40);A0=int.from_bytes(ROM().readBytes(2),B)
-							if A0==F:O=j
+							z=Y+4+k*48;ROM().seek(z+40);A0=int.from_bytes(ROM().readBytes(2),B)
+							if A0==F:O=k
 					ROM().seek(Z);A1=int.from_bytes(ROM().readBytes(2),B)
-					for k in range(A1):
+					for l in range(A1):
 						if P==-1:
-							l=Z+2+k*56;ROM().seek(l+16);A2=int.from_bytes(ROM().readBytes(2),B)
+							m=Z+2+l*56;ROM().seek(m+16);A2=int.from_bytes(ROM().readBytes(2),B)
 							if A2==16:
-								ROM().seek(l+18);A3=int.from_bytes(ROM().readBytes(2),B)
-								if A3==J:P=k
-					if O>-1 and P>-1:D[r]=O;D[s]=P;D[K]=H;D['original_model']=F;D[t]=I;D[e]=M-L;D[u]=N/E;i.append(D)
+								ROM().seek(m+18);A3=int.from_bytes(ROM().readBytes(2),B)
+								if A3==J:P=l
+					if O>-1 and P>-1:D[s]=O;D[t]=P;D[K]=H;D['original_model']=F;D[u]=I;D[f]=M-L;D[v]=N/E;j.append(D)
 					else:print(f"ERROR: Couldn't find LZ or Model attributed to shop ({O} | {P})")
 				else:print("ERROR: Couldn't find shop in assortment")
-			for A in i:
-				G=Y+4+A[r]*48;Q=Z+2+A[s]*56;ROM().seek(G+40);ROM().writeMultipleBytes(A[K],2)
-				if A[e]!=0:
-					ROM().seek(G+28);A4=intf_to_float(int.from_bytes(ROM().readBytes(4),B));R=A4+A[e]
+			for A in j:
+				G=Y+4+A[s]*48;Q=Z+2+A[t]*56;ROM().seek(G+40);ROM().writeMultipleBytes(A[K],2)
+				if A[f]!=0:
+					ROM().seek(G+28);A4=intf_to_float(int.from_bytes(ROM().readBytes(4),B));R=A4+A[f]
 					if R<0:R+=360
 					elif R>=360:R-=360
 					ROM().seek(G+28);ROM().writeMultipleBytes(int(float_to_hex(R),16),4)
-				ROM().seek(G+12);A5=intf_to_float(int.from_bytes(ROM().readBytes(4),B));E=A5*A[u];ROM().seek(G+12);ROM().writeMultipleBytes(int(float_to_hex(E),16),4);ROM().seek(G);m=intf_to_float(int.from_bytes(ROM().readBytes(4),B));ROM().seek(G+8);n=intf_to_float(int.from_bytes(ROM().readBytes(4),B));ROM().seek(Q);A6=ushort_to_short(int.from_bytes(ROM().readBytes(2),B));ROM().seek(Q+4);A7=ushort_to_short(int.from_bytes(ROM().readBytes(2),B));a=A6-m;b=A7-n;A8=math.sqrt(a*a+b*b);S=1
+				ROM().seek(G+12);A5=intf_to_float(int.from_bytes(ROM().readBytes(4),B));E=A5*A[v];ROM().seek(G+12);ROM().writeMultipleBytes(int(float_to_hex(E),16),4);ROM().seek(G);n=intf_to_float(int.from_bytes(ROM().readBytes(4),B));ROM().seek(G+8);o=intf_to_float(int.from_bytes(ROM().readBytes(4),B));ROM().seek(Q);A6=ushort_to_short(int.from_bytes(ROM().readBytes(2),B));ROM().seek(Q+4);A7=ushort_to_short(int.from_bytes(ROM().readBytes(2),B));b=A6-n;c=A7-o;A8=math.sqrt(b*b+c*c);S=1
 				if A[K]==115:S=35
 				elif A[K]==122:S=43
 				elif A[K]==292:S=35
 				elif A[K]==121:S=50
-				A9=S*E;o=A9/A8;AA=a*o;AB=b*o;c=m+AA;d=n+AB
-				if c<0:c+=65536
+				A9=S*E;p=A9/A8;AA=b*p;AB=c*p;d=n+AA;e=o+AB
 				if d<0:d+=65536
-				ROM().seek(Q+0);ROM().writeMultipleBytes(c,2);ROM().seek(Q+4);ROM().writeMultipleBytes(d,2);ROM().seek(Q+18);ROM().writeMultipleBytes(A[t],2)
+				if e<0:e+=65536
+				ROM().seek(Q+0);ROM().writeMultipleBytes(d,2);ROM().seek(Q+4);ROM().writeMultipleBytes(e,2);ROM().seek(Q+18);ROM().writeMultipleBytes(A[u],2)
