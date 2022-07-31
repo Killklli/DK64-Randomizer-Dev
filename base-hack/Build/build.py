@@ -70,7 +70,7 @@ from vanilla_move_data import writeVanillaMoveData
 from image_converter import convertToRGBA32
 from end_seq_writer import createTextFile,createSquishFile
 from generate_yellow_wrinkly import generateYellowWrinkly
-import model_fix,instance_script_maker,create_helm_geo
+import model_fix,shop_instance_script,instance_script_maker,create_helm_geo
 ROMName='rom/dk64.z64'
 newROMName='rom/dk64-randomizer-base.z64'
 if os.path.exists(newROMName):os.remove(newROMName)
@@ -273,7 +273,13 @@ with open(newROMName,'r+b')as fh:
 	for x in other_remove:
 		pth=f"assets/Non-Code/{x}"
 		if os.path.exists(pth):os.remove(pth)
-	hash_items=['dk_tie_palette','homing_crate_0','homing_crate_1','num_1_lit','num_1_unlit',_A1,_A2,'num_7_lit','num_7_unlit',_A3,_A4,'standard_crate_0','standard_crate_1','tiny_palette']
+	hash_items=['dk_tie_palette','homing_crate_0','homing_crate_1','num_1_lit','num_1_unlit',_A1,_A2,'num_7_lit','num_7_unlit',_A3,_A4,'standard_crate_0','standard_crate_1','tiny_palette'];script_files=[A[0]for A in os.walk('assets/Non-Code/instance_scripts/')];shop_files=['snide.script','cranky.script','funky.script','candy.script']
+	for folder in script_files:
+		for file in os.listdir(folder):
+			file=f"{folder}/{file}"
+			for shop in shop_files:
+				if shop in file:
+					if os.path.exists(file):os.remove(file)
 	for hash_item in hash_items:
 		for f_t in [_G,'png']:
 			pth=f"assets/Non-Code/hash/{hash_item}.{f_t}"

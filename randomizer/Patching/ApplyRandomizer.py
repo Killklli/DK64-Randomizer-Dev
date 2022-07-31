@@ -20,6 +20,7 @@ from randomizer.Patching.PriceRando import randomize_prices
 from randomizer.Patching.PuzzleRando import randomize_puzzles
 from randomizer.Patching.UpdateHints import PushHints,wipeHints
 from randomizer.Patching.MiscSetupChanges import randomize_setup
+from randomizer.Patching.ShopRandomizer import ApplyShopRandomizer
 from GenTracker import generateTracker
 from randomizer.Settings import Settings
 from ui.progress_bar import ProgressBar
@@ -94,7 +95,7 @@ def patching_response(responded_data):
 	for F in H:I=I|1<<F
 	ROM().seek(B+295);ROM().write(I)
 	if A.settings.coin_door_open in[V,W]:ROM().seek(B+336);ROM().write(A.settings.medal_requirement)
-	randomize_entrances(A);randomize_moves(A);randomize_prices(A);randomize_bosses(A);randomize_krool(A);randomize_barrels(A);randomize_bananaport(A);randomize_kasplat_locations(A);randomize_enemies(A);apply_kongrando_cosmetic(A);randomize_setup(A);randomize_puzzles(A);random.seed(A.settings.seed);randomize_music(A);apply_cosmetic_colors(A);random.seed(A.settings.seed)
+	randomize_entrances(A);randomize_moves(A);randomize_prices(A);randomize_bosses(A);randomize_krool(A);randomize_barrels(A);randomize_bananaport(A);randomize_kasplat_locations(A);randomize_enemies(A);apply_kongrando_cosmetic(A);randomize_setup(A);randomize_puzzles(A);ApplyShopRandomizer(A);random.seed(A.settings.seed);randomize_music(A);apply_cosmetic_colors(A);random.seed(A.settings.seed)
 	if A.settings.wrinkly_hints in['standard','cryptic']:wipeHints();compileHints(A);PushHints()
 	C=0;i=get_hash_images()
 	for D in A.settings.seed_hash:ROM().seek(B+297+C);ROM().write(D);js.document.getElementById('hash'+str(C)).src='data:image/jpeg;base64,'+i[D];C+=1
