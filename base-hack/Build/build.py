@@ -39,8 +39,8 @@ _U='coins'
 _T='offset'
 _S='map_folder'
 _R='model_index'
-_Q='bps'
-_P='model_file'
+_Q='model_file'
+_P='bps'
 _O='do_not_extract'
 _N='use_external_gzip'
 _M='do_not_compress'
@@ -94,11 +94,11 @@ new_coin_sfx='assets/Non-Code/music/coin_sfx.bin'
 if os.path.exists(new_coin_sfx):os.remove(new_coin_sfx)
 shutil.copyfile(base_coin_sfx,new_coin_sfx)
 map_replacements=[]
-song_replacements=[{_B:'baboon_balloon',_I:107,_Q:_E},{_B:'bonus_minigames',_I:8,_Q:_E},{_B:'dk_rap',_I:75,_Q:_E},{_B:'failure_races_try_again',_I:87,_Q:_E},{_B:'move_get',_I:114,_Q:_E},{_B:'nintendo_logo',_I:174,_Q:_E},{_B:'success_races',_I:86,_Q:_E},{_B:'coin_sfx',_I:7,_Q:_i}]
+song_replacements=[{_B:'baboon_balloon',_I:107,_P:_E},{_B:'bonus_minigames',_I:8,_P:_E},{_B:'dk_rap',_I:75,_P:_E},{_B:'failure_races_try_again',_I:87,_P:_E},{_B:'move_get',_I:114,_P:_E},{_B:'nintendo_logo',_I:174,_P:_E},{_B:'success_races',_I:86,_P:_E},{_B:'klumsy_celebration',_I:125,_P:_E},{_B:'coin_sfx',_I:7,_P:_i}]
 changed_song_indexes=[]
 for song in song_replacements:
 	item={_B:song[_B].replace('_',' '),_C:0,_D:song[_I],_A:f"assets/Non-Code/music/{song[_B]}.bin",_K:11742}
-	if song[_Q]:item[_h]=_E;item[_l]=f"assets/Non-Code/music/{song[_B]}.bps"
+	if song[_P]:item[_h]=_E;item[_l]=f"assets/Non-Code/music/{song[_B]}.bps"
 	else:item[_L]=_E;item[_O]=_E
 	file_dict.append(item);changed_song_indexes.append(song[_I])
 with open('./instance_scripts_data.json','r')as json_f:instance_script_maps=json.load(json_f)
@@ -129,8 +129,8 @@ for x in kong_palettes:
 	x_s=32*32*2
 	if x==3769:x_s=43*32*2
 	file_dict.append({_B:f"Palette Expansion ({hex(x)})",_C:25,_D:x,_A:f"palette_{x}.bin",_K:x_s})
-model_changes=[{_R:0,_P:'diddy_base.bin'},{_R:1,_P:'diddy_ins.bin'},{_R:5,_P:'lanky_base.bin'},{_R:6,_P:'lanky_ins.bin'},{_R:3,_P:'dk_base.bin'},{_R:8,_P:'tiny_base.bin'},{_R:9,_P:'tiny_ins.bin'}]
-for x in model_changes:file_dict.append({_B:f"Model {x[_R]}",_C:5,_D:x[_R],_A:x[_P],_L:_E})
+model_changes=[{_R:0,_Q:'diddy_base.bin'},{_R:1,_Q:'diddy_ins.bin'},{_R:5,_Q:'lanky_base.bin'},{_R:6,_Q:'lanky_ins.bin'},{_R:3,_Q:'dk_base.bin'},{_R:8,_Q:'tiny_base.bin'},{_R:9,_Q:'tiny_ins.bin'}]
+for x in model_changes:file_dict.append({_B:f"Model {x[_R]}",_C:5,_D:x[_R],_A:x[_Q],_L:_E})
 portal_image_order=[['SE','NE','SW','NW'],['NW','SW','NE','SE']]
 for x in range(2):
 	order=portal_image_order[x];image_series=portal_images[x]
@@ -290,7 +290,7 @@ with open(newROMName,'r+b')as fh:
 		if os.path.exists(pth):os.remove(pth)
 	if os.path.exists(_m):os.remove(_m)
 	for x in model_changes:
-		if os.path.exists(x[_P]):os.remove(x[_P])
+		if os.path.exists(x[_Q]):os.remove(x[_Q])
 	if os.path.exists(new_coin_sfx):os.remove(new_coin_sfx)
 	if os.path.exists(_p):os.remove(_p)
 print('[7 / 7] - Generating BizHawk RAM watch')
