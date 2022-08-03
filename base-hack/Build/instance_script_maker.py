@@ -21,10 +21,12 @@ new_blocks=[]
 new_block=[]
 new_conds=[]
 new_execs=[]
+class bcolors:'Color codes for printing to console.';HEADER='\x1b[95m';OKBLUE='\x1b[94m';OKCYAN='\x1b[96m';OKGREEN='\x1b[92m';WARNING='\x1b[93m';FAIL='\x1b[91m';ENDC='\x1b[0m';BOLD='\x1b[1m';UNDERLINE='\x1b[4m'
 def resetCond(reset_block):
 	'Reset block data with relation to script.';global new_block_count;global new_cond_count;global new_exec_count;global new_blocks;global new_block;global new_conds;global new_execs
 	if reset_block:new_block_count=0;new_blocks=[]
 	new_cond_count=0;new_exec_count=0;new_block=[];new_conds=[];new_execs=[]
+print('\nCOMPILING SCRIPTS')
 with open(base_rom,_D)as fh:
 	fh.seek(pointer_table_offset+10*4);script_table=pointer_table_offset+int.from_bytes(fh.read(4),_A);map_data=[]
 	if script_table!=0:
@@ -69,9 +71,9 @@ with open(base_rom,_D)as fh:
 												if'0x'in val:val=int(val,16)
 												else:val=int(val)
 												script_data[attr]=val
-								pre_message='Ignoring'
-								if script_data[_I]==0:pre_message='Compiling'
-								print(f"{pre_message} {file.replace('.script','')} ({hex(script_data[_B])})")
+								pre_message=f"{bcolors.WARNING}Ignoring"
+								if script_data[_I]==0:pre_message=f"{bcolors.OKGREEN}Compiling"
+								print(f"{pre_message} {file.replace('.script','')} ({hex(script_data[_B])}){bcolors.ENDC}")
 								if contains_code and code_start>-1:
 									resetCond(_H)
 									for code_line in script_info[code_start:]:

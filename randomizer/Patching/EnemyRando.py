@@ -52,73 +52,74 @@ def randomize_enemies(spoiler):
 					if n[s]==F:
 						for o in n[t]:
 							A2=o[S]+Enemies.KasplatDK;A3=o[T]+Enemies.KasplatDK
-							for A in P:
-								if A[N]==A2:ROM().seek(C+A[D]);ROM().writeMultipleBytes(A3,1)
+							for B in P:
+								if B[N]==A2:ROM().seek(C+B[D]);ROM().writeMultipleBytes(A3,1)
 			if E.settings.enemy_rando and F in u:
 				for Q in b:
 					V=b[Q];A4=X[Q];p=0
-					for A in P:
-						if A[N]in A4:
-							if F!=Maps.FranticFactory or A[d]<35 or A[d]>44:
-								B=V[p];p+=1
-								if B!=Enemies.Book or F not in(Maps.CavesDonkeyCabin,Maps.JapesLankyCave,Maps.AngryAztecLobby):
-									if B!=Enemies.Kosha or F!=Maps.CavesDiddyLowerCabin:
-										if B!=Enemies.Guard or F not in(Maps.CavesDiddyLowerCabin,Maps.CavesTinyIgloo,Maps.CavesTinyCabin):
-											ROM().seek(C+A[D]);ROM().writeMultipleBytes(B,1)
-											if B in EnemyMetaData.keys():
-												ROM().seek(C+A[D]+16);ROM().writeMultipleBytes(EnemyMetaData[B].aggro,1)
-												if B==Enemies.RoboKremling:ROM().seek(C+A[D]+11);ROM().writeMultipleBytes(200,1)
-												ROM().seek(C+A[D]+15);R=int.from_bytes(ROM().readBytes(1),I)
-												if EnemyMetaData[B].size_cap>0:
-													if R>EnemyMetaData[B].size_cap:ROM().seek(C+A[D]+15);ROM().writeMultipleBytes(EnemyMetaData[B].size_cap,1)
-												if E.settings.enemy_speed_rando:
-													H=EnemyMetaData[B].min_speed;K=EnemyMetaData[B].max_speed
-													if H>0 and K>0:ROM().seek(C+A[D]+13);L=random.randint(H,K);ROM().writeMultipleBytes(L,1);ROM().seek(C+A[D]+12);ROM().writeMultipleBytes(random.randint(H,L),1)
+					for B in P:
+						if B[N]in A4:
+							if F!=Maps.FranticFactory or B[d]<35 or B[d]>44:
+								A=V[p];p+=1
+								if F!=Maps.ForestSpider or EnemyMetaData[A].aggro!=4:
+									if A!=Enemies.Book or F not in(Maps.CavesDonkeyCabin,Maps.JapesLankyCave,Maps.AngryAztecLobby):
+										if A!=Enemies.Kosha or F!=Maps.CavesDiddyLowerCabin:
+											if A!=Enemies.Guard or F not in(Maps.CavesDiddyLowerCabin,Maps.CavesTinyIgloo,Maps.CavesTinyCabin):
+												ROM().seek(C+B[D]);ROM().writeMultipleBytes(A,1)
+												if A in EnemyMetaData.keys():
+													ROM().seek(C+B[D]+16);ROM().writeMultipleBytes(EnemyMetaData[A].aggro,1)
+													if A==Enemies.RoboKremling:ROM().seek(C+B[D]+11);ROM().writeMultipleBytes(200,1)
+													ROM().seek(C+B[D]+15);R=int.from_bytes(ROM().readBytes(1),I)
+													if EnemyMetaData[A].size_cap>0:
+														if R>EnemyMetaData[A].size_cap:ROM().seek(C+B[D]+15);ROM().writeMultipleBytes(EnemyMetaData[A].size_cap,1)
+													if E.settings.enemy_speed_rando:
+														H=EnemyMetaData[A].min_speed;K=EnemyMetaData[A].max_speed
+														if H>0 and K>0:ROM().seek(C+B[D]+13);L=random.randint(H,K);ROM().writeMultipleBytes(L,1);ROM().seek(C+B[D]+12);ROM().writeMultipleBytes(random.randint(H,L),1)
 			if E.settings.enemy_rando and F in U:
 				M=[]
 				if F in e:M=h.copy()
 				elif F in f:M=i.copy()
 				elif F in g:M=j.copy()
 				elif F in O:M=k.copy()
-				for A in P:
-					if A[N]in M:
-						B=random.choice(M)
+				for B in P:
+					if B[N]in M:
+						A=random.choice(M)
 						if F in O:
 							A5=random.choice(M)
-							if B!=Enemies.BeaverGold or A5!=Enemies.BeaverGold:B=Enemies.BeaverBlue
-						ROM().seek(C+A[D]);ROM().writeMultipleBytes(B,1)
-						if B in EnemyMetaData.keys():
-							ROM().seek(C+A[D]+16);ROM().writeMultipleBytes(EnemyMetaData[B].aggro,1)
-							if B==Enemies.RoboKremling:ROM().seek(C+A[D]+11);ROM().writeMultipleBytes(200,1)
-							if EnemyMetaData[B].air:ROM().seek(C+A[D]+6);ROM().writeMultipleBytes(300,2)
-							ROM().seek(C+A[D]+15);R=int.from_bytes(ROM().readBytes(1),I)
-							if EnemyMetaData[B].size_cap>0:
-								if R>EnemyMetaData[B].size_cap:ROM().seek(C+A[D]+15);ROM().writeMultipleBytes(EnemyMetaData[B].size_cap,1)
+							if A!=Enemies.BeaverGold or A5!=Enemies.BeaverGold:A=Enemies.BeaverBlue
+						ROM().seek(C+B[D]);ROM().writeMultipleBytes(A,1)
+						if A in EnemyMetaData.keys():
+							ROM().seek(C+B[D]+16);ROM().writeMultipleBytes(EnemyMetaData[A].aggro,1)
+							if A==Enemies.RoboKremling:ROM().seek(C+B[D]+11);ROM().writeMultipleBytes(200,1)
+							if EnemyMetaData[A].air:ROM().seek(C+B[D]+6);ROM().writeMultipleBytes(300,2)
+							ROM().seek(C+B[D]+15);R=int.from_bytes(ROM().readBytes(1),I)
+							if EnemyMetaData[A].size_cap>0:
+								if R>EnemyMetaData[A].size_cap:ROM().seek(C+B[D]+15);ROM().writeMultipleBytes(EnemyMetaData[A].size_cap,1)
 							if E.settings.enemy_speed_rando and F not in O:
-								H=EnemyMetaData[B].min_speed;K=EnemyMetaData[B].max_speed
-								if H>0 and K>0:ROM().seek(C+A[D]+13);L=random.randint(H,K);ROM().writeMultipleBytes(L,1);ROM().seek(C+A[D]+12);ROM().writeMultipleBytes(random.randint(H,L),1)
-							if B==Enemies.BeaverGold and F in O:
+								H=EnemyMetaData[A].min_speed;K=EnemyMetaData[A].max_speed
+								if H>0 and K>0:ROM().seek(C+B[D]+13);L=random.randint(H,K);ROM().writeMultipleBytes(L,1);ROM().seek(C+B[D]+12);ROM().writeMultipleBytes(random.randint(H,L),1)
+							if A==Enemies.BeaverGold and F in O:
 								for q in [12,13]:
-									ROM().seek(C+A[D]+q);A6=int.from_bytes(ROM().readBytes(1),I);c=int(A6*1.1)
+									ROM().seek(C+B[D]+q);A6=int.from_bytes(ROM().readBytes(1),I);c=int(A6*1.1)
 									if c>255:c=255
-									ROM().seek(C+A[D]+q);ROM().writeMultipleBytes(c,1)
+									ROM().seek(C+B[D]+q);ROM().writeMultipleBytes(c,1)
 			if E.settings.crown_enemy_rando!=_A and F in v:
 				r=0
-				for A in P:
-					if A[N]in Y:
-						B=m[r];ROM().seek(C+A[D]);ROM().writeMultipleBytes(B,1);r+=1
-						if B in EnemyMetaData.keys():
-							ROM().seek(C+A[D]+16);ROM().writeMultipleBytes(EnemyMetaData[B].aggro,1)
-							if B==Enemies.RoboKremling:ROM().seek(C+A[D]+11);ROM().writeMultipleBytes(200,1)
-							if EnemyMetaData[B].air:ROM().seek(C+A[D]+6);ROM().writeMultipleBytes(300,2)
-							ROM().seek(C+A[D]+15);R=int.from_bytes(ROM().readBytes(1),I)
-							if EnemyMetaData[B].size_cap>0:
-								if R>EnemyMetaData[B].size_cap:ROM().seek(C+A[D]+15);ROM().writeMultipleBytes(EnemyMetaData[B].size_cap,1)
+				for B in P:
+					if B[N]in Y:
+						A=m[r];ROM().seek(C+B[D]);ROM().writeMultipleBytes(A,1);r+=1
+						if A in EnemyMetaData.keys():
+							ROM().seek(C+B[D]+16);ROM().writeMultipleBytes(EnemyMetaData[A].aggro,1)
+							if A==Enemies.RoboKremling:ROM().seek(C+B[D]+11);ROM().writeMultipleBytes(200,1)
+							if EnemyMetaData[A].air:ROM().seek(C+B[D]+6);ROM().writeMultipleBytes(300,2)
+							ROM().seek(C+B[D]+15);R=int.from_bytes(ROM().readBytes(1),I)
+							if EnemyMetaData[A].size_cap>0:
+								if R>EnemyMetaData[A].size_cap:ROM().seek(C+B[D]+15);ROM().writeMultipleBytes(EnemyMetaData[A].size_cap,1)
 							if E.settings.enemy_speed_rando:
-								H=EnemyMetaData[B].min_speed;K=EnemyMetaData[B].max_speed
-								if H>0 and K>0:ROM().seek(C+A[D]+13);L=random.randint(H,K);ROM().writeMultipleBytes(L,1);ROM().seek(C+A[D]+12);ROM().writeMultipleBytes(random.randint(H,L),1)
-					elif A[N]==Enemies.BattleCrownController:
-						ROM().seek(C+A[D]+11);W=5
+								H=EnemyMetaData[A].min_speed;K=EnemyMetaData[A].max_speed
+								if H>0 and K>0:ROM().seek(C+B[D]+13);L=random.randint(H,K);ROM().writeMultipleBytes(L,1);ROM().seek(C+B[D]+12);ROM().writeMultipleBytes(random.randint(H,L),1)
+					elif B[N]==Enemies.BattleCrownController:
+						ROM().seek(C+B[D]+11);W=5
 						if E.settings.crown_enemy_rando=='easy':W=5
 						elif E.settings.crown_enemy_rando==_B:W=15
 						elif E.settings.crown_enemy_rando=='hard':W=30

@@ -145,7 +145,7 @@ for x in range(len(hash_indexes)):idx=hash_indexes[x];file_dict.append({_B:f"Has
 file_dict.append({_B:'Dolby Text',_C:12,_D:13,_A:'dolby_text.bin',_M:_E,_L:_E})
 file_dict.append({_B:'Custom Text',_C:12,_D:32,_A:'custom_text.bin',_M:_E,_L:_E})
 file_dict.append({_B:'DK Text',_C:12,_D:24,_A:'dk_text.bin',_M:_E,_L:_E})
-print('DK64 Extractor')
+print('\nDK64 Extractor\nBuilt by Isotarge')
 with open(ROMName,_X)as fh:
 	print('[1 / 7] - Parsing pointer tables');parsePointerTables(fh);readOverlayOriginalData(fh)
 	for x in map_replacements:
