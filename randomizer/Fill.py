@@ -10,7 +10,7 @@ _D='on_cross_purchase'
 _C=False
 _B=True
 _A=None
-import random,js
+import json,random,js
 from randomizer.Enums.MinigameType import MinigameType
 from randomizer.Enums.Warps import Warps
 import randomizer.ItemPool as ItemPool,randomizer.Lists.Exceptions as Ex
@@ -381,7 +381,7 @@ def GetLogicallyAccessibleKongLocations(spoiler,kongLocations,ownedKongs,latestL
 		if B.settings.level_order[E]==Levels.AngryAztec and Locations.LankyKong in D and(Kongs.diddy in A or B.settings.open_levels)and(Kongs.donkey in A or Kongs.lanky in A or Kongs.tiny in A):C.append(Locations.LankyKong)
 	return C
 def PlaceKongs(spoiler,kongItems,kongLocations):
-	'For these settings, Kongs to place, and locations to place them in, place the Kongs in such a way the generation will never error here.';E=kongLocations;D=kongItems;A=spoiler;B=[B for B in A.settings.starting_kong_list]
+	'For these settings, Kongs to place, and locations to place them in, place the Kongs in such a way the generation will never error here.';N='SEND THIS TO THE DEVS!';E=kongLocations;D=kongItems;A=spoiler;B=[B for B in A.settings.starting_kong_list]
 	if A.settings.shuffle_loading_zones==_F or A.settings.no_logic:
 		random.shuffle(D)
 		if Locations.ChunkyKong in E:C=D.pop();LocationList[Locations.ChunkyKong].PlaceItem(C);A.settings.chunky_freeing_kong=random.choice(B);B.append(ItemPool.GetKongForItem(C))
@@ -391,7 +391,7 @@ def PlaceKongs(spoiler,kongItems,kongLocations):
 	elif A.settings.shuffle_loading_zones in(_K,'none'):
 		H=len(B)+1;F=GetLogicallyAccessibleKongLocations(A,E,B,H)
 		while len(B)!=5:
-			if not any(F):raise Ex.EntrancePlacementException('Levels shuffled in a way that makes Kong unlocks impossible. SEND THIS TO THE DEVS!')
+			if not any(F):raise Ex.EntrancePlacementException('Levels shuffled in a way that makes Kong unlocks impossible. SEND THIS TO THE DEVS!'+json.dumps(A.settings)+N)
 			G=random.choice(F);F.remove(G)
 			if G==Locations.DiddyKong:A.settings.diddy_freeing_kong=random.choice(B)
 			elif G==Locations.LankyKong:A.settings.lanky_freeing_kong=random.choice(B)
@@ -403,8 +403,9 @@ def PlaceKongs(spoiler,kongItems,kongLocations):
 				if not any(F):
 					K=[]
 					for L in D:
-						M=[A for A in B];M.append(ItemPool.GetKongForItem(L));N=GetLogicallyAccessibleKongLocations(A,E,M,H)
-						if any(N):K.append(L)
+						M=[A for A in B];M.append(ItemPool.GetKongForItem(L));O=GetLogicallyAccessibleKongLocations(A,E,M,H)
+						if any(O):K.append(L)
+					if len(K)==0:raise Ex.FillException('Kongs placed in a way that is impossible to unlock everyone. SEND THIS TO THE DEVS!'+json.dumps(A.settings)+N)
 					I=random.choice(K)
 			LocationList[G].PlaceItem(I);D.remove(I);B.append(ItemPool.GetKongForItem(I));F=GetLogicallyAccessibleKongLocations(A,E,B,H)
 	if A.settings.diddy_freeing_kong==Kongs.any:A.settings.diddy_freeing_kong=random.choice(GetKongs())
