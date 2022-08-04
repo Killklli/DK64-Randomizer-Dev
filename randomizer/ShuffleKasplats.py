@@ -34,13 +34,13 @@ def ShuffleKasplatsAndLocations(spoiler,LogicVariables):
 		E=KasplatLocationList[D]
 		for A in E:A.setKasplat(state=False)
 		I=GetKongs();random.shuffle(I)
-		for (K,C) in enumerate(I):
+		for C in I:
 			J=[]
 			for A in E:
 				if not A.selected and C in A.kong_lst:J.append(A.name)
-			L=random.choice(J)
+			K=random.choice(J)
 			for A in E:
-				if A.name==L:A.setKasplat();M=GetBlueprintItemForKongAndLevel(D,C);F=GetBlueprintLocationForKongAndLevel(D,C);B=Location(A.name,M,Types.Blueprint,[A.map,C]);B.PlaceDefaultItem();Logic.LocationList[F]=B;N=Logic.Regions[A.region_id];N.locations.append(LocationLogic(F,A.additional_logic));H.kasplat_map[F]=C;G.shuffled_kasplat_map[A.name]=K;break
+				if A.name==K:A.setKasplat();L=GetBlueprintItemForKongAndLevel(D,C);F=GetBlueprintLocationForKongAndLevel(D,C);B=Location(A.name,L,Types.Blueprint,[A.map,C]);B.PlaceDefaultItem();Logic.LocationList[F]=B;M=Logic.Regions[A.region_id];M.locations.append(LocationLogic(F,A.additional_logic));H.kasplat_map[F]=C;G.shuffled_kasplat_map[A.name]=int(C);break
 def ShuffleKasplats(LogicVariables):
 	'Shuffles the kong assigned to each kasplat.';A=LogicVariables;B=[];C=GetKongs()
 	for J in range(len(Levels)-1):B.append(C.copy())
