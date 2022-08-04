@@ -90,6 +90,7 @@ class Settings:
 	def SelectKongLocations(B):
 		'Select which random kong locations to use depending on number of starting kongs.';A=[Locations.DiddyKong,Locations.LankyKong,Locations.TinyKong,Locations.ChunkyKong]
 		for D in range(0,B.starting_kongs_count-1):C=random.choice(A);A.remove(C)
+		if B.starting_kongs_count==3 and Kongs.diddy not in B.starting_kong_list and Kongs.chunky not in B.starting_kong_list and Locations.TinyKong in A and Locations.LankyKong in A:A.pop();A.append(random.choice(Locations.DiddyKong,Locations.ChunkyKong))
 		if B.starting_kongs_count==4 and Kongs.diddy not in B.starting_kong_list and Locations.LankyKong in A:A.remove(Locations.LankyKong);A.append(random.choice(Locations.DiddyKong,Locations.TinyKong,Locations.ChunkyKong))
 		return A
 	def __repr__(A):'Return printable version of the object as json.\n\n        Returns:\n            str: Json string of the dict.\n        ';return json.dumps(A.__dict__)
