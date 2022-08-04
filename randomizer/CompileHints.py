@@ -34,176 +34,178 @@ def resetHintList():
 		if not A.base:hint_list.remove(A)
 		else:A.used=_A;A.important=A.was_important;A.repeats=A.original_repeats;A.priority=A.original_priority
 def compileHints(spoiler):
-	'Push hints to hint list based on settings.';Ar='shop_dump';Aq="'s in ";Ap='Cranky';Ao='Their first special move';An='Their third special move';Am='DK Isles';Al='Chunky';Ak='Donkey';AI='levels';AH='Creepy Castle';AG='Crystal Caves';AF='Fungi Forest';AE='Gloomy Galleon';AD='Angry Aztec';x='kongs';w='Frantic Factory';v='Jungle Japes';p='name_cryptic';f='color';e='cryptic';d='purchase_kong';Z='shared';S='moves';I='important';H='move_index';G='move_type';F='key';E='shop';D=spoiler;C='kong';B='level';A='name';resetHintList();AJ=[Levels.JungleJapes,Levels.AngryAztec,Levels.FranticFactory,Levels.GloomyGalleon,Levels.FungiForest,Levels.CrystalCaves,Levels.CreepyCastle]
-	if D.settings.krool_phase_order_rando and len(D.settings.krool_order)>1:
-		AK=f"K. Rool order is {NameFromKong(D.settings.krool_order[0])}"
-		for L in range(len(D.settings.krool_order)):
-			if L!=0:AK+=f" then {NameFromKong(D.settings.krool_order[L])}"
-		hint_list.append(Hint(hint=AK,repeats=2,kongs=D.settings.krool_order.copy(),subtype='k_rool'))
-	AL=[Ak,'Diddy','Lanky','Tiny',Al];AM=[['The kong who is bigger, faster and potentially stronger too','The kong who fires in spurts','The kong with a tie','The kong who slaps their instrument to the jungle beat'],['The kong who can fly real high','The kong who features in the first two Donkey Kong Country games','The kong who wants to see red','The kong who frees the only female playable kong'],['The kong who inflates like a balloon, just like a balloon','The kong who waddles in his overalls','The kong who has a cold race with an insect','The kong who lacks style, grace but not a funny face'],['The kong who likes jazz',"The kong who shoots K. Rool's tiny toes",'The kong who has ammo that is light as a feather','The kong who can shrink in size'],['The kong who is one hell of a guy','The kong who can pick up boulders','The kong who fights a blocky boss','The kong who bows down to a dragonfly']];V=[v,AD,w,AE,AF,AG,AH,'Hideout Helm'];As=[v,AD,w,AE,AF,AG,AH,Am];a=[['The level with a localized storm','The level with a dirt mountain','The level which has two retailers and no race'],['The level with sporadic gusts of sand','The level with two kongs to free','The level with a spinning totem'],['The level with a toy production facility','The level with a tower of blocks','The level with Cranky and Candy adjacent to each other'],['The level with the most water','The level where you free a water dweller','The level with stacks of gold'],['The level with only two retailers and two races','The level where night can be acquired at will','The level with a nocturnal tree dweller'],['The level where it rains rocks','The level with two ice shields','The level with an Ice Tomato'],['The level with constant rain','The level with a dungeon, ballroom and a library','The level with drawbridge and a moat'],['The timed level','The level with no boss','The level with no small bananas']];q=a.copy();q.remove(q[-1]);q.append(['The hub world',"The world with DK's ugly mug on it","The world with only a Cranky's Lab and Snide's HQ in it"])
-	if D.settings.shuffle_items==S and D.move_data is not _C:
-		At=[0,2,1,1,4];Au=0
-		for L in D.settings.krool_order:Au+=At[L]
-		y=[{A:'Monkeyport',p:An,F:3,C:3,G:0,H:3,B:0,E:0,I:_B},{A:'Mini Monkey',p:Ao,F:1,C:3,G:0,H:1,B:0,E:0,I:_B},{A:'Coconut Gun',p:'Their gun',F:33,C:0,G:2,H:1,B:0,E:0,I:_B},{A:'Chimpy Charge',p:Ao,F:1,C:1,G:0,H:1,B:0,E:0,I:_B},{A:'Gorilla Gone',p:An,F:3,C:4,G:0,H:3,B:0,E:0,I:_B},{A:'Ponytail Twirl',F:2,C:3,G:0,H:2,B:0,E:0,I:_A},{A:'Baboon Blast',F:1,C:0,G:0,H:1,B:0,E:0,I:_A},{A:'Strong Kong',F:2,C:0,G:0,H:2,B:0,E:0,I:_A},{A:'Gorilla Grab',F:3,C:0,G:0,H:3,B:0,E:0,I:_A},{A:'Rocketbarrel Boost',F:2,C:1,G:0,H:2,B:0,E:0,I:_A},{A:'Simian Spring',F:3,C:1,G:0,H:3,B:0,E:0,I:_A},{A:'Orangstand',F:1,C:2,G:0,H:1,B:0,E:0,I:_A},{A:'Baboon Balloon',F:2,C:2,G:0,H:2,B:0,E:0,I:_A},{A:'Orangstand Sprint',F:3,C:2,G:0,H:3,B:0,E:0,I:_A},{A:'Hunky Chunky',F:1,C:4,G:0,H:1,B:0,E:0,I:_A},{A:'Primate Punch',F:2,C:4,G:0,H:2,B:0,E:0,I:_A},{A:'Peanut Popguns',F:33,C:1,G:2,H:1,B:0,E:0,I:_A},{A:'Grape Shooter',F:33,C:2,G:2,H:1,B:0,E:0,I:_A},{A:'Feather Bow',F:33,C:3,G:2,H:1,B:0,E:0,I:_A},{A:'Pineapple Launcher',F:33,C:4,B:0,G:2,H:1,E:0,I:_A},{A:'Bongo Blast',F:65,C:0,G:4,H:1,B:0,E:0,I:_A},{A:'Guitar Gazump',F:65,C:1,G:4,H:1,B:0,E:0,I:_A},{A:'Trombone Tremor',F:65,C:2,G:4,H:1,B:0,E:0,I:_A},{A:'Saxophone Slam',F:65,C:3,G:4,H:1,B:0,E:0,I:_A},{A:'Triangle Trample',F:65,C:4,G:4,H:1,B:0,E:0,I:_A},{A:'Slam Upgrade',F:18,C:0,G:1,H:2,B:0,E:0,I:_A,Z:_B},{A:'Homing Ammo',F:34,C:0,G:2,H:2,B:0,E:0,I:_A,Z:_B},{A:'Sniper Scope',F:35,C:0,G:2,H:3,B:0,E:0,I:_A,Z:_B},{A:'Ammo Belt Upgrade',F:50,C:0,G:3,H:2,B:0,E:0,I:_A,Z:_B},{A:'Instrument Upgrade',F:66,C:0,G:4,H:2,B:0,E:0,I:_A,Z:_B}];z=[Ap,'Funky','Candy'];B9=[['The shop owner with a walking stick','The shop owner who is old','The shop owner who is persistently grumpy','The shop owner who resides near your Treehouse'],['The shop owner who has an armory','The shop owner who has a banana on his shop','The shop owner with sunglasses','The shop owner who calls everyone Dude'],['The shop owner who is flirtatious','The shop owner who is not present in Fungi Forest','The shop owner who is not present in Jungle Japes','The shop owner with blonde hair']]
-		for J in y:J[F]=((J[G]&7)<<5)+((J[H]-1&3)<<3)+(J[C]&7);J[d]=-1;J[B]=-1;J[E]=-1
+	'Push hints to hint list based on settings.';As='shop_dump';Ar="'s in ";Aq='Cranky';Ap='Their first special move';Ao='Their third special move';An='DK Isles';Am='Chunky';Al='Donkey';AJ='levels';AI='Creepy Castle';AH='Crystal Caves';AG='Fungi Forest';AF='Gloomy Galleon';AE='Angry Aztec';y='kongs';x='Frantic Factory';w='Jungle Japes';o='name_cryptic';g='color';f='cryptic';e='purchase_kong';Z='shared';S='moves';I='important';H='move_index';G='move_type';F='key';E='shop';D='kong';C='level';B='name';A=spoiler;resetHintList();AK=[Levels.JungleJapes,Levels.AngryAztec,Levels.FranticFactory,Levels.GloomyGalleon,Levels.FungiForest,Levels.CrystalCaves,Levels.CreepyCastle]
+	if A.settings.krool_phase_order_rando and len(A.settings.krool_order)>1:
+		AL=f"K. Rool order is {NameFromKong(A.settings.krool_order[0])}"
+		for L in range(len(A.settings.krool_order)):
+			if L!=0:AL+=f" then {NameFromKong(A.settings.krool_order[L])}"
+		hint_list.append(Hint(hint=AL,repeats=2,kongs=A.settings.krool_order.copy(),subtype='k_rool'))
+	AM=[Al,'Diddy','Lanky','Tiny',Am];AN=[['The kong who is bigger, faster and potentially stronger too','The kong who fires in spurts','The kong with a tie','The kong who slaps their instrument to the jungle beat'],['The kong who can fly real high','The kong who features in the first two Donkey Kong Country games','The kong who wants to see red','The kong who frees the only female playable kong'],['The kong who inflates like a balloon, just like a balloon','The kong who waddles in his overalls','The kong who has a cold race with an insect','The kong who lacks style, grace but not a funny face'],['The kong who likes jazz',"The kong who shoots K. Rool's tiny toes",'The kong who has ammo that is light as a feather','The kong who can shrink in size'],['The kong who is one hell of a guy','The kong who can pick up boulders','The kong who fights a blocky boss','The kong who bows down to a dragonfly']];V=[w,AE,x,AF,AG,AH,AI,'Hideout Helm'];At=[w,AE,x,AF,AG,AH,AI,An];a=[['The level with a localized storm','The level with a dirt mountain','The level which has two retailers and no race'],['The level with four vases','The level with two kongs cages','The level with a spinning totem'],['The level with a toy production facility','The level with a tower of blocks','The level with a game from 1981','The level where you need two quarters to play'],['The level with the most water','The level where you free a water dweller','The level with stacks of gold'],['The level with only two retailers and two races','The level where night can be acquired at will','The level with a nocturnal tree dweller'],['The level with two inches of water','The level with two ice shields','The level with an Ice Tomato'],['The level with battlements','The level with a dungeon, ballroom and a library','The level with drawbridge and a moat'],['The timed level','The level with no boss','The level with no small bananas']];p=a.copy();p.remove(p[-1]);p.append(['The hub world',"The world with DK's ugly mug on it","The world with only a Cranky's Lab and Snide's HQ in it"])
+	if A.settings.shuffle_items==S and A.move_data is not _C:
+		Au=[0,2,1,1,4];Av=0
+		for L in A.settings.krool_order:Av+=Au[L]
+		z=[{B:'Monkeyport',o:Ao,F:3,D:3,G:0,H:3,C:0,E:0,I:_B},{B:'Mini Monkey',o:Ap,F:1,D:3,G:0,H:1,C:0,E:0,I:_B},{B:'Coconut Gun',o:'Their gun',F:33,D:0,G:2,H:1,C:0,E:0,I:_B},{B:'Chimpy Charge',o:Ap,F:1,D:1,G:0,H:1,C:0,E:0,I:_B},{B:'Gorilla Gone',o:Ao,F:3,D:4,G:0,H:3,C:0,E:0,I:_B},{B:'Ponytail Twirl',F:2,D:3,G:0,H:2,C:0,E:0,I:_A},{B:'Baboon Blast',F:1,D:0,G:0,H:1,C:0,E:0,I:_A},{B:'Strong Kong',F:2,D:0,G:0,H:2,C:0,E:0,I:_A},{B:'Gorilla Grab',F:3,D:0,G:0,H:3,C:0,E:0,I:_A},{B:'Rocketbarrel Boost',F:2,D:1,G:0,H:2,C:0,E:0,I:_A},{B:'Simian Spring',F:3,D:1,G:0,H:3,C:0,E:0,I:_A},{B:'Orangstand',F:1,D:2,G:0,H:1,C:0,E:0,I:_A},{B:'Baboon Balloon',F:2,D:2,G:0,H:2,C:0,E:0,I:_A},{B:'Orangstand Sprint',F:3,D:2,G:0,H:3,C:0,E:0,I:_A},{B:'Hunky Chunky',F:1,D:4,G:0,H:1,C:0,E:0,I:_A},{B:'Primate Punch',F:2,D:4,G:0,H:2,C:0,E:0,I:_A},{B:'Peanut Popguns',F:33,D:1,G:2,H:1,C:0,E:0,I:_A},{B:'Grape Shooter',F:33,D:2,G:2,H:1,C:0,E:0,I:_A},{B:'Feather Bow',F:33,D:3,G:2,H:1,C:0,E:0,I:_A},{B:'Pineapple Launcher',F:33,D:4,C:0,G:2,H:1,E:0,I:_A},{B:'Bongo Blast',F:65,D:0,G:4,H:1,C:0,E:0,I:_A},{B:'Guitar Gazump',F:65,D:1,G:4,H:1,C:0,E:0,I:_A},{B:'Trombone Tremor',F:65,D:2,G:4,H:1,C:0,E:0,I:_A},{B:'Saxophone Slam',F:65,D:3,G:4,H:1,C:0,E:0,I:_A},{B:'Triangle Trample',F:65,D:4,G:4,H:1,C:0,E:0,I:_A},{B:'Slam Upgrade',F:18,D:0,G:1,H:2,C:0,E:0,I:_A,Z:_B},{B:'Homing Ammo',F:34,D:0,G:2,H:2,C:0,E:0,I:_A,Z:_B},{B:'Sniper Scope',F:35,D:0,G:2,H:3,C:0,E:0,I:_A,Z:_B},{B:'Ammo Belt Upgrade',F:50,D:0,G:3,H:2,C:0,E:0,I:_A,Z:_B},{B:'Instrument Upgrade',F:66,D:0,G:4,H:2,C:0,E:0,I:_A,Z:_B}];A0=[Aq,'Funky','Candy'];BB=[['The shop owner with a walking stick','The shop owner who is old','The shop owner who is persistently grumpy','The shop owner who resides near your Treehouse'],['The shop owner who has an armory','The shop owner who has a banana on his shop','The shop owner with sunglasses','The shop owner who calls everyone Dude'],['The shop owner who is flirtatious','The shop owner who is not present in Fungi Forest','The shop owner who is not present in Jungle Japes','The shop owner with blonde hair']]
+		for J in z:J[F]=((J[G]&7)<<5)+((J[H]-1&3)<<3)+(J[D]&7);J[e]=-1;J[C]=-1;J[E]=-1
 		O={}
 		for N in range(3):
-			for r in range(5):
+			for q in range(5):
 				for W in range(8):
-					for J in y:
-						if D.move_data[N][r][W]==J[F]:
-							J[B]=W;J[E]=N;J[d]=r
-							if D.settings.wrinkly_hints==e:g=f"{z[N]}'s in {W}"
-							else:g=f"{As[W]} {z[N]}"
-							A0=_A
-							if Z in J:A0=J[Z]
-							if g in O:
-								if not A0:O[g][S].append(J[A]);O[g][x].append(r)
+					for J in z:
+						if A.move_data[N][q][W]==J[F]:
+							J[C]=W;J[E]=N;J[e]=q
+							if A.settings.wrinkly_hints==f:h=f"{A0[N]}'s in {W}"
+							else:h=f"{At[W]} {A0[N]}"
+							A1=_A
+							if Z in J:A1=J[Z]
+							if h in O:
+								if not A1:O[h][S].append(J[B]);O[h][y].append(q)
 							else:
-								AN=[r]
-								if A0:AN=[Kongs.donkey,Kongs.diddy,Kongs.lanky,Kongs.tiny,Kongs.chunky]
-								O[g]={S:[J[A]],x:AN.copy()}
-		AO=list(O.keys());random.shuffle(AO);A1=[3,6,10];h=1;A2=_B
-		for (Av,N) in enumerate(AO):
+								AO=[q]
+								if A1:AO=[Kongs.donkey,Kongs.diddy,Kongs.lanky,Kongs.tiny,Kongs.chunky]
+								O[h]={S:[J[B]],y:AO.copy()}
+		AP=list(O.keys());random.shuffle(AP);A2=[3,6,10];i=1;A3=_B
+		for (Aw,N) in enumerate(AP):
 			X=N
-			if Aq in X:s=int(X.split(Aq)[1].strip());X=random.choice(q[s])
+			if Ar in X:r=int(X.split(Ar)[1].strip());X=random.choice(p[r])
 			if len(O[N][S])>2:b=', '.join(O[N][S][:-1]);b=f"{b} and {O[N][S][-1]}"
 			elif len(O[N][S])==2:b=' and '.join(O[N][S])
 			else:b=O[N][S][0]
-			hint_list.append(Hint(hint=f"{X} contains {b}",priority=h,important=A2,kongs=O[N][x],keywords=O[N][S],subtype=Ar))
-			if A2:hint_list.append(Hint(hint=f"{X} contains {b}",important=_A,kongs=O[N][x],keywords=O[N][S],subtype=Ar))
-			if h<=len(A1):
-				if Av+1>=A1[h-1]:
-					if h==len(A1):A2=_A
-					else:h+=1
-		for J in y:
-			if J[B]>-1 and J[E]>-1 and J[d]>-1:
-				if D.settings.wrinkly_hints==e:i=random.choice(AM[J[d]]);M=random.choice(a[J[B]])
-				else:i=AL[J[d]];M=V[J[B]]
-				Aw=J[A];X=z[J[E]];Ax=f"{Aw} can be purchased from {X} in {M}.";hint_list.append(Hint(hint=Ax,priority=2,kongs=[J[d]],important=J[I],keywords=[J[A]],subtype='move_location'))
-	if D.settings.kong_rando:
-		AP=D.shuffled_kong_placement;Ay=[{A:v,B:0},{A:'Llama Temple',B:1},{A:'Tiny Temple',B:1},{A:w,B:2}]
-		for A3 in Ay:
-			j=AP[A3[A]]['locked'][C];Az=AP[A3[A]]['puzzle'][C];s=A3[B]
-			if D.settings.wrinkly_hints==e:
-				if not j==Kongs.any:i=random.choice(AM[j])
-				M=random.choice(a[s])
+			hint_list.append(Hint(hint=f"{X} contains {b}",priority=i,important=A3,kongs=O[N][y],keywords=O[N][S],subtype=As))
+			if A3:hint_list.append(Hint(hint=f"{X} contains {b}",important=_A,kongs=O[N][y],keywords=O[N][S],subtype=As))
+			if i<=len(A2):
+				if Aw+1>=A2[i-1]:
+					if i==len(A2):A3=_A
+					else:i+=1
+		for J in z:
+			if J[C]>-1 and J[E]>-1 and J[e]>-1:
+				if A.settings.wrinkly_hints==f:j=random.choice(AN[J[e]]);M=random.choice(a[J[C]])
+				else:j=AM[J[e]];M=V[J[C]]
+				Ax=J[B];X=A0[J[E]];Ay=f"{Ax} can be purchased from {X} in {M}.";hint_list.append(Hint(hint=Ay,priority=2,kongs=[J[e]],important=J[I],keywords=[J[B]],subtype='move_location'))
+	if A.settings.kong_rando:
+		AQ=A.shuffled_kong_placement;Az=[{B:w,C:0},{B:'Llama Temple',C:1},{B:'Tiny Temple',C:1},{B:x,C:2}]
+		for A4 in Az:
+			k=AQ[A4[B]]['locked'][D];A_=AQ[A4[B]]['puzzle'][D];r=A4[C]
+			if A.settings.wrinkly_hints==f:
+				if not k==Kongs.any:j=random.choice(AN[k])
+				M=random.choice(a[r])
 			else:
-				if not j==Kongs.any:i=AL[j]
-				M=V[s]
-			AQ=2
-			if j==Kongs.any:i='An empty cage';AQ=3
-			hint_list.append(Hint(hint=f"{i} can be found in {M}.",kongs=[Az],priority=AQ,subtype='kong_location'))
-	if D.settings.random_patches:
-		t={Am:0,v:0,AD:0,w:0,AE:0,AF:0,AG:0,AH:0}
-		for A_ in D.dirt_patch_placement:
-			for W in t:
-				if W in A_:t[W]+=1
-		AR=list(t.keys());random.shuffle(AR)
-		for k in range(2):
+				if not k==Kongs.any:j=AM[k]
+				M=V[r]
+			AR=2
+			if k==Kongs.any:j='An empty cage';AR=3
+			hint_list.append(Hint(hint=f"{j} can be found in {M}.",kongs=[A_],priority=AR,subtype='kong_location'))
+	if A.settings.random_patches:
+		s={An:0,w:0,AE:0,x:0,AF:0,AG:0,AH:0,AI:0}
+		for B0 in A.dirt_patch_placement:
+			for W in s:
+				if W in B0:s[W]+=1
+		AS=list(s.keys());random.shuffle(AS)
+		for t in range(2):
 			for l in range(4):
-				M=AR[l+4*k];A4=t[M]
-				if A4>0:
-					AS='patches';AT='are'
-					if A4==1:AS='patch';AT='is'
-					A5=f"There {AT} {A4} {AS} in {M}";hint_list.append(Hint(hint=A5,priority=l+3,important=k==0,subtype='level_patch_count'))
-		AU=D.dirt_patch_placement.copy();random.shuffle(AU)
-		for k in range(2):
-			for l in range(4):B0=AU[l+k*4];A5=f"There is a dirt patch located at {B0}";hint_list.append(Hint(hint=A5,priority=l+4,important=k==0,subtype='patch_location'))
-	if D.settings.shuffle_loading_zones=='all':AddLoadingZoneHints(D)
-	if D.settings.coin_door_open=='need_both'or D.settings.coin_door_open=='need_rw':hint_list.append(Hint(hint=f"{D.settings.medal_requirement} medals are required to access Jetpac.",priority=4,subtype='medal'))
-	if D.settings.perma_death:hint_list.append(Hint(hint='The curse can only be removed upon disabling K. Rools machine.',subtype='permadeath'))
-	if D.settings.level_randomization!='level_order':
-		for L in D.settings.krool_keys_required:
-			AV=L-4
-			if D.settings.wrinkly_hints==e:M=random.choice(a[AV])
-			else:M=V[AV]
+				M=AS[l+4*t];A5=s[M]
+				if A5>0:
+					AT='patches';AU='are'
+					if A5==1:AT='patch';AU='is'
+					A6=f"There {AU} {A5} {AT} in {M}";hint_list.append(Hint(hint=A6,priority=l+3,important=_A,subtype='level_patch_count'))
+		AV=A.dirt_patch_placement.copy();random.shuffle(AV)
+		for t in range(2):
+			for l in range(4):B1=AV[l+t*4];A6=f"There is a dirt patch located at {B1}";hint_list.append(Hint(hint=A6,priority=l+4,important=t==0,subtype='patch_location'))
+	if A.settings.shuffle_loading_zones=='all':AddLoadingZoneHints(A)
+	if A.settings.coin_door_open=='need_both'or A.settings.coin_door_open=='need_rw':hint_list.append(Hint(hint=f"{A.settings.medal_requirement} medals are required to access Jetpac.",priority=4,subtype='medal'))
+	if A.settings.perma_death:hint_list.append(Hint(hint='The curse can only be removed upon disabling K. Rools machine.',subtype='permadeath'))
+	if A.settings.level_randomization!='level_order':
+		for L in A.settings.krool_keys_required:
+			AW=L-4
+			if A.settings.wrinkly_hints==f:M=random.choice(a[AW])
+			else:M=V[AW]
 			hint_list.append(Hint(hint=f"You will need to obtain the key from {M} to fight your greatest foe.",important=_A,subtype='key_is_required'))
-	B1=['Candy','Funky',Ap];B2=[' Donkey',' Diddy',' Lanky',' Tiny',' Chunky',' Shared'];AW=[A for A in D.woth.keys()if any((B in A for B in B1))];B3=random.sample(AW,min(5,len(AW)));AX=random.randint(1,4)
-	for AY in B3:
-		AZ=[A for A in B2 if A in AY]
-		if len(AZ)>0:B4=str(AY).removesuffix(AZ[0])
-		hint_list.append(Hint(hint=f"{B4} is on the Way of the Hoard.",important=random.choice([_B,_B,_A]),priority=AX,subtype='way_of_the_hoard'));AX+=random.randint(1,2)
-	B5=[{C:Ak,f:'Yellow'},{C:'Diddy',f:'Red'},{C:'Lanky',f:'Blue'},{C:'Tiny',f:'Purple'},{C:Al,f:'Green'}];hint_list.append(Hint(hint=f"You can find bananas in {V[random.randint(0,6)]}, but also in other levels.",important=_A,subtype=_D,joke=_B,joke_defined=_B));Aa=random.choice(B5);hint_list.append(Hint(hint=f"{Aa[C]} can find {Aa[f]} bananas in {random.choice(V)}.",important=_A,subtype=_D,joke=_B,joke_defined=_B));hint_list.append(Hint(hint=f"{D.settings.krool_key_count} Keys are required to reach K. Rool.",important=_A,subtype='key_count_required'))
-	if D.settings.shuffle_loading_zones==AI:
-		B6={Transitions.IslesMainToJapesLobby:Levels.JungleJapes,Transitions.IslesMainToAztecLobby:Levels.AngryAztec,Transitions.IslesMainToFactoryLobby:Levels.FranticFactory,Transitions.IslesMainToGalleonLobby:Levels.GloomyGalleon,Transitions.IslesMainToForestLobby:Levels.FungiForest,Transitions.IslesMainToCavesLobby:Levels.CrystalCaves,Transitions.IslesMainToCastleLobby:Levels.CreepyCastle};B7={Transitions.IslesJapesLobbyToMain:Levels.JungleJapes,Transitions.IslesAztecLobbyToMain:Levels.AngryAztec,Transitions.IslesFactoryLobbyToMain:Levels.FranticFactory,Transitions.IslesGalleonLobbyToMain:Levels.GloomyGalleon,Transitions.IslesForestLobbyToMain:Levels.FungiForest,Transitions.IslesCavesLobbyToMain:Levels.CrystalCaves,Transitions.IslesCastleLobbyToMain:Levels.CreepyCastle};A6={};A7={}
-		for (B8,Ab) in B6.items():Ac=B7[D.shuffled_exit_data[B8].reverse];A6[Ac]=Ab;A7[Ab]=Ac
-	for L in range(8):
-		m=D.settings.EntryGBs[L];Ad='Golden Bananas'
-		if m==1:Ad='Golden Banana'
-		if D.settings.wrinkly_hints==e:M=random.choice(a[L])
-		else:M=V[L]
-		Ae=_A;Y=AJ.copy();n=L+1
-		if D.settings.shuffle_loading_zones==AI:
-			if L!=7:
-				A8=A6[L];Y=[]
-				for o in range(7):
-					if o<A8:Y.append(A7[o])
-			if L>3 and L<8:n=9-L;Ae=_B
-		hint_list.append(Hint(hint=f"The barrier to {M} can be cleared by obtaining {m} {Ad}.",important=Ae,priority=n,permitted_levels=Y.copy(),subtype='gb_amount'))
+	B2=['Candy','Funky',Aq];B3=[' Donkey',' Diddy',' Lanky',' Tiny',' Chunky',' Shared'];AX=[B for B in A.woth.keys()if any((A in B for A in B2))];B4=random.sample(AX,min(5,len(AX)));AY=random.randint(1,4)
+	for AZ in B4:
+		Aa=[A for A in B3 if A in AZ]
+		if len(Aa)>0:B5=str(AZ).removesuffix(Aa[0])
+		hint_list.append(Hint(hint=f"{B5} is on the Way of the Hoard.",important=random.choice([_B,_B,_A]),priority=AY,subtype='way_of_the_hoard'));AY+=random.randint(1,2)
+	B6=[{D:Al,g:'Yellow'},{D:'Diddy',g:'Red'},{D:'Lanky',g:'Blue'},{D:'Tiny',g:'Purple'},{D:Am,g:'Green'}];hint_list.append(Hint(hint=f"You can find bananas in {V[random.randint(0,6)]}, but also in other levels.",important=_A,subtype=_D,joke=_B,joke_defined=_B));Ab=random.choice(B6);hint_list.append(Hint(hint=f"{Ab[D]} can find {Ab[g]} bananas in {random.choice(V)}.",important=_A,subtype=_D,joke=_B,joke_defined=_B));hint_list.append(Hint(hint=f"{A.settings.krool_key_count} Keys are required to reach K. Rool.",important=_A,subtype='key_count_required'))
+	if A.settings.shuffle_loading_zones==AJ:
+		B7={Transitions.IslesMainToJapesLobby:Levels.JungleJapes,Transitions.IslesMainToAztecLobby:Levels.AngryAztec,Transitions.IslesMainToFactoryLobby:Levels.FranticFactory,Transitions.IslesMainToGalleonLobby:Levels.GloomyGalleon,Transitions.IslesMainToForestLobby:Levels.FungiForest,Transitions.IslesMainToCavesLobby:Levels.CrystalCaves,Transitions.IslesMainToCastleLobby:Levels.CreepyCastle};B8={Transitions.IslesJapesLobbyToMain:Levels.JungleJapes,Transitions.IslesAztecLobbyToMain:Levels.AngryAztec,Transitions.IslesFactoryLobbyToMain:Levels.FranticFactory,Transitions.IslesGalleonLobbyToMain:Levels.GloomyGalleon,Transitions.IslesForestLobbyToMain:Levels.FungiForest,Transitions.IslesCavesLobbyToMain:Levels.CrystalCaves,Transitions.IslesCastleLobbyToMain:Levels.CreepyCastle};A7={};u={};Ac=[]
+		for (B9,Ad) in B7.items():Ae=B8[A.shuffled_exit_data[B9].reverse];A7[Ae]=Ad;u[Ad]=Ae
+	if A.settings.randomize_blocker_required_amounts is _B:
+		for BA in list(u.values()):Ac.append(BA.name)
+		for L in range(8):
+			m=A.settings.EntryGBs[L];Af='Golden Bananas'
+			if m==1:Af='Golden Banana'
+			M=V[L];A8=_A;Y=AK.copy();c=L+1
+			if A.settings.shuffle_loading_zones==AJ:
+				if L!=7:
+					A9=A7[L];Y=[]
+					for n in range(7):
+						if n<A9:Y.append(u[n])
+					if M.replace(' ','')in Ac[4:7]:c=4;A8=_B
+				if A.settings.maximize_helm_blocker is _A and L==7:c=1;A8=_B
+			if A.settings.wrinkly_hints==f:M=random.choice(a[L])
+			hint_list.append(Hint(hint=f"The barrier to {M} can be cleared by obtaining {m} {Af}.",important=A8,priority=c,permitted_levels=Y.copy(),subtype='gb_amount'))
 	for L in range(7):
-		m=D.settings.BossBananas[L];Af='Small Bananas'
-		if m==1:Af='Small Banana'
-		if D.settings.wrinkly_hints==e:M=random.choice(a[L])
+		m=A.settings.BossBananas[L];Ag='Small Bananas'
+		if m==1:Ag='Small Banana'
+		if A.settings.wrinkly_hints==f:M=random.choice(a[L])
 		else:M=V[L]
-		Y=AJ.copy()
-		if D.settings.shuffle_loading_zones==AI:
-			A8=A6[L];Y=[]
-			for o in range(7):
-				if o<=A8:Y.append(A7[o])
-		hint_list.append(Hint(hint=f"The barrier to the boss in {M} can be cleared by obtaining {m} {Af}.",important=_A,permitted_levels=Y.copy(),subtype='cb_amount'))
+		Y=AK.copy()
+		if A.settings.shuffle_loading_zones==AJ:
+			A9=A7[L];Y=[]
+			for n in range(7):
+				if n<=A9:Y.append(u[n])
+		hint_list.append(Hint(hint=f"The barrier to the boss in {M} can be cleared by obtaining {m} {Ag}.",important=_A,permitted_levels=Y.copy(),subtype='cb_amount'))
 	Q={};R=[]
 	for K in hint_list:
 		if not K.important and not K.used and K.joke:R.append(K)
-	c=random.choice(R);U=_A;A9=0
+	d=random.choice(R);U=_A;AA=0
 	while not U:
-		U=updateRandomHint(c.hint,c.kongs.copy(),c.keywords.copy(),c.permitted_levels.copy())
+		U=updateRandomHint(d.hint,d.kongs.copy(),d.keywords.copy(),d.permitted_levels.copy())
 		if U:
-			c.use_hint();A9+=1;P=c.subtype
+			d.use_hint();AA+=1;P=d.subtype
 			if P in Q:Q[P]+=1
 			else:Q[P]=1
 			break
-	random.shuffle(hint_list);n=1;Ag=_A;AA=0
-	while not Ag:
-		Ah=_A
+	random.shuffle(hint_list);c=1;Ah=_A;AB=0
+	while not Ah:
+		Ai=_A
 		for K in hint_list:
-			if K.important and K.priority==n and not K.used and not K.joke:
-				Ah=_B;U=updateRandomHint(K.hint,K.kongs.copy(),K.keywords.copy(),K.permitted_levels.copy())
+			if K.important and K.priority==c and not K.used and not K.joke:
+				Ai=_B;U=updateRandomHint(K.hint,K.kongs.copy(),K.keywords.copy(),K.permitted_levels.copy())
 				if U:
-					K.use_hint();AA+=1;P=K.subtype
+					K.use_hint();AB+=1;P=K.subtype
 					if P in Q:Q[P]+=1
 					else:Q[P]=1
 				else:K.downgrade()
-		if not Ah:Ag=_B
-		n+=1
-	R=[];u=0
+		if not Ai:Ah=_B
+		c+=1
+	R=[];v=0
 	for K in hint_list:
 		if not K.important and not K.used and not K.joke:R.append(K)
 	for K in hints:
-		if K.hint=='':u+=1
-	random.shuffle(R);AB=0;Ai=0
-	if u>0:
-		AC=0;Aj=100;T=0
-		while AC<u:
+		if K.hint=='':v+=1
+	random.shuffle(R);AC=0;Aj=0
+	if v>0:
+		AD=0;Ak=100;T=0
+		while AD<v:
 			U=_A
 			if not R[T].used:U=updateRandomHint(R[T].hint,R[T].kongs,R[T].keywords.copy(),R[T].permitted_levels.copy())
 			if U:
-				R[T].use_hint();AB+=1;P=R[T].subtype
+				R[T].use_hint();AC+=1;P=R[T].subtype
 				if P in Q:Q[P]+=1
 				else:Q[P]=1
-				AC+=1
-			else:Aj-=1
+				AD+=1
+			else:Ak-=1
 			T+=1
 			if T>=len(R):T=0
-			if Aj==0:
+			if Ak==0:
 				for K in hints:
 					if K.hint=='':
 						K.hint='I have so little to tell you that this hint got placed here. If you see this, please report with your spoiler log in the bug reports channel in the DK64 Randomizer discord.';P='error'
 						if P in Q:Q[P]+=1
 						else:Q[P]=1
-						Ai+=1
-				AC=u
-	print(f"Hint Distribution | Important: {AA}, Unimportant: {AB}, Jokes: {A9}, Errors: {Ai}, Total Good: {AA+AB+A9}");print(f"Hint JSON: {Q}");UpdateSpoilerHintList(D);return _B
+						Aj+=1
+				AD=v
+	print(f"Hint Distribution | Important: {AB}, Unimportant: {AC}, Jokes: {AA}, Errors: {Aj}, Total Good: {AB+AC+AA}");print(f"Hint JSON: {Q}");UpdateSpoilerHintList(A);return _B
 def AddLoadingZoneHints(spoiler):
 	'Add hints for loading zone transitions and their destinations.';A=spoiler;G=[Regions.JungleJapesMain,Regions.JapesBeyondFeatherGate,Regions.TinyHive,Regions.JapesLankyCave,Regions.Mine];H=[Regions.AngryAztecStart,Regions.AngryAztecMain];I=[Regions.FranticFactoryStart,Regions.ChunkyRoomPlatform,Regions.PowerHut,Regions.BeyondHatch,Regions.InsideCore];B=[B for(B,C)in A.shuffled_exit_data.items()if C.regionId in G];random.shuffle(B);J=_A
 	while len(B)>0:
