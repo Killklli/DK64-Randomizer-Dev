@@ -19,7 +19,9 @@ def ShuffleWarps(bananaport_replacements,human_ports):
 			if BananaportVanilla[A].map_id==B and not BananaportVanilla[A].locked:BananaportVanilla[A].setNewWarp(D[F]);F+=1
 		G=[];C=[[],[],[],[],[]]
 		for A in BananaportVanilla.values():
-			if A.map_id==B and not A.locked:C[A.new_warp].append(A.obj_id_vanilla);human_ports[A.name]='Warp '+str(A.new_warp+1)
+			if A.map_id==B:
+				human_ports[A.name]='Warp '+str(A.new_warp+1)
+				if not A.locked:C[A.new_warp].append(A.obj_id_vanilla)
 		for E in range(len(C)):
 			if len(C[E])>0:G.append({'warp_index':E,'warp_ids':C[E].copy()})
 		bananaport_replacements.append({'containing_map':B,'pads':G.copy()})
