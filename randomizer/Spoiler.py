@@ -87,6 +87,7 @@ class Spoiler:
 		if A.settings.music_events==P:C['Shuffled Music Events']=A.music_event_data
 		if A.settings.kasplat_rando:C['Shuffled Kasplats']=A.human_kasplats
 		if A.settings.random_patches:C['Shuffled Dirt Patches']=A.human_patches
+		if A.settings.bananaport_rando:C['Shuffled Bananaports']=A.human_warp_locations
 		if len(A.hint_list)>0:C['Wrinkly Hints']=A.hint_list
 		if A.settings.shuffle_shops:
 			V={}
