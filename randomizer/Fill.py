@@ -281,14 +281,19 @@ def GetItemPrerequisites(spoiler,targetItemId,ownedKongs=[]):
 	if GetAccessibleLocations(C.settings,[],SearchMode.CheckSpecificItemReachable,targetItemId=B):return[]
 	A=[]
 	if D==[]:D=GetKongs()
-	F=[A for A in ItemPool.OwnedKongMoves(D)if A!=B];random.shuffle(F);E=_A
-	for G in F:
-		A.append(G);Reset()
-		if GetAccessibleLocations(C.settings,A.copy(),SearchMode.CheckSpecificItemReachable,targetItemId=B):E=G;break
-	if E is _A:raise Ex.ItemPlacementException('Item placed in an inaccessible location??')
+	G=[A for A in ItemPool.OwnedKongMoves(D)if A!=B];random.shuffle(G);E=_A
+	for H in G:
+		A.append(H);Reset()
+		if GetAccessibleLocations(C.settings,A.copy(),SearchMode.CheckSpecificItemReachable,targetItemId=B):E=H;break
+	if E is _A:
+		F=_A
+		for I in GetValidLocationsForMove(C,B):
+			if LocationList[I].item==B:F=LocationList[I];break
+		if F is _A:raise Ex.ItemPlacementException('Target item not placed??')
+		raise Ex.ItemPlacementException('Item placed in an inaccessible location: '+str(F.name))
 	while A!=[]and A[0]!=E:
-		H=A.pop(0);Reset()
-		if not GetAccessibleLocations(C.settings,A.copy(),SearchMode.CheckSpecificItemReachable,targetItemId=B):A.append(H)
+		J=A.pop(0);Reset()
+		if not GetAccessibleLocations(C.settings,A.copy(),SearchMode.CheckSpecificItemReachable,targetItemId=B):A.append(J)
 	return A
 def GetValidLocationsForMove(spoiler,move):
 	'Return the valid locations for the given move. Currently only returns shop locations for moves.';C=move;B=spoiler;A=[]
@@ -351,7 +356,9 @@ def FillKongsAndMovesGeneric(spoiler):
 			return
 		except Ex.FillException as C:
 			if A==20:js.postMessage(_I);raise C
-			A+=1;js.postMessage(_J+str(A));Reset();Logic.ClearAllLocations()
+			A+=1
+			if A%5==0:B.settings.shuffle_prices()
+			js.postMessage(_J+str(A));Reset();Logic.ClearAllLocations()
 def GeneratePlaythrough(spoiler):'Generate playthrough and way of the hoard and update spoiler.';A=spoiler;Reset();B=GetAccessibleLocations(A.settings,[],SearchMode.GeneratePlaythrough);ParePlaythrough(A.settings,B);C=PareWoth(A.settings,B);A.UpdateLocations(LocationList);A.UpdatePlaythrough(LocationList,B);A.UpdateWoth(LocationList,C)
 def GetLogicallyAccessibleKongLocations(spoiler,kongLocations,ownedKongs,latestLevel):
 	'Find the logically accessible Kong Locations given the current state of Kong unlocking.';D=kongLocations;B=spoiler;A=ownedKongs;C=[]

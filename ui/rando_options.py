@@ -1,6 +1,8 @@
 'Options for the main rando tab.'
-_j='coin_door_open'
-_i='gnawty_barrels'
+_l='unlock_fairy_shockwave'
+_k='coin_door_open'
+_j='gnawty_barrels'
+_i='random_prices'
 _h='move_rando'
 _g='krool_random'
 _f='starting_kongs_count'
@@ -88,7 +90,7 @@ def set_preset_options():
 		if B.get(_I)not in D:
 			A=document.createElement('option');A.value=B.get(_I);A.innerHTML=B.get(_I);A.title=B.get('description');C.appendChild(A)
 			if B.get(_I)==E:A.disabled=_B;A.hidden=_B
-	js.jq('#presets').val(E);toggle_counts_boxes(_D);toggle_b_locker_boxes(_D);js.load_cookies()
+	js.jq('#presets').val(E);toggle_counts_boxes(_D);toggle_b_locker_boxes(_D);toggle_extreme_prices_option(_D);js.load_cookies()
 @bind(_F,_W)
 def toggle_b_locker_boxes(event):
 	'Toggle the textboxes for BLockers.';A=_B
@@ -177,15 +179,15 @@ def disable_krool_phases(evt):
 	except AttributeError:pass
 @bind(_E,_h)
 def disable_prices(evt):
-	'Disable prices if move rando is set to start with all moves.';B=js.document.getElementById(_h);A=js.document.getElementById('random_prices')
+	'Disable prices if move rando is set to start with all moves.';B=js.document.getElementById(_h);A=js.document.getElementById(_i)
 	try:
 		if B.value=='start_with':A.setAttribute(_A,_A)
 		else:A.removeAttribute(_A)
 	except AttributeError:pass
-@bind(_F,_i)
+@bind(_F,_j)
 def disable_barrel_rando(evt):
 	'Disable Bonus Barrel Rando when Oops All Beaver Bother is selected.';B=_C;A=js.document.getElementById('bonus_barrel_rando')
-	if js.document.getElementById(_i).checked:B=_B
+	if js.document.getElementById(_j).checked:B=_B
 	try:
 		if B:A.setAttribute(_A,_A);A.checked=_C
 		else:A.removeAttribute(_A)
@@ -230,12 +232,19 @@ def toggle_medals_box(event):
 	B=js.document.getElementById(_L)
 	if A:B.setAttribute(_A,_A)
 	else:B.removeAttribute(_A)
-@bind(_E,_j)
+@bind(_E,_k)
 def disable_rw(evt):
-	'Disable Banana Medal values from being changed if RW coin not needed.';B=document.getElementById(_j);A=document.getElementById(_T);C=document.getElementById(_L)
+	'Disable Banana Medal values from being changed if RW coin not needed.';B=document.getElementById(_k);A=document.getElementById(_T);C=document.getElementById(_L)
 	if B.value=='need_zero'or B.value=='need_nin':
 		try:A.setAttribute(_A,_A);A.checked=_C;C.setAttribute(_A,_A)
 		except Exception:pass
 	else:
 		try:A.removeAttribute(_A);C.removeAttribute(_A)
 		except Exception:pass
+@bind(_E,_l)
+def toggle_extreme_prices_option(event):
+	'Determine the visibility of the extreme prices option.';C=document.getElementById(_l).checked;A=document.getElementById('extreme_price_option')
+	if C:A.removeAttribute(_A)
+	else:
+		A.setAttribute(_A,_A);B=document.getElementById(_i)
+		if B.value=='extreme':B.value='high'
