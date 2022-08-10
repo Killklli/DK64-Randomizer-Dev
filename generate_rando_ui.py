@@ -12,7 +12,7 @@ async def initialize():
 	def I(template_name):B=int(round(time.time()*1000));return A('templates/'+f"{template_name}?currtime={B}")
 	J=int(round(time.time()*1000))
 	for K in json.loads(A(f"static/presets/preset_files.json?currtime={J}")).get('progression'):js.progression_presets.append(json.loads(A('static/presets/'+K)))
-	L=Environment(loader=FunctionLoader(I),enable_async=True);M=L.get_template('base.html.jinja2');N=await M.render();js.document.documentElement.innerHTML='';js.document.open();js.document.write(N);js.document.close()
+	js.pointer_addresses=json.loads(js.getFile('./static/patches/pointer_addresses.json'));L=Environment(loader=FunctionLoader(I),enable_async=True);M=L.get_template('base.html.jinja2');N=await M.render();js.document.documentElement.innerHTML='';js.document.open();js.document.write(N);js.document.close()
 	try:
 		B=document.cookie
 		if B:
@@ -23,5 +23,4 @@ async def initialize():
 				try:document.getElementById(E).value=D[E]
 				except Exception:pass
 	except Exception:pass
-	js.pointer_addresses=json.loads(js.getFile('./static/patches/pointer_addresses.json'))
 initialize()
