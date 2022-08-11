@@ -1,4 +1,5 @@
 'Options for the main rando tab.'
+_m='no_logic'
 _l='unlock_fairy_shockwave'
 _k='coin_door_open'
 _j='gnawty_barrels'
@@ -243,8 +244,10 @@ def disable_rw(evt):
 		except Exception:pass
 @bind(_E,_l)
 def toggle_extreme_prices_option(event):
-	'Determine the visibility of the extreme prices option.';C=document.getElementById(_l).checked;A=document.getElementById('extreme_price_option')
-	if C:A.removeAttribute(_A)
+	'Determine the visibility of the extreme prices option.';C=document.getElementById(_l).checked;D=document.getElementById(_m).checked;A=document.getElementById('extreme_price_option')
+	if C or D:A.removeAttribute(_A)
 	else:
 		A.setAttribute(_A,_A);B=document.getElementById(_i)
 		if B.value=='extreme':B.value='high'
+@bind(_E,_m)
+def toggle_no_logic(event):'Toggle settings based on the presence of logic.';toggle_extreme_prices_option(event)

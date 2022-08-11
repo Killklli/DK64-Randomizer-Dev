@@ -36,20 +36,23 @@ def AttemptConnect(settings,frontExit,frontId,backExit,backId):
 		if not B.decoupled_loading_zones:AddRootExit(E);C.shuffled=_C;C.shuffledId=_A
 	return G
 def ShuffleExitsInPool(settings,frontpool,backpool):
-	'Shuffle exits within a specific pool.';O='Failed to connect to ';K=settings;B=backpool;A=frontpool;C=[A for A in B if not Logic.Regions[ShufflableExits[A].back.regionId].tagbarrel];D=[A for A in C if len(Logic.Regions[ShufflableExits[A].back.regionId].exits)==1];random.shuffle(D);H=[A for A in C if A not in D];random.shuffle(H);I=[A for A in B if A not in C];E=[A for A in I if len(Logic.Regions[ShufflableExits[A].back.regionId].exits)==1];random.shuffle(E);J=[A for A in I if A not in E];random.shuffle(J);B=D;B.extend(H);B.extend(E);B.extend(J)
-	if not K.decoupled_loading_zones:C=[B for B in A if not Logic.Regions[ShufflableExits[B].back.regionId].tagbarrel];D=[A for A in C if len(Logic.Regions[ShufflableExits[A].back.regionId].exits)==1];random.shuffle(D);H=[A for A in C if A not in D];random.shuffle(H);I=[B for B in A if B not in C];E=[A for A in I if len(Logic.Regions[ShufflableExits[A].back.regionId].exits)==1];random.shuffle(E);J=[A for A in I if A not in E];random.shuffle(J);A=D;A.extend(H);A.extend(E);A.extend(J)
+	'Shuffle exits within a specific pool.';O='Failed to connect to ';H=settings;B=backpool;A=frontpool;E=[A for A in B if not Logic.Regions[ShufflableExits[A].back.regionId].tagbarrel];F=[A for A in E if len(Logic.Regions[ShufflableExits[A].back.regionId].exits)==1];random.shuffle(F);I=[A for A in E if A not in F];random.shuffle(I);J=[A for A in B if A not in E];G=[A for A in J if len(Logic.Regions[ShufflableExits[A].back.regionId].exits)==1];random.shuffle(G);K=[A for A in J if A not in G];random.shuffle(K);B=F;B.extend(I);B.extend(G);B.extend(K)
+	if not H.decoupled_loading_zones:E=[B for B in A if not Logic.Regions[ShufflableExits[B].back.regionId].tagbarrel];F=[A for A in E if len(Logic.Regions[ShufflableExits[A].back.regionId].exits)==1];random.shuffle(F);I=[A for A in E if A not in F];random.shuffle(I);J=[B for B in A if B not in E];G=[A for A in J if len(Logic.Regions[ShufflableExits[A].back.regionId].exits)==1];random.shuffle(G);K=[A for A in J if A not in G];random.shuffle(K);A=F;A.extend(I);A.extend(G);A.extend(K)
 	else:random.shuffle(A)
 	while len(B)>0:
-		N=B.pop(0);F=ShufflableExits[N];G=[B for B in A if ShufflableExits[B].entryKongs.issuperset(F.regionKongs)]
-		if not K.decoupled_loading_zones and F.category is _A:G=[A for A in G if ShufflableExits[ShufflableExits[A].back.reverse].category is not _A];G=[A for A in G if ShufflableExits[F.back.reverse].entryKongs.issuperset(ShufflableExits[ShufflableExits[A].back.reverse].regionKongs)]
-		if len(G)==0:print(O+F.name+', found no suitable origins!');raise Ex.EntranceOutOfDestinations
-		for L in G:
+		N=B.pop(0);D=ShufflableExits[N];C=[B for B in A if ShufflableExits[B].entryKongs.issuperset(D.regionKongs)]
+		if not H.decoupled_loading_zones and D.category is _A:C=[A for A in C if ShufflableExits[ShufflableExits[A].back.reverse].category is not _A];C=[A for A in C if ShufflableExits[D.back.reverse].entryKongs.issuperset(ShufflableExits[ShufflableExits[A].back.reverse].regionKongs)]
+		elif H.decoupled_loading_zones and D.back.regionId in[Regions.JapesMinecarts,Regions.ForestMinecarts]:
+			if Transitions.JapesCartsToMain in C:C.remove(Transitions.JapesCartsToMain)
+			if Transitions.ForestCartsToMain in C:C.remove(Transitions.ForestCartsToMain)
+		if len(C)==0:print(O+D.name+', found no suitable origins!');raise Ex.EntranceOutOfDestinations
+		for L in C:
 			M=ShufflableExits[L]
-			if AttemptConnect(K,M,L,F,N):
+			if AttemptConnect(H,M,L,D,N):
 				A.remove(L)
-				if not K.decoupled_loading_zones:A.remove(F.back.reverse);B.remove(M.back.reverse)
+				if not H.decoupled_loading_zones:A.remove(D.back.reverse);B.remove(M.back.reverse)
 				break
-		if not M.shuffled:print(O+F.name+' from any of the remaining '+str(len(G))+' origins!');raise Ex.EntranceOutOfDestinations
+		if not M.shuffled:print(O+D.name+' from any of the remaining '+str(len(C))+' origins!');raise Ex.EntranceOutOfDestinations
 		if len(A)!=len(B):print('Length of frontpool '+len(A)+' and length of backpool '+len(B)+' do not match!');raise Ex.EntranceOutOfDestinations
 def AssumeExits(settings,frontpool,backpool,newpool):
 	'Split exit pool into front and back pools, and assumes exits reachable from root.';B=newpool
