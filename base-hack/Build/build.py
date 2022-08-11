@@ -48,8 +48,8 @@ _L='do_not_delete_source'
 _K='target_compressed_size'
 _J='output_file'
 _I='index'
-_H='big'
-_G='rgba5551'
+_H='rgba5551'
+_G='big'
 _F='texture_format'
 _E=True
 _D='file_index'
@@ -81,14 +81,14 @@ portal_images.append(convertPortalImage('assets/Non-Code/portals/DK_rando_portal
 createTextFile(_q)
 createSquishFile(_q)
 generateYellowWrinkly()
-file_dict=[{_B:'Static ASM Code',_V:70640,_j:726500,_A:'StaticCode.bin',_N:_E,_g:patchStaticCode},{_B:'Dolby Logo',_C:14,_D:176,_A:'assets/Non-Code/Dolby/DolbyThin.png',_F:_k},{_B:'Thumb Image',_C:14,_D:94,_A:'assets/Non-Code/Nintendo Logo/Nintendo4.png',_F:_G},{_B:'DKTV Image',_C:14,_D:44,_A:'assets/Non-Code/DKTV/logo3.png',_F:_G},{_B:'Spin Transition Image',_C:14,_D:95,_A:'assets/Non-Code/transition/transition-body.png',_F:_k},{_B:'Moves Image',_C:14,_D:115,_A:'assets/Non-Code/file_screen/moves.png',_F:_G},{_B:'Blueprint Image',_C:14,_D:116,_A:'assets/Non-Code/file_screen/blueprint.png',_F:_G},{_B:'Tag Barrel Shell Texture',_C:25,_D:4938,_A:'assets/Non-Code/tagbarrel/shell.png',_F:_G},{_B:'Gong Geometry',_C:4,_D:195,_A:'assets/Non-Code/Gong/gong_geometry.bin',_l:'assets/Non-Code/Gong/gong_geometry.bps',_h:_E},{_B:'No Face',_C:14,_D:33,_A:'assets/Non-Code/displays/none.png',_F:_d},{_B:'Shared Face',_C:14,_D:39,_A:'assets/Non-Code/displays/shared.png',_F:_d},{_B:'Sold Out Face',_C:14,_D:40,_A:'assets/Non-Code/displays/soldout32.png',_F:_d},{_B:'End Sequence Credits',_C:19,_D:7,_A:'assets/Non-Code/credits/credits.bin',_L:_E},{_B:'DK Wrinkly Door',_C:4,_D:240,_A:_m,_L:_E},{_B:'WXY_Slash',_C:14,_D:12,_A:'assets/Non-Code/displays/wxys.png',_F:_G},{_B:'DK Tie Palette',_C:25,_D:6013,_A:'assets/Non-Code/hash/dk_tie_palette.png',_O:_E,_F:_G,_K:32*32*2},{_B:_r,_C:25,_D:6014,_A:_s,_O:_E,_F:_G,_K:32*32*2},{_B:_r,_C:25,_D:6014,_A:_s,_O:_E,_F:_G,_K:32*32*2},{_B:'DPad Image',_C:14,_D:187,_A:'assets/Non-Code/displays/dpad.png',_F:_G}]
+file_dict=[{_B:'Static ASM Code',_V:70640,_j:726500,_A:'StaticCode.bin',_N:_E,_g:patchStaticCode},{_B:'Dolby Logo',_C:14,_D:176,_A:'assets/Non-Code/Dolby/DolbyThin.png',_F:_k},{_B:'Thumb Image',_C:14,_D:94,_A:'assets/Non-Code/Nintendo Logo/Nintendo4.png',_F:_H},{_B:'DKTV Image',_C:14,_D:44,_A:'assets/Non-Code/DKTV/logo3.png',_F:_H},{_B:'Spin Transition Image',_C:14,_D:95,_A:'assets/Non-Code/transition/transition-body.png',_F:_k},{_B:'Moves Image',_C:14,_D:115,_A:'assets/Non-Code/file_screen/moves.png',_F:_H},{_B:'Blueprint Image',_C:14,_D:116,_A:'assets/Non-Code/file_screen/blueprint.png',_F:_H},{_B:'Tag Barrel Shell Texture',_C:25,_D:4938,_A:'assets/Non-Code/tagbarrel/shell.png',_F:_H},{_B:'Gong Geometry',_C:4,_D:195,_A:'assets/Non-Code/Gong/gong_geometry.bin',_l:'assets/Non-Code/Gong/gong_geometry.bps',_h:_E},{_B:'No Face',_C:14,_D:33,_A:'assets/Non-Code/displays/none.png',_F:_d},{_B:'Shared Face',_C:14,_D:39,_A:'assets/Non-Code/displays/shared.png',_F:_d},{_B:'Sold Out Face',_C:14,_D:40,_A:'assets/Non-Code/displays/soldout32.png',_F:_d},{_B:'End Sequence Credits',_C:19,_D:7,_A:'assets/Non-Code/credits/credits.bin',_L:_E},{_B:'DK Wrinkly Door',_C:4,_D:240,_A:_m,_L:_E},{_B:'WXY_Slash',_C:14,_D:12,_A:'assets/Non-Code/displays/wxys.png',_F:_H},{_B:'DK Tie Palette',_C:25,_D:6013,_A:'assets/Non-Code/hash/dk_tie_palette.png',_O:_E,_F:_H,_K:32*32*2},{_B:_r,_C:25,_D:6014,_A:_s,_O:_E,_F:_H,_K:32*32*2},{_B:_r,_C:25,_D:6014,_A:_s,_O:_E,_F:_H,_K:32*32*2},{_B:'DPad Image',_C:14,_D:187,_A:'assets/Non-Code/displays/dpad.png',_F:_H}]
 number_game_changes=[{_Y:6,_Z:'unlit',_e:520},{_Y:6,_Z:'lit',_e:521},{_Y:9,_Z:'unlit',_e:526},{_Y:9,_Z:'lit',_e:527}]
-for num in number_game_changes:file_dict.append({_B:f"Number Game ({num[_Y]}, {num[_Z]})",_C:7,_D:num[_e],_A:f"assets/Non-Code/displays/num_{num[_Y]}_{num[_Z]}.png",_F:_G,_M:_E})
+for num in number_game_changes:file_dict.append({_B:f"Number Game ({num[_Y]}, {num[_Z]})",_C:7,_D:num[_e],_A:f"assets/Non-Code/displays/num_{num[_Y]}_{num[_Z]}.png",_F:_H,_M:_E})
 kong_names=['DK','Diddy','Lanky','Tiny',_t]
 ammo_names=[_u,_v]
-for (ammo_index,ammo) in enumerate(ammo_names):file_dict.append({_B:f"{ammo.replace('_',' ')} Image",_C:14,_D:188+ammo_index,_A:f"assets/Non-Code/displays/{ammo}.png",_F:_G})
+for (ammo_index,ammo) in enumerate(ammo_names):file_dict.append({_B:f"{ammo.replace('_',' ')} Image",_C:14,_D:188+ammo_index,_A:f"assets/Non-Code/displays/{ammo}.png",_F:_H})
 for (kong_index,kong) in enumerate(kong_names):
-	for (x_i,x) in enumerate([_d,_G]):file_dict.append({_B:f"{kong} Face ({x})",_C:14,_D:[34+kong_index,190+kong_index][x_i],_A:f"assets/Non-Code/displays/{kong.lower()}_face.png",_F:x})
+	for (x_i,x) in enumerate([_d,_H]):file_dict.append({_B:f"{kong} Face ({x})",_C:14,_D:[34+kong_index,190+kong_index][x_i],_A:f"assets/Non-Code/displays/{kong.lower()}_face.png",_F:x})
 base_coin_sfx='assets/Non-Code/music/Win95_startup.dk64song'
 new_coin_sfx='assets/Non-Code/music/coin_sfx.bin'
 if os.path.exists(new_coin_sfx):os.remove(new_coin_sfx)
@@ -110,20 +110,20 @@ for x in range(6):file_dict.append({_B:'DKTV Inputs '+str(x),_C:17,_D:x,_A:'dktv
 for x in range(221):file_dict.append({_B:'Zones for map '+str(x),_C:18,_D:x,_A:'lz'+str(x)+_a,_K:2128,_b:_E})
 for x in range(221):file_dict.append({_B:'Setup for map '+str(x),_C:9,_D:x,_A:'setup'+str(x)+_a,_K:32768,_c:32768,_b:_E})
 for x in range(221):file_dict.append({_B:'Character Spawners for map '+str(x),_C:16,_D:x,_A:'charspawners'+str(x)+_a,_K:5120,_c:5120,_b:_E})
-for x in range(8):file_dict.append({_B:'Key '+str(x+1)+' file screen',_C:14,_D:107+x,_A:'assets/Non-Code/file_screen/key'+str(x+1)+_f,_F:_G})
+for x in range(8):file_dict.append({_B:'Key '+str(x+1)+' file screen',_C:14,_D:107+x,_A:'assets/Non-Code/file_screen/key'+str(x+1)+_f,_F:_H})
 for x in range(43):
 	if x!=13:
 		if x!=32:
 			if x!=24:file_dict.append({_B:'Text '+str(x),_C:12,_D:x,_A:'text'+str(x)+_a,_K:8192,_c:8192,_b:_E})
-for x in range(10):file_dict.append({_B:f"Tag Barrel Bottom Texture ({x+1})",_C:25,_D:4749+x,_A:'assets/Non-Code/tagbarrel/bottom.png',_F:_G})
+for x in range(10):file_dict.append({_B:f"Tag Barrel Bottom Texture ({x+1})",_C:25,_D:4749+x,_A:'assets/Non-Code/tagbarrel/bottom.png',_F:_H})
 for x in range(4761,4768):
 	sz='44'
 	if x==4761:sz='3264'
-	file_dict.append({_B:f"Portal Ripple Texture ({x})",_C:25,_D:x,_A:f"assets/Non-Code/displays/empty{sz}.png",_F:_G})
+	file_dict.append({_B:f"Portal Ripple Texture ({x})",_C:25,_D:x,_A:f"assets/Non-Code/displays/empty{sz}.png",_F:_H})
 barrel_faces=['Dk','Diddy','Lanky','Tiny',_t]
 barrel_offsets=[4817,4815,4819,4769,4747]
 for x in range(5):
-	for y in range(2):file_dict.append({_B:f"{barrel_faces[x]} Transform Barrel Shell ({y+1})",_C:25,_D:barrel_offsets[x]+y,_A:f"assets/Non-Code/tagbarrel/{barrel_faces[x]} barrel {y}a.png",_F:_G})
+	for y in range(2):file_dict.append({_B:f"{barrel_faces[x]} Transform Barrel Shell ({y+1})",_C:25,_D:barrel_offsets[x]+y,_A:f"assets/Non-Code/tagbarrel/{barrel_faces[x]} barrel {y}a.png",_F:_H})
 kong_palettes=[3724,3686,3689,3769,3687,3826,3847]
 for x in kong_palettes:
 	x_s=32*32*2
@@ -138,10 +138,10 @@ for x in range(2):
 		segment=order[y];found_image=''
 		for image in image_series:
 			if segment in image:found_image=image
-		if found_image!='':file_dict.append({_B:f"Portal Image {x+1} - {segment}",_C:7,_D:931+4*x+y,_A:found_image,_F:_G,_M:_E})
+		if found_image!='':file_dict.append({_B:f"Portal Image {x+1} - {segment}",_C:7,_D:931+4*x+y,_A:found_image,_F:_H,_M:_E})
 hash_icons=['bongos.png','crown.png','dkcoin.png','fairy.png','guitar.png','nin_coin.png','orange.png','rainbow_coin.png','rw_coin.png','sax.png']
 hash_indexes=[48,49,50,51,55,62,63,64,65,76]
-for x in range(len(hash_indexes)):idx=hash_indexes[x];file_dict.append({_B:f"Hash Icon {x+1}",_C:14,_D:idx,_A:f"assets/Non-Code/hash/{hash_icons[x]}",_F:_G})
+for x in range(len(hash_indexes)):idx=hash_indexes[x];file_dict.append({_B:f"Hash Icon {x+1}",_C:14,_D:idx,_A:f"assets/Non-Code/hash/{hash_icons[x]}",_F:_H})
 file_dict.append({_B:'Dolby Text',_C:12,_D:13,_A:'dolby_text.bin',_M:_E,_L:_E})
 file_dict.append({_B:'Custom Text',_C:12,_D:32,_A:'custom_text.bin',_M:_E,_L:_E})
 file_dict.append({_B:'DK Text',_C:12,_D:24,_A:'dk_text.bin',_M:_E,_L:_E})
@@ -198,7 +198,7 @@ with open(newROMName,'r+b')as fh:
 			with open(x[_A],_X)as fg:byte_read=fg.read();uncompressed_size=len(byte_read)
 			subprocess.Popen(['build\\flips.exe','--apply',x[_l],x[_A],x[_A]]).wait()
 		if _F in x:
-			if x[_F]in[_G,'i4',_k,'i8','ia8']:
+			if x[_F]in[_H,'i4',_k,'i8','ia8']:
 				result=subprocess.check_output(['./build/n64tex.exe',x[_F],x[_A]])
 				if _K in x:x[_A]=x[_A].replace(_f,f".{x[_F]}")
 			elif x[_F]==_d:convertToRGBA32(x[_A]);x[_A]=x[_A].replace(_f,_w)
@@ -211,11 +211,11 @@ with open(newROMName,'r+b')as fh:
 				compress=bytearray(byte_read)
 				if _c in x:
 					diff=x[_c]-len(byte_read);byte_append=0
-					if diff>0:byte_read+=byte_append.to_bytes(diff,_H)
+					if diff>0:byte_read+=byte_append.to_bytes(diff,_G)
 					compress=bytearray(byte_read);uncompressed_size=x[_c]
 			else:
 				precomp=gzip.compress(byte_read,compresslevel=9);byte_append=0;diff=x[_K]-len(precomp)
-				if diff>0:precomp+=byte_append.to_bytes(diff,_H)
+				if diff>0:precomp+=byte_append.to_bytes(diff,_G)
 				compress=bytearray(precomp);compress[4]=0;compress[5]=0;compress[6]=0;compress[7]=0
 			with open(x[_A],'wb')as fg:fg.write(compress)
 			x[_J]=x[_A]
@@ -246,11 +246,11 @@ with open(newROMName,'r+b')as fh:
 				if os.path.exists(x[_J])and x[_J]!=x[_A]:os.remove(x[_J])
 			if not(_L in x and x[_L]):
 				if os.path.exists(x[_A]):os.remove(x[_A])
-	print('[5 / 7] - Writing recomputed pointer tables to ROM');writeModifiedPointerTablesToROM(fh);writeModifiedOverlaysToROM(fh);print('[6 / 7] - Dumping details of all pointer tables to rom/build.log');dumpPointerTableDetails('rom/build.log',fh);main_pointer_table_offset=1055824;fh.seek(main_pointer_table_offset+4);geo_table=main_pointer_table_offset+int.from_bytes(fh.read(4),_H);fh.seek(geo_table+17*4);helm_geo=main_pointer_table_offset+int.from_bytes(fh.read(4),_H);helm_geo_end=main_pointer_table_offset+int.from_bytes(fh.read(4),_H);helm_geo_size=helm_geo_end-helm_geo;fh.seek(helm_geo)
-	for by_i in range(helm_geo_size):fh.write((0).to_bytes(1,_H))
+	print('[5 / 7] - Writing recomputed pointer tables to ROM');writeModifiedPointerTablesToROM(fh);writeModifiedOverlaysToROM(fh);print('[6 / 7] - Dumping details of all pointer tables to rom/build.log');dumpPointerTableDetails('rom/build.log',fh);main_pointer_table_offset=1055824;fh.seek(main_pointer_table_offset+4);geo_table=main_pointer_table_offset+int.from_bytes(fh.read(4),_G);fh.seek(geo_table+17*4);helm_geo=main_pointer_table_offset+int.from_bytes(fh.read(4),_G);helm_geo_end=main_pointer_table_offset+int.from_bytes(fh.read(4),_G);helm_geo_size=helm_geo_end-helm_geo;fh.seek(helm_geo)
+	for by_i in range(helm_geo_size):fh.write((0).to_bytes(1,_G))
 	fh.seek(helm_geo)
 	with open(_p,_X)as helm_geo:fh.write(gzip.compress(helm_geo.read(),compresslevel=9))
-	main_pointer_table_offset=1055824;fh.seek(main_pointer_table_offset+12*4);text_table=main_pointer_table_offset+int.from_bytes(fh.read(4),_H);fh.seek(text_table+19*4);misc_text=main_pointer_table_offset+int.from_bytes(fh.read(4),_H);fh.seek(misc_text+1872);fh.write('?'.encode('ascii'))
+	main_pointer_table_offset=1055824;fh.seek(main_pointer_table_offset+12*4);text_table=main_pointer_table_offset+int.from_bytes(fh.read(4),_G);fh.seek(text_table+19*4);misc_text=main_pointer_table_offset+int.from_bytes(fh.read(4),_G);fh.seek(misc_text+1872);fh.write('?'.encode('ascii'))
 	for i in range(21):fh.write('\x00'.encode('ascii'))
 	fh.seek(33476640);arr=[]
 	for x in range(512):arr.append(0)
@@ -258,11 +258,13 @@ with open(newROMName,'r+b')as fh:
 	for x in portal_images:
 		for y in x:
 			if os.path.exists(y):os.remove(y)
-	fh.seek(33476640+337);fh.write((0).to_bytes(1,_H));fh.seek(33476640+338);fh.write((1).to_bytes(1,_H));fh.seek(33476640+339);fh.write((0).to_bytes(1,_H));fh.seek(33476640+340);fh.write((2).to_bytes(1,_H));fh.seek(33476640+341);fh.write((0).to_bytes(1,_H));fh.seek(33476640+342);fh.write((3).to_bytes(1,_H));fh.seek(33476640+343);fh.write((1).to_bytes(1,_H));fh.seek(33476640+344);fh.write((4).to_bytes(1,_H));fh.seek(33476640+345);fh.write((2).to_bytes(1,_H));fh.seek(33476640+331);fh.write((1).to_bytes(1,_H));piano_vanilla=[2,1,2,3,4,2,0]
-	for (piano_index,piano_key) in enumerate(piano_vanilla):fh.seek(33476640+364+piano_index);fh.write(piano_key.to_bytes(1,_H))
+	fh.seek(33476640+337);fh.write((0).to_bytes(1,_G));fh.seek(33476640+338);fh.write((1).to_bytes(1,_G));fh.seek(33476640+339);fh.write((0).to_bytes(1,_G));fh.seek(33476640+340);fh.write((2).to_bytes(1,_G));fh.seek(33476640+341);fh.write((0).to_bytes(1,_G));fh.seek(33476640+342);fh.write((3).to_bytes(1,_G));fh.seek(33476640+343);fh.write((1).to_bytes(1,_G));fh.seek(33476640+344);fh.write((4).to_bytes(1,_G));fh.seek(33476640+345);fh.write((2).to_bytes(1,_G));fh.seek(33476640+331);fh.write((1).to_bytes(1,_G));piano_vanilla=[2,1,2,3,4,2,0]
+	for (piano_index,piano_key) in enumerate(piano_vanilla):fh.seek(33476640+364+piano_index);fh.write(piano_key.to_bytes(1,_G))
+	dk_face_puzzle_vanilla=[0,3,2,0,1,2,3,2,1];chunky_face_puzzle_vanilla=[0,1,3,1,2,1,3,0,1]
+	for face_index in range(9):fh.seek(33476640+382+face_index);fh.write(dk_face_puzzle_vanilla[face_index].to_bytes(1,_G));fh.seek(33476640+391+face_index);fh.write(chunky_face_puzzle_vanilla[face_index].to_bytes(1,_G))
 	with open('assets/Non-Code/credits/squish.bin',_X)as squish:fh.seek(33552384);fh.write(squish.read())
 	vanilla_coin_reqs=[{_T:316,_U:50},{_T:317,_U:50},{_T:318,_U:10},{_T:319,_U:10},{_T:320,_U:10},{_T:321,_U:50},{_T:322,_U:50},{_T:323,_U:25}]
-	for coinreq in vanilla_coin_reqs:fh.seek(33476640+coinreq[_T]);fh.write(coinreq[_U].to_bytes(1,_H))
+	for coinreq in vanilla_coin_reqs:fh.seek(33476640+coinreq[_T]);fh.write(coinreq[_U].to_bytes(1,_G))
 	for x in hash_icons:
 		pth=f"assets/Non-Code/hash/{x}"
 		if os.path.exists(pth):os.remove(pth)
@@ -281,7 +283,7 @@ with open(newROMName,'r+b')as fh:
 				if shop in file:
 					if os.path.exists(file):os.remove(file)
 	for hash_item in hash_items:
-		for f_t in [_G,'png']:
+		for f_t in [_H,'png']:
 			pth=f"assets/Non-Code/hash/{hash_item}.{f_t}"
 			if os.path.exists(pth):os.remove(pth)
 	credits_bins=['credits','squish']
