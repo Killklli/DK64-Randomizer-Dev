@@ -1,0 +1,11 @@
+'Randomize Price Locations.'
+from randomizer.Enums.Items import Items
+from randomizer.Patching.Patcher import ROM
+from randomizer.Spoiler import Spoiler
+def randomize_prices(spoiler):
+	'Write prices to ROM variable space based on settings.';B='vanilla';A=spoiler
+	if A.settings.random_prices!=B or A.settings.shuffle_items!='none':
+		C=A.settings.rom_data;D=53;ROM().seek(C+D)
+		if A.settings.random_prices!=B:ROM().write(1)
+		else:ROM().write(0)
+		ROM().write(A.settings.prices[Items.BaboonBlast]);ROM().write(A.settings.prices[Items.StrongKong]);ROM().write(A.settings.prices[Items.GorillaGrab]);ROM().write(A.settings.prices[Items.ChimpyCharge]);ROM().write(A.settings.prices[Items.RocketbarrelBoost]);ROM().write(A.settings.prices[Items.SimianSpring]);ROM().write(A.settings.prices[Items.Orangstand]);ROM().write(A.settings.prices[Items.BaboonBalloon]);ROM().write(A.settings.prices[Items.OrangstandSprint]);ROM().write(A.settings.prices[Items.MiniMonkey]);ROM().write(A.settings.prices[Items.PonyTailTwirl]);ROM().write(A.settings.prices[Items.Monkeyport]);ROM().write(A.settings.prices[Items.HunkyChunky]);ROM().write(A.settings.prices[Items.PrimatePunch]);ROM().write(A.settings.prices[Items.GorillaGone]);ROM().write(A.settings.prices[Items.ProgressiveSlam][0]);ROM().write(A.settings.prices[Items.ProgressiveSlam][1]);ROM().write(A.settings.prices[Items.Coconut]);ROM().write(A.settings.prices[Items.Peanut]);ROM().write(A.settings.prices[Items.Grape]);ROM().write(A.settings.prices[Items.Feather]);ROM().write(A.settings.prices[Items.Pineapple]);ROM().write(A.settings.prices[Items.Bongos]);ROM().write(A.settings.prices[Items.Guitar]);ROM().write(A.settings.prices[Items.Trombone]);ROM().write(A.settings.prices[Items.Saxophone]);ROM().write(A.settings.prices[Items.Triangle]);ROM().write(A.settings.prices[Items.HomingAmmo]);ROM().write(A.settings.prices[Items.SniperSight]);ROM().write(A.settings.prices[Items.ProgressiveAmmoBelt][0]);ROM().write(A.settings.prices[Items.ProgressiveAmmoBelt][1]);ROM().write(A.settings.prices[Items.ProgressiveInstrumentUpgrade][0]);ROM().write(A.settings.prices[Items.ProgressiveInstrumentUpgrade][1]);ROM().write(A.settings.prices[Items.ProgressiveInstrumentUpgrade][2])

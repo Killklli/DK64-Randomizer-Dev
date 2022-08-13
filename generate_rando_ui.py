@@ -4,7 +4,9 @@ from jinja2 import Environment,FunctionLoader
 import time,js
 from js import document
 async def initialize():
-	'Shifted code into an async function so we can properly lint await calls.';F='settings=';G=js.window.location.origin;await micropip.install(f"{G}/static/py_libraries/pyodide_importer-0.0.2-py2.py3-none-any.whl");await micropip.install('pillow');from pyodide_importer import register_hook as H
+	'Shifted code into an async function so we can properly lint await calls.';G='settings=';B=js.window.location.origin;await micropip.install(f"{B}/static/py_libraries/pyodide_importer-0.0.2-py2.py3-none-any.whl")
+	if js.location.hostname in['dev.dk64randomizer.com','dk64randomizer.com']:await micropip.install(f"{B}/static/py_libraries/dk64rando-web-py3-none-any.whl")
+	await micropip.install('pillow');from pyodide_importer import register_hook as H
 	try:H('/')
 	except Exception:pass
 	js.listeners=[];js.progression_presets=[];js.background_worker=None
@@ -14,13 +16,13 @@ async def initialize():
 	for K in json.loads(A(f"static/presets/preset_files.json?currtime={J}")).get('progression'):js.progression_presets.append(json.loads(A('static/presets/'+K)))
 	js.pointer_addresses=json.loads(js.getFile('./static/patches/pointer_addresses.json'));L=Environment(loader=FunctionLoader(I),enable_async=True);M=L.get_template('base.html.jinja2');N=await M.render();js.document.documentElement.innerHTML='';js.document.open();js.document.write(N);js.document.close()
 	try:
-		B=document.cookie
-		if B:
-			for C in B.split(';'):
-				if F in C:O=str(C).replace(F,'');break
-			D=json.loads(O)
-			for E in D:
-				try:document.getElementById(E).value=D[E]
+		C=document.cookie
+		if C:
+			for D in C.split(';'):
+				if G in D:O=str(D).replace(G,'');break
+			E=json.loads(O)
+			for F in E:
+				try:document.getElementById(F).value=E[F]
 				except Exception:pass
 	except Exception:pass
 initialize()
