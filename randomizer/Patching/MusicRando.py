@@ -12,60 +12,63 @@ from randomizer.Patching.Patcher import ROM
 from randomizer.Settings import Settings
 from randomizer.Spoiler import Spoiler
 def randomize_music(spoiler):
-	'Randomize music passed from the misc music settings.\n\n    Args:\n        settings (Settings): Settings object from the windows form.\n    ';U='uploaded';M='music_events';K='music_fanfares';H='default';G='randomized';F='music_bgm';D=spoiler;Y=D.settings
-	if js.document.getElementById('random_music').checked:js.document.getElementById(F).value=G;js.document.getElementById(K).value=G;js.document.getElementById(M).value=G
-	if js.document.getElementById(F).value!=H or js.document.getElementById(M).value!=H or js.document.getElementById(K).value!=H:V=D.settings.rom_data;ROM().seek(V+302);ROM().write(1)
-	if js.document.getElementById(F).value!=H:
-		if js.document.getElementById(F).value==G:
-			B=[]
-			for N in range(12):B.append([])
-			for A in song_data:
-				if A.type==SongType.BGM:B[A.channel-1].append(js.pointer_addresses[0][_C][song_data.index(A)])
-			for N in range(12):I=B[N].copy();random.shuffle(I);shuffle_music(D,B[N].copy(),I)
-		elif js.document.getElementById(F).value=='chaos':
-			L=js.pointer_addresses[0][_C][song_data.index(next((A for A in song_data if A.name=='DK Rap'),None))];B=[]
-			for A in song_data:
-				if A.type==SongType.BGM:B.append(js.pointer_addresses[0][_C][song_data.index(A)])
-			ROM().seek(L[_B]);W=ROM().readBytes(L[_D]);R=js.pointer_addresses[26][_C][0]
-			for A in B:ROM().seek(A[_B]);ROM().writeBytes(W);ROM().seek(R[_B]+4*B.index(A));X=ROM().readBytes(4);ROM().seek(R[_B]+4*B.index(L));ROM().writeBytes(X);ROM().seek(33550336+A[_A]*2);ROM().writeMultipleBytes(song_data[L[_A]].memory,2)
-		elif js.document.getElementById(F).value==U:
-			B=[]
-			for A in song_data:
-				if A.type==SongType.BGM:B.append(js.pointer_addresses[0][_C][song_data.index(A)])
-			S=list(js.cosmetics.bgm);random.shuffle(S);E=[]
-			for O in S:
-				def J():
-					A=random.choice(B)
-					if len(E)>=len(B):return
-					if A not in E:ROM().seek(A[_B]);ROM().writeBytes(gzip.compress(bytes(O),compresslevel=9));E.append(A)
-					else:J()
-				J()
-			C=B.copy();random.shuffle(C);shuffle_music(D,B.copy(),C)
-	if js.document.getElementById(K).value!=H:
-		if js.document.getElementById(K).value==G:
-			P=[]
-			for A in song_data:
-				if A.type==SongType.Fanfare:P.append(js.pointer_addresses[0][_C][song_data.index(A)])
-			I=P.copy();random.shuffle(I);shuffle_music(D,P.copy(),I)
-		elif js.document.getElementById(K).value==U:
-			B=[]
-			for A in song_data:
-				if A.type==SongType.Fanfare:B.append(js.pointer_addresses[0][_C][song_data.index(A)])
-			T=list(js.cosmetics.fanfares);random.shuffle(T);E=[]
-			for O in T:
-				def J():
-					A=random.choice(B)
-					if len(E)>=len(B):return
-					if A not in E:ROM().seek(A[_B]);ROM().writeBytes(gzip.compress(bytes(O),compresslevel=9));E.append(A)
-					else:J()
-				J()
-			C=B.copy();random.shuffle(C);shuffle_music(D,B.copy(),C)
-	if js.document.getElementById(M).value!=H:
-		if js.document.getElementById(M).value==G:
-			Q=[]
-			for A in song_data:
-				if A.type==SongType.Event:Q.append(js.pointer_addresses[0][_C][song_data.index(A)])
-			C=Q.copy();random.shuffle(C);shuffle_music(D,Q.copy(),C)
+	'Randomize music passed from the misc music settings.\n\n    Args:\n        settings (Settings): Settings object from the windows form.\n    ';T='uploaded';S='music_fanfares';R='music_bgm';G='default';D='randomized';A=spoiler;X=A.settings
+	if js.document.getElementById('override_cosmetics').checked:
+		if js.document.getElementById('random_music').checked:A.settings.music_bgm=D;A.settings.music_fanfares=D;A.settings.music_events=D
+		else:A.settings.music_bgm=js.document.getElementById(R).value;A.settings.music_fanfares=js.document.getElementById(S).value;A.settings.music_events=js.document.getElementById('music_events').value
+	elif A.settings.random_music:A.settings.music_bgm=D;A.settings.music_fanfares=D;A.settings.music_events=D
+	if A.settings.music_bgm!=G or A.settings.music_events!=G or A.settings.music_fanfares!=G:U=A.settings.rom_data;ROM().seek(U+302);ROM().write(1)
+	if A.settings.music_bgm!=G:
+		if A.settings.music_bgm==D:
+			C=[]
+			for K in range(12):C.append([])
+			for B in song_data:
+				if B.type==SongType.BGM:C[B.channel-1].append(js.pointer_addresses[0][_C][song_data.index(B)])
+			for K in range(12):H=C[K].copy();random.shuffle(H);shuffle_music(A,C[K].copy(),H)
+		elif A.settings.music_bgm=='chaos':
+			J=js.pointer_addresses[0][_C][song_data.index(next((A for A in song_data if A.name=='DK Rap'),None))];C=[]
+			for B in song_data:
+				if B.type==SongType.BGM:C.append(js.pointer_addresses[0][_C][song_data.index(B)])
+			ROM().seek(J[_B]);V=ROM().readBytes(J[_D]);O=js.pointer_addresses[26][_C][0]
+			for B in C:ROM().seek(B[_B]);ROM().writeBytes(V);ROM().seek(O[_B]+4*C.index(B));W=ROM().readBytes(4);ROM().seek(O[_B]+4*C.index(J));ROM().writeBytes(W);ROM().seek(33550336+B[_A]*2);ROM().writeMultipleBytes(song_data[J[_A]].memory,2)
+		elif js.document.getElementById(R).value==T:
+			C=[]
+			for B in song_data:
+				if B.type==SongType.BGM:C.append(js.pointer_addresses[0][_C][song_data.index(B)])
+			P=list(js.cosmetics.bgm);random.shuffle(P);F=[]
+			for L in P:
+				def I():
+					A=random.choice(C)
+					if len(F)>=len(C):return
+					if A not in F:ROM().seek(A[_B]);ROM().writeBytes(gzip.compress(bytes(L),compresslevel=9));F.append(A)
+					else:I()
+				I()
+			E=C.copy();random.shuffle(E);shuffle_music(A,C.copy(),E)
+	if A.settings.music_fanfares!=G:
+		if A.settings.music_fanfares==D:
+			M=[]
+			for B in song_data:
+				if B.type==SongType.Fanfare:M.append(js.pointer_addresses[0][_C][song_data.index(B)])
+			H=M.copy();random.shuffle(H);shuffle_music(A,M.copy(),H)
+		elif js.document.getElementById(S).value==T:
+			C=[]
+			for B in song_data:
+				if B.type==SongType.Fanfare:C.append(js.pointer_addresses[0][_C][song_data.index(B)])
+			Q=list(js.cosmetics.fanfares);random.shuffle(Q);F=[]
+			for L in Q:
+				def I():
+					A=random.choice(C)
+					if len(F)>=len(C):return
+					if A not in F:ROM().seek(A[_B]);ROM().writeBytes(gzip.compress(bytes(L),compresslevel=9));F.append(A)
+					else:I()
+				I()
+			E=C.copy();random.shuffle(E);shuffle_music(A,C.copy(),E)
+	if A.settings.music_events!=G:
+		if A.settings.music_events==D:
+			N=[]
+			for B in song_data:
+				if B.type==SongType.Event:N.append(js.pointer_addresses[0][_C][song_data.index(B)])
+			E=N.copy();random.shuffle(E);shuffle_music(A,N.copy(),E)
 def ShuffleMusicWithSizeCheck(spoiler,song_list):
 	'Facilitate shuffling of music.';L=song_list;E=spoiler;C='uncompressed_size';J=0
 	while True:
