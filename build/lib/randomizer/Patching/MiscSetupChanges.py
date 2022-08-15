@@ -36,7 +36,7 @@ def randomize_setup(spoiler):
 		for AX in range(A6[T]):n.append(A6[S])
 	AG=[A.settings.fast_gbs,A.settings.randomize_pickups,A.settings.random_patches,A.settings.puzzle_rando,A.settings.hard_bosses,A.settings.high_req];o=_C
 	for AH in AG:o=o or AH
-	AI=[{U:Maps.AztecLlamaTemple,V:[188,555,553,554]},{U:Maps.CastleMuseum,V:[23]},{U:Maps.AztecTinyTemple,V:[167,166,165,164]},{U:Maps.FranticFactory,V:[333,332,331,330]},{U:Maps.CastleCrypt,V:[583,584,585,586]}];AJ=[{k:AD,l:[{C:12,D:0},{C:3,D:1},{C:5,D:2},{C:6,D:3}]},{k:'edge',l:[{C:8,D:0},{C:10,D:0},{C:7,D:1},{C:16,D:1},{C:14,D:2},{C:9,D:2},{C:4,D:3},{C:1,D:3}]},{k:A4,l:[{C:13,D:0},{C:15,D:0},{C:11,D:0},{C:2,D:0}]}];p=[[365.533,138.167,717.282],[212.543,120.5,963.536],[100.017,120.5,569.51],[497.464,120.5,458.709],[401.557,138.167,754.136],[318.119,138.167,752.011],[311.555,138.167,666.162],[398.472,138.167,668.426]]
+	AI=[{U:Maps.AztecLlamaTemple,V:[188,555,553,554]},{U:Maps.CastleMuseum,V:[23]},{U:Maps.AztecTinyTemple,V:[167,166,165,164]},{U:Maps.FranticFactory,V:[333,332,331,330]},{U:Maps.CastleCrypt,V:[583,584,585,586]}];AJ=[{k:AD,l:[{C:12,D:0},{C:3,D:1},{C:5,D:2},{C:6,D:3}]},{k:'edge',l:[{C:8,D:0},{C:10,D:0},{C:7,D:1},{C:16,D:1},{C:14,D:2},{C:9,D:2},{C:4,D:3},{C:1,D:3}]},{k:A4,l:[{C:13,D:0},{C:15,D:0},{C:11,D:0},{C:2,D:0}]}];p=[[212.543,120.5,963.536],[100.017,120.5,569.51],[497.464,120.5,458.709],[401.557,138.167,754.136],[318.119,138.167,752.011],[311.555,138.167,666.162],[398.472,138.167,668.426]]
 	if o:
 		q=pickRandomPositionsMult(287.94,312.119,0,140,6,40);c=pickRandomPositionsMult(274.9,316.505,40,160,6,40);r=pickRandomPositionsMult(294.594,337.22,70,180,3,70);random.shuffle(p);d=0
 		for E in range(216):
@@ -117,7 +117,7 @@ def randomize_setup(spoiler):
 			for A3 in range(A2):
 				J=A1+4+A3*56;ROM().seek(J+50);P=int.from_bytes(ROM().readBytes(2),G)+16
 				if P>=100 and P<=105 and A.settings.puzzle_rando and E==Maps.CavesDiddyIgloo:H=q[_B][q[_A]];ROM().seek(J);ROM().writeMultipleBytes(int(float_to_hex(H[0]),16),4);ROM().seek(J+8);ROM().writeMultipleBytes(int(float_to_hex(H[1]),16),4);q[_A]+=1
-				elif P>=63 and P<=66 and A.settings.puzzle_rando and E==Maps.AngryAztec:
+				elif P>=64 and P<=66 and A.settings.puzzle_rando and E==Maps.AngryAztec:
 					ROM().seek(J)
 					for I in range(3):ROM().writeMultipleBytes(int(float_to_hex(p[d][I]),16),4)
 					d+=1
