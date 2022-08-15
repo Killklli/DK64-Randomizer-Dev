@@ -4,7 +4,7 @@ from itertools import groupby
 import js
 def encrypt_settings_string(dict_data):
 	'Take a dictionary and return an encrypted string.\n\n    Args:\n        dict_data (dict): Posted JSON data from the form.\n\n    Returns:\n        str: Returns an encrypted string.\n    ';D=dict_data
-	for I in ['download_patch_file','seed','settings_string','chunky_colors','chunky_custom_color','diddy_colors','diddy_custom_color','dk_colors','dk_custom_color','enguarde_colors','enguarde_custom_color','klaptrap_model','lanky_colors','lanky_custom_color','rambi_colors','rambi_custom_color','random_colors','random_music','music_bgm','music_events','music_fanfares','tiny_colors','tiny_custom_color']:D.pop(I)
+	for I in ['download_patch_file','seed','settings_string','chunky_colors','chunky_custom_color','diddy_colors','diddy_custom_color','dk_colors','dk_custom_color','enguarde_colors','enguarde_custom_color','klaptrap_model','lanky_colors','lanky_custom_color','rambi_colors','rambi_custom_color','random_colors','random_music','music_bgm','music_events','music_fanfares','tiny_colors','tiny_custom_color','override_cosmetics']:D.pop(I)
 	B=collections.OrderedDict(sorted(D.items()));J=collections.OrderedDict(sorted(default_dict.items()));C=''
 	for A in B:
 		if J[A]==B[A]:C+=','
