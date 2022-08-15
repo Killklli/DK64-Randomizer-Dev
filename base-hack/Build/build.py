@@ -124,10 +124,10 @@ barrel_faces=['Dk','Diddy','Lanky','Tiny',_t]
 barrel_offsets=[4817,4815,4819,4769,4747]
 for x in range(5):
 	for y in range(2):file_dict.append({_B:f"{barrel_faces[x]} Transform Barrel Shell ({y+1})",_C:25,_D:barrel_offsets[x]+y,_A:f"assets/Non-Code/tagbarrel/{barrel_faces[x]} barrel {y}a.png",_F:_H})
-kong_palettes=[3724,3686,3689,3769,3687,3826,3847]
+kong_palettes=[3724,3686,3689,3769,3687,3826,3847,3734]
 for x in kong_palettes:
 	x_s=32*32*2
-	if x==3769:x_s=43*32*2
+	if x==3769 or x==3734:x_s=43*32*2
 	file_dict.append({_B:f"Palette Expansion ({hex(x)})",_C:25,_D:x,_A:f"palette_{x}.bin",_K:x_s})
 model_changes=[{_R:0,_Q:'diddy_base.bin'},{_R:1,_Q:'diddy_ins.bin'},{_R:5,_Q:'lanky_base.bin'},{_R:6,_Q:'lanky_ins.bin'},{_R:3,_Q:'dk_base.bin'},{_R:8,_Q:'tiny_base.bin'},{_R:9,_Q:'tiny_ins.bin'}]
 for x in model_changes:file_dict.append({_B:f"Model {x[_R]}",_C:5,_D:x[_R],_A:x[_Q],_L:_E})
