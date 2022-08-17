@@ -27,20 +27,23 @@ def GetBlueprintLocationForKongAndLevel(level,kong):
 	if A>7:A=7
 	return Locations(B+5*A+int(kong))
 def ShuffleKasplatsAndLocations(spoiler,LogicVariables):
-	'Shuffle the location and kong assigned to each kasplat. This should replace ShuffleKasplats if all goes well.';H=LogicVariables;G=spoiler;G.shuffled_kasplat_map={};H.kasplat_map={}
+	'Shuffle the location and kong assigned to each kasplat. This should replace ShuffleKasplats if all goes well.';G=LogicVariables;F=spoiler;F.shuffled_kasplat_map={};G.kasplat_map={}
 	for B in shufflable:Logic.LocationList.pop(B,None)
 	for B in constants:Logic.LocationList.pop(B,None)
 	for D in KasplatLocationList:
-		E=KasplatLocationList[D]
-		for A in E:A.setKasplat(state=False)
-		I=GetKongs();random.shuffle(I)
+		H=KasplatLocationList[D];I=GetKongs();random.shuffle(I)
 		for C in I:
 			J=[]
-			for A in E:
+			for A in H:
 				if not A.selected and C in A.kong_lst:J.append(A.name)
 			K=random.choice(J)
-			for A in E:
-				if A.name==K:A.setKasplat();L=GetBlueprintItemForKongAndLevel(D,C);F=GetBlueprintLocationForKongAndLevel(D,C);B=Location(A.name,L,Types.Blueprint,[A.map,C]);B.PlaceDefaultItem();Logic.LocationList[F]=B;M=Logic.Regions[A.region_id];M.locations.append(LocationLogic(F,A.additional_logic));H.kasplat_map[F]=C;G.shuffled_kasplat_map[A.name]=int(C);break
+			for A in H:
+				if A.name==K:A.setKasplat();L=GetBlueprintItemForKongAndLevel(D,C);E=GetBlueprintLocationForKongAndLevel(D,C);B=Location(A.name,L,Types.Blueprint,[A.map,C]);B.PlaceDefaultItem();Logic.LocationList[E]=B;M=Logic.Regions[A.region_id];M.locations.append(LocationLogic(E,A.additional_logic));G.kasplat_map[E]=C;F.shuffled_kasplat_map[A.name]=int(C);break
+def ResetShuffledKasplatLocations():
+	'Reset all placed kasplat locations.'
+	for C in KasplatLocationList:
+		for A in KasplatLocationList[C]:
+			if A.selected:A.setKasplat(state=False);B=Logic.Regions[A.region_id];B.locations=[A for A in B.locations if A.id<Locations.JapesDonkeyKasplatRando or A.id>Locations.IslesChunkyKasplatRando]
 def ShuffleKasplats(LogicVariables):
 	'Shuffles the kong assigned to each kasplat.';A=LogicVariables;B=[];C=GetKongs()
 	for J in range(len(Levels)-1):B.append(C.copy())
@@ -65,4 +68,5 @@ def KasplatShuffle(spoiler,LogicVariables):
 			except Ex.KasplatPlacementException:
 				if B==5:js.postMessage('Kasplat placement failed, out of retries.');raise Ex.KasplatAttemptCountExceeded
 				B+=1;js.postMessage('Kasplat placement failed. Retrying. Tries: '+str(B))
+				if A.settings.kasplat_location_rando:ResetShuffledKasplatLocations()
 def InitKasplatMap(LogicVariables):'Initialize kasplat_map in logic variables with default values.';A=LogicVariables;A.kasplat_map={};A.kasplat_map.update(shufflable);A.kasplat_map.update(constants)
