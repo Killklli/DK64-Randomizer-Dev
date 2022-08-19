@@ -265,6 +265,7 @@ with open(newROMName,'r+b')as fh:
 	with open('assets/Non-Code/credits/squish.bin',_X)as squish:fh.seek(33552384);fh.write(squish.read())
 	vanilla_coin_reqs=[{_T:316,_U:50},{_T:317,_U:50},{_T:318,_U:10},{_T:319,_U:10},{_T:320,_U:10},{_T:321,_U:50},{_T:322,_U:50},{_T:323,_U:25}]
 	for coinreq in vanilla_coin_reqs:fh.seek(33476640+coinreq[_T]);fh.write(coinreq[_U].to_bytes(1,_G))
+	for x in range(5):fh.seek(33476640+x);fh.write(x.to_bytes(1,_G))
 	for x in hash_icons:
 		pth=f"assets/Non-Code/hash/{x}"
 		if os.path.exists(pth):os.remove(pth)

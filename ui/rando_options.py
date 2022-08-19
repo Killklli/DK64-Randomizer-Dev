@@ -1,16 +1,17 @@
 'Options for the main rando tab.'
-_t='override_div'
-_s='nav-qol-tab'
-_r='nav-difficulty-tab'
-_q='nav-overworld-tab'
-_p='nav-random-tab'
-_o='nav-started-tab'
-_n='no_logic'
-_m='unlock_fairy_shockwave'
-_l='coin_door_open'
-_k='gnawty_barrels'
-_j='random_prices'
-_i='move_rando'
+_u='override_div'
+_t='nav-qol-tab'
+_s='nav-difficulty-tab'
+_r='nav-overworld-tab'
+_q='nav-random-tab'
+_p='nav-started-tab'
+_o='no_logic'
+_n='unlock_fairy_shockwave'
+_m='coin_door_open'
+_l='gnawty_barrels'
+_k='random_prices'
+_j='move_rando'
+_i='helm_random'
 _h='krool_random'
 _g='starting_kongs_count'
 _f='random_music'
@@ -185,17 +186,25 @@ def disable_krool_phases(evt):
 		if A:B.setAttribute(_A,_A)
 		else:B.removeAttribute(_A)
 	except AttributeError:pass
-@bind(_F,_i)
+@bind(_E,_i)
+def disable_helm_phases(evt):
+	'Disable K Rool options when Randomize All is selected.';A=_C;B=js.document.getElementById('helm_phase_count')
+	if js.document.getElementById(_i).checked:A=_B
+	try:
+		if A:B.setAttribute(_A,_A)
+		else:B.removeAttribute(_A)
+	except AttributeError:pass
+@bind(_F,_j)
 def disable_prices(evt):
-	'Disable prices if move rando is set to start with all moves.';B=js.document.getElementById(_i);A=js.document.getElementById(_j)
+	'Disable prices if move rando is set to start with all moves.';B=js.document.getElementById(_j);A=js.document.getElementById(_k)
 	try:
 		if B.value=='start_with':A.setAttribute(_A,_A)
 		else:A.removeAttribute(_A)
 	except AttributeError:pass
-@bind(_E,_k)
+@bind(_E,_l)
 def disable_barrel_rando(evt):
 	'Disable Bonus Barrel Rando when Oops All Beaver Bother is selected.';B=_C;A=js.document.getElementById('bonus_barrel_rando')
-	if js.document.getElementById(_k).checked:B=_B
+	if js.document.getElementById(_l).checked:B=_B
 	try:
 		if B:A.setAttribute(_A,_A);A.checked=_C
 		else:A.removeAttribute(_A)
@@ -240,31 +249,31 @@ def toggle_medals_box(event):
 	B=js.document.getElementById(_L)
 	if A:B.setAttribute(_A,_A)
 	else:B.removeAttribute(_A)
-@bind(_F,_l)
+@bind(_F,_m)
 def disable_rw(evt):
-	'Disable Banana Medal values from being changed if RW coin not needed.';B=document.getElementById(_l);A=document.getElementById(_S);C=document.getElementById(_L)
+	'Disable Banana Medal values from being changed if RW coin not needed.';B=document.getElementById(_m);A=document.getElementById(_S);C=document.getElementById(_L)
 	if B.value=='need_zero'or B.value=='need_nin':
 		try:A.setAttribute(_A,_A);A.checked=_C;C.setAttribute(_A,_A)
 		except Exception:pass
 	else:
 		try:A.removeAttribute(_A);C.removeAttribute(_A)
 		except Exception:pass
-@bind(_F,_m)
+@bind(_F,_n)
 def toggle_extreme_prices_option(event):
-	'Determine the visibility of the extreme prices option.';C=document.getElementById(_m).checked;D=document.getElementById(_n).checked;A=document.getElementById('extreme_price_option')
+	'Determine the visibility of the extreme prices option.';C=document.getElementById(_n).checked;D=document.getElementById(_o).checked;A=document.getElementById('extreme_price_option')
 	if C or D:A.removeAttribute(_A)
 	else:
-		A.setAttribute(_A,_A);B=document.getElementById(_j)
+		A.setAttribute(_A,_A);B=document.getElementById(_k)
 		if B.value=='extreme':B.value='high'
-@bind(_F,_n)
+@bind(_F,_o)
 def toggle_no_logic(event):'Toggle settings based on the presence of logic.';toggle_extreme_prices_option(event)
 @bind(_E,'nav-patch-tab')
 def toggle_patch_ui(event):
 	'Disable non-cosmetic tabs and show override option if using patch file.'
-	for A in [_o,_p,_q,_r,_s]:document.getElementById(A).setAttribute(_A,_A)
-	document.getElementById(_t).removeAttribute(_T);document.getElementById('nav-cosmetics-tab').click()
+	for A in [_p,_q,_r,_s,_t]:document.getElementById(A).setAttribute(_A,_A)
+	document.getElementById(_u).removeAttribute(_T);document.getElementById('nav-cosmetics-tab').click()
 @bind(_E,'nav-seed-gen-tab')
 def toggle_patch_ui(event):
 	'Re-enable non-cosmetic tabs and hide override option if generating a new seed.'
-	for A in [_o,_p,_q,_r,_s]:document.getElementById(A).removeAttribute(_A)
-	document.getElementById(_t).setAttribute(_T,_T)
+	for A in [_p,_q,_r,_s,_t]:document.getElementById(A).removeAttribute(_A)
+	document.getElementById(_u).setAttribute(_T,_T)

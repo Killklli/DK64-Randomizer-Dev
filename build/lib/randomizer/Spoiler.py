@@ -35,19 +35,21 @@ class Spoiler:
 			A.move_data.append(B)
 		A.hint_list={}
 	def toJson(A):
-		'Convert spoiler to JSON.';d='Unknown Shop';c='skip';b='none';P='randomized';O=', ';A.settings.verify_hash();C=OrderedDict();B=OrderedDict();B['Seed']=A.settings.seed_id;B['No Logic']=A.settings.no_logic;B['Shuffle Enemies']=A.settings.enemy_rando;B['Move Randomization type']=A.settings.move_rando;B['Loading Zones Shuffled']=A.settings.shuffle_loading_zones;B['Decoupled Loading Zones']=A.settings.decoupled_loading_zones;Q=[]
-		for e in A.settings.starting_kong_list:Q.append(e.name.capitalize())
+		'Convert spoiler to JSON.';e='Unknown Shop';d='skip';c='none';P='randomized';O=', ';A.settings.verify_hash();C=OrderedDict();B=OrderedDict();B['Seed']=A.settings.seed_id;B['No Logic']=A.settings.no_logic;B['Shuffle Enemies']=A.settings.enemy_rando;B['Move Randomization type']=A.settings.move_rando;B['Loading Zones Shuffled']=A.settings.shuffle_loading_zones;B['Decoupled Loading Zones']=A.settings.decoupled_loading_zones;Q=[]
+		for f in A.settings.starting_kong_list:Q.append(f.name.capitalize())
 		B['Starting Kong List']=Q;B['Colors']=A.settings.colors;B['B Locker GBs']=A.settings.EntryGBs
 		if A.settings.randomize_blocker_required_amounts:B['Maximum B Locker']=A.settings.blocker_text
 		if A.settings.randomize_cb_required_amounts:B['Maximum Troff N Scoff']=A.settings.troff_text
 		B['Troff N Scoff Bananas']=A.settings.BossBananas;B['Diddy Freeing Kong']=ItemList[ItemFromKong(A.settings.diddy_freeing_kong)].name;B['Tiny Freeing Kong']=ItemList[ItemFromKong(A.settings.tiny_freeing_kong)].name;B['Lanky Freeing Kong']=ItemList[ItemFromKong(A.settings.lanky_freeing_kong)].name;B['Chunky Freeing Kong']=ItemList[ItemFromKong(A.settings.chunky_freeing_kong)].name;B['Open Lobbies']=A.settings.open_lobbies;B['Open Levels']=A.settings.open_levels;B['Randomize Pickups']=A.settings.randomize_pickups;B['Randomize Patches']=A.settings.random_patches;B['Puzzle Randomization']=A.settings.puzzle_rando;B['Crown Door Open']=A.settings.crown_door_open;B['Coin Door Open']=A.settings.coin_door_open;B['Unlock Fairy Shockwave']=A.settings.unlock_fairy_shockwave;B['Random Medal Requirement']=A.settings.random_medal_requirement
 		if A.settings.coin_door_open in['need_both','need_rw']:B['Medal Requirement']=A.settings.medal_requirement
-		B['Random Shop Prices']=A.settings.random_prices;B['Banana Port Randomization']=A.settings.bananaport_rando;B['Shuffle Shop Locations']=A.settings.shuffle_shops;B['Shuffle Kasplats']=A.settings.kasplat_rando_setting;B['K Rool Phases']=A.settings.krool_order;B['Key 8 Required']=A.settings.krool_access;B['Keys Required for K Rool']=A.GetKroolKeysRequired(A.settings.krool_keys_required);B['Number of Keys Required']=A.settings.krool_key_count;B['Fast Start']=A.settings.fast_start_beginning_of_game;B['Helm Setting']=A.settings.helm_setting;B['Quality of Life']=A.settings.quality_of_life;B['Tag Anywhere']=A.settings.enable_tag_anywhere;B['Fast GBs']=A.settings.fast_gbs;B['High Requirements']=A.settings.high_req;C['Settings']=B
-		if A.settings.shuffle_items!=b:
-			C['Playthrough']=A.playthrough;C['Way_of_the_Hoard']=A.woth;R=OrderedDict()
+		B['Random Shop Prices']=A.settings.random_prices;B['Banana Port Randomization']=A.settings.bananaport_rando;B['Shuffle Shop Locations']=A.settings.shuffle_shops;B['Shuffle Kasplats']=A.settings.kasplat_rando_setting;B['K Rool Phases']=A.settings.krool_order;B['Key 8 Required']=A.settings.krool_access;B['Keys Required for K Rool']=A.GetKroolKeysRequired(A.settings.krool_keys_required);B['Number of Keys Required']=A.settings.krool_key_count;B['Fast Start']=A.settings.fast_start_beginning_of_game;B['Helm Setting']=A.settings.helm_setting;B['Quality of Life']=A.settings.quality_of_life;B['Tag Anywhere']=A.settings.enable_tag_anywhere;B['Fast GBs']=A.settings.fast_gbs;B['High Requirements']=A.settings.high_req;C['Settings']=B;g=[Kongs.donkey,Kongs.chunky,Kongs.tiny,Kongs.lanky,Kongs.diddy];R=[]
+		for h in A.settings.helm_order:R.append(g[h].name)
+		C['Helm Rooms']=R
+		if A.settings.shuffle_items!=c:
+			C['Playthrough']=A.playthrough;C['Way_of_the_Hoard']=A.woth;S=OrderedDict()
 			for (F,G) in A.location_data.items():
-				if not LocationList[F].constant:R[LocationList[F].name]=ItemList[G].name
-			C['Locations']=R
+				if not LocationList[F].constant:S[LocationList[F].name]=ItemList[G].name
+			C['Locations']=S
 		if A.settings.random_prices!='vanilla':
 			D=OrderedDict()
 			for (G,E) in A.settings.prices.items():
@@ -57,33 +59,33 @@ class Spoiler:
 				else:D[ItemList[G].name]=E
 			C['Prices']=D
 		if A.settings.shuffle_loading_zones=='levels':
-			H=OrderedDict();f={Transitions.IslesMainToJapesLobby:Levels.JungleJapes,Transitions.IslesMainToAztecLobby:Levels.AngryAztec,Transitions.IslesMainToFactoryLobby:Levels.FranticFactory,Transitions.IslesMainToGalleonLobby:Levels.GloomyGalleon,Transitions.IslesMainToForestLobby:Levels.FungiForest,Transitions.IslesMainToCavesLobby:Levels.CrystalCaves,Transitions.IslesMainToCastleLobby:Levels.CreepyCastle};g={Transitions.IslesJapesLobbyToMain:Levels.JungleJapes,Transitions.IslesAztecLobbyToMain:Levels.AngryAztec,Transitions.IslesFactoryLobbyToMain:Levels.FranticFactory,Transitions.IslesGalleonLobbyToMain:Levels.GloomyGalleon,Transitions.IslesForestLobbyToMain:Levels.FungiForest,Transitions.IslesCavesLobbyToMain:Levels.CrystalCaves,Transitions.IslesCastleLobbyToMain:Levels.CreepyCastle}
-			for (h,i) in f.items():j=g[A.shuffled_exit_data[h].reverse];H[i.name]=j.name
+			H=OrderedDict();i={Transitions.IslesMainToJapesLobby:Levels.JungleJapes,Transitions.IslesMainToAztecLobby:Levels.AngryAztec,Transitions.IslesMainToFactoryLobby:Levels.FranticFactory,Transitions.IslesMainToGalleonLobby:Levels.GloomyGalleon,Transitions.IslesMainToForestLobby:Levels.FungiForest,Transitions.IslesMainToCavesLobby:Levels.CrystalCaves,Transitions.IslesMainToCastleLobby:Levels.CreepyCastle};j={Transitions.IslesJapesLobbyToMain:Levels.JungleJapes,Transitions.IslesAztecLobbyToMain:Levels.AngryAztec,Transitions.IslesFactoryLobbyToMain:Levels.FranticFactory,Transitions.IslesGalleonLobbyToMain:Levels.GloomyGalleon,Transitions.IslesForestLobbyToMain:Levels.FungiForest,Transitions.IslesCavesLobbyToMain:Levels.CrystalCaves,Transitions.IslesCastleLobbyToMain:Levels.CreepyCastle}
+			for (k,l) in i.items():m=j[A.shuffled_exit_data[k].reverse];H[l.name]=m.name
 			C['Shuffled Level Order']=H
-		elif A.settings.shuffle_loading_zones!=b:
+		elif A.settings.shuffle_loading_zones!=c:
 			H=OrderedDict()
-			for (exit,k) in A.shuffled_exit_data.items():H[ShufflableExits[exit].name]=k.spoilerName
+			for (exit,n) in A.shuffled_exit_data.items():H[ShufflableExits[exit].name]=n.spoilerName
 			C['Shuffled Exits']=H
 		if A.settings.boss_location_rando:
-			S=OrderedDict()
-			for I in range(7):S[Levels(I).name]=Maps(A.settings.boss_maps[I]).name
-			C['Shuffled Boss Order']=S
-		if A.settings.boss_kong_rando:
 			T=OrderedDict()
-			for I in range(7):T[Levels(I).name]=Kongs(A.settings.boss_kongs[I]).name
-			C['Shuffled Boss Kongs']=T;L=''
-			for l in A.settings.kutout_kongs:L=L+Kongs(l).name+O
+			for I in range(7):T[Levels(I).name]=Maps(A.settings.boss_maps[I]).name
+			C['Shuffled Boss Order']=T
+		if A.settings.boss_kong_rando:
+			U=OrderedDict()
+			for I in range(7):U[Levels(I).name]=Kongs(A.settings.boss_kongs[I]).name
+			C['Shuffled Boss Kongs']=U;L=''
+			for o in A.settings.kutout_kongs:L=L+Kongs(o).name+O
 			C['Shuffled Kutout Kong Order']=L.removesuffix(O)
 		if A.settings.hard_bosses:
-			U=[]
-			for m in A.settings.kko_phase_order:U.append(f"Phase {m+1}")
-			C['Shuffled Kutout Phases']=O.join(U)
+			V=[]
+			for p in A.settings.kko_phase_order:V.append(f"Phase {p+1}")
+			C['Shuffled Kutout Phases']=O.join(V)
 		if A.settings.bonus_barrels in('random','all_beaver_bother'):
 			M=OrderedDict()
-			for (F,n) in A.shuffled_barrel_data.items():
-				if F in HelmMinigameLocations and A.settings.helm_barrels==c:continue
-				if F not in HelmMinigameLocations and A.settings.bonus_barrels==c:continue
-				M[LocationList[F].name]=MinigameRequirements[n].name
+			for (F,q) in A.shuffled_barrel_data.items():
+				if F in HelmMinigameLocations and A.settings.helm_barrels==d:continue
+				if F not in HelmMinigameLocations and A.settings.bonus_barrels==d:continue
+				M[LocationList[F].name]=MinigameRequirements[q].name
 			if len(M)>0:C['Shuffled Bonus Barrels']=M
 		if A.settings.music_bgm==P:C['Shuffled Music (BGM)']=A.music_bgm_data
 		if A.settings.music_fanfares==P:C['Shuffled Music Fanfares']=A.music_fanfare_data
@@ -93,16 +95,16 @@ class Spoiler:
 		if A.settings.bananaport_rando:C['Shuffled Bananaports']=A.human_warp_locations
 		if len(A.hint_list)>0:C['Wrinkly Hints']=A.hint_list
 		if A.settings.shuffle_shops:
-			V={}
+			W={}
 			for J in A.shuffled_shop_locations:
-				W='Unknown Level';X={Levels.DKIsles:'DK Isles',Levels.JungleJapes:_D,Levels.AngryAztec:'Angry Aztec',Levels.FranticFactory:_E,Levels.GloomyGalleon:'Gloomy Galleon',Levels.FungiForest:'Fungi Forest',Levels.CrystalCaves:'Crystal Caves',Levels.CreepyCastle:'Creepy Castle'};K={Regions.CrankyGeneric:'Cranky',Regions.CandyGeneric:'Candy',Regions.FunkyGeneric:'Funky',Regions.Snide:'Snide'}
-				if J in X:W=X[J]
+				X='Unknown Level';Y={Levels.DKIsles:'DK Isles',Levels.JungleJapes:_D,Levels.AngryAztec:'Angry Aztec',Levels.FranticFactory:_E,Levels.GloomyGalleon:'Gloomy Galleon',Levels.FungiForest:'Fungi Forest',Levels.CrystalCaves:'Crystal Caves',Levels.CreepyCastle:'Creepy Castle'};K={Regions.CrankyGeneric:'Cranky',Regions.CandyGeneric:'Candy',Regions.FunkyGeneric:'Funky',Regions.Snide:'Snide'}
+				if J in Y:X=Y[J]
 				for N in A.shuffled_shop_locations[J]:
-					Y=d;Z=d;a=A.shuffled_shop_locations[J][N]
-					if N in K:Y=K[N]
-					if a in K:Z=K[a]
-					V[f"{W} - {Y}"]=Z
-			C['Shop Locations']=V
+					Z=e;a=e;b=A.shuffled_shop_locations[J][N]
+					if N in K:Z=K[N]
+					if b in K:a=K[b]
+					W[f"{X} - {Z}"]=a
+			C['Shop Locations']=W
 		return json.dumps(C,indent=4)
 	def UpdateKasplats(A,kasplat_map):
 		'Update kasplat data.';C='kasplat_swaps'

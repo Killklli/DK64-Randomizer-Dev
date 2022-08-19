@@ -85,13 +85,13 @@ randomizer/Patching/DKTV.py
 randomizer/Patching/EnemyRando.py
 randomizer/Patching/EntranceRando.py
 randomizer/Patching/Hash.py
-randomizer/Patching/KRoolRando.py
 randomizer/Patching/KasplatLocationRando.py
 randomizer/Patching/KongRando.py
 randomizer/Patching/MiscSetupChanges.py
 randomizer/Patching/MoveLocationRando.py
 randomizer/Patching/MusicRando.py
 randomizer/Patching/Patcher.py
+randomizer/Patching/PhaseRando.py
 randomizer/Patching/PriceRando.py
 randomizer/Patching/PuzzleRando.py
 randomizer/Patching/ShopRandomizer.py
