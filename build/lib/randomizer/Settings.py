@@ -44,18 +44,18 @@ class Settings:
 		'Price randomization. Reuseable if we need to reshuffle prices.'
 		if A.random_prices!=_D:A.prices=RandomizePrices(A.random_prices)
 	def resolve_settings(A):
-		'Resolve settings which are not directly set through the UI.';L='levels';K='random';J='skip';F=GetKongs();A.shuffle_prices();A.update_progression_totals();A.krool_donkey=_A;A.krool_diddy=_A;A.krool_lanky=_A;A.krool_tiny=_A;A.krool_chunky=_C;G=[A for A in F if A!=Kongs.chunky]
-		if A.krool_phase_order_rando:random.shuffle(G)
+		'Resolve settings which are not directly set through the UI.';L='levels';K='random';J='skip';G=GetKongs();A.shuffle_prices();A.update_progression_totals();A.krool_donkey=_A;A.krool_diddy=_A;A.krool_lanky=_A;A.krool_tiny=_A;A.krool_chunky=_C;F=[A for A in G if A!=Kongs.chunky]
+		if A.krool_phase_order_rando:random.shuffle(F)
 		if A.krool_random:A.krool_phase_count=randint(1,5)
 		if isinstance(A.krool_phase_count,str)is _C:A.krool_phase_count=5
-		if A.krool_phase_count<5:G=random.sample(G,A.krool_phase_count-1)
+		if A.krool_phase_count<5:F=random.sample(F,A.krool_phase_count-1)
 		C=[]
-		for B in G:
+		for B in F:
 			if B==Kongs.donkey:A.krool_donkey=_C;C.append(Kongs.donkey)
 			if B==Kongs.diddy:A.krool_diddy=_C;C.append(Kongs.diddy)
 			if B==Kongs.lanky:A.krool_lanky=_C;C.append(Kongs.lanky)
 			if B==Kongs.tiny:A.krool_tiny=_C;C.append(Kongs.tiny)
-		C.append(Kongs.chunky);A.krool_order=C;A.helm_donkey=_A;A.helm_diddy=_A;A.helm_lanky=_A;A.helm_tiny=_A;A.helm_chunky=_A;D=[A for A in F]
+		C.append(Kongs.chunky);A.krool_order=C;A.helm_donkey=_A;A.helm_diddy=_A;A.helm_lanky=_A;A.helm_tiny=_A;A.helm_chunky=_A;D=[Kongs.donkey,Kongs.chunky,Kongs.tiny,Kongs.lanky,Kongs.diddy]
 		if A.helm_phase_order_rando:random.shuffle(D)
 		if A.helm_random:A.helm_phase_count=randint(1,5)
 		if isinstance(A.helm_phase_count,str)is _C:A.helm_phase_count=5
@@ -86,9 +86,9 @@ class Settings:
 		elif A.level_randomization==_D:A.shuffle_loading_zones=_E
 		if A.starting_random:A.starting_kongs_count=randint(1,5)
 		if A.starting_kongs_count==5:A.kong_rando=_A
-		if A.kong_rando:A.starting_kong_list=random.sample(F,A.starting_kongs_count);A.starting_kong=random.choice(A.starting_kong_list);A.diddy_freeing_kong=Kongs.any;A.lanky_freeing_kong=Kongs.any;A.tiny_freeing_kong=Kongs.any;A.chunky_freeing_kong=Kongs.any;A.kong_locations=A.SelectKongLocations()
+		if A.kong_rando:A.starting_kong_list=random.sample(G,A.starting_kongs_count);A.starting_kong=random.choice(A.starting_kong_list);A.diddy_freeing_kong=Kongs.any;A.lanky_freeing_kong=Kongs.any;A.tiny_freeing_kong=Kongs.any;A.chunky_freeing_kong=Kongs.any;A.kong_locations=A.SelectKongLocations()
 		else:
-			A.possible_kong_list=F.copy();A.possible_kong_list.remove(0);A.starting_kong_list=random.sample(A.possible_kong_list,A.starting_kongs_count-1);A.starting_kong_list.append(Kongs.donkey);A.starting_kong=Kongs.donkey;A.diddy_freeing_kong=Kongs.donkey;A.lanky_freeing_kong=Kongs.donkey;A.tiny_freeing_kong=Kongs.diddy;A.chunky_freeing_kong=Kongs.lanky;A.kong_locations=[Locations.DiddyKong,Locations.LankyKong,Locations.TinyKong,Locations.ChunkyKong]
+			A.possible_kong_list=G.copy();A.possible_kong_list.remove(0);A.starting_kong_list=random.sample(A.possible_kong_list,A.starting_kongs_count-1);A.starting_kong_list.append(Kongs.donkey);A.starting_kong=Kongs.donkey;A.diddy_freeing_kong=Kongs.donkey;A.lanky_freeing_kong=Kongs.donkey;A.tiny_freeing_kong=Kongs.diddy;A.chunky_freeing_kong=Kongs.lanky;A.kong_locations=[Locations.DiddyKong,Locations.LankyKong,Locations.TinyKong,Locations.ChunkyKong]
 			if Kongs.diddy in A.starting_kong_list:A.kong_locations.remove(Locations.DiddyKong)
 			if Kongs.lanky in A.starting_kong_list:A.kong_locations.remove(Locations.LankyKong)
 			if Kongs.tiny in A.starting_kong_list:A.kong_locations.remove(Locations.TinyKong)
