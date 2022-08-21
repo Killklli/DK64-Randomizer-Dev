@@ -9,18 +9,18 @@ async def initialize():
 	from pyodide_importer import register_hook as H
 	try:H('/')
 	except Exception:pass
-	js.listeners=[];js.progression_presets=[];js.background_worker=None
+	from randomizer.Lists.Minigame import MinigameSelector as I;js.listeners=[];js.progression_presets=[];js.background_worker=None
 	def B(file):A=js.getFile(file);return A
-	def I(template_name):A=int(round(time.time()*1000));return B('templates/'+f"{template_name}?currtime={A}")
-	J=int(round(time.time()*1000))
-	for K in json.loads(B(f"static/presets/preset_files.json?currtime={J}")).get('progression'):js.progression_presets.append(json.loads(B('static/presets/'+K)))
-	js.pointer_addresses=json.loads(js.getFile('./static/patches/pointer_addresses.json'));L=Environment(loader=FunctionLoader(I),enable_async=True);M=L.get_template('base.html.jinja2');N=await M.render();js.document.documentElement.innerHTML='';js.document.open();js.document.write(N);js.document.close()
+	def J(template_name):A=int(round(time.time()*1000));return B('templates/'+f"{template_name}?currtime={A}")
+	K=int(round(time.time()*1000))
+	for L in json.loads(B(f"static/presets/preset_files.json?currtime={K}")).get('progression'):js.progression_presets.append(json.loads(B('static/presets/'+L)))
+	js.pointer_addresses=json.loads(js.getFile('./static/patches/pointer_addresses.json'));M=Environment(loader=FunctionLoader(J),enable_async=True);N=M.get_template('base.html.jinja2');O=await N.render(minigames=I);js.document.documentElement.innerHTML='';js.document.open();js.document.write(O);js.document.close()
 	try:
 		C=document.cookie
 		if C:
 			for D in C.split(';'):
-				if G in D:O=str(D).replace(G,'');break
-			E=json.loads(O)
+				if G in D:P=str(D).replace(G,'');break
+			E=json.loads(P)
 			for F in E:
 				try:document.getElementById(F).value=E[F]
 				except Exception:pass

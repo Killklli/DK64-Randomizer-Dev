@@ -80,7 +80,7 @@ class Spoiler:
 			V=[]
 			for p in A.settings.kko_phase_order:V.append(f"Phase {p+1}")
 			C['Shuffled Kutout Phases']=O.join(V)
-		if A.settings.bonus_barrels in('random','all_beaver_bother'):
+		if A.settings.bonus_barrels in('random','selected'):
 			M=OrderedDict()
 			for (F,q) in A.shuffled_barrel_data.items():
 				if F in HelmMinigameLocations and A.settings.helm_barrels==d:continue

@@ -506,7 +506,7 @@ def Generate_Spoiler(spoiler):
 	GeneratePlaythrough(A);Reset();ShuffleExits.Reset();return A
 def ShuffleMisc(spoiler):
 	'Shuffle miscellaneous objects outside of main fill algorithm, including Kasplats, Bonus barrels, and bananaport warps.';A=spoiler;KasplatShuffle(A,LogicVariables);A.human_kasplats={};A.UpdateKasplats(LogicVariables.kasplat_map)
-	if A.settings.bonus_barrels in(_F,'all_beaver_bother'):BarrelShuffle(A.settings);A.UpdateBarrels()
+	if A.settings.bonus_barrels in(_F,'selected'):BarrelShuffle(A.settings);A.UpdateBarrels()
 	if A.settings.bananaport_rando:C=[];D={};ShuffleWarps(C,D);A.bananaport_replacements=C.copy();A.human_warp_locations=D
 	if A.settings.random_patches:G=[];A.human_patches=ShufflePatches(A,G).copy()
 	if A.settings.shuffle_shops:ShuffleShopLocations(A)

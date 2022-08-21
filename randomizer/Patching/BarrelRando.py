@@ -5,7 +5,7 @@ from randomizer.Patching.Patcher import ROM
 from randomizer.Spoiler import Spoiler
 def randomize_barrels(spoiler):
 	'Randomize barrel locations.';R='new_map';Q='instance_id';I='barrels';H='containing_map';F=spoiler;A='big';S=[12,91]
-	if F.settings.bonus_barrel_rando or F.settings.gnawty_barrels:
+	if F.settings.bonus_barrel_rando or F.settings.minigames_list_selected:
 		B=[]
 		for (J,T) in F.shuffled_barrel_data.items():
 			K=int(BarrelMetaData[J].map);L={Q:int(BarrelMetaData[J].barrel_id),R:int(MinigameRequirements[T].map)};M=True
