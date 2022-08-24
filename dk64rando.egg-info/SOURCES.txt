@@ -35,6 +35,7 @@ randomizer/CollectibleLogicFiles/__init__.py
 randomizer/Enums/Collectibles.py
 randomizer/Enums/Events.py
 randomizer/Enums/ExitCategories.py
+randomizer/Enums/HintType.py
 randomizer/Enums/Items.py
 randomizer/Enums/Kongs.py
 randomizer/Enums/Levels.py

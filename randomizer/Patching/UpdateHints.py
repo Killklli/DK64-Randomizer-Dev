@@ -32,13 +32,12 @@ def updateRandomHint(message,kongs_req=[],keywords=[],levels=[]):
 			if not C:B.append(A)
 	if len(B)>0:E=random.choice(B);return UpdateHint(hints[E],message)
 	return _A
-def PushHints():
-	'Update the ROM with all hints.';B=[]
-	for C in hints:
-		A=C.hint
+def PushHints(spoiler):
+	'Update the ROM with all hints.';B=spoiler;C=[]
+	for A in B.hint_list.values():
 		if A=='':A='PLACEHOLDER HINT'
-		B.append([A.upper()])
-	writeWrinklyHints(js.pointer_addresses[12]['entries'][41]['pointing_to'],B)
+		C.append([A.upper()])
+	writeWrinklyHints(js.pointer_addresses[12]['entries'][41]['pointing_to'],C);B.hint_list.pop('First Time Talk')
 def wipeHints():
 	'Wipe the hint block.'
 	for A in range(len(hints)):
