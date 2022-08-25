@@ -90,7 +90,7 @@ HINT_CAP=35
 def compileHints(spoiler):
 	'Create a hint distribution, generate buff hints, and place them in locations.';A=spoiler;F=[HintType.Joke]
 	if A.settings.krool_phase_count<5:F.append(HintType.KRoolOrder)
-	if A.helm_setting!='skip_all'and A.settings.helm_phase_count<5:F.append(HintType.HelmOrder)
+	if A.settings.helm_setting!='skip_all'and A.settings.helm_phase_count<5:F.append(HintType.HelmOrder)
 	if not A.settings.unlock_all_moves:F.append(HintType.FullShop);F.append(HintType.MoveLocation)
 	if A.settings.random_patches:F.append(HintType.DirtPatch)
 	if A.settings.randomize_blocker_required_amounts:F.append(HintType.BLocker)
