@@ -91,7 +91,7 @@ def compileHints(spoiler):
 	'Create a hint distribution, generate buff hints, and place them in locations.';A=spoiler;F=[HintType.Joke]
 	if A.settings.krool_phase_count<5:F.append(HintType.KRoolOrder)
 	if A.settings.helm_setting!='skip_all'and A.settings.helm_phase_count<5:F.append(HintType.HelmOrder)
-	if not A.settings.unlock_all_moves:F.append(HintType.FullShop);F.append(HintType.MoveLocation)
+	if not A.settings.unlock_all_moves and A.settings.move_rando!='off':F.append(HintType.FullShop);F.append(HintType.MoveLocation)
 	if A.settings.random_patches:F.append(HintType.DirtPatch)
 	if A.settings.randomize_blocker_required_amounts:F.append(HintType.BLocker)
 	if A.settings.randomize_cb_required_amounts:F.append(HintType.TroffNScoff)
@@ -106,7 +106,7 @@ def compileHints(spoiler):
 	while R>HINT_CAP:
 		q=random.choice(F)
 		if hint_distribution[q]>0:hint_distribution[q]-=1;R-=1
-	P=A.settings.shuffle_loading_zones!=_W;Q=_C
+	P=not A.settings.no_logic and A.settings.shuffle_loading_zones!=_W;Q=_C
 	if P:
 		Q=[]
 		for C in all_levels:

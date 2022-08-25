@@ -171,7 +171,7 @@ def PareWoth(settings,PlaythroughLocations):
 	'Pare playthrough to locations which are Way of the Hoard (hard required by logic).';A=[]
 	for D in PlaythroughLocations:
 		for E in [A for A in D.locations if not LocationList[A].constant]:A.append(E)
-	for F in range(len(A)-2,-1,-1):
+	for F in range(len(A)-1,-1,-1):
 		C=A[F];B=LocationList[C];G=B.item;B.item=_A;Reset()
 		if GetAccessibleLocations(settings,[],SearchMode.CheckBeatable):A.remove(C)
 		B.PlaceItem(G)
