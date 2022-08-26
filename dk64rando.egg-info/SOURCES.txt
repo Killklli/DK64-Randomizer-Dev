@@ -100,6 +100,7 @@ randomizer/Patching/ShopRandomizer.py
 randomizer/Patching/UpdateHints.py
 randomizer/Patching/__init__.py
 randomizer/Patching/generate_kong_color_images.py
+ui/GenSpoiler.py
 ui/GenTracker.py
 ui/__init__.py
 ui/bindings.py
