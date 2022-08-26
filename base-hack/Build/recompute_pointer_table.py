@@ -95,11 +95,11 @@ def replaceROMFile(rom,pointer_table_index,file_index,data,uncompressed_size,fil
 	if len(D)%2==1:I=bytearray(D);I.append(0);D=bytes(I)
 	F=hashlib.sha1(D).hexdigest();pointer_table_files[A][F]={_M:D,_S:F,_T:uncompressed_size}
 	if B>=len(pointer_tables[A][_C]):
-		G=B-len(pointer_tables[A][_C])+1;print(f"Appending {G} extra entries to {pointer_tables[A][_B]} ({B+1-G}->{B+1})")
+		G=B-len(pointer_tables[A][_C])+1;print(f" - Appending {G} extra entries to {pointer_tables[A][_B]} ({B+1-G}->{B+1})")
 		for L in range(G):pointer_tables[A][_C].append({_A:B,_P:_U,_Q:''})
 		C.seek(main_pointer_table_offset+4*len(pointer_tables)+4*A);C.write((B+1).to_bytes(4,_D));pointer_tables[A][_J]=B+1;C.seek(main_pointer_table_offset+4*26);M=main_pointer_table_offset+int.from_bytes(C.read(4),_D);C.seek(M+4*A);J=main_pointer_table_offset+int.from_bytes(C.read(4),_D);N=main_pointer_table_offset+int.from_bytes(C.read(4),_D);E=N-J
 		if E>0:
-			print(f"Expanding pointer table {A} from {E} bytes to {4*(B+1)} bytes");C.seek(J);K=bytearray(C.read(E))
+			print(f" - Expanding pointer table {A} from {E} bytes to {4*(B+1)} bytes");C.seek(J);K=bytearray(C.read(E))
 			for L in range(4*(B+1)-E):K.append(0)
 			replaceROMFile(C,26,A,bytes(K),4*(B+1))
 	pointer_tables[A][_C][B][_K]=F

@@ -71,9 +71,9 @@ with open(base_rom,_D)as fh:
 												if'0x'in val:val=int(val,16)
 												else:val=int(val)
 												script_data[attr]=val
-								pre_message=f"{bcolors.WARNING}Ignoring"
-								if script_data[_I]==0:pre_message=f"{bcolors.OKGREEN}Compiling"
-								print(f"{pre_message} {file.replace('.script','')} ({hex(script_data[_B])}){bcolors.ENDC}")
+								pre_message=f"[x] - Ignoring"
+								if script_data[_I]==0:pre_message=f"    - Compiling"
+								print(f"{pre_message} {file.replace('.script','')} ({hex(script_data[_B])})")
 								if contains_code and code_start>-1:
 									resetCond(_H)
 									for code_line in script_info[code_start:]:
