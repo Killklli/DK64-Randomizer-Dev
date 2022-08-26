@@ -41,20 +41,19 @@ _B=False
 _A=True
 import random
 from re import U
+from randomizer.Enums.Events import Events
 from randomizer.Enums.HintType import HintType
 from randomizer.Enums.Items import Items
 from randomizer.Enums.Kongs import Kongs
+from randomizer.Enums.Levels import Levels
 from randomizer.Enums.Regions import Regions
-from randomizer.Enums.Events import Events
+from randomizer.Enums.Transitions import Transitions
 from randomizer.Lists.Item import ItemList,NameFromKong
 from randomizer.Lists.MapsAndExits import GetMapId
 from randomizer.Lists.ShufflableExit import ShufflableExits
-from randomizer.Lists.WrinklyHints import hints
-from randomizer.Spoiler import Spoiler
-from randomizer.Patching.UpdateHints import UpdateHint,updateRandomHint
 from randomizer.Lists.WrinklyHints import HintLocation,hints
-from randomizer.Enums.Levels import Levels
-from randomizer.Enums.Transitions import Transitions
+from randomizer.Patching.UpdateHints import UpdateHint,updateRandomHint
+from randomizer.Spoiler import Spoiler
 class Hint:
 	'Hint object for Wrinkly hint text.'
 	def __init__(A,*,hint='',important=_A,priority=1,kongs=[Kongs.donkey,Kongs.diddy,Kongs.lanky,Kongs.tiny,Kongs.chunky],repeats=1,base=_B,keywords=[],permitted_levels=[Levels.JungleJapes,Levels.AngryAztec,Levels.FranticFactory,Levels.GloomyGalleon,Levels.FungiForest,Levels.CrystalCaves,Levels.CreepyCastle],subtype=_N,joke=_B,joke_defined=_B):

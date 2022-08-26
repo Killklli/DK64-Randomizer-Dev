@@ -1,15 +1,13 @@
 'Module used to handle setting and randomizing kasplats.'
-import random,js
+import random,js,randomizer.Fill as Fill,randomizer.Lists.Exceptions as Ex,randomizer.Logic as Logic
 from randomizer.Enums.Items import Items
+from randomizer.Enums.Kongs import GetKongs,Kongs
+from randomizer.Enums.Levels import Levels
+from randomizer.Enums.Locations import Locations
 from randomizer.Enums.Types import Types
-import randomizer.Fill as Fill,randomizer.Lists.Exceptions as Ex
 from randomizer.Lists.KasplatLocations import KasplatLocationList
 from randomizer.Lists.Location import Location
 from randomizer.Lists.MapsAndExits import Maps
-import randomizer.Logic as Logic
-from randomizer.Enums.Kongs import Kongs,GetKongs
-from randomizer.Enums.Levels import Levels
-from randomizer.Enums.Locations import Locations
 from randomizer.LogicClasses import LocationLogic
 shufflable={Locations.IslesKasplatHelmLobby:Kongs.donkey,Locations.IslesKasplatCastleLobby:Kongs.diddy,Locations.IslesKasplatCavesLobby:Kongs.lanky,Locations.IslesKasplatFactoryLobby:Kongs.tiny,Locations.IslesKasplatGalleonLobby:Kongs.chunky,Locations.JapesKasplatLeftTunnelNear:Kongs.donkey,Locations.JapesKasplatNearPaintingRoom:Kongs.diddy,Locations.JapesKasplatNearLab:Kongs.lanky,Locations.JapesKasplatLeftTunnelFar:Kongs.tiny,Locations.AztecKasplatSandyBridge:Kongs.donkey,Locations.AztecKasplatLlamaTemple:Kongs.lanky,Locations.AztecKasplatNearLab:Kongs.tiny,Locations.FactoryKasplatProductionTop:Kongs.donkey,Locations.FactoryKasplatProductionBottom:Kongs.diddy,Locations.FactoryKasplatRandD:Kongs.lanky,Locations.FactoryKasplatStorage:Kongs.tiny,Locations.FactoryKasplatBlocks:Kongs.chunky,Locations.GalleonKasplatGoldTower:Kongs.donkey,Locations.GalleonKasplatLighthouseArea:Kongs.diddy,Locations.GalleonKasplatCannons:Kongs.lanky,Locations.GalleonKasplatNearLab:Kongs.tiny,Locations.GalleonKasplatNearSub:Kongs.chunky,Locations.ForestKasplatNearBarn:Kongs.donkey,Locations.ForestKasplatInsideMushroom:Kongs.diddy,Locations.ForestKasplatOwlTree:Kongs.lanky,Locations.ForestKasplatLowerMushroomExterior:Kongs.tiny,Locations.ForestKasplatUpperMushroomExterior:Kongs.chunky,Locations.CavesKasplatNearLab:Kongs.donkey,Locations.CavesKasplatPillar:Kongs.lanky,Locations.CavesKasplatNearCandy:Kongs.tiny,Locations.CavesKasplatOn5DI:Kongs.chunky,Locations.CastleKasplatCrypt:Kongs.diddy,Locations.CastleKasplatHalfway:Kongs.lanky,Locations.CastleKasplatLowerLedge:Kongs.tiny,Locations.CastleKasplatNearCandy:Kongs.chunky}
 constants={Locations.JapesKasplatUnderground:Kongs.chunky,Locations.AztecKasplatOnTinyTemple:Kongs.diddy,Locations.AztecKasplatChunky5DT:Kongs.chunky,Locations.CavesKasplatNearFunky:Kongs.diddy,Locations.CastleKasplatTree:Kongs.donkey}

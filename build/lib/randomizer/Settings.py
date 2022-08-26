@@ -8,19 +8,19 @@ _C=True
 _B=None
 _A=False
 import hashlib,inspect,json,random,sys
-from randomizer.ShuffleBosses import ShuffleBosses,ShuffleBossKongs,ShuffleKutoutKongs,ShuffleKKOPhaseOrder
-from randomizer.Enums.Events import Events
-from randomizer.Enums.Kongs import Kongs,GetKongs
-from randomizer.Enums.Locations import Locations
-from randomizer.Enums.Levels import Levels
-from randomizer.Prices import RandomizePrices,VanillaPrices
 from random import randint
+from randomizer.Enums.Events import Events
+from randomizer.Enums.Kongs import GetKongs,Kongs
+from randomizer.Enums.Levels import Levels
+from randomizer.Enums.Locations import Locations
+from randomizer.Prices import RandomizePrices,VanillaPrices
+from randomizer.ShuffleBosses import ShuffleBosses,ShuffleBossKongs,ShuffleKKOPhaseOrder,ShuffleKutoutKongs
 class Settings:
 	'Class used to store settings for seed generation.'
 	def __init__(A,form_data):
 		'Init all the settings using the form data to set the flags.\n\n        Args:\n            form_data (dict): Post data from the html form.\n        ';A.__hash=A.__get_hash();A.public_hash=A.__get_hash();A.algorithm='forward';A.generate_main();A.generate_progression();A.generate_misc();A.rom_data=33476640
 		for (B,C) in form_data.items():setattr(A,B,C)
-		A.seed_id=str(A.seed);A.seed=str(A.seed)+A.__hash;A.set_seed();A.seed_hash=[random.randint(0,9)for A in range(5)];A.krool_keys_required=[];A.blocker_max=A.blocker_text if A.blocker_text else 50;A.troff_max=A.troff_text if A.troff_text else 270;A.troff_min=[0.25,0.3,0.35,0.4,0.45,0.5,0.55];A.training_barrels='startwith';A.shuffle_items=_E;A.unlock_all_moves=_A;A.progressive_upgrades=_A;A.prices=VanillaPrices.copy();A.level_order={1:Levels.JungleJapes,2:Levels.AngryAztec,3:Levels.FranticFactory,4:Levels.GloomyGalleon,5:Levels.FungiForest,6:Levels.CrystalCaves,7:Levels.CreepyCastle};A.owned_kongs_by_level={Levels.JungleJapes:[],Levels.AngryAztec:[],Levels.FranticFactory:[],Levels.GloomyGalleon:[],Levels.FungiForest:[],Levels.CrystalCaves:[],Levels.CreepyCastle:[]};A.owned_moves_by_level={Levels.JungleJapes:[],Levels.AngryAztec:[],Levels.FranticFactory:[],Levels.GloomyGalleon:[],Levels.FungiForest:[],Levels.CrystalCaves:[],Levels.CreepyCastle:[]};A.resolve_settings()
+		A.seed_id=str(A.seed);A.seed=str(A.seed)+A.__hash;A.set_seed();A.seed_hash=[random.randint(0,9)for A in range(5)];A.krool_keys_required=[];A.blocker_max=int(A.blocker_text)if A.blocker_text else 50;A.troff_max=int(A.troff_text)if A.troff_text else 270;A.troff_min=[0.25,0.3,0.35,0.4,0.45,0.5,0.55];A.training_barrels='startwith';A.shuffle_items=_E;A.unlock_all_moves=_A;A.progressive_upgrades=_A;A.prices=VanillaPrices.copy();A.level_order={1:Levels.JungleJapes,2:Levels.AngryAztec,3:Levels.FranticFactory,4:Levels.GloomyGalleon,5:Levels.FungiForest,6:Levels.CrystalCaves,7:Levels.CreepyCastle};A.owned_kongs_by_level={Levels.JungleJapes:[],Levels.AngryAztec:[],Levels.FranticFactory:[],Levels.GloomyGalleon:[],Levels.FungiForest:[],Levels.CrystalCaves:[],Levels.CreepyCastle:[]};A.owned_moves_by_level={Levels.JungleJapes:[],Levels.AngryAztec:[],Levels.FranticFactory:[],Levels.GloomyGalleon:[],Levels.FungiForest:[],Levels.CrystalCaves:[],Levels.CreepyCastle:[]};A.resolve_settings()
 	def update_progression_totals(A):
 		"Update the troff and blocker totals if we're randomly setting them.";A.troff_weight_0=0.5;A.troff_weight_1=0.55;A.troff_weight_2=0.6;A.troff_weight_3=0.7;A.troff_weight_4=0.8;A.troff_weight_5=0.9;A.troff_weight_6=1.0
 		if A.level_randomization in(_G,_H):A.troff_weight_0=1;A.troff_weight_1=1;A.troff_weight_2=1;A.troff_weight_3=1;A.troff_weight_4=1;A.troff_weight_5=1;A.troff_weight_6=1

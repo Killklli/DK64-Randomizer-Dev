@@ -1,5 +1,5 @@
 'File which generates a basic HTML tracker table for your seed.'
-import js,json
+import json,js
 def generateTracker(spoilerJson):
 	'Use the tracker template and spoiler data to generate a basic tracker.';P='Shuffled Exits';O='</table>\n';N='</tr>\n';M='" class="spoiler">';L=')"/></td>\n';K='<tr>\n';J='<table>\n';I='Locations';F='</td>\n';E='">';C=js.getFile('./TrackerTemplate.html');D=json.loads(spoilerJson);G='<!--Start Generated Content-->';H=C.index(G)+len(G);A='\n';A+='<h4>Seed: '+D['Settings']['Seed']+'</h4>\n'
 	if I in D:

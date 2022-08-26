@@ -1,10 +1,10 @@
 'Apply Kasplat Locations.'
 import js
 from randomizer.Lists.EnemyTypes import Enemies
+from randomizer.Lists.KasplatLocations import KasplatLocationList
 from randomizer.Lists.MapsAndExits import Maps
 from randomizer.Patching.Patcher import ROM
 from randomizer.Spoiler import Spoiler
-from randomizer.Lists.KasplatLocations import KasplatLocationList
 def randomize_kasplat_locations(spoiler):
 	'Write replaced enemies to ROM.';K=spoiler;G='big';Q=[Enemies.KasplatDK,Enemies.KasplatDiddy,Enemies.KasplatLanky,Enemies.KasplatTiny,Enemies.KasplatChunky];o=[Maps.JungleJapes,Maps.JapesUnderGround,Maps.AngryAztec,Maps.AztecChunky5DTemple,Maps.AztecLlamaTemple,Maps.FranticFactory,Maps.GloomyGalleon,Maps.FungiForest,Maps.ForestGiantMushroom,Maps.CrystalCaves,Maps.CreepyCastle,Maps.CastleUpperCave,Maps.CastleLowerCave,Maps.CastleTree,Maps.HideoutHelmLobby,Maps.CreepyCastleLobby,Maps.CrystalCavesLobby,Maps.FranticFactoryLobby,Maps.GloomyGalleonLobby]
 	if K.settings.kasplat_location_rando:

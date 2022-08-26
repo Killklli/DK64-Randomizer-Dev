@@ -9,15 +9,16 @@ _D='disabled'
 _C='patchfileloader'
 _B='rom'
 _A=None
-import asyncio,json,random,js
+import asyncio,json,random
+from pyodide import create_proxy
+import js
 from randomizer.BackgroundRandomizer import generate_playthrough
 from randomizer.Patching.ApplyRandomizer import patching_response
+from randomizer.SettingStrings import decrypt_setting_string,encrypt_settings_string
 from randomizer.Worker import background
 from ui.bindings import bind
 from ui.progress_bar import ProgressBar
-from ui.settings_strings import encrypt_settings_string,decrypt_setting_string
-from ui.rando_options import toggle_counts_boxes,toggle_b_locker_boxes,update_boss_required,disable_colors,disable_music,disable_prices,max_randomized_blocker,max_randomized_troff,disable_barrel_modal
-from pyodide import create_proxy
+from ui.rando_options import disable_barrel_modal,disable_colors,disable_music,disable_prices,max_randomized_blocker,max_randomized_troff,toggle_b_locker_boxes,toggle_counts_boxes,update_boss_required
 @bind(_F,'export_settings')
 def export_settings_string(event):'Click event for exporting settings to a string.\n\n    Args:\n        event (event): Javascript event object.\n    ';A=serialize_settings();B=encrypt_settings_string(A);js.settings_string.value=B
 @bind(_F,'import_settings')

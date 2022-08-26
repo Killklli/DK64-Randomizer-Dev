@@ -8,8 +8,8 @@ _D='assets/Non-Code/hash/'
 _C='RGBA'
 _B='crop'
 _A='num'
+import os,PIL
 from PIL import Image
-import PIL,os
 pre='../'
 cwd=os.getcwd()
 cwd_split=cwd.split('\\')

@@ -2,8 +2,9 @@
 _C='medium'
 _B='off'
 _A=True
+import random
 from email.policy import default
-import random,js
+import js
 from randomizer.Lists.EnemyTypes import Enemies,EnemyMetaData
 from randomizer.Lists.MapsAndExits import Maps
 from randomizer.Patching.Patcher import ROM

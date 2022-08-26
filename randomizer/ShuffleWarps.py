@@ -1,8 +1,8 @@
 'Randomizes Bananaports.'
 import random,js
 from randomizer.Enums.Warps import Warps
-from randomizer.Lists.Warps import BananaportVanilla
 from randomizer.Lists.MapsAndExits import Maps
+from randomizer.Lists.Warps import BananaportVanilla
 def getShuffleMaps():
 	'Produce list of maps which contain a bananaport swap.';A=[]
 	for B in BananaportVanilla.values():

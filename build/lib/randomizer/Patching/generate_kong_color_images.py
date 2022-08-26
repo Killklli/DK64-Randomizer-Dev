@@ -1,7 +1,6 @@
 'Convert RGB colors into a kong color palette.'
-import gzip,math
+import gzip,math,js
 from randomizer.Patching.Patcher import ROM
-import js
 def convertRGBAToBytearray(rgba_lst):'Convert RGBA list with 4 items (r,g,b,a) to a two-byte array in RGBA5551 format.';A=rgba_lst;B=A[0]<<11|A[1]<<6|A[2]<<1|A[3];C=B%256;D=int(B/256)%256;return[D,C]
 def convertColors(color_palettes):
 	'Convert color into RGBA5551 format.';g='colors';f='checkered';V='radial';N=True;J='fill_type'

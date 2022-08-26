@@ -56,10 +56,13 @@ _D='file_index'
 _C='pointer_table_index'
 _B='name'
 _A='source_file'
-import gzip,os,shutil,subprocess,sys,zlib,json,generate_watch_file,patch_text
+import gzip,json,os,shutil,subprocess,sys,zlib,create_helm_geo,generate_watch_file,instance_script_maker,model_fix,patch_text,shop_instance_script
 from adjust_exits import adjustExits
 from convertPortalImage import convertPortalImage
 from convertSetup import convertSetup
+from end_seq_writer import createSquishFile,createTextFile
+from generate_yellow_wrinkly import generateYellowWrinkly
+from image_converter import convertToRGBA32
 from map_names import maps
 from populateSongData import writeVanillaSongData
 from recompute_overlays import isROMAddressOverlay,readOverlayOriginalData,replaceOverlayData,writeModifiedOverlaysToROM
@@ -67,10 +70,6 @@ from recompute_pointer_table import dumpPointerTableDetails,getFileInfo,make_saf
 from replace_simslam_text import replaceSimSlam
 from staticcode import patchStaticCode
 from vanilla_move_data import writeVanillaMoveData
-from image_converter import convertToRGBA32
-from end_seq_writer import createTextFile,createSquishFile
-from generate_yellow_wrinkly import generateYellowWrinkly
-import model_fix,shop_instance_script,instance_script_maker,create_helm_geo
 ROMName='rom/dk64.z64'
 newROMName='rom/dk64-randomizer-base.z64'
 if os.path.exists(newROMName):os.remove(newROMName)

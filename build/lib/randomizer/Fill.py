@@ -10,39 +10,36 @@ _D='all'
 _C=False
 _B=True
 _A=None
-import json,random,js
+import json,random,js,randomizer.ItemPool as ItemPool,randomizer.Lists.Exceptions as Ex,randomizer.Logic as Logic,randomizer.ShuffleExits as ShuffleExits
 from randomizer.CompileHints import compileHints
-from randomizer.Enums.MinigameType import MinigameType
-from randomizer.Enums.Warps import Warps
-import randomizer.ItemPool as ItemPool,randomizer.Lists.Exceptions as Ex
-from randomizer.Lists.ShufflableExit import GetLevelShuffledToIndex,GetShuffledLevelIndex
-from randomizer.Lists.Warps import BananaportVanilla
-import randomizer.Logic as Logic
-from randomizer.Settings import Settings
-import randomizer.ShuffleExits as ShuffleExits
 from randomizer.Enums.Events import Events
 from randomizer.Enums.Items import Items
-from randomizer.Enums.Kongs import Kongs,GetKongs
+from randomizer.Enums.Kongs import GetKongs,Kongs
 from randomizer.Enums.Levels import Levels
 from randomizer.Enums.Locations import Locations
+from randomizer.Enums.MinigameType import MinigameType
 from randomizer.Enums.Regions import Regions
 from randomizer.Enums.SearchMode import SearchMode
 from randomizer.Enums.Time import Time
 from randomizer.Enums.Transitions import Transitions
 from randomizer.Enums.Types import Types
+from randomizer.Enums.Warps import Warps
 from randomizer.Lists.Item import ItemList,KongFromItem
 from randomizer.Lists.Location import LocationList
 from randomizer.Lists.MapsAndExits import Maps
 from randomizer.Lists.Minigame import BarrelMetaData,MinigameRequirements
-from randomizer.Logic import LogicVarHolder,LogicVariables,STARTING_SLAM
+from randomizer.Lists.ShufflableExit import GetLevelShuffledToIndex,GetShuffledLevelIndex
+from randomizer.Lists.Warps import BananaportVanilla
+from randomizer.Logic import STARTING_SLAM,LogicVarHolder,LogicVariables
 from randomizer.LogicClasses import Sphere,TransitionFront
 from randomizer.Prices import GetMaxForKong,GetPriceOfMoveItem
+from randomizer.Settings import Settings
 from randomizer.ShuffleBarrels import BarrelShuffle
-from randomizer.ShuffleKasplats import InitKasplatMap,KasplatShuffle
-from randomizer.ShuffleWarps import ShuffleWarps
 from randomizer.ShuffleBosses import ShuffleBossesBasedOnOwnedItems
+from randomizer.ShuffleKasplats import InitKasplatMap,KasplatShuffle
 from randomizer.ShufflePatches import ShufflePatches
 from randomizer.ShuffleShopLocations import ShuffleShopLocations
+from randomizer.ShuffleWarps import ShuffleWarps
 def GetExitLevelExit(region):
 	'Get the exit that using the "Exit Level" button will take you to.';B=region;A=B.level
 	if B.restart is not _A:return _A

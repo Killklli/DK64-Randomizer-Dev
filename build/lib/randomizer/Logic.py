@@ -3,7 +3,6 @@ _C=None
 _B=True
 _A=False
 import randomizer.CollectibleLogicFiles.AngryAztec,randomizer.CollectibleLogicFiles.CreepyCastle,randomizer.CollectibleLogicFiles.CrystalCaves,randomizer.CollectibleLogicFiles.DKIsles,randomizer.CollectibleLogicFiles.FranticFactory,randomizer.CollectibleLogicFiles.FungiForest,randomizer.CollectibleLogicFiles.GloomyGalleon,randomizer.CollectibleLogicFiles.JungleJapes,randomizer.LogicFiles.AngryAztec,randomizer.LogicFiles.CreepyCastle,randomizer.LogicFiles.CrystalCaves,randomizer.LogicFiles.DKIsles,randomizer.LogicFiles.FranticFactory,randomizer.LogicFiles.FungiForest,randomizer.LogicFiles.GloomyGalleon,randomizer.LogicFiles.HideoutHelm,randomizer.LogicFiles.JungleJapes,randomizer.LogicFiles.Shops
-from randomizer.Lists.ShufflableExit import GetShuffledLevelIndex
 from randomizer.Enums.Collectibles import Collectibles
 from randomizer.Enums.Events import Events
 from randomizer.Enums.Items import Items
@@ -13,6 +12,7 @@ from randomizer.Enums.Locations import Locations
 from randomizer.Enums.Time import Time
 from randomizer.Lists.Location import Location,LocationList
 from randomizer.Lists.MapsAndExits import Maps
+from randomizer.Lists.ShufflableExit import GetShuffledLevelIndex
 from randomizer.Prices import CanBuy,GetPriceOfMoveItem
 STARTING_SLAM=1
 class LogicVarHolder:

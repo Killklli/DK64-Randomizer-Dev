@@ -1,10 +1,10 @@
 'Module used to handle setting and randomizing bonus barrels.'
 _A='selected'
 import random,js,randomizer.Fill as Fill,randomizer.Lists.Exceptions as Ex
-from randomizer.Settings import Settings
 from randomizer.Enums.Minigames import Minigames
-from randomizer.Lists.Minigame import BarrelMetaData,MinigameRequirements
 from randomizer.Lists.MapsAndExits import Maps
+from randomizer.Lists.Minigame import BarrelMetaData,MinigameRequirements
+from randomizer.Settings import Settings
 def Reset(barrelLocations):
 	'Reset bonus barrel associations.'
 	for A in barrelLocations:BarrelMetaData[A].minigame=Minigames.NoGame

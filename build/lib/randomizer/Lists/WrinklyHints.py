@@ -1,9 +1,9 @@
 'Hint location data for Wrinkly hints.'
 _B='Primate Punch'
 _A='Gorilla Grab'
-from randomizer.Enums.WrinklyKong import WrinklyLocation
 from randomizer.Enums.Kongs import Kongs
 from randomizer.Enums.Levels import Levels
+from randomizer.Enums.WrinklyKong import WrinklyLocation
 class HintLocation:
 	'Hint object for Wrinkly hint data locations.'
 	def __init__(A,name,kong,location,hint,level,banned_keywords=[]):'Create wrinkly hint object.\n\n        Args:\n            name (str): Location/String name of wrinkly.\n            kong (Kongs): What kong the hint is for.\n            location (WrinklyLocation): What lobby the hint is in.\n            hint (str): Hint to be written to ROM\n        ';A.name=name;A.kong=kong;A.location=location;A.hint=hint;A.hint_type=-1;A.banned_keywords=banned_keywords.copy();A.level=level

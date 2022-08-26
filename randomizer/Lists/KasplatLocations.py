@@ -1,10 +1,10 @@
 'Stores the data for each potential kasplat location.'
 _A=True
 from randomizer.Enums.Events import Events
+from randomizer.Enums.Kongs import Kongs
 from randomizer.Enums.Levels import Levels
 from randomizer.Enums.Regions import Regions
 from randomizer.Lists.MapsAndExits import Maps
-from randomizer.Enums.Kongs import Kongs
 class KasplatLocation:
 	'Class which stores name and logic for a kasplat location.'
 	def __init__(A,*,name='No Location',map_id=0,kong_lst=[],coords=[0,0,0],xmin=0,xmax=0,zmin=0,zmax=0,region,additional_logic=None,vanilla=False):

@@ -1,6 +1,6 @@
 'Convert files to their minified types.'
 _A=True
-import glob,os,subprocess,shutil
+import glob,os,shutil,subprocess
 from pathlib import Path
 from urllib.parse import urlparse
 import requests

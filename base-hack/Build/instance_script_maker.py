@@ -8,7 +8,7 @@ _D='rb'
 _C='behav_9C'
 _B='id'
 _A='big'
-import os,zlib,json
+import json,os,zlib
 base_rom='./rom/dk64.z64'
 instance_dir='./assets/Non-Code/instance_scripts'
 pointer_table_offset=1055824

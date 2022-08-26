@@ -1,6 +1,6 @@
 'Install packages that are required to build the base hack.'
 _A='version'
-import pkg_resources,subprocess,sys
+import subprocess,sys,pkg_resources
 installed_packages=pkg_resources.working_set
 installed_packages_list=sorted(['%s==%s'%(A.key,A.version)for A in installed_packages])
 required_build_packages=['pillow','requests']

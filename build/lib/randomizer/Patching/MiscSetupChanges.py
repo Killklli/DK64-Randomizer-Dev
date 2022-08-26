@@ -4,11 +4,11 @@ _D=True
 _C='picked'
 _B=False
 _A='index'
-import js,random,struct,math
+import math,random,struct,js
+from randomizer.Lists.MapsAndExits import Maps
+from randomizer.Lists.Patches import DirtPatchLocations
 from randomizer.Patching.Patcher import ROM
 from randomizer.Spoiler import Spoiler
-from randomizer.Lists.Patches import DirtPatchLocations
-from randomizer.Lists.MapsAndExits import Maps
 def float_to_hex(f):
 	'Convert float to hex.'
 	if f==0:return _E

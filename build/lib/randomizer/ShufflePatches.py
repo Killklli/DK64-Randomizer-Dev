@@ -1,12 +1,11 @@
 'Shuffle Dirt Patch Locations.'
 _A=False
-import randomizer.CollectibleLogicFiles.AngryAztec,randomizer.CollectibleLogicFiles.CreepyCastle,randomizer.CollectibleLogicFiles.CrystalCaves,randomizer.CollectibleLogicFiles.DKIsles,randomizer.CollectibleLogicFiles.FranticFactory,randomizer.CollectibleLogicFiles.FungiForest,randomizer.CollectibleLogicFiles.GloomyGalleon,randomizer.CollectibleLogicFiles.JungleJapes
+import random,randomizer.CollectibleLogicFiles.AngryAztec,randomizer.CollectibleLogicFiles.CreepyCastle,randomizer.CollectibleLogicFiles.CrystalCaves,randomizer.CollectibleLogicFiles.DKIsles,randomizer.CollectibleLogicFiles.FranticFactory,randomizer.CollectibleLogicFiles.FungiForest,randomizer.CollectibleLogicFiles.GloomyGalleon,randomizer.CollectibleLogicFiles.JungleJapes
 from randomizer.Enums.Collectibles import Collectibles
-from randomizer.Enums.Levels import Levels
-from randomizer.LogicClasses import Collectible
 from randomizer.Enums.Kongs import Kongs
+from randomizer.Enums.Levels import Levels
 from randomizer.Lists.Patches import DirtPatchLocations
-import random
+from randomizer.LogicClasses import Collectible
 from randomizer.Spoiler import Spoiler
 def addPatch(patch):
 	'Add patch to relevant Logic Region.';A=patch;C={Levels.DKIsles:randomizer.CollectibleLogicFiles.DKIsles.LogicRegions,Levels.JungleJapes:randomizer.CollectibleLogicFiles.JungleJapes.LogicRegions,Levels.AngryAztec:randomizer.CollectibleLogicFiles.AngryAztec.LogicRegions,Levels.FranticFactory:randomizer.CollectibleLogicFiles.FranticFactory.LogicRegions,Levels.GloomyGalleon:randomizer.CollectibleLogicFiles.GloomyGalleon.LogicRegions,Levels.FungiForest:randomizer.CollectibleLogicFiles.FungiForest.LogicRegions,Levels.CrystalCaves:randomizer.CollectibleLogicFiles.CrystalCaves.LogicRegions,Levels.CreepyCastle:randomizer.CollectibleLogicFiles.CreepyCastle.LogicRegions};B=C[A.level_name]

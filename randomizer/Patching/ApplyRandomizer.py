@@ -11,17 +11,17 @@ from randomizer.Patching.EntranceRando import randomize_entrances
 from randomizer.Patching.Hash import get_hash_images
 from randomizer.Patching.KasplatLocationRando import randomize_kasplat_locations
 from randomizer.Patching.KongRando import apply_kongrando_cosmetic
-from randomizer.Patching.PhaseRando import randomize_krool,randomize_helm
+from randomizer.Patching.MiscSetupChanges import randomize_setup
 from randomizer.Patching.MoveLocationRando import randomize_moves
 from randomizer.Patching.MusicRando import randomize_music
 from randomizer.Patching.Patcher import ROM
+from randomizer.Patching.PhaseRando import randomize_helm,randomize_krool
 from randomizer.Patching.PriceRando import randomize_prices
 from randomizer.Patching.PuzzleRando import randomize_puzzles
-from randomizer.Patching.UpdateHints import PushHints,wipeHints
-from randomizer.Patching.MiscSetupChanges import randomize_setup
 from randomizer.Patching.ShopRandomizer import ApplyShopRandomizer
-from ui.GenTracker import generateTracker
+from randomizer.Patching.UpdateHints import PushHints,wipeHints
 from randomizer.Settings import Settings
+from ui.GenTracker import generateTracker
 from ui.progress_bar import ProgressBar
 def patching_response(responded_data):
 	'Response data from the background task.\n\n    Args:\n        responded_data (str): Pickled data (or json)\n    ';d='tracker_text';c='spoiler_log_text';b='spoiler_log_block';a='need_rw';Z='need_both';Y='base64';X='error';M=responded_data;G='';E=asyncio.get_event_loop()

@@ -3,9 +3,9 @@ _A=False
 import random
 from io import BytesIO
 import js
+from randomizer.Enums.Kongs import Kongs
 from randomizer.Lists.WrinklyHints import HintLocation,hints
 from randomizer.Patching.Patcher import ROM
-from randomizer.Enums.Kongs import Kongs
 def writeWrinklyHints(file_start_offset,text):
 	'Write the text to ROM.';E=text;B=file_start_offset;ROM().seek(B);ROM().writeMultipleBytes(len(E),1);F=0;A=1
 	for D in E:

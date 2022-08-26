@@ -1,10 +1,11 @@
 'Apply cosmetic elements of Kong Rando.'
+import random
 from imp import source_from_cache
-import random,js
+import js
 from randomizer.Enums.Kongs import Kongs
+from randomizer.Lists.EnemyTypes import Enemies
 from randomizer.Patching.Patcher import ROM
 from randomizer.Spoiler import Spoiler
-from randomizer.Lists.EnemyTypes import Enemies
 def apply_kongrando_cosmetic(spoiler):
 	'Rando write bananaport locations.';n=False;m='pointing_to';l='entries';k='Frantic Factory';j='Llama Temple';i='Tiny Temple';h='Jungle Japes';Q='locked';P='puzzle';M='type';J='charspawner_changes';I='model2_changes';H='map_index';F='big';E='index';D='kong';B='new_type';A=spoiler
 	if A.settings.kong_rando:

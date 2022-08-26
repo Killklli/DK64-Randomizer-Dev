@@ -1,5 +1,5 @@
 'File to modify Chunky Wrinkly door to a yellow one to place inside the DK Wrinkly slot.'
-import shutil,zlib,os
+import os,shutil,zlib
 new_file='assets/Non-Code/Gong/hint_door.bin'
 def generateYellowWrinkly():
 	'Pull geo file from ROM and modify.';D='big';E=1055824

@@ -4,8 +4,7 @@ import random
 from randomizer.Enums.Items import Items
 from randomizer.Enums.Kongs import Kongs
 from randomizer.Enums.Locations import Locations
-from randomizer.ItemPool import ChunkyMoveLocations,DiddyMoveLocations,DonkeyMoveLocations,LankyMoveLocations,SharedMoveLocations,TinyMoveLocations
-from randomizer.ItemPool import DonkeyMoves,DiddyMoves,LankyMoves,TinyMoves,ChunkyMoves
+from randomizer.ItemPool import ChunkyMoveLocations,ChunkyMoves,DiddyMoveLocations,DiddyMoves,DonkeyMoveLocations,DonkeyMoves,LankyMoveLocations,LankyMoves,SharedMoveLocations,TinyMoveLocations,TinyMoves
 from randomizer.Lists.Location import LocationList
 VanillaPrices={Items.BaboonBlast:3,Items.StrongKong:5,Items.GorillaGrab:7,Items.ChimpyCharge:3,Items.RocketbarrelBoost:5,Items.SimianSpring:7,Items.Orangstand:3,Items.BaboonBalloon:5,Items.OrangstandSprint:7,Items.MiniMonkey:3,Items.PonyTailTwirl:5,Items.Monkeyport:7,Items.HunkyChunky:3,Items.PrimatePunch:5,Items.GorillaGone:7,Items.Coconut:3,Items.Peanut:3,Items.Grape:3,Items.Feather:3,Items.Pineapple:3,Items.HomingAmmo:5,Items.SniperSight:7,Items.Bongos:3,Items.Guitar:3,Items.Trombone:3,Items.Saxophone:3,Items.Triangle:3,Items.ProgressiveSlam:[5,7],Items.ProgressiveAmmoBelt:[3,5],Items.ProgressiveInstrumentUpgrade:[5,7,9]}
 ProgressiveMoves={Items.ProgressiveSlam:2,Items.ProgressiveAmmoBelt:2,Items.ProgressiveInstrumentUpgrade:3}

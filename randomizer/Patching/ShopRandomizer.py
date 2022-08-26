@@ -1,10 +1,10 @@
 'Place Shuffled Shops.'
-from randomizer.Spoiler import Spoiler
-import js,struct,math
-from randomizer.ShuffleShopLocations import available_shops
+import math,struct,js
 from randomizer.Enums.Regions import Regions
 from randomizer.Lists.MapsAndExits import Maps
 from randomizer.Patching.Patcher import ROM
+from randomizer.ShuffleShopLocations import available_shops
+from randomizer.Spoiler import Spoiler
 def intf_to_float(intf):
 	'Convert float as int format to float.'
 	if intf==0:return 0

@@ -11,6 +11,7 @@ randomizer/ItemPool.py
 randomizer/Logic.py
 randomizer/LogicClasses.py
 randomizer/Prices.py
+randomizer/SettingStrings.py
 randomizer/Settings.py
 randomizer/ShuffleBarrels.py
 randomizer/ShuffleBosses.py
@@ -105,4 +106,3 @@ ui/bindings.py
 ui/generate_buttons.py
 ui/progress_bar.py
 ui/rando_options.py
-ui/settings_strings.py

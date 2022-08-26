@@ -1,9 +1,10 @@
 'Apply cosmetic skins to kongs.'
+import random
+from random import randint
+import js
+from randomizer.Patching.generate_kong_color_images import convertColors
 from randomizer.Patching.Patcher import ROM
 from randomizer.Spoiler import Spoiler
-from randomizer.Patching.generate_kong_color_images import convertColors
-from random import randint
-import random,js
 def apply_cosmetic_colors(spoiler):
 	'Apply cosmetic skins to kongs.';r='checkered';q='patch';p='overalls';o='override_cosmetics';l='02x';k='enguarde_custom_color';j='enguarde_colors';i='rambi_custom_color';h='rambi_colors';g='chunky_custom_color';f='chunky_colors';e='tiny_custom_color';d='tiny_colors';c='lanky_custom_color';b='lanky_colors';a='diddy_custom_color';Z='diddy_colors';Y='dk_custom_color';X='dk_colors';W='base';U='colors';T='#000000';Q='zones';M='block';L='custom_setting';K='palettes';I='kong_index';H='base_setting';F='name';E='kong';D='image';C='fill_type';B='randomized';A=spoiler;N=0
 	if js.document.getElementById(o).checked:O=js.document.getElementById('klaptrap_model').value

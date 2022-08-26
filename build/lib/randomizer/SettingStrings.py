@@ -1,5 +1,5 @@
 'Encryption and Decryption of settings strings.'
-import json,collections,base64
+import base64,collections,json
 from itertools import groupby
 import js
 def encrypt_settings_string(dict_data):
@@ -19,24 +19,25 @@ def encrypt_settings_string(dict_data):
 	for A in K(F):H+='|'+str(A[0])+':'+A[1]
 	return H
 def decrypt_setting_string(encrypted_string):
-	'Take an encrypted string and return a dictionary.\n\n    Args:\n        encrypted_string (str): Passed settings string.\n\n    Returns:\n        dict: Returns the decrypted set of data.\n    ';J=' ';I=False;F=''
+	'Take an encrypted string and return a dictionary.\n\n    Args:\n        encrypted_string (str): Passed settings string.\n\n    Returns:\n        dict: Returns the decrypted set of data.\n    ';K=' ';J=False;G=''
 	for A in encrypted_string.split('|'):
 		if A:
-			if':'in A:K,L=A.split(':');F+=L*int(K)
-			else:F+=A
-	G={};B=0;H=I;C=[];D=collections.OrderedDict(sorted(default_dict.items()))
-	for A in base64.b64decode(F).decode('ascii').split(','):
-		if'['in A:H=True;str=A.replace('[','').replace("'",'').replace(J,'');C.append(str)
-		elif']'in A:H=I;str=A.replace(']','').replace("'",'').replace(J,'');C.append(str);G[list(D.items())[B][0]]=C;B+=1;C=[]
-		elif H:str=A.replace("'",'').replace(J,'');C.append(str)
+			if':'in A:L,M=A.split(':');G+=M*int(L)
+			else:G+=A
+	H={};C=0;I=J;D=[];F=collections.OrderedDict(sorted(default_dict.items()))
+	for A in base64.b64decode(G).decode('ascii').split(','):
+		if'['in A:I=True;E=A.replace('[','').replace("'",'').replace(K,'');D.append(E)
+		elif']'in A:I=J;E=A.replace(']','').replace("'",'').replace(K,'');D.append(E);H[list(F.items())[C][0]]=D;C+=1;D=[]
+		elif I:E=A.replace("'",'').replace(K,'');D.append(E)
 		else:
-			if B<len(list(D.items())):
-				if A=='x1':E=True
-				elif A=='x0':E=I
-				elif A=='':E=list(D.items())[B][1]
-				else:E=A
-				G[list(D.items())[B][0]]=E
-			B+=1
-	return G
+			if C<len(list(F.items())):
+				if A=='x1':B=True
+				elif A=='x0':B=J
+				elif A=='':B=list(F.items())[C][1]
+				else:B=A
+				if isinstance(B,str)and B.isnumeric():B=int(B)
+				H[list(F.items())[C][0]]=B
+			C+=1
+	return H
 resp=js.getFile('./static/presets/default.json')
 default_dict=json.loads(resp)

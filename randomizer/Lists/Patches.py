@@ -6,7 +6,6 @@ from randomizer.Enums.Levels import Levels
 from randomizer.Enums.Regions import Regions
 from randomizer.Enums.Time import Time
 from randomizer.Lists.MapsAndExits import Maps
-from randomizer.Enums.Levels import Levels
 class DirtPatchData:
 	'Information about the dirt patch location.'
 	def __init__(A,*,name='',level=0,map_id=0,vanilla=False,x=0,y=0,z=0,rotation=0,group=0,logicregion='',logic=0,resize=''):'Initialize with given parameters.';B=vanilla;A.name=name;A.level_name=level;A.map_id=map_id;A.vanilla=B;A.x=x;A.y=y;A.z=z;A.rotation=rotation;A.selected=B;A.group=group;A.logicregion=logicregion;A.logic=logic;A.resize=resize
