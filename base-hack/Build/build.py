@@ -56,7 +56,7 @@ _D='file_index'
 _C='pointer_table_index'
 _B='name'
 _A='source_file'
-import gzip,json,os,shutil,subprocess,sys,zlib,create_helm_geo,generate_watch_file,instance_script_maker,model_fix,patch_text,shop_instance_script
+import gzip,json,os,shutil,subprocess,sys,zlib,create_helm_geo,generate_watch_file,shop_instance_script,instance_script_maker,model_fix,patch_text
 from adjust_exits import adjustExits
 from convertPortalImage import convertPortalImage
 from convertSetup import convertSetup
