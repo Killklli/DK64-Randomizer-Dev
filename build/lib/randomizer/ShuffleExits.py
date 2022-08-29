@@ -64,7 +64,7 @@ def ShuffleExits(settings):
 	'Shuffle exit pools depending on settings.';A=settings
 	if A.shuffle_loading_zones==_D:
 		if A.kongs_for_progression:ShuffleLevelOrderWithRestrictions(A)
-		else:ShuffleLevelExits()
+		else:ShuffleLevelExits(A)
 	elif A.shuffle_loading_zones=='all':B=[];C=[];AssumeExits(A,B,C,list(ShufflableExits.keys()));ShuffleExitsInPool(A,B,C)
 	if A.shuffle_loading_zones==_D:UpdateLevelProgression(A)
 def ExitShuffle(settings):
@@ -84,18 +84,20 @@ def UpdateLevelProgression(settings):
 		if A.shuffle_loading_zones==_D:G=ShufflableExits[LobbyEntrancePool[B]].shuffledId;H=ShufflableExits[G].back.regionId;C=F.index(H)
 		D[C]=A.EntryGBs[B];E[C]=A.BossBananas[B]
 	A.EntryGBs=D;A.BossBananas=E
-def ShuffleLevelExits(newLevelOrder=_A):
-	'Shuffle level exits according to new level order if provided, otherwise shuffle randomly.';C=newLevelOrder;D=LobbyEntrancePool.copy();A=LobbyEntrancePool.copy()
-	if C is not _A:
-		for (G,H) in C.items():A[G-1]=LobbyEntrancePool[H]
-	else:random.shuffle(D)
-	while len(A)>0:E=A.pop();I=ShufflableExits[E];J=D.pop();B=ShufflableExits[J];B.shuffled=_B;B.shuffledId=E;F=ShufflableExits[I.back.reverse];F.shuffled=_B;F.shuffledId=B.back.reverse
+def ShuffleLevelExits(settings,newLevelOrder=_A):
+	'Shuffle level exits according to new level order if provided, otherwise shuffle randomly.';D=newLevelOrder;E=LobbyEntrancePool.copy();A=LobbyEntrancePool.copy()
+	if D is not _A:
+		for (J,K) in D.items():A[J-1]=LobbyEntrancePool[K]
+	else:random.shuffle(E)
+	F={Transitions.IslesMainToJapesLobby:Levels.JungleJapes,Transitions.IslesMainToAztecLobby:Levels.AngryAztec,Transitions.IslesMainToFactoryLobby:Levels.FranticFactory,Transitions.IslesMainToGalleonLobby:Levels.GloomyGalleon,Transitions.IslesMainToForestLobby:Levels.FungiForest,Transitions.IslesMainToCavesLobby:Levels.CrystalCaves,Transitions.IslesMainToCastleLobby:Levels.CreepyCastle};G={1:_A,2:_A,3:_A,4:_A,5:_A,6:_A,7:_A}
+	while len(A)>0:B=A.pop();L=ShufflableExits[B];H=E.pop();C=ShufflableExits[H];C.shuffled=_B;C.shuffledId=B;I=ShufflableExits[L.back.reverse];I.shuffled=_B;I.shuffledId=C.back.reverse;G[F[H]+1]=F[B]
+	settings.level_order=G
 def ShuffleLevelOrderWithRestrictions(settings):
 	'Determine level order given starting kong and the need to find more kongs along the way.';A=settings
 	if A.starting_kongs_count==1:B=ShuffleLevelOrderForOneStartingKong(A)
 	else:B=ShuffleLevelOrderForMultipleStartingKongs(A)
 	if _A in B.values():raise Ex.EntrancePlacementException('Invalid level order with fewer than the 7 required main levels.')
-	A.level_order=B;ShuffleLevelExits(B)
+	ShuffleLevelExits(A,B)
 def ShuffleLevelOrderForOneStartingKong(settings):
 	'Determine level order given only starting with one kong and the need to find more kongs along the way.';J='free';C=settings;A={1,2,3,4,5,6,7}
 	if C.starting_kong==Kongs.diddy:D=random.randint(1,4)
