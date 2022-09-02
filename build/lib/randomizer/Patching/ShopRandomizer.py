@@ -37,8 +37,8 @@ def ApplyShopRandomizer(spoiler):
 				D={};r=f[c][B];H=-1;I=-1;N=-1;E=-1;F=-1;J=-1;O=-1;P=-1;s=[B,r]
 				for (V,W) in enumerate(s):
 					if W==Regions.CrankyGeneric:
-						if V==0:F=115;J=Maps.Cranky;O=180;P=1
-						else:H=115;I=Maps.Cranky;N=180;E=1
+						if V==0:F=115;J=Maps.Cranky;O=180;P=0.95
+						else:H=115;I=Maps.Cranky;N=180;E=0.95
 					elif W==Regions.CandyGeneric:
 						if V==0:F=292;J=Maps.Candy;O=0;P=1
 						else:H=292;I=Maps.Candy;N=0;E=1
