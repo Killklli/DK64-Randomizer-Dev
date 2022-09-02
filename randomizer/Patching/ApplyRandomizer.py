@@ -26,28 +26,28 @@ from randomizer.Settings import Settings
 from ui.GenTracker import generateTracker
 from ui.progress_bar import ProgressBar
 def patching_response(responded_data):
-	'Response data from the background task.\n\n    Args:\n        responded_data (str): Pickled data (or json)\n    ';d='spoiler_log_text';c='tracker_text';b='spoiler_log_block';a='need_rw';Z='need_both';Y='base64';X='error';M=responded_data;F='';D=asyncio.get_event_loop()
+	'Response data from the background task.\n\n    Args:\n        responded_data (str): Pickled data (or json)\n    ';d='spoiler_log_text';c='tracker_text';b='spoiler_log_block';a='need_rw';Z='need_both';Y='error';N=responded_data;M='base64';F='';D=asyncio.get_event_loop()
 	try:
-		N=json.loads(M)
-		if N.get(X):O=N.get(X);ProgressBar().set_class('bg-danger');js.toast_alert(O);D.run_until_complete(ProgressBar().update_progress(10,f"Error: {O}"));D.run_until_complete(ProgressBar().reset());return None
+		O=json.loads(N)
+		if O.get(Y):P=O.get(Y);ProgressBar().set_class('bg-danger');js.toast_alert(P);D.run_until_complete(ProgressBar().update_progress(10,f"Error: {P}"));D.run_until_complete(ProgressBar().reset());return None
 	except Exception:pass
-	D.run_until_complete(ProgressBar().update_progress(8,'Applying Patches'));A=pickle.loads(codecs.decode(M.encode(),Y));A.settings.verify_hash();Settings({'seed':0}).compare_hash(A.settings.public_hash);A.settings.set_seed()
-	if A.settings.download_patch_file:A.settings.download_patch_file=False;js.save_text_as_file(codecs.encode(pickle.dumps(A),Y).decode(),f"dk64-{A.settings.seed_id}.lanky")
-	B=A.settings.rom_data
+	D.run_until_complete(ProgressBar().update_progress(8,'Applying Patches'));A=pickle.loads(codecs.decode(N.encode(),M));A.settings.verify_hash();Settings({'seed':0}).compare_hash(A.settings.public_hash);A.settings.set_seed()
+	if A.settings.download_patch_file:A.settings.download_patch_file=False;js.save_text_as_file(codecs.encode(pickle.dumps(A),M).decode(),f"dk64-{A.settings.seed_id}.lanky")
+	js.write_seed_history(A.settings.seed_id,codecs.encode(pickle.dumps(A),M).decode(),A.settings.public_hash);B=A.settings.rom_data
 	if A.settings.shuffle_loading_zones=='levels':
 		ROM().seek(B+0);ROM().write(1);e=[Transitions.IslesMainToJapesLobby,Transitions.IslesMainToAztecLobby,Transitions.IslesMainToFactoryLobby,Transitions.IslesMainToGalleonLobby,Transitions.IslesMainToForestLobby,Transitions.IslesMainToCavesLobby,Transitions.IslesMainToCastleLobby];f=[Transitions.IslesJapesLobbyToMain,Transitions.IslesAztecLobbyToMain,Transitions.IslesFactoryLobbyToMain,Transitions.IslesGalleonLobbyToMain,Transitions.IslesForestLobbyToMain,Transitions.IslesCavesLobbyToMain,Transitions.IslesCastleLobbyToMain];C=0
 		for g in e:ROM().seek(B+1+C);ROM().write(f.index(A.shuffled_exit_data[int(g)].reverse));C+=1
 		h={Transitions.IslesMainToJapesLobby:Transitions.IslesJapesLobbyToMain,Transitions.IslesMainToAztecLobby:Transitions.IslesAztecLobbyToMain,Transitions.IslesMainToFactoryLobby:Transitions.IslesFactoryLobbyToMain,Transitions.IslesMainToGalleonLobby:Transitions.IslesGalleonLobbyToMain,Transitions.IslesMainToForestLobby:Transitions.IslesForestLobbyToMain,Transitions.IslesMainToCavesLobby:Transitions.IslesCavesLobbyToMain,Transitions.IslesMainToCastleLobby:Transitions.IslesCastleLobbyToMain};i={Transitions.IslesJapesLobbyToMain:26,Transitions.IslesAztecLobbyToMain:74,Transitions.IslesFactoryLobbyToMain:138,Transitions.IslesGalleonLobbyToMain:168,Transitions.IslesForestLobbyToMain:236,Transitions.IslesCavesLobbyToMain:292,Transitions.IslesCastleLobbyToMain:317};C=0
-		for (G,P) in h.items():j=A.shuffled_exit_data.get(G).reverse;ROM().seek(B+30+C);ROM().writeMultipleBytes(i[int(j)],2);C+=2
+		for (G,Q) in h.items():j=A.shuffled_exit_data.get(G).reverse;ROM().seek(B+30+C);ROM().writeMultipleBytes(i[int(j)],2);C+=2
 	C=0
 	for E in A.settings.BossBananas:ROM().seek(B+8+C);ROM().writeMultipleBytes(E,2);C+=2
 	C=0
 	for E in A.settings.EntryGBs:ROM().seek(B+22+C);ROM().writeMultipleBytes(E,1);C+=1
 	if A.settings.starting_kongs_count==5:ROM().seek(B+44);ROM().write(31)
 	else:
-		Q=0
-		for k in A.settings.starting_kong_list:Q|=1<<k
-		ROM().seek(B+44);ROM().write(Q)
+		R=0
+		for k in A.settings.starting_kong_list:R|=1<<k
+		ROM().seek(B+44);ROM().write(R)
 	if A.settings.unlock_all_moves:ROM().seek(B+45);ROM().write(1)
 	ROM().seek(B+46);ROM().write(1)
 	if A.settings.unlock_fairy_shockwave:ROM().seek(B+47);ROM().write(1)
@@ -86,12 +86,12 @@ def patching_response(responded_data):
 	if A.settings.fast_gbs:ROM().seek(B+378);ROM().write(1)
 	if A.settings.auto_keys:ROM().seek(B+347);ROM().write(1)
 	if A.settings.hard_bosses:
-		for R in range(3):ROM().seek(B+379+R);ROM().write(A.settings.kko_phase_order[R])
+		for S in range(3):ROM().seek(B+379+S);ROM().write(A.settings.kko_phase_order[S])
 	I=[0,1,2,3,4,5,6,7]
 	if len(A.settings.krool_keys_required)>0:
 		for G in A.settings.krool_keys_required:
-			S=G-4
-			if S in I:I.remove(S)
+			T=G-4
+			if T in I:I.remove(T)
 	J=0
 	for G in I:J=J|1<<G
 	ROM().seek(B+295);ROM().write(J)
@@ -103,12 +103,12 @@ def patching_response(responded_data):
 	D.run_until_complete(ProgressBar().update_progress(10,'Seed Generated.'));js.document.getElementById('nav-settings-tab').style.display=F
 	if A.settings.generate_spoilerlog is True:js.document.getElementById(b).style.display=F;D.run_until_complete(GenerateSpoiler(A.toJson()));js.document.getElementById(c).value=generateTracker(A.toJson())
 	else:js.document.getElementById(d).innerHTML=F;js.document.getElementById(d).value=F;js.document.getElementById(c).value=F;js.document.getElementById(b).style.display='none'
-	js.document.getElementById('generated_seed_id').innerHTML=A.settings.seed_id;T=json.loads(A.toJson())['Settings'];H={};K=0
+	js.document.getElementById('generated_seed_id').innerHTML=A.settings.seed_id;U=json.loads(A.toJson())['Settings'];H={};K=0
 	for L in range(0,3):js.document.getElementById(f"settings_table_{L}").innerHTML=F;H[L]=js.document.getElementById(f"settings_table_{L}")
-	for (U,P) in T.items():
-		V=['Seed','algorithm']
-		if U not in V:
-			if H[K].rows.length>math.ceil((len(T.items())-len(V))/len(H)):K+=1
-			W=H[K].insertRow(-1);m=W.insertCell(0);n=W.insertCell(1);m.innerHTML=U;n.innerHTML=FormatSpoiler(P)
+	for (V,Q) in U.items():
+		W=['Seed','algorithm']
+		if V not in W:
+			if H[K].rows.length>math.ceil((len(U.items())-len(W))/len(H)):K+=1
+			X=H[K].insertRow(-1);m=X.insertCell(0);n=X.insertCell(1);m.innerHTML=V;n.innerHTML=FormatSpoiler(Q)
 	ROM().fixSecurityValue();ROM().save(f"dk64-{A.settings.seed_id}.z64");D.run_until_complete(ProgressBar().reset());js.jq('#nav-settings-tab').tab('show')
 def FormatSpoiler(value):'Format the values passed to the settings table into a more readable format.\n\n    Args:\n        value (str) or (bool)\n    ';A=str(value);B=A.replace('_',' ');C=B.title();return C
