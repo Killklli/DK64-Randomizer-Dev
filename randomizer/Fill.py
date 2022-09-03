@@ -151,19 +151,19 @@ def VerifyWorldWithWorstCoinUsage(settings):
 def Reset():'Reset logic variables and region info that should be reset before a search.';LogicVariables.Reset();Logic.ResetRegionAccess();Logic.ResetCollectibleRegions()
 def ParePlaythrough(settings,PlaythroughLocations):
 	'Pare playthrough down to only the essential elements.';C=PlaythroughLocations;A=settings;G=[];I=max([A.blocker_0,A.blocker_1,A.blocker_2,A.blocker_3,A.blocker_4,A.blocker_5,A.blocker_6,A.blocker_7])
-	for F in range(len(C)-2,-1,-1):
-		B=C[F]
-		if B.availableGBs>I:B.locations=[A for A in B.locations if LocationList[A].item!=Items.GoldenBanana];continue
-		for D in B.locations.copy():
-			E=LocationList[D]
-			if E.item==Items.GoldenBanana:continue
-			H=E.item;E.item=_A;Reset()
-			if GetAccessibleLocations(A,[],SearchMode.CheckBeatable):B.locations.remove(D);E.SetDelayedItem(H);G.append(D)
-			else:E.PlaceItem(H)
-	for F in range(len(C)-2,-1,-1):
-		B=C[F]
+	for D in range(len(C)-2,-1,-1):
+		B=C[D]
+		if D>0 and C[D-1].availableGBs>I:B.locations=[A for A in B.locations if LocationList[A].item!=Items.GoldenBanana]
+		for E in B.locations.copy():
+			F=LocationList[E]
+			if F.item==Items.GoldenBanana:continue
+			H=F.item;F.item=_A;Reset()
+			if GetAccessibleLocations(A,[],SearchMode.CheckBeatable):B.locations.remove(E);F.SetDelayedItem(H);G.append(E)
+			else:F.PlaceItem(H)
+	for D in range(len(C)-2,-1,-1):
+		B=C[D]
 		if len(B.locations)==0:C.remove(B)
-	for D in G:LocationList[D].PlaceDelayedItem()
+	for E in G:LocationList[E].PlaceDelayedItem()
 def PareWoth(settings,PlaythroughLocations):
 	'Pare playthrough to locations which are Way of the Hoard (hard required by logic).';A=[]
 	for D in PlaythroughLocations:
