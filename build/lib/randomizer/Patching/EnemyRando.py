@@ -8,50 +8,55 @@ from randomizer.Lists.MapsAndExits import Maps
 from randomizer.Patching.Patcher import ROM
 from randomizer.Spoiler import Spoiler
 def getBalancedCrownEnemyRando(crown_setting,damage_ohko_setting):
-	'Get array of weighted enemies.';M=damage_ohko_setting;K=False;I=crown_setting;C={}
-	if I!=_B:
-		C={Maps.JapesCrown:[],Maps.AztecCrown:[],Maps.FactoryCrown:[],Maps.GalleonCrown:[],Maps.ForestCrown:[],Maps.CavesCrown:[],Maps.CastleCrown:[],Maps.HelmCrown:[],Maps.SnidesCrown:[],Maps.LobbyCrown:[]};N=[];J=[];L=[];G=[];O=[]
+	'Get array of weighted enemies.';N=damage_ohko_setting;J=crown_setting;I=False;C={}
+	if J!=_B:
+		C={Maps.JapesCrown:[],Maps.AztecCrown:[],Maps.FactoryCrown:[],Maps.GalleonCrown:[],Maps.ForestCrown:[],Maps.CavesCrown:[],Maps.CastleCrown:[],Maps.HelmCrown:[],Maps.SnidesCrown:[],Maps.LobbyCrown:[]};O=[];K=[];L=[];G=[];M=[]
 		for B in EnemyMetaData:
 			if EnemyMetaData[B].crown_enabled and B is not Enemies.GetOut:
-				N.append(B)
-				if EnemyMetaData[B].disruptive<=1:J.append(B)
+				O.append(B)
+				if EnemyMetaData[B].disruptive<=1:K.append(B)
 				if EnemyMetaData[B].kasplat is _A:L.append(B)
 				elif EnemyMetaData[B].disruptive==0:L.append(B);G.append(B)
-		R=2
+		T=2
 		for B in EnemyMetaData.keys():
 			if EnemyMetaData[B].crown_enabled:
-				S=EnemyMetaData[B].crown_weight;T=abs(S-R);U=abs(10-T)
-				if M is K or B is not Enemies.GetOut:
-					for P in range(U):O.append(B)
-		if I=='easy':
+				U=EnemyMetaData[B].crown_weight;V=abs(U-T);P=abs(10-V)
+				if B==Enemies.GetOut:P=1
+				if N is I or B is not Enemies.GetOut:
+					for Q in range(P):M.append(B)
+		if J=='easy':
 			for A in C:
-				C[A].append(random.choice(J));C[A].append(random.choice(G));C[A].append(random.choice(G))
+				C[A].append(random.choice(K));C[A].append(random.choice(G));C[A].append(random.choice(G))
 				if A==Maps.GalleonCrown or A==Maps.LobbyCrown or A==Maps.HelmCrown:C[A].append(random.choice(G))
-		elif I==_C:
+		elif J==_C:
 			D=0
 			for A in C:
-				F=0;E=0;H=3;Q=K
+				F=0;E=0;H=3;R=I
 				if A==Maps.GalleonCrown or A==Maps.LobbyCrown or A==Maps.HelmCrown:H=4
-				for P in range(H):
+				for Q in range(H):
 					if F==0:
-						if E<2:D=random.choice(N)
-						elif E==2:D=random.choice(J)
+						if E<2:D=random.choice(O)
+						elif E==2:D=random.choice(K)
 						elif E==3:D=random.choice(G)
 					elif F==1:
-						if E<2:D=random.choice(J)
+						if E<2:D=random.choice(K)
 						elif E==2:D=random.choice(G)
 					elif F==2:
 						if E==0:D=random.choice(L)
 						elif E==1:D=random.choice(G)
 					elif E>3 or E>2 and F>1 or E==2 and F==2:print('This is a mistake in the crown enemy algorithm. Report this to the devs.');D=Enemies.BeaverGold
-					if M is K and F<2 and Q is K and random.randint(0,1000)>994:D=Enemies.GetOut;Q=_A
+					if N is I and F<2 and R is I and random.randint(0,1000)>994:D=Enemies.GetOut;R=_A
 					if EnemyMetaData[D].kasplat is _A:E=E+1
 					F=EnemyMetaData[D].disruptive+F;C[A].append(D)
-		elif I=='hard':
+		elif J=='hard':
+			W=I
 			for A in C:
 				H=3
 				if A==Maps.GalleonCrown or A==Maps.LobbyCrown or A==Maps.HelmCrown:H=4
-				for P in range(H):C[A].append(random.choice(O))
+				for Q in range(H):
+					if W:S=random.choice([A for A in M if A!=Enemies.GetOut])
+					else:S=random.choice(M)
+					C[A].append(S)
 		for A in C:
 			if len(C[A])>0:random.shuffle(C[A])
 	return C
