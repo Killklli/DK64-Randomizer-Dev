@@ -40,11 +40,11 @@ def ApplyShopRandomizer(spoiler):
 						if V==0:F=115;J=Maps.Cranky;O=180;P=0.95
 						else:H=115;I=Maps.Cranky;N=180;E=0.95
 					elif W==Regions.CandyGeneric:
-						if V==0:F=292;J=Maps.Candy;O=0;P=1
-						else:H=292;I=Maps.Candy;N=0;E=1
+						if V==0:F=292;J=Maps.Candy;O=0;P=0.95
+						else:H=292;I=Maps.Candy;N=0;E=0.95
 					elif W==Regions.FunkyGeneric:
-						if V==0:F=122;J=Maps.Funky;O=90;P=1.1
-						else:H=122;I=Maps.Funky;N=90;E=1.1
+						if V==0:F=122;J=Maps.Funky;O=90;P=1.045
+						else:H=122;I=Maps.Funky;N=90;E=1.045
 					elif W==Regions.Snide:
 						if V==0:F=121;J=Maps.Snide;O=270;P=3
 						else:H=121;I=Maps.Snide;N=270;E=3
