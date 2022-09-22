@@ -166,12 +166,14 @@ def ParePlaythrough(settings,PlaythroughLocations):
 	for E in G:LocationList[E].PlaceDelayedItem()
 def PareWoth(settings,PlaythroughLocations):
 	'Pare playthrough to locations which are Way of the Hoard (hard required by logic).';A=[]
-	for D in PlaythroughLocations:
-		for E in [A for A in D.locations if not LocationList[A].constant]:A.append(E)
-	for F in range(len(A)-1,-1,-1):
-		C=A[F];B=LocationList[C];G=B.item;B.item=_A;Reset()
+	for E in PlaythroughLocations:
+		for F in [A for A in E.locations if not LocationList[A].constant]:A.append(F)
+	for G in range(len(A)-1,-1,-1):
+		C=A[G];B=LocationList[C];D=B.item
+		if D==Items.ProgressiveSlam:continue
+		B.item=_A;Reset()
 		if GetAccessibleLocations(settings,[],SearchMode.CheckBeatable):A.remove(C)
-		B.PlaceItem(G)
+		B.PlaceItem(D)
 	return A
 def RandomFill(itemsToPlace,validLocations):
 	'Randomly place given items in any location disregarding logic.';A=itemsToPlace;random.shuffle(A);B=[]
