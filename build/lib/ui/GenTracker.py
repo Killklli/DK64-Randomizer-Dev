@@ -8,7 +8,7 @@ def generateTracker(spoilerJson):
 		if M in C[D]:F.update(C[D][M])
 		if N in C[D]:F.update(C[D][N])
 		A+='<h3>Locations</h3>\n';A+=O;B=0
-		for (W,X) in F.items():A+=P;A+='<td id="loc_'+str(B)+H+W+I;A+='<td class="check-cell"><input id="itemCheck_'+str(B)+'" type="checkbox" onclick="showRow(\'item\', '+str(B)+Q;A+='<td id="item_'+str(B)+R+X+I;A+=S;B+=1
+		for (W,X) in F.items():A+=P;A+='<td id="loc_'+str(B)+H+str(W)+I;A+='<td class="check-cell"><input id="itemCheck_'+str(B)+'" type="checkbox" onclick="showRow(\'item\', '+str(B)+Q;A+='<td id="item_'+str(B)+R+str(X)+I;A+=S;B+=1
 		A+=T;A+='<input type="hidden" id="locCount" value="'+str(B)+H
 	else:A+='<input type="hidden" id="locCount" value="0">'
 	G={}
@@ -16,7 +16,7 @@ def generateTracker(spoilerJson):
 	if V in C:G.update(C[V])
 	if len(G)>0:
 		A+='<h3>Exits</h3>\n';A+=O;B=0
-		for (Y,Z) in G.items():A+=P;A+='<td id="front_'+str(B)+H+Y+I;A+='<td class="check-cell"><input id="backCheck_'+str(B)+'" type="checkbox" onclick="showRow(\'back\', '+str(B)+Q;A+='<td id="back_'+str(B)+R+Z+I;A+=S;B+=1
+		for (Y,Z) in G.items():A+=P;A+='<td id="front_'+str(B)+H+str(Y)+I;A+='<td class="check-cell"><input id="backCheck_'+str(B)+'" type="checkbox" onclick="showRow(\'back\', '+str(B)+Q;A+='<td id="back_'+str(B)+R+str(Z)+I;A+=S;B+=1
 		A+=T;A+='<input type="hidden" id="exitCount" value="'+str(B)+H
 	else:A+='<input type="hidden" id="exitCount" value="0">'
 	E=E[:K]+A+E[K:];return E
