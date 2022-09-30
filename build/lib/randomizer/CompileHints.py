@@ -192,23 +192,24 @@ def compileHints(spoiler):
 		A9=level_list_isles[a]
 		if A.settings.wrinkly_hints==_G:A9=random.choice(level_cryptic_isles[a])
 		i=[A for A in shop_owners if A in W][0];D=f"On the Way of the Hoard, {ItemList[N].name} is bought from {i} in {A9}.";Z[N].append(B.level);B.hint_type=HintType.MoveLocation;UpdateHint(B,D);f+=1
-	for G in range(hint_distribution[HintType.TroffNScoff]):
+	if hint_distribution[HintType.TroffNScoff]>0:
 		J=[]
 		for O in A.settings.krool_keys_required:
-			if O==Events.JapesKeyTurnedIn:J.append(Levels.JungleJapes)
-			if O==Events.AztecKeyTurnedIn:J.append(Levels.AngryAztec)
-			if O==Events.FactoryKeyTurnedIn:J.append(Levels.FranticFactory)
-			if O==Events.GalleonKeyTurnedIn:J.append(Levels.GloomyGalleon)
-			if O==Events.ForestKeyTurnedIn:J.append(Levels.FungiForest)
-			if O==Events.CavesKeyTurnedIn:J.append(Levels.CrystalCaves)
-			if O==Events.CastleKeyTurnedIn:J.append(Levels.CreepyCastle)
-		j=[]
-		while not any(j):B=getRandomHintLocation();j=[C for C in all_levels if C in J and(not K or A.settings.EntryGBs[C]>=A.settings.EntryGBs[B.level])]
-		I=random.choice(j);H=level_list[I]
-		if A.settings.wrinkly_hints==_G:H=random.choice(level_cryptic[I])
-		AA=A.settings.BossBananas[I];AB=_i
-		if AA==1:AB=_j
-		D=f"The barrier to the boss in {H} can be cleared by obtaining {AA} {AB}.";B.hint_type=HintType.TroffNScoff;UpdateHint(B,D)
+			if O==Events.JapesKeyTurnedIn:J.append(A.settings.level_order[1])
+			if O==Events.AztecKeyTurnedIn:J.append(A.settings.level_order[2])
+			if O==Events.FactoryKeyTurnedIn:J.append(A.settings.level_order[3])
+			if O==Events.GalleonKeyTurnedIn:J.append(A.settings.level_order[4])
+			if O==Events.ForestKeyTurnedIn:J.append(A.settings.level_order[5])
+			if O==Events.CavesKeyTurnedIn:J.append(A.settings.level_order[6])
+			if O==Events.CastleKeyTurnedIn:J.append(A.settings.level_order[7])
+		for G in range(hint_distribution[HintType.TroffNScoff]):
+			j=[]
+			while not any(j):B=getRandomHintLocation();j=[C for C in all_levels if C in J and(not K or A.settings.EntryGBs[C]>=A.settings.EntryGBs[B.level])]
+			I=random.choice(j);H=level_list[I]
+			if A.settings.wrinkly_hints==_G:H=random.choice(level_cryptic[I])
+			AA=A.settings.BossBananas[I];AB=_i
+			if AA==1:AB=_j
+			D=f"The barrier to the boss in {H} can be cleared by obtaining {AA} {AB}.";B.hint_type=HintType.TroffNScoff;UpdateHint(B,D)
 	if hint_distribution[HintType.Entrance]>0:
 		k=[Regions.JungleJapesMain,Regions.JapesBeyondFeatherGate,Regions.TinyHive,Regions.JapesLankyCave,Regions.Mine];l=[Regions.AngryAztecStart,Regions.AngryAztecMain];m=[Regions.FranticFactoryStart,Regions.ChunkyRoomPlatform,Regions.PowerHut,Regions.BeyondHatch,Regions.InsideCore];AS=[k,l,m,[Regions.BananaFairyRoom],[Regions.TrainingGrounds],[Regions.GloomyGalleonStart,Regions.LighthouseArea,Regions.Shipyard],[Regions.FungiForestStart,Regions.GiantMushroomArea,Regions.MushroomLowerExterior,Regions.MushroomNightExterior,Regions.MushroomUpperExterior,Regions.MillArea],[Regions.CrystalCavesMain,Regions.IglooArea,Regions.CabinArea],[Regions.CreepyCastleMain,Regions.CastleWaterfall],[Regions.LowerCave],[Regions.UpperCave]]
 		for G in range(hint_distribution[HintType.Entrance]):
