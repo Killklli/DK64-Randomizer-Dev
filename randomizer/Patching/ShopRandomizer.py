@@ -1,22 +1,11 @@
 'Place Shuffled Shops.'
-import math,struct,js
+import math,js
 from randomizer.Enums.Regions import Regions
 from randomizer.Lists.MapsAndExits import Maps
 from randomizer.Patching.Patcher import ROM
 from randomizer.ShuffleShopLocations import available_shops
 from randomizer.Spoiler import Spoiler
-def intf_to_float(intf):
-	'Convert float as int format to float.'
-	if intf==0:return 0
-	else:return struct.unpack('!f',bytes.fromhex(hex(intf)[2:]))[0]
-def float_to_hex(f):
-	'Convert float to hex.'
-	if f==0:return'0x00000000'
-	return hex(struct.unpack('<I',struct.pack('<f',f))[0])
-def ushort_to_short(ushort):
-	'Convert unsigned short to signed short.';A=ushort
-	if A>32767:return A-65536
-	return A
+from randomizer.Patching.Lib import float_to_hex,intf_to_float
 def ApplyShopRandomizer(spoiler):
 	'Write shop locations to ROM.';q='scale_factor';p='replace_zone';o='zone_index';n='model_index';m='pointing_to';l='entries';e=spoiler;d='angle_change';M='replace_model';C='big'
 	if e.settings.shuffle_shops:

@@ -9,18 +9,18 @@ async def initialize():
 	from pyodide_importer import register_hook as H
 	try:H('/')
 	except Exception:pass
-	from randomizer.Lists.Minigame import MinigameSelector as I;js.listeners=[];js.progression_presets=[];js.background_worker=None
+	from randomizer.Lists.Minigame import MinigameSelector as I;from randomizer.Lists.QoL import QoLSelector as J;from randomizer.Lists.EnemyTypes import EnemySelector as K;from randomizer.Enums.Types import ItemRandoSelector as L;js.listeners=[];js.progression_presets=[];js.background_worker=None
 	def B(file):A=js.getFile(file);return A
-	def J(template_name):A=int(round(time.time()*1000));return B('templates/'+f"{template_name}?currtime={A}")
-	K=int(round(time.time()*1000))
-	for L in json.loads(B(f"static/presets/preset_files.json?currtime={K}")).get('progression'):js.progression_presets.append(json.loads(B('static/presets/'+L)))
-	js.pointer_addresses=json.loads(js.getFile('./static/patches/pointer_addresses.json'));M=Environment(loader=FunctionLoader(J),enable_async=True);N=M.get_template('base.html.jinja2');O=await N.render(minigames=I);js.document.documentElement.innerHTML='';js.document.open();js.document.write(O);js.document.close()
+	def M(template_name):A=int(round(time.time()*1000));return B('templates/'+f"{template_name}?currtime={A}")
+	N=int(round(time.time()*1000))
+	for O in json.loads(B(f"static/presets/preset_files.json?currtime={N}")).get('progression'):js.progression_presets.append(json.loads(B('static/presets/'+O)))
+	js.pointer_addresses=json.loads(js.getFile('./static/patches/pointer_addresses.json'));P=Environment(loader=FunctionLoader(M),enable_async=True);Q=P.get_template('base.html.jinja2');R=await Q.render(minigames=I,misc_changes=J,enemies=K,itemRando=L);js.document.documentElement.innerHTML='';js.document.open();js.document.write(R);js.document.close()
 	try:
 		C=document.cookie
 		if C:
 			for D in C.split(';'):
-				if G in D:P=str(D).replace(G,'');break
-			E=json.loads(P)
+				if G in D:S=str(D).replace(G,'');break
+			E=json.loads(S)
 			for F in E:
 				try:document.getElementById(F).value=E[F]
 				except Exception:pass

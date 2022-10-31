@@ -1,13 +1,19 @@
 'Create complex images from in-game assets.'
-_I='56789.png'
-_H='01234.png'
-_G='image_list'
-_F='image'
-_E='assets/Non-Code/displays/'
-_D='assets/Non-Code/hash/'
-_C='RGBA'
-_B='crop'
-_A='num'
+_O='barrel'
+_N='orange'
+_M='pineapple'
+_L='coconut'
+_K='56789.png'
+_J='01234.png'
+_I='homing_crate'
+_H='image_list'
+_G='image'
+_F='assets/Non-Code/file_screen/'
+_E='assets/Non-Code/hash/'
+_D='assets/Non-Code/displays/'
+_C='crop'
+_B='num'
+_A='RGBA'
 import os,PIL
 from PIL import Image
 pre='../'
@@ -18,47 +24,42 @@ pre=''
 if last_part.upper()=='BUILD':pre='../'
 def getDir(directory):'Convert directory into the right format based on where the script is run.';return f"{pre}{directory}"
 print('Composing complex images')
-number_crop=[{_F:_H,_G:[{_A:0,_B:(0,0,20,24)},{_A:1,_B:(20,0,30,24)},{_A:2,_B:(30,0,45,24)},{_A:3,_B:(45,0,58,24)},{_A:4,_B:(58,0,76,24)}]},{_F:_I,_G:[{_A:5,_B:(0,0,14,24)},{_A:6,_B:(14,0,29,24)},{_A:7,_B:(29,0,43,24)},{_A:8,_B:(43,0,58,24)},{_A:9,_B:(58,0,76,24)}]}]
+number_crop=[{_G:_J,_H:[{_B:0,_C:(0,0,20,24)},{_B:1,_C:(20,0,30,24)},{_B:2,_C:(30,0,45,24)},{_B:3,_C:(45,0,58,24)},{_B:4,_C:(58,0,76,24)}]},{_G:_K,_H:[{_B:5,_C:(0,0,14,24)},{_B:6,_C:(14,0,29,24)},{_B:7,_C:(29,0,43,24)},{_B:8,_C:(43,0,58,24)},{_B:9,_C:(58,0,76,24)}]}]
 kongs=['dk','diddy','lanky','tiny','chunky']
-hash_dir=getDir(_D)
+hash_dir=getDir(_E)
 if not os.path.exists(hash_dir):os.mkdir(hash_dir)
-for file_info in number_crop:
-	for num_info in file_info[_G]:
-		key_num=num_info[_A]
-		if key_num>=1 and key_num<=8:
-			base_dir=getDir(_D)
-			if not os.path.exists(base_dir):os.mkdir(base_dir)
-			file_dir=f"{base_dir}{file_info[_F]}";key_dir=f"{base_dir}boss_key.png";num_im=Image.open(file_dir);key_im=Image.open(key_dir);key_im=key_im.rotate(45,PIL.Image.Resampling.NEAREST,expand=1);num_im=num_im.crop(num_info[_B]);Image.Image.paste(key_im,num_im,(40,10));bbox=key_im.getbbox();key_im=key_im.crop(bbox);key_im=key_im.resize((32,32));key_im.save(f"{getDir('assets/Non-Code/file_screen/key')}{key_num}.png")
 kong_res=32,32
 for kong in kongs:
-	base_dir=getDir(_E)
+	base_dir=getDir(_D)
 	if not os.path.exists(base_dir):os.mkdir(base_dir)
-	im=Image.new(mode=_C,size=(64,64))
+	im=Image.new(mode=_A,size=(64,64))
 	for x in range(2):
 		im1=Image.open(f"{hash_dir}{kong}_face_{x}.png");x_p=32*x
 		if kong in('dk','tiny'):x_p=32-x_p
 		Image.Image.paste(im,im1,(x_p,0))
 	im=im.resize(kong_res);im.save(f"{base_dir}{kong}_face.png")
-im=Image.new(mode=_C,size=(64,64))
+im=Image.new(mode=_A,size=(64,64))
 shared_x_move=[4,16,30,10,26]
 shared_y_move=[0,0,0,23,23]
 kong_z_order=[0,1,2,3,4]
-disp_dir=getDir(_E)
+disp_dir=getDir(_D)
 for x in range(5):kong_index=kong_z_order[x];im1=Image.open(f"{disp_dir}{kongs[kong_index]}_face.png");im.paste(im1,(shared_x_move[kong_index],shared_y_move[kong_index]),im1)
 bbox=im.getbbox()
 im=im.crop(bbox)
 im=im.resize(kong_res)
 im.save(f"{disp_dir}shared.png")
-im=Image.new(mode=_C,size=kong_res)
+im=Image.new(mode=_A,size=kong_res)
 im.save(f"{disp_dir}none.png")
-im=Image.new(mode=_C,size=(44,44))
+im=Image.new(mode=_A,size=(44,44))
 im.save(f"{disp_dir}empty44.png")
-im=Image.new(mode=_C,size=(32,64))
+im=Image.new(mode=_A,size=(32,64))
 im.save(f"{disp_dir}empty3264.png")
+im=Image.new(mode=_A,size=(1,1))
+im.save(f"{disp_dir}empty11.png")
 im=Image.open(f"{disp_dir}soldout_bismuth.png")
 im_height=26
 im=im.resize((32,im_height))
-im1=Image.new(mode=_C,size=(32,32))
+im1=Image.new(mode=_A,size=(32,32))
 Image.Image.paste(im1,im,(0,int((32-im_height)/2)))
 im1.save(f"{disp_dir}soldout32.png")
 im=Image.open(f"{hash_dir}specialchars.png")
@@ -72,20 +73,20 @@ scale=imhb/imh
 imw=int(imw*scale)
 im=im.resize((imw,imhb))
 im1=Image.open(f"{hash_dir}WXYL.png")
-im2=Image.new(mode=_C,size=(32,32))
+im2=Image.new(mode=_A,size=(32,32))
 Image.Image.paste(im1,im2,(61,0))
 Image.Image.paste(im1,im,(65,1))
 im1.save(f"{disp_dir}wxys.png")
 for idx in range(2):
-	im=Image.open(f"{hash_dir}red_qmark_{idx}.png");im_hsv=im.convert('HSV');H,S,V=im_hsv.split();H=H.point(lambda p:p+40 if p<10 else p);im_hsv=Image.merge('HSV',(H,S,V));im_rgb=im_hsv.convert(_C);pix_alpha=im.load();imw,imh=im.size;pix_hsv=im_rgb.load();im_new=Image.new(mode=_C,size=(imw,imh));pix_new=im_new.load()
+	im=Image.open(f"{hash_dir}red_qmark_{idx}.png");im_hsv=im.convert('HSV');H,S,V=im_hsv.split();H=H.point(lambda p:p+40 if p<10 else p);im_hsv=Image.merge('HSV',(H,S,V));im_rgb=im_hsv.convert(_A);pix_alpha=im.load();imw,imh=im.size;pix_hsv=im_rgb.load();im_new=Image.new(mode=_A,size=(imw,imh));pix_new=im_new.load()
 	for x in range(imw):
 		for y in range(imh):r,g,b,a=im.getpixel((x,y));r2,g2,b2,a2=im_rgb.getpixel((x,y));pix_new[(x,y)]=r2,g2,b2,a
 	im_new.save(f"{disp_dir}yellow_qmark_{idx}.png")
-crate_names=['standard_crate','homing_crate']
+crate_names=['standard_crate',_I]
 for crate in crate_names:
-	base_dir=getDir(_E)
+	base_dir=getDir(_D)
 	if not os.path.exists(base_dir):os.mkdir(base_dir)
-	im=Image.new(mode=_C,size=(64,64));crate_r_offset=0
+	im=Image.new(mode=_A,size=(64,64));crate_r_offset=0
 	for x in range(2):
 		im1=Image.open(f"{hash_dir}{crate}_{x}.png");x_p=32*x;y_p=0
 		if x==1:y_p=crate_r_offset
@@ -94,8 +95,8 @@ for crate in crate_names:
 lit=['num_6_lit','num_1_lit']
 unlit=['num_6_unlit','num_1_unlit']
 num_types=[lit,unlit]
-base_dir=getDir(_E)
-hash_dir=getDir(_D)
+base_dir=getDir(_D)
+hash_dir=getDir(_E)
 for num_type in num_types:
 	number=num_type[0];line_num=num_type[1]
 	if not os.path.exists(base_dir):os.mkdir(base_dir)
@@ -104,8 +105,56 @@ lit=['num_9_lit','num_7_lit']
 unlit=['num_9_unlit','num_7_unlit']
 num_types=[lit,unlit]
 for num_type in num_types:number=num_type[0];line_num=num_type[1];line_im=Image.open(f"{hash_dir}{line_num}.png");line=line_im.crop((10,23,22,26));num_im=Image.open(f"{hash_dir}{number}.png");line_y=1;num_im.paste(line,(7,line_y),line);num_im.paste(line,(14,line_y),line);num_im.save(f"{base_dir}{number}.png")
-rmve=[_H,_I,'boss_key.png','WXYL.png','specialchars.png','red_qmark_0.png','red_qmark_1.png']
+tracker_im=Image.new(mode=_A,size=(254,128))
+instruments='bongos','guitar','trombone','sax','triangle'
+pellets=_L,'peanut','grape','feather',_M
+extra_moves='film','shockwave','slam',_I,'sniper'
+training_moves='swim',_N,_O,'vine'
+kong_submoves='_move','pad',_O
+dim=20
+gap=int(dim*1.1)
+small_gap=int(dim*0.8)
+for (ins_index,instrument) in enumerate(instruments):ins_im=Image.open(f"{hash_dir}{instrument}.png");ins_im=ins_im.resize((dim,dim));tracker_im.paste(ins_im,(gap*ins_index,gap),ins_im)
+for (pel_index,pellet) in enumerate(pellets):
+	pel_im=Image.open(f"{hash_dir}{pellet}.png")
+	if pellet==_M:pel_im=pel_im.resize((dim,int(dim*1.5)))
+	elif pellet==_L:pel_im=pel_im.resize((dim,int(dim*1.275)))
+	else:pel_im=pel_im.resize((dim,dim))
+	tracker_im.paste(pel_im,(gap*pel_index,0),pel_im)
+for (kong_index,kong) in enumerate(kongs):
+	for (sub_index,sub) in enumerate(kong_submoves):move_im=Image.open(f"{getDir(_F)}tracker_images/{kong}{sub}.png");move_im=move_im.resize((dim,dim));tracker_im.paste(move_im,(gap*kong_index,(sub_index+2)*gap),move_im)
+for (move_index,move) in enumerate(extra_moves):
+	if move in _I:move_im=Image.open(f"{base_dir}{move}.png")
+	elif move in'film':move_im=Image.open(f"{hash_dir}{move}.png")
+	else:move_im=Image.open(f"{getDir(_F)}tracker_images/{move}.png")
+	move_im=move_im.resize((dim,dim));tracker_im.paste(move_im,(6*gap,move_index*gap),move_im)
+for (move_index,move) in enumerate(training_moves):
+	if move in _N:move_im=Image.open(f"{hash_dir}{move}.png")
+	else:move_im=Image.open(f"{getDir(_F)}tracker_images/{move}.png")
+	move_im=move_im.resize((dim,dim));tracker_im.paste(move_im,(move_index*gap,128-dim),move_im)
+for file_info in number_crop:
+	for num_info in file_info[_H]:
+		key_num=num_info[_B]
+		if key_num>=1 and key_num<=8:
+			base_dir=getDir(_E)
+			if not os.path.exists(base_dir):os.mkdir(base_dir)
+			file_dir=f"{base_dir}{file_info[_G]}";key_dir=f"{base_dir}boss_key.png";num_im=Image.open(file_dir);key_im=Image.open(key_dir);num_im=num_im.crop(num_info[_C]);num_w,num_h=num_im.size;targ_h=36;num_im_scale=targ_h/num_h;new_w=int(num_w*num_im_scale);num_im=num_im.resize((new_w,targ_h));key_im.paste(num_im,(targ_h-num_w-[5,0,2,-2,0,-1,0,-1][key_num-1],2),num_im);key_im=key_im.resize((20,20));key_im.save(f"{getDir('assets/Non-Code/file_screen/key')}{key_num}.png");tracker_im.paste(key_im,(249-small_gap*(9-key_num),128-dim),key_im)
+for melon in range(3):melon_im=Image.open(f"{hash_dir}melon.png");melon_im=melon_im.resize((dim,dim));tracker_im.paste(melon_im,(200-small_gap*melon,0),melon_im)
+prog_offset=218
+for (p_i,progressive) in enumerate([f"{hash_dir}headphones.png",f"{disp_dir}standard_crate.png"]):prog_im=Image.open(progressive);prog_im=prog_im.resize((dim,dim));tracker_im.paste(prog_im,(prog_offset,gap+p_i*gap),prog_im);num_im=Image.open(f"{hash_dir}01234.png");num_im=num_im.crop((30,0,45,24));num_w,num_h=num_im.size;num_size=15;num_scale=num_size/num_h;new_w=int(num_w*num_scale);num_im=num_im.resize((new_w,num_size));tracker_im.paste(num_im,(prog_offset+[22,17][p_i],int(gap+3+p_i*small_gap*1.2)),num_im)
+tracker_im.save(f"{getDir(_F)}tracker.png")
+for coin in ('nin_coin','rw_coin'):loc=f"{hash_dir}{coin}.png";coin_im=Image.open(loc);coin_im=coin_im.crop((2,0,28,31));coin_im=coin_im.transpose(Image.Transpose.FLIP_TOP_BOTTOM);coin_im=coin_im.resize((64,64));coin_im_0=coin_im.crop((0,0,32,64));coin_im_1=coin_im.crop((32,0,64,64));coin_im_0.save(f"{hash_dir}{coin}_0.png");coin_im_1.save(f"{hash_dir}{coin}_1.png")
+side_im=Image.open(f"{hash_dir}special_coin_side.png")
+side_im=side_im.crop((17,3,25,19))
+side_im=side_im.resize((32,16))
+side_im=side_im.rotate(90,PIL.Image.Resampling.NEAREST,expand=1)
+side_im.save(f"{hash_dir}modified_coin_side.png")
+krusha_im=Image.open(f"{getDir(_D)}krusha_head.png")
+krusha_im=krusha_im.resize((64,64))
+krusha_im=krusha_im.transpose(Image.Transpose.FLIP_TOP_BOTTOM)
+krusha_im.save(f"{getDir(_D)}krusha_head64.png")
+rmve=[_J,_K,'boss_key.png','WXYL.png','specialchars.png','red_qmark_0.png','red_qmark_1.png','headphones.png','film.png','melon.png']
 for kong in kongs:
 	for x in range(2):rmve.append(f"{kong}_face_{x}.png")
 for x in rmve:
-	if os.path.exists(f"{getDir(_D)}{x}"):os.remove(f"{getDir(_D)}{x}")
+	if os.path.exists(f"{getDir(_E)}{x}"):os.remove(f"{getDir(_E)}{x}")

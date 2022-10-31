@@ -5,27 +5,39 @@ from randomizer.Lists.Warps import BananaportVanilla
 from randomizer.Patching.Patcher import ROM
 from randomizer.Spoiler import Spoiler
 def randomize_bananaport(spoiler):
-	'Rando write bananaport locations.';V='idx';U='scale';K=spoiler;C='big';L=[532,531,529,530,528]
-	if K.settings.bananaport_rando:
-		for M in K.bananaport_replacements:
-			B={};G=int(M['containing_map']);H=js.pointer_addresses[9]['entries'][G]['pointing_to'];ROM().seek(H);W=int.from_bytes(ROM().readBytes(4),C)
-			for N in range(W):
-				A=H+4+N*48;ROM().seek(A+40);O=int.from_bytes(ROM().readBytes(2),C)
-				if O in L:
-					g=L.index(O);ROM().seek(A+42);P=int.from_bytes(ROM().readBytes(2),C);ROM().seek(A+0);X=int.from_bytes(ROM().readBytes(4),C);ROM().seek(A+4);Y=int.from_bytes(ROM().readBytes(4),C);ROM().seek(A+8);Z=int.from_bytes(ROM().readBytes(4),C);ROM().seek(A+12);a=int.from_bytes(ROM().readBytes(4),C);ROM().seek(A+24);b=int.from_bytes(ROM().readBytes(4),C);ROM().seek(A+28);c=int.from_bytes(ROM().readBytes(4),C);ROM().seek(A+32);d=int.from_bytes(ROM().readBytes(4),C);Q=False
-					for I in BananaportVanilla.values():
-						if I.map_id==G and I.obj_id_vanilla==P and I.locked:Q=True
-					if not Q:B[P]={'x':X,'y':Y,'z':Z,U:a,'rx':b,'ry':c,'rz':d,V:N}
-			for R in M['pads']:
-				e=R['warp_index']
-				for (S,D) in enumerate(R['warp_ids']):
-					J=0;T=[];F=-1
-					for E in BananaportVanilla.values():
-						if E.map_id==G and E.vanilla_warp==e and F==-1:
-							T.append(E.locked)
-							if S==J and not E.locked or S==0 and J==1 and T[0]and not E.locked:F=E.obj_id_vanilla
-							J+=1
-					if F!=-1:
-						if F in B and D in B:f=B[F][V];A=H+48*f+4;ROM().seek(A);ROM().writeMultipleBytes(B[D]['x'],4);ROM().writeMultipleBytes(B[D]['y'],4);ROM().writeMultipleBytes(B[D]['z'],4);ROM().writeMultipleBytes(B[D][U],4);ROM().seek(A+24);ROM().writeMultipleBytes(B[D]['rx'],4);ROM().writeMultipleBytes(B[D]['ry'],4);ROM().writeMultipleBytes(B[D]['rz'],4)
+	'Rando write bananaport locations.';d='idx';c='scale';b='pointing_to';a='entries';J=spoiler;B='big';L=[532,531,529,530,528]
+	if J.settings.bananaport_rando=='in_level':
+		for S in J.bananaport_replacements:
+			C={};E=int(S['containing_map']);F=js.pointer_addresses[9][a][E][b];ROM().seek(F);M=int.from_bytes(ROM().readBytes(4),B)
+			for K in range(M):
+				A=F+4+K*48;ROM().seek(A+40);T=int.from_bytes(ROM().readBytes(2),B)
+				if T in L:
+					p=L.index(T);ROM().seek(A+42);G=int.from_bytes(ROM().readBytes(2),B);ROM().seek(A+0);e=int.from_bytes(ROM().readBytes(4),B);ROM().seek(A+4);f=int.from_bytes(ROM().readBytes(4),B);ROM().seek(A+8);g=int.from_bytes(ROM().readBytes(4),B);ROM().seek(A+12);h=int.from_bytes(ROM().readBytes(4),B);ROM().seek(A+24);i=int.from_bytes(ROM().readBytes(4),B);ROM().seek(A+28);j=int.from_bytes(ROM().readBytes(4),B);ROM().seek(A+32);k=int.from_bytes(ROM().readBytes(4),B);U=False
+					for N in BananaportVanilla.values():
+						if N.map_id==E and N.obj_id_vanilla==G and N.locked:U=True
+					if not U:C[G]={'x':e,'y':f,'z':g,c:h,'rx':i,'ry':j,'rz':k,d:K}
+			for V in S['pads']:
+				l=V['warp_index']
+				for (W,D) in enumerate(V['warp_ids']):
+					O=0;X=[];I=-1
+					for H in BananaportVanilla.values():
+						if H.map_id==E and H.vanilla_warp==l and I==-1:
+							X.append(H.locked)
+							if W==O and not H.locked or W==0 and O==1 and X[0]and not H.locked:I=H.obj_id_vanilla
+							O+=1
+					if I!=-1:
+						if I in C and D in C:m=C[I][d];A=F+48*m+4;ROM().seek(A);ROM().writeMultipleBytes(C[D]['x'],4);ROM().writeMultipleBytes(C[D]['y'],4);ROM().writeMultipleBytes(C[D]['z'],4);ROM().writeMultipleBytes(C[D][c],4);ROM().seek(A+24);ROM().writeMultipleBytes(C[D]['rx'],4);ROM().writeMultipleBytes(C[D]['ry'],4);ROM().writeMultipleBytes(C[D]['rz'],4)
 						else:print('ERROR: ID not found in pad location dump')
 					else:print('ERROR: Vanilla ID not found')
+	elif J.settings.bananaport_rando in('crossmap_coupled','crossmap_decoupled'):
+		n=33488896;Y=[];P=[]
+		for (o,Z) in enumerate(J.bananaport_replacements):
+			ROM().seek(n+o*10);Q=int.from_bytes(ROM().readBytes(1),B);ROM().writeMultipleBytes(Z[0],1);G=int.from_bytes(ROM().readBytes(2),B)
+			if Q not in P:P.append(Q)
+			Y.append([Q,G,Z[1]])
+		for E in P:
+			F=js.pointer_addresses[9][a][E][b];ROM().seek(F);M=int.from_bytes(ROM().readBytes(4),B)
+			for K in range(M):
+				A=F+4+K*48;ROM().seek(A+42);G=int.from_bytes(ROM().readBytes(2),B)
+				for R in Y:
+					if R[0]==E and R[1]==G:ROM().seek(A+40);ROM().writeMultipleBytes(L[R[2]],2)

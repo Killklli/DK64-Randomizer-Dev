@@ -94,10 +94,15 @@ def ShuffleLevelExits(settings,newLevelOrder=_A):
 	settings.level_order=G
 def ShuffleLevelOrderWithRestrictions(settings):
 	'Determine level order given starting kong and the need to find more kongs along the way.';A=settings
-	if A.starting_kongs_count==1:B=ShuffleLevelOrderForOneStartingKong(A)
+	if A.hard_level_progression:B=ShuffleLevelOrderUnrestricted(A)
+	elif A.starting_kongs_count==1:B=ShuffleLevelOrderForOneStartingKong(A)
 	else:B=ShuffleLevelOrderForMultipleStartingKongs(A)
 	if _A in B.values():raise Ex.EntrancePlacementException('Invalid level order with fewer than the 7 required main levels.')
 	ShuffleLevelExits(A,B)
+def ShuffleLevelOrderUnrestricted(settings):
+	'Shuffle the level order without Kong placement restrictions.';B={1:_A,2:_A,3:_A,4:_A,5:_A,6:_A,7:_A};A=[Levels.JungleJapes,Levels.AngryAztec,Levels.FranticFactory,Levels.GloomyGalleon,Levels.FungiForest,Levels.CrystalCaves,Levels.CreepyCastle];random.shuffle(A)
+	for C in range(len(A)):B[C+1]=A[C]
+	return B
 def ShuffleLevelOrderForOneStartingKong(settings):
 	'Determine level order given only starting with one kong and the need to find more kongs along the way.';J='free';C=settings;A={1,2,3,4,5,6,7}
 	if C.starting_kong==Kongs.diddy:D=random.randint(1,4)

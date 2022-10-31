@@ -18,7 +18,7 @@ from randomizer.SettingStrings import decrypt_setting_string,encrypt_settings_st
 from randomizer.Worker import background
 from ui.bindings import bind
 from ui.progress_bar import ProgressBar
-from ui.rando_options import disable_barrel_modal,disable_colors,disable_music,disable_prices,max_randomized_blocker,max_randomized_troff,toggle_b_locker_boxes,toggle_counts_boxes,update_boss_required
+from ui.rando_options import disable_barrel_modal,disable_colors,disable_music,disable_move_shuffles,max_randomized_blocker,max_randomized_troff,toggle_b_locker_boxes,toggle_counts_boxes,update_boss_required
 @bind(_E,'export_settings')
 def export_settings_string(event):'Click event for exporting settings to a string.\n\n    Args:\n        event (event): Javascript event object.\n    ';A=serialize_settings();B=encrypt_settings_string(A);js.settings_string.value=B
 @bind(_E,'import_settings')
@@ -40,7 +40,7 @@ def import_settings_string(event):
 					else:js.jq(f"#{A}").val(B[A])
 					js.jq(f"#{A}").removeAttr(_F)
 			except Exception as F:pass
-		toggle_counts_boxes(_B);toggle_b_locker_boxes(_B);update_boss_required(_B);disable_colors(_B);disable_music(_B);disable_prices(_B);max_randomized_blocker(_B);max_randomized_troff(_B);disable_barrel_modal(_B)
+		toggle_counts_boxes(_B);toggle_b_locker_boxes(_B);update_boss_required(_B);disable_colors(_B);disable_music(_B);disable_move_shuffles(_B);max_randomized_blocker(_B);max_randomized_troff(_B);disable_barrel_modal(_B)
 	except Exception:pass
 @bind('change',_D)
 def lanky_file_changed(event):

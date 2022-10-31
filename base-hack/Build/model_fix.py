@@ -4,7 +4,7 @@ _D='add'
 _C='wipe'
 _B='model_index'
 _A='model_file'
-import zlib
+import zlib,os
 rom_file='rom/dk64.z64'
 pointer_offset=1055824
 diddy_fix='\n    E7 00 00 00 00 00 00 00\n    FC 12 18 24 FF 33 FF FF\n    D7 00 00 02 08 00 08 00\n    FD 10 00 00 0E 00 00 00\n    E6 00 00 00 00 00 00 00\n    F3 00 00 00 07 3F F1 00\n    E7 00 00 00 00 00 00 00\n    E3 00 10 01 00 00 00 00\n    D9 FF FF FF 00 04 00 00\n    DA 38 00 03 04 00 00 40\n'
@@ -15,7 +15,9 @@ lanky_fix4='\n    FC 12 18 24 FF 33 FF FF\n'
 lanky_fix5='\n    00 00 0E 69\n'
 dk_adjustment='\n    17 7D\n'
 tiny_adjustment='\n    17 7E\n'
-modifications=[{_B:0,_A:'diddy_base.bin',_C:[[18384,18552]],_D:[diddy_fix]},{_B:1,_A:'diddy_ins.bin',_C:[[17816,17952]],_D:[diddy_fix]},{_B:5,_A:'lanky_base.bin',_C:[[20996,21000],[21532,21536],[22220,22224]],_D:[lanky_fix5,lanky_fix5,lanky_fix5]},{_B:6,_A:'lanky_ins.bin',_C:[[23532,23536],[24228,24232],[22860,22864],[24556,24560]],_D:[lanky_fix5,lanky_fix5,lanky_fix5,lanky_fix5]},{_B:3,_A:'dk_base.bin',_C:[[24994,24996]],_D:[dk_adjustment]},{_B:8,_A:'tiny_base.bin',_C:[[25556,25558]],_D:[tiny_adjustment]},{_B:9,_A:'tiny_ins.bin',_C:[[26524,26526]],_D:[tiny_adjustment]}]
+krusha_adjustment_0='\n    13 6B\n'
+krusha_adjustment_1='\n    13 66\n'
+modifications=[{_B:0,_A:'diddy_base.bin',_C:[[18384,18552]],_D:[diddy_fix]},{_B:1,_A:'diddy_ins.bin',_C:[[17816,17952]],_D:[diddy_fix]},{_B:5,_A:'lanky_base.bin',_C:[[20996,21000],[21532,21536],[22220,22224]],_D:[lanky_fix5,lanky_fix5,lanky_fix5]},{_B:6,_A:'lanky_ins.bin',_C:[[23532,23536],[24228,24232],[22860,22864],[24556,24560]],_D:[lanky_fix5,lanky_fix5,lanky_fix5,lanky_fix5]},{_B:3,_A:'dk_base.bin',_C:[[24994,24996]],_D:[dk_adjustment]},{_B:8,_A:'tiny_base.bin',_C:[[25556,25558]],_D:[tiny_adjustment]},{_B:9,_A:'tiny_ins.bin',_C:[[26524,26526]],_D:[tiny_adjustment]},{_B:218,_A:'krusha_base.bin',_C:[[11926,11928],[14942,14944],[12582,12584],[13646,13648],[14334,14336],[16870,16872]],_D:[krusha_adjustment_0,krusha_adjustment_0,krusha_adjustment_1,krusha_adjustment_1,krusha_adjustment_1,krusha_adjustment_1]}]
 with open(rom_file,'rb')as rom:
 	rom.seek(pointer_offset+5*4);actor_table=pointer_offset+int.from_bytes(rom.read(4),_E)
 	for model in modifications:

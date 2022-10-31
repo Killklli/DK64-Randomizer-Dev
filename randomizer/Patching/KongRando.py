@@ -1,7 +1,5 @@
 'Apply cosmetic elements of Kong Rando.'
-import random
-from imp import source_from_cache
-import js
+import random,js
 from randomizer.Enums.Kongs import Kongs
 from randomizer.Lists.EnemyTypes import Enemies
 from randomizer.Patching.Patcher import ROM

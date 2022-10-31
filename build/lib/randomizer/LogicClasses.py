@@ -6,7 +6,6 @@ from randomizer.Enums.Kongs import Kongs
 from randomizer.Enums.Levels import Levels
 from randomizer.Enums.Regions import Regions
 from randomizer.Enums.Time import Time
-from randomizer.Enums.Transitions import Transitions
 class LocationLogic:
 	'Logic for a location.'
 	def __init__(A,id,logic,bonusBarrel=_C):'Initialize with given parameters.';A.id=id;A.logic=logic;A.bonusBarrel=bonusBarrel
@@ -63,4 +62,4 @@ class TransitionFront:
 	def __init__(A,dest,logic,exitShuffleId=_C,assumed=_A,time=Time.Both):'Initialize with given parameters.';A.dest=dest;A.logic=logic;A.exitShuffleId=exitShuffleId;A.time=time;A.assumed=assumed
 class Sphere:
 	"A randomizer concept often used in spoiler logs.\n\n    A 'sphere' is a collection of locations and items that are accessible\n    or obtainable with only the items available from earlier, smaller spheres.\n    Sphere 0 items are what you start with in a seed, sphere 1 items can be\n    obtained with those items, sphere 2 items can be obtained with sphere 0\n    and sphere 1 items, and so on.\n    "
-	def __init__(A):'Initialize with given parameters.';A.availableGBs=0;A.locations=[]
+	def __init__(A):'Initialize with given parameters.';A.seedBeaten=_A;A.availableGBs=0;A.locations=[]

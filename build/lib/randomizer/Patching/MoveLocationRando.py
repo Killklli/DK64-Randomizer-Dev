@@ -17,12 +17,15 @@ diddy_candymoves=[]
 lanky_candymoves=[]
 tiny_candymoves=[]
 chunky_candymoves=[]
+def writeMoveDataToROM(arr):
+	'Write move data to ROM.';F='price';C='flag';B='move_type'
+	for A in arr:
+		if A[B]==C:
+			D={'dive':386,'orange':388,'barrel':389,'vine':387,'camera':765,'shockwave':377,'camera_shockwave':65534};E=65535
+			if A[C]in D:E=D[A[C]]
+			ROM().writeMultipleBytes(5<<5,1);ROM().writeMultipleBytes(A[F],1);ROM().writeMultipleBytes(E,2)
+		elif A[B]is None:ROM().writeMultipleBytes(7<<5,1);ROM().writeMultipleBytes(0,1);ROM().writeMultipleBytes(65535,2)
+		else:G=['special','slam','gun','ammo_belt','instrument'];H=G.index(A[B])<<5|A['move_lvl']<<3|A['move_kong'];ROM().writeMultipleBytes(H,1);ROM().writeMultipleBytes(A[F],1);ROM().writeMultipleBytes(65535,2)
 def randomize_moves(spoiler):
-	'Randomize Move locations based on move_data from spoiler.';B=spoiler;F=B.settings.rom_data
-	if B.settings.shuffle_items=='moves'and B.move_data is not None:
-		A=B.move_data.copy()
-		for C in range(3):
-			for D in range(5):
-				for E in range(8):
-					if A[C][D][E]==-1:G=5;A[C][D][E]=G<<5
-		H=A[0][0];I=A[0][1];J=A[0][2];K=A[0][3];L=A[0][4];M=A[1][0];N=A[1][1];O=A[1][2];P=A[1][3];Q=A[1][4];R=A[2][0];S=A[2][1];T=A[2][2];U=A[2][3];V=A[2][4];ROM().seek(F+moveRandoOffset);ROM().write(1);ROM().writeBytes(bytearray(H));ROM().writeBytes(bytearray(I));ROM().writeBytes(bytearray(J));ROM().writeBytes(bytearray(K));ROM().writeBytes(bytearray(L));ROM().writeBytes(bytearray(M));ROM().writeBytes(bytearray(N));ROM().writeBytes(bytearray(O));ROM().writeBytes(bytearray(P));ROM().writeBytes(bytearray(Q));ROM().writeBytes(bytearray(R));ROM().writeBytes(bytearray(S));ROM().writeBytes(bytearray(T));ROM().writeBytes(bytearray(U));ROM().writeBytes(bytearray(V))
+	'Randomize Move locations based on move_data from spoiler.';B=spoiler;C=B.settings.rom_data;D=B.settings.move_location_data
+	if B.settings.move_rando not in('off','starts_with')and B.move_data is not None:A=B.move_data.copy();E=A[0][0][0];F=A[0][0][1];G=A[0][0][2];H=A[0][0][3];I=A[0][0][4];J=A[0][1][0];K=A[0][1][1];L=A[0][1][2];M=A[0][1][3];N=A[0][1][4];O=A[0][2][0];P=A[0][2][1];Q=A[0][2][2];R=A[0][2][3];S=A[0][2][4];T=A[1];U=A[2];ROM().seek(C+moveRandoOffset);ROM().write(1);ROM().seek(D);writeMoveDataToROM(E);writeMoveDataToROM(F);writeMoveDataToROM(G);writeMoveDataToROM(H);writeMoveDataToROM(I);writeMoveDataToROM(J);writeMoveDataToROM(K);writeMoveDataToROM(L);writeMoveDataToROM(M);writeMoveDataToROM(N);writeMoveDataToROM(O);writeMoveDataToROM(P);writeMoveDataToROM(Q);writeMoveDataToROM(R);writeMoveDataToROM(S);writeMoveDataToROM(T);writeMoveDataToROM(U)

@@ -40,33 +40,41 @@ def ShuffleKKOPhaseOrder(settings):
 	for C in range(3):B.append(A[C])
 	return B.copy()
 def ShuffleBossesBasedOnOwnedItems(settings,ownedKongs,ownedMoves):
-	'Perform Boss Location & Boss Kong rando, ensuring each first boss can be beaten with an unlocked kong and owned moves.';I=ownedMoves;B=ownedKongs;A=settings
+	'Perform Boss Location & Boss Kong rando, ensuring each first boss can be beaten with an unlocked kong and owned moves.';b='Dogadon 2';M=ownedMoves;B=ownedKongs;A=settings
 	try:
-		F={0,1,2,3,4,5,6};J='Dogadon 2';M=[A for A in F if Kongs.chunky in B[A]and Items.HunkyChunky in I[A]]
-		if not A.kong_rando and not A.boss_location_rando and 4 not in M:raise ItemPlacementException('Items not placed to allow vanilla Dogadon 2.')
-		N=random.choice(M);O=Kongs.chunky;F.remove(N);J='Mad Jack'
+		G={0,1,2,3,4,5,6};H=[A for A in G if Kongs.chunky in B[A]and Items.HunkyChunky in M[A]]
+		if not A.kong_rando and not A.boss_location_rando and 4 not in H:raise ItemPlacementException('Items not placed to allow vanilla Dogadon 2.')
+		if A.hard_bosses:I=[A for A in G if Kongs.donkey in B[A]or Kongs.chunky in B[A]or Kongs.tiny in B[A]and Items.PonyTailTwirl in M[A]]
+		else:I=[A for A in G if Kongs.tiny in B[A]and Items.PonyTailTwirl in M[A]]
+		K=None;N=b
+		if len(H)<len(I):
+			L=random.choice(H);K=Kongs.chunky
+			if L in I:I.remove(L)
+		N='Mad Jack'
 		if A.hard_bosses:
-			K=[A for A in F if Kongs.donkey in B[A]or Kongs.chunky in B[A]or Kongs.tiny in B[A]and Items.PonyTailTwirl in I[A]];G=random.choice(K);P=set(B[G]).intersection({Kongs.donkey,Kongs.chunky})
-			if Kongs.tiny in B[G]and Items.PonyTailTwirl in I[G]:P.add(Kongs.tiny)
-			L=random.choice(list(P))
-		else:K=[A for A in F if Kongs.tiny in B[A]and Items.PonyTailTwirl in I[A]];G=random.choice(K);L=Kongs.tiny
-		F.remove(G);J='the easy bosses to place (if this breaks here something REALLY strange happened)';H=list(F);random.shuffle(H);Q=H.pop();R=random.choice(B[Q]);S=H.pop();T=random.choice(B[S]);U=H.pop();V=random.choice(B[U]);W=H.pop();X=random.choice(B[W]);Y=H.pop();Z=random.choice(B[Y]);C=[];D=[]
-		for E in range(0,7):
-			if E==U:C.append(Maps.JapesBoss);D.append(V)
-			elif E==W:C.append(Maps.AztecBoss);D.append(X)
-			elif E==G:C.append(Maps.FactoryBoss);D.append(L)
-			elif E==Q:C.append(Maps.GalleonBoss);D.append(R)
-			elif E==N:C.append(Maps.FungiBoss);D.append(O)
-			elif E==S:C.append(Maps.CavesBoss);D.append(T)
-			elif E==Y:C.append(Maps.CastleBoss);D.append(Z)
+			D=random.choice(I);Q=set(B[D]).intersection({Kongs.donkey,Kongs.chunky})
+			if Kongs.tiny in B[D]and Items.PonyTailTwirl in M[D]:Q.add(Kongs.tiny)
+			O=random.choice(list(Q))
+		else:D=random.choice(I);O=Kongs.tiny
+		if D in H:H.remove(D)
+		if K is None:N=b;L=random.choice(H);K=Kongs.chunky
+		G.remove(L);G.remove(D);N='the easy bosses to place (if this breaks here something REALLY strange happened)';J=list(G);random.shuffle(J);R=J.pop();S=random.choice(B[R]);T=J.pop();U=random.choice(B[T]);V=J.pop();W=random.choice(B[V]);X=J.pop();Y=random.choice(B[X]);Z=J.pop();a=random.choice(B[Z]);C=[];E=[]
+		for F in range(0,7):
+			if F==V:C.append(Maps.JapesBoss);E.append(W)
+			elif F==X:C.append(Maps.AztecBoss);E.append(Y)
+			elif F==D:C.append(Maps.FactoryBoss);E.append(O)
+			elif F==R:C.append(Maps.GalleonBoss);E.append(S)
+			elif F==L:C.append(Maps.FungiBoss);E.append(K)
+			elif F==T:C.append(Maps.CavesBoss);E.append(U)
+			elif F==Z:C.append(Maps.CastleBoss);E.append(a)
 		if len(C)<7:raise FillException('Invalid boss order with fewer than the 7 required main levels.')
-	except Exception as a:
-		if'index out of range'in a.args[0]:raise BossOutOfLocationsException('No valid locations to place '+J)
-		raise FillException(a)
+	except Exception as P:
+		if isinstance(P.args[0],str)and'index out of range'in P.args[0]:raise BossOutOfLocationsException('No valid locations to place '+N)
+		raise FillException(P)
 	if A.kong_rando or A.boss_location_rando:A.boss_maps=C
 	else:A.boss_maps=BossMapList.copy()
 	if A.kong_rando or A.boss_kong_rando:
-		if not A.boss_location_rando:A.boss_kongs=[V,X,L,R,O,T,Z]
-		else:A.boss_kongs=D
+		if not A.boss_location_rando:A.boss_kongs=[W,Y,O,S,K,U,a]
+		else:A.boss_kongs=E
 	else:A.boss_kongs=ShuffleBossKongs(A)
 	A.kutout_kongs=ShuffleKutoutKongs(A.boss_maps,A.boss_kongs,A.boss_kong_rando)

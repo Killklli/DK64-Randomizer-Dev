@@ -31,7 +31,7 @@ MinigameSelector=[]
 result=[]
 for minigame in MinigameRequirements.values():
 	name=minigame.group
-	if name not in result and name!=_N:MinigameSelector.append({'name':name,'value':name.lower().replace(' ','_')});result.append(name)
+	if name not in result and name!=_N:MinigameSelector.append({'name':name,'value':name.lower().replace(' ','_'),'tooltip':''});result.append(name)
 class MinigameLocationData:
 	'Class which stores container map and barrel id for a minigame barrel.'
 	def __init__(A,map_id,barrel_id,minigame):'Initialize with given parameters.';A.map=map_id;A.barrel_id=barrel_id;A.minigame=minigame
