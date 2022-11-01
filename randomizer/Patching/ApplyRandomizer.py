@@ -110,6 +110,7 @@ def patching_response(responded_data):
 	if A.settings.hard_bosses:
 		for Y in range(3):ROM().seek(B+379+Y);ROM().write(A.settings.kko_phase_order[Y])
 	if A.settings.disco_chunky:ROM().seek(B+303);ROM().write(1)
+	if A.settings.tns_location_rando:ROM().seek(B+270);ROM().write(1)
 	Z=['dk','diddy','lanky','tiny','chunky'];ROM().seek(B+284)
 	if A.settings.krusha_slot=='no_slot':ROM().write(255)
 	elif A.settings.krusha_slot in Z:a=Z.index(A.settings.krusha_slot);ROM().write(a);placeKrushaHead(a)
