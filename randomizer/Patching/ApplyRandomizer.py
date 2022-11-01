@@ -129,7 +129,7 @@ def patching_response(responded_data):
 	N=0
 	for D in M:N=N|1<<D
 	ROM().seek(B+295);ROM().write(N)
-	if A.settings.coin_door_open in[j,k]:ROM().seek(B+336);ROM().write(A.settings.medal_requirement)
+	if A.settings.coin_door_open in[j,k]or'coin'in A.settings.item_rando_list_selected:ROM().seek(B+336);ROM().write(A.settings.medal_requirement)
 	if A.settings.medal_cb_req!=75:ROM().seek(B+274);ROM().write(A.settings.medal_cb_req)
 	if len(A.settings.enemies_selected)==0 and(A.settings.enemy_rando or A.settings.crown_enemy_rando!='off'):
 		d=[]
