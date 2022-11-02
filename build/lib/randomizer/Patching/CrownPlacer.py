@@ -31,8 +31,8 @@ def randomize_crown_pads(spoiler):
 						ROM().seek(R);S=[]
 						for T in range(int(48/4)):S.append(int.from_bytes(ROM().readBytes(4),D))
 						H.append(S)
+				U=[]
 				for B in M:
-					U=[]
 					if B.map==C and not B.vanilla:
 						I=getNextFreeID(C,U);U.append(I);H.append([int(float_to_hex(B.coords[0]),16),int(float_to_hex(B.coords[1]),16),int(float_to_hex(B.coords[2]),16),int(float_to_hex(B.scale),16),1795943986,2605527663,0,0,0,0,454<<16|I,1<<16])
 						if B.default==0:addNewScript(C,[I],ScriptTypes.CrownMain)
