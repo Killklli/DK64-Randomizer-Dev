@@ -147,4 +147,4 @@ def placeKrushaHead(slot):
 	H.reverse()
 	for B in H:N.extend(B)
 	for A in range(2):P=[L,K][A];W=Q[C][A];X=R[C][A];Y=js.pointer_addresses[25][_A][W][_B];Z=js.pointer_addresses[7][_A][X][_B];a=gzip.compress(bytearray(P),compresslevel=9);ROM().seek(Y);ROM().writeBytes(a);ROM().seek(Z);ROM().writeBytes(bytearray(P))
-	b=js.pointer_addresses[14][_A][34+C][_B];c=js.pointer_addresses[14][_A][190+C][_B];d=gzip.compress(bytearray(M),compresslevel=9);e=gzip.compress(bytearray(N),compresslevel=9);ROM().seek(b);ROM().writeBytes(bytearray(e));ROM().seek(c);ROM().writeBytes(bytearray(d))
+	b=js.pointer_addresses[14][_A][196+C][_B];c=js.pointer_addresses[14][_A][190+C][_B];d=gzip.compress(bytearray(M),compresslevel=9);e=gzip.compress(bytearray(N),compresslevel=9);ROM().seek(b);ROM().writeBytes(bytearray(e));ROM().seek(c);ROM().writeBytes(bytearray(d))

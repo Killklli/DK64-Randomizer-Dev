@@ -93,7 +93,7 @@ def patching_response(responded_data):
 	if A.settings.no_melons:ROM().seek(B+296);ROM().write(1)
 	if A.settings.bonus_barrel_auto_complete:ROM().seek(B+294);ROM().write(1)
 	if A.settings.warp_to_isles:ROM().seek(B+309);ROM().write(1)
-	if A.settings.shop_indicator:ROM().seek(B+308);ROM().write(1)
+	if A.settings.shop_indicator:ROM().seek(B+308);ROM().write(2)
 	if A.settings.perma_death:ROM().seek(B+333);ROM().write(1);ROM().seek(B+334);ROM().write(1)
 	if A.settings.open_lobbies:ROM().seek(B+332);ROM().write(255)
 	if A.settings.disable_tag_barrels:ROM().seek(B+335);ROM().write(1)

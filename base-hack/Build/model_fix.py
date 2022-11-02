@@ -17,7 +17,10 @@ dk_adjustment='\n    17 7D\n'
 tiny_adjustment='\n    17 7E\n'
 krusha_adjustment_0='\n    13 6B\n'
 krusha_adjustment_1='\n    13 66\n'
-modifications=[{_B:0,_A:'diddy_base.bin',_C:[[18384,18552]],_D:[diddy_fix]},{_B:1,_A:'diddy_ins.bin',_C:[[17816,17952]],_D:[diddy_fix]},{_B:5,_A:'lanky_base.bin',_C:[[20996,21000],[21532,21536],[22220,22224]],_D:[lanky_fix5,lanky_fix5,lanky_fix5]},{_B:6,_A:'lanky_ins.bin',_C:[[23532,23536],[24228,24232],[22860,22864],[24556,24560]],_D:[lanky_fix5,lanky_fix5,lanky_fix5,lanky_fix5]},{_B:3,_A:'dk_base.bin',_C:[[24994,24996]],_D:[dk_adjustment]},{_B:8,_A:'tiny_base.bin',_C:[[25556,25558]],_D:[tiny_adjustment]},{_B:9,_A:'tiny_ins.bin',_C:[[26524,26526]],_D:[tiny_adjustment]},{_B:218,_A:'krusha_base.bin',_C:[[11926,11928],[14942,14944],[12582,12584],[13646,13648],[14334,14336],[16870,16872]],_D:[krusha_adjustment_0,krusha_adjustment_0,krusha_adjustment_1,krusha_adjustment_1,krusha_adjustment_1,krusha_adjustment_1]}]
+counter_adjustment_0='\n    00 00\n'
+counter_adjustment_1='\n    02 16\n'
+counter_adjustment_2='\n    FD EA\n'
+modifications=[{_B:0,_A:'diddy_base.bin',_C:[[18384,18552]],_D:[diddy_fix]},{_B:1,_A:'diddy_ins.bin',_C:[[17816,17952]],_D:[diddy_fix]},{_B:5,_A:'lanky_base.bin',_C:[[20996,21000],[21532,21536],[22220,22224]],_D:[lanky_fix5,lanky_fix5,lanky_fix5]},{_B:6,_A:'lanky_ins.bin',_C:[[23532,23536],[24228,24232],[22860,22864],[24556,24560]],_D:[lanky_fix5,lanky_fix5,lanky_fix5,lanky_fix5]},{_B:3,_A:'dk_base.bin',_C:[[24994,24996]],_D:[dk_adjustment]},{_B:8,_A:'tiny_base.bin',_C:[[25556,25558]],_D:[tiny_adjustment]},{_B:9,_A:'tiny_ins.bin',_C:[[26524,26526]],_D:[tiny_adjustment]},{_B:218,_A:'krusha_base.bin',_C:[[11926,11928],[14942,14944],[12582,12584],[13646,13648],[14334,14336],[16870,16872]],_D:[krusha_adjustment_0,krusha_adjustment_0,krusha_adjustment_1,krusha_adjustment_1,krusha_adjustment_1,krusha_adjustment_1]},{_B:163,_A:'counter.bin',_C:[[104,106],[120,122],[136,138],[152,154],[168,170],[184,186],[200,202],[216,218]],_D:[counter_adjustment_0,counter_adjustment_1,counter_adjustment_1,counter_adjustment_0,counter_adjustment_2,counter_adjustment_2,counter_adjustment_0,counter_adjustment_0]}]
 with open(rom_file,'rb')as rom:
 	rom.seek(pointer_offset+5*4);actor_table=pointer_offset+int.from_bytes(rom.read(4),_E)
 	for model in modifications:

@@ -1,44 +1,40 @@
 'Pull hash images from ROM.'
-_N='assets/Non-Code/hash'
-_M='rgba32'
-_L='big'
-_K=False
-_J='rgba16'
-_I=True
-_H='flip'
-_G='resize'
-_F='name'
-_E='h'
-_D='index'
-_C='table'
-_B='format'
-_A='w'
+_G='assets/Non-Code/hash'
+_F='peanut'
+_E='rgba32'
+_D='big'
+_C=False
+_B='rgba16'
+_A=True
 import os,zlib
 from PIL import Image
+class ImageData:
+	'Class to store information regarding images.'
+	def __init__(A,name,format,table,index,width,height,resize,flip):'Initialize with given data.';A.name=name;A.format=format;A.table=table;A.index=index;A.width=width;A.height=height;A.resize=resize;A.flip=flip
 crate_frame_l=7
 crate_frame_r=9
-images=[{_F:'bongos',_B:_J,_C:25,_D:5548,_A:40,_E:40,_G:_I,_H:_I},{_F:'crown',_B:_J,_C:25,_D:5893,_A:44,_E:44,_G:_I,_H:_I},{_F:'dkcoin',_B:_J,_C:7,_D:500,_A:48,_E:44,_G:_I,_H:_I},{_F:'fairy',_B:_M,_C:25,_D:5869,_A:32,_E:32,_G:_I,_H:_I},{_F:'guitar',_B:_J,_C:25,_D:5547,_A:40,_E:40,_G:_I,_H:_I},{_F:'triangle',_B:_J,_C:25,_D:5550,_A:40,_E:40,_G:_I,_H:_I},{_F:'trombone',_B:_J,_C:25,_D:5551,_A:40,_E:40,_G:_I,_H:_I},{_F:'peanut',_B:_J,_C:7,_D:424,_A:32,_E:32,_G:_I,_H:_I},{_F:'feather',_B:_J,_C:7,_D:642,_A:32,_E:32,_G:_I,_H:_I},{_F:'grape',_B:_J,_C:7,_D:650,_A:32,_E:32,_G:_I,_H:_I},{_F:'pineapple',_B:_J,_C:7,_D:666,_A:32,_E:48,_G:_I,_H:_I},{_F:'coconut',_B:_J,_C:7,_D:675,_A:40,_E:51,_G:_I,_H:_I},{_F:'nin_coin',_B:_J,_C:25,_D:5912,_A:44,_E:44,_G:_I,_H:_I},{_F:'orange',_B:_J,_C:7,_D:309,_A:32,_E:32,_G:_I,_H:_I},{_F:'rainbow_coin',_B:_J,_C:25,_D:5963,_A:48,_E:44,_G:_I,_H:_I},{_F:'rw_coin',_B:_J,_C:25,_D:5905,_A:44,_E:44,_G:_I,_H:_I},{_F:'sax',_B:_J,_C:25,_D:5549,_A:40,_E:40,_G:_I,_H:_I},{_F:'boss_key',_B:_J,_C:25,_D:5877,_A:44,_E:44,_G:_K,_H:_I},{_F:'01234',_B:_J,_C:14,_D:15,_A:76,_E:24,_G:_K,_H:_K},{_F:'56789',_B:_J,_C:14,_D:16,_A:76,_E:24,_G:_K,_H:_K},{_F:'WXYL',_B:_J,_C:14,_D:12,_A:76,_E:24,_G:_K,_H:_K},{_F:'specialchars',_B:_J,_C:14,_D:30,_A:64,_E:32,_G:_K,_H:_K},{_F:'red_qmark_0',_B:_J,_C:7,_D:508,_A:32,_E:64,_G:_K,_H:_K},{_F:'red_qmark_1',_B:_J,_C:7,_D:509,_A:32,_E:64,_G:_K,_H:_K},{_F:'dk_tie_palette',_B:_J,_C:25,_D:3686,_A:32,_E:32,_G:_K,_H:_K},{_F:'tiny_palette',_B:_J,_C:25,_D:3689,_A:32,_E:32,_G:_K,_H:_K},{_F:'homing_crate_0',_B:_J,_C:7,_D:176+crate_frame_r,_A:32,_E:64,_G:_K,_H:_I},{_F:'homing_crate_1',_B:_J,_C:7,_D:193+crate_frame_l,_A:32,_E:64,_G:_K,_H:_I},{_F:'standard_crate_0',_B:_J,_C:7,_D:383+crate_frame_r,_A:32,_E:64,_G:_K,_H:_I},{_F:'standard_crate_1',_B:_J,_C:7,_D:400+crate_frame_l,_A:32,_E:64,_G:_K,_H:_I},{_F:'num_1_unlit',_B:_J,_C:7,_D:510,_A:32,_E:32,_G:_K,_H:_K},{_F:'num_1_lit',_B:_J,_C:7,_D:511,_A:32,_E:32,_G:_K,_H:_K},{_F:'num_6_unlit',_B:_J,_C:7,_D:520,_A:32,_E:32,_G:_K,_H:_K},{_F:'num_6_lit',_B:_J,_C:7,_D:521,_A:32,_E:32,_G:_K,_H:_K},{_F:'num_7_unlit',_B:_J,_C:7,_D:522,_A:32,_E:32,_G:_K,_H:_K},{_F:'num_7_lit',_B:_J,_C:7,_D:523,_A:32,_E:32,_G:_K,_H:_K},{_F:'num_9_unlit',_B:_J,_C:7,_D:526,_A:32,_E:32,_G:_K,_H:_K},{_F:'num_9_lit',_B:_J,_C:7,_D:527,_A:32,_E:32,_G:_K,_H:_K},{_F:'film',_B:_J,_C:7,_D:439,_A:48,_E:42,_G:_K,_H:_I},{_F:'melon',_B:_J,_C:7,_D:544,_A:48,_E:42,_G:_K,_H:_I},{_F:'headphones',_B:_J,_C:7,_D:979,_A:40,_E:40,_G:_K,_H:_I},{_F:'special_coin_side',_B:_J,_C:25,_D:5901,_A:44,_E:44,_G:_K,_H:_I}]
+images=[ImageData('bongos',_B,25,5548,40,40,_A,_A),ImageData('crown',_B,25,5893,44,44,_A,_A),ImageData('dkcoin',_B,7,500,48,44,_A,_A),ImageData('fairy',_E,25,5869,32,32,_A,_A),ImageData('guitar',_B,25,5547,40,40,_A,_A),ImageData('triangle',_B,25,5550,40,40,_A,_A),ImageData('trombone',_B,25,5551,40,40,_A,_A),ImageData(_F,_B,7,424,32,32,_A,_A),ImageData(_F,_B,7,424,32,32,_A,_A),ImageData('feather',_B,7,642,32,32,_A,_A),ImageData('grape',_B,7,650,32,32,_A,_A),ImageData('pineapple',_B,7,666,32,48,_A,_A),ImageData('coconut',_B,7,675,40,51,_A,_A),ImageData('nin_coin',_B,25,5912,44,44,_A,_A),ImageData('orange',_B,7,309,32,32,_A,_A),ImageData('rainbow_coin',_B,25,5963,48,44,_A,_A),ImageData('rw_coin',_B,25,5905,44,44,_A,_A),ImageData('sax',_B,25,5549,40,40,_A,_A),ImageData('boss_key',_B,25,5877,44,44,_C,_A),ImageData('01234',_B,14,15,76,24,_C,_C),ImageData('56789',_B,14,16,76,24,_C,_C),ImageData('WXYL',_B,14,12,76,24,_C,_C),ImageData('specialchars',_B,14,30,64,32,_C,_C),ImageData('red_qmark_0',_B,7,508,32,64,_C,_C),ImageData('red_qmark_1',_B,7,509,32,64,_C,_C),ImageData('dk_tie_palette',_B,25,3686,32,32,_C,_C),ImageData('tiny_palette',_B,25,3689,32,32,_C,_C),ImageData('homing_crate_0',_B,7,185,32,64,_C,_A),ImageData('homing_crate_1',_B,7,200,32,64,_C,_A),ImageData('standard_crate_0',_B,7,392,32,64,_C,_A),ImageData('standard_crate_1',_B,7,407,32,64,_C,_A),ImageData('num_1_unlit',_B,7,510,32,32,_C,_C),ImageData('num_1_lit',_B,7,511,32,32,_C,_C),ImageData('num_6_unlit',_B,7,520,32,32,_C,_C),ImageData('num_6_lit',_B,7,521,32,32,_C,_C),ImageData('num_7_unlit',_B,7,522,32,32,_C,_C),ImageData('num_7_lit',_B,7,523,32,32,_C,_C),ImageData('num_9_unlit',_B,7,526,32,32,_C,_C),ImageData('num_9_lit',_B,7,527,32,32,_C,_C),ImageData('film',_B,7,439,48,42,_C,_A),ImageData('melon',_B,7,544,48,42,_C,_A),ImageData('headphones',_B,7,979,40,40,_C,_A),ImageData('special_coin_side',_B,25,5901,44,44,_C,_A),ImageData('gb',_B,25,5468,44,44,_C,_A),ImageData('medal',_B,25,5484,44,44,_C,_A),ImageData('dk_bp',_B,25,5628,48,42,_C,_A),ImageData('lanky_bp',_B,25,5523,48,42,_C,_A),ImageData('key',_B,25,5877,44,44,_C,_A),ImageData('crown_shop',_B,25,5893,44,44,_C,_A)]
 kong_tex=['chunky','tiny','lanky','diddy','dk']
 tex_idx=627
 for kong in kong_tex:
-	for x in range(2):images.append({_F:f"{kong}_face_{x}",_B:_J,_C:25,_D:tex_idx+x,_A:32,_E:64,_G:_K,_H:_I})
+	for x in range(2):images.append(ImageData(f"{kong}_face_{x}",_B,25,tex_idx+x,32,64,_C,_A))
 	tex_idx+=2
 ptr_offset=1055824
-if not os.path.exists(_N):os.mkdir(_N)
+if not os.path.exists(_G):os.mkdir(_G)
 print('Extracting Images from ROM')
 with open('rom/dk64.z64','rb')as fh:
 	for x in images:
-		fh.seek(ptr_offset+x[_C]*4);ptr_table=ptr_offset+int.from_bytes(fh.read(4),_L);fh.seek(ptr_table+x[_D]*4);img_start=ptr_offset+int.from_bytes(fh.read(4),_L);fh.seek(ptr_table+(x[_D]+1)*4);img_end=ptr_offset+int.from_bytes(fh.read(4),_L);img_size=img_end-img_start;fh.seek(img_start)
-		if x[_C]==7:dec=fh.read(img_size)
+		fh.seek(ptr_offset+x.table*4);ptr_table=ptr_offset+int.from_bytes(fh.read(4),_D);fh.seek(ptr_table+x.index*4);img_start=ptr_offset+int.from_bytes(fh.read(4),_D);fh.seek(ptr_table+(x.index+1)*4);img_end=ptr_offset+int.from_bytes(fh.read(4),_D);img_size=img_end-img_start;fh.seek(img_start)
+		if x.table==7:dec=fh.read(img_size)
 		else:dec=zlib.decompress(fh.read(img_size),15+32)
-		img_name=f"assets/Non-Code/hash/{x[_F]}.png"
+		img_name=f"assets/Non-Code/hash/{x.name}.png"
 		if os.path.exists(img_name):os.remove(img_name)
 		with open(img_name,'wb')as fg:fg.seek(0)
-		im=Image.new(mode='RGBA',size=(x[_A],x[_E]));pix=im.load();pix_count=x[_A]*x[_E]
+		im=Image.new(mode='RGBA',size=(x.width,x.height));pix=im.load();pix_count=x.width*x.height
 		for pixel in range(pix_count):
-			if x[_B]==_J:start=pixel*2;end=start+2;pixel_data=int.from_bytes(dec[start:end],_L);red=pixel_data>>11&31;green=pixel_data>>6&31;blue=pixel_data>>1&31;alpha=pixel_data&1;red=int(red/31*255);green=int(green/31*255);blue=int(blue/31*255);alpha=alpha*255
-			elif x[_B]==_M:start=pixel*4;end=start+4;pixel_data=int.from_bytes(dec[start:end],_L);red=pixel_data>>24&255;green=pixel_data>>16&255;blue=pixel_data>>8&255;alpha=pixel_data&255
-			pix_x=pixel%x[_A];pix_y=int(pixel/x[_A]);pix[(pix_x,pix_y)]=red,green,blue,alpha
-		if x[_H]:im=im.transpose(Image.Transpose.FLIP_TOP_BOTTOM)
-		if x[_G]:im=im.resize((32,32))
+			if x.format==_B:start=pixel*2;end=start+2;pixel_data=int.from_bytes(dec[start:end],_D);red=pixel_data>>11&31;green=pixel_data>>6&31;blue=pixel_data>>1&31;alpha=pixel_data&1;red=int(red/31*255);green=int(green/31*255);blue=int(blue/31*255);alpha=alpha*255
+			elif x.format==_E:start=pixel*4;end=start+4;pixel_data=int.from_bytes(dec[start:end],_D);red=pixel_data>>24&255;green=pixel_data>>16&255;blue=pixel_data>>8&255;alpha=pixel_data&255
+			pix_x=pixel%x.width;pix_y=int(pixel/x.width);pix[(pix_x,pix_y)]=red,green,blue,alpha
+		if x.flip:im=im.transpose(Image.Transpose.FLIP_TOP_BOTTOM)
+		if x.resize:im=im.resize((32,32))
 		im.save(img_name)

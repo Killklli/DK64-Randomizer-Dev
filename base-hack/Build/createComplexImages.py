@@ -1,4 +1,6 @@
 'Create complex images from in-game assets.'
+_Q='rw_coin'
+_P='nin_coin'
 _O='barrel'
 _N='orange'
 _M='pineapple'
@@ -9,8 +11,8 @@ _I='homing_crate'
 _H='image_list'
 _G='image'
 _F='assets/Non-Code/file_screen/'
-_E='assets/Non-Code/hash/'
-_D='assets/Non-Code/displays/'
+_E='assets/Non-Code/displays/'
+_D='assets/Non-Code/hash/'
 _C='crop'
 _B='num'
 _A='RGBA'
@@ -26,11 +28,11 @@ def getDir(directory):'Convert directory into the right format based on where th
 print('Composing complex images')
 number_crop=[{_G:_J,_H:[{_B:0,_C:(0,0,20,24)},{_B:1,_C:(20,0,30,24)},{_B:2,_C:(30,0,45,24)},{_B:3,_C:(45,0,58,24)},{_B:4,_C:(58,0,76,24)}]},{_G:_K,_H:[{_B:5,_C:(0,0,14,24)},{_B:6,_C:(14,0,29,24)},{_B:7,_C:(29,0,43,24)},{_B:8,_C:(43,0,58,24)},{_B:9,_C:(58,0,76,24)}]}]
 kongs=['dk','diddy','lanky','tiny','chunky']
-hash_dir=getDir(_E)
+hash_dir=getDir(_D)
 if not os.path.exists(hash_dir):os.mkdir(hash_dir)
 kong_res=32,32
 for kong in kongs:
-	base_dir=getDir(_D)
+	base_dir=getDir(_E)
 	if not os.path.exists(base_dir):os.mkdir(base_dir)
 	im=Image.new(mode=_A,size=(64,64))
 	for x in range(2):
@@ -42,7 +44,7 @@ im=Image.new(mode=_A,size=(64,64))
 shared_x_move=[4,16,30,10,26]
 shared_y_move=[0,0,0,23,23]
 kong_z_order=[0,1,2,3,4]
-disp_dir=getDir(_D)
+disp_dir=getDir(_E)
 for x in range(5):kong_index=kong_z_order[x];im1=Image.open(f"{disp_dir}{kongs[kong_index]}_face.png");im.paste(im1,(shared_x_move[kong_index],shared_y_move[kong_index]),im1)
 bbox=im.getbbox()
 im=im.crop(bbox)
@@ -84,7 +86,7 @@ for idx in range(2):
 	im_new.save(f"{disp_dir}yellow_qmark_{idx}.png")
 crate_names=['standard_crate',_I]
 for crate in crate_names:
-	base_dir=getDir(_D)
+	base_dir=getDir(_E)
 	if not os.path.exists(base_dir):os.mkdir(base_dir)
 	im=Image.new(mode=_A,size=(64,64));crate_r_offset=0
 	for x in range(2):
@@ -95,8 +97,8 @@ for crate in crate_names:
 lit=['num_6_lit','num_1_lit']
 unlit=['num_6_unlit','num_1_unlit']
 num_types=[lit,unlit]
-base_dir=getDir(_D)
-hash_dir=getDir(_E)
+base_dir=getDir(_E)
+hash_dir=getDir(_D)
 for num_type in num_types:
 	number=num_type[0];line_num=num_type[1]
 	if not os.path.exists(base_dir):os.mkdir(base_dir)
@@ -136,25 +138,31 @@ for file_info in number_crop:
 	for num_info in file_info[_H]:
 		key_num=num_info[_B]
 		if key_num>=1 and key_num<=8:
-			base_dir=getDir(_E)
+			base_dir=getDir(_D)
 			if not os.path.exists(base_dir):os.mkdir(base_dir)
 			file_dir=f"{base_dir}{file_info[_G]}";key_dir=f"{base_dir}boss_key.png";num_im=Image.open(file_dir);key_im=Image.open(key_dir);num_im=num_im.crop(num_info[_C]);num_w,num_h=num_im.size;targ_h=36;num_im_scale=targ_h/num_h;new_w=int(num_w*num_im_scale);num_im=num_im.resize((new_w,targ_h));key_im.paste(num_im,(targ_h-num_w-[5,0,2,-2,0,-1,0,-1][key_num-1],2),num_im);key_im=key_im.resize((20,20));key_im.save(f"{getDir('assets/Non-Code/file_screen/key')}{key_num}.png");tracker_im.paste(key_im,(249-small_gap*(9-key_num),128-dim),key_im)
 for melon in range(3):melon_im=Image.open(f"{hash_dir}melon.png");melon_im=melon_im.resize((dim,dim));tracker_im.paste(melon_im,(200-small_gap*melon,0),melon_im)
 prog_offset=218
 for (p_i,progressive) in enumerate([f"{hash_dir}headphones.png",f"{disp_dir}standard_crate.png"]):prog_im=Image.open(progressive);prog_im=prog_im.resize((dim,dim));tracker_im.paste(prog_im,(prog_offset,gap+p_i*gap),prog_im);num_im=Image.open(f"{hash_dir}01234.png");num_im=num_im.crop((30,0,45,24));num_w,num_h=num_im.size;num_size=15;num_scale=num_size/num_h;new_w=int(num_w*num_scale);num_im=num_im.resize((new_w,num_size));tracker_im.paste(num_im,(prog_offset+[22,17][p_i],int(gap+3+p_i*small_gap*1.2)),num_im)
 tracker_im.save(f"{getDir(_F)}tracker.png")
-for coin in ('nin_coin','rw_coin'):loc=f"{hash_dir}{coin}.png";coin_im=Image.open(loc);coin_im=coin_im.crop((2,0,28,31));coin_im=coin_im.transpose(Image.Transpose.FLIP_TOP_BOTTOM);coin_im=coin_im.resize((64,64));coin_im_0=coin_im.crop((0,0,32,64));coin_im_1=coin_im.crop((32,0,64,64));coin_im_0.save(f"{hash_dir}{coin}_0.png");coin_im_1.save(f"{hash_dir}{coin}_1.png")
+for coin in (_P,_Q):loc=f"{hash_dir}{coin}.png";coin_im=Image.open(loc);coin_im=coin_im.crop((2,0,28,31));coin_im=coin_im.transpose(Image.Transpose.FLIP_TOP_BOTTOM);coin_im=coin_im.resize((64,64));coin_im_0=coin_im.crop((0,0,32,64));coin_im_1=coin_im.crop((32,0,64,64));coin_im_0.save(f"{hash_dir}{coin}_0.png");coin_im_1.save(f"{hash_dir}{coin}_1.png")
 side_im=Image.open(f"{hash_dir}special_coin_side.png")
 side_im=side_im.crop((17,3,25,19))
 side_im=side_im.resize((32,16))
 side_im=side_im.rotate(90,PIL.Image.Resampling.NEAREST,expand=1)
 side_im.save(f"{hash_dir}modified_coin_side.png")
-krusha_im=Image.open(f"{getDir(_D)}krusha_head.png")
+krusha_im=Image.open(f"{disp_dir}krusha_head.png")
 krusha_im=krusha_im.resize((64,64))
 krusha_im=krusha_im.transpose(Image.Transpose.FLIP_TOP_BOTTOM)
-krusha_im.save(f"{getDir(_D)}krusha_head64.png")
-rmve=[_J,_K,'boss_key.png','WXYL.png','specialchars.png','red_qmark_0.png','red_qmark_1.png','headphones.png','film.png','melon.png']
+krusha_im.save(f"{disp_dir}krusha_head64.png")
+for bp in ('dk_bp','lanky_bp'):bp_im=Image.open(f"{hash_dir}{bp}.png");bp_im=bp_im.crop((8,2,40,34));bp_im.save(f"{disp_dir}{bp}.png")
+for item in ('crown_shop','gb','key','medal'):item_im=Image.open(f"{hash_dir}{item}.png");item_im=item_im.resize((32,32));item_im.save(f"{disp_dir}{item}.png")
+potion_im=Image.open(f"{disp_dir}potion.png")
+potion_im=potion_im.resize((32,32))
+potion_im.save(f"{disp_dir}potion32.png")
+for coin in (_P,_Q):coin_im=Image.open(f"{hash_dir}{coin}.png");coin_im.save(f"{disp_dir}{coin}.png")
+rmve=[_J,_K,'boss_key.png','WXYL.png','specialchars.png','red_qmark_0.png','red_qmark_1.png','headphones.png','film.png','melon.png','dk_bp.png','lanky_bp.png','crown_shop.png','gb.png','key.png','medal.png']
 for kong in kongs:
 	for x in range(2):rmve.append(f"{kong}_face_{x}.png")
 for x in rmve:
-	if os.path.exists(f"{getDir(_E)}{x}"):os.remove(f"{getDir(_E)}{x}")
+	if os.path.exists(f"{getDir(_D)}{x}"):os.remove(f"{getDir(_D)}{x}")
