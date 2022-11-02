@@ -27,57 +27,58 @@ def setPkmnSnapEnemy(focused_enemy):
 	for A in pkmn_snap_enemies:
 		if A.enemy==focused_enemy:A.addEnemy()
 def getBalancedCrownEnemyRando(spoiler,crown_setting,damage_ohko_setting):
-	'Get array of weighted enemies.';N=damage_ohko_setting;M=spoiler;I=crown_setting;C={}
+	'Get array of weighted enemies.';N=spoiler;I=crown_setting;C={}
 	if I!=_C:
-		C={Maps.JapesCrown:[],Maps.AztecCrown:[],Maps.FactoryCrown:[],Maps.GalleonCrown:[],Maps.ForestCrown:[],Maps.CavesCrown:[],Maps.CastleCrown:[],Maps.HelmCrown:[],Maps.SnidesCrown:[],Maps.LobbyCrown:[]};O=[];J=[];K=[];G=[];L=[]
+		C={Maps.JapesCrown:[],Maps.AztecCrown:[],Maps.FactoryCrown:[],Maps.GalleonCrown:[],Maps.ForestCrown:[],Maps.CavesCrown:[],Maps.CastleCrown:[],Maps.HelmCrown:[],Maps.SnidesCrown:[],Maps.LobbyCrown:[]};O=[];J=[];K=[];F=[];L=[]
 		for B in EnemyMetaData:
 			if EnemyMetaData[B].crown_enabled and B is not Enemies.GetOut:
-				if convertEnemyName(EnemyMetaData[B].name)in M.settings.enemies_selected:
+				if convertEnemyName(EnemyMetaData[B].name)in N.settings.enemies_selected:
 					O.append(B)
 					if EnemyMetaData[B].disruptive<=1:J.append(B)
 					if EnemyMetaData[B].kasplat is _A:K.append(B)
-					elif EnemyMetaData[B].disruptive==0:K.append(B);G.append(B)
-		T=2
+					elif EnemyMetaData[B].disruptive==0:K.append(B);F.append(B)
+		S=2
 		for B in EnemyMetaData.keys():
 			if EnemyMetaData[B].crown_enabled:
-				if convertEnemyName(EnemyMetaData[B].name)in M.settings.enemies_selected:
-					U=EnemyMetaData[B].crown_weight;V=abs(U-T);P=abs(10-V)
+				if convertEnemyName(EnemyMetaData[B].name)in N.settings.enemies_selected:
+					T=EnemyMetaData[B].crown_weight;U=abs(T-S);P=abs(10-U)
 					if B==Enemies.GetOut:P=1
-					if N is _B or B is not Enemies.GetOut:
+					if damage_ohko_setting is _B or B is not Enemies.GetOut:
 						for Q in range(P):L.append(B)
 		if I=='easy':
 			for A in C:
-				C[A].append(random.choice(J));C[A].append(random.choice(G));C[A].append(random.choice(G))
-				if A==Maps.GalleonCrown or A==Maps.LobbyCrown or A==Maps.HelmCrown:C[A].append(random.choice(G))
+				C[A].append(random.choice(J));C[A].append(random.choice(F));C[A].append(random.choice(F))
+				if A==Maps.GalleonCrown or A==Maps.LobbyCrown or A==Maps.HelmCrown:C[A].append(random.choice(F))
 		elif I==_D:
-			D=0
+			E=0
 			for A in C:
-				F=0;E=0;H=3;R=_B
+				G=0;D=0;H=3
 				if A==Maps.GalleonCrown or A==Maps.LobbyCrown or A==Maps.HelmCrown:H=4
 				for Q in range(H):
-					if F==0:
-						if E<2:D=random.choice(O)
-						elif E==2:D=random.choice(J)
-						elif E==3:D=random.choice(G)
-					elif F==1:
-						if E<2:D=random.choice(J)
-						elif E==2:D=random.choice(G)
-					elif F==2:
-						if E==0:D=random.choice(K)
-						elif E==1:D=random.choice(G)
-					elif E>3 or E>2 and F>1 or E==2 and F==2:print('This is a mistake in the crown enemy algorithm. Report this to the devs.');D=Enemies.BeaverGold
-					if N is _B and F<2 and R is _B and random.randint(0,1000)>994:D=Enemies.GetOut;R=_A
-					if EnemyMetaData[D].kasplat is _A:E=E+1
-					F=EnemyMetaData[D].disruptive+F;C[A].append(D)
+					if G==0:
+						if D<2:E=random.choice(O)
+						elif D==2:E=random.choice(J)
+						elif D==3:E=random.choice(F)
+					elif G==1:
+						if D<2:E=random.choice(J)
+						elif D==2:E=random.choice(F)
+					elif G==2:
+						if D==0:E=random.choice(K)
+						elif D==1:E=random.choice(F)
+					elif D>3 or D>2 and G>1 or D==2 and G==2:print('This is a mistake in the crown enemy algorithm. Report this to the devs.');E=Enemies.BeaverGold
+					if EnemyMetaData[E].kasplat is _A:D=D+1
+					G=EnemyMetaData[E].disruptive+G;C[A].append(E)
 		elif I=='hard':
-			W=_B
 			for A in C:
 				H=3
 				if A==Maps.GalleonCrown or A==Maps.LobbyCrown or A==Maps.HelmCrown:H=4
+				R=_B
 				for Q in range(H):
-					if W:S=random.choice([A for A in L if A!=Enemies.GetOut])
-					else:S=random.choice(L)
-					C[A].append(S)
+					if R:M=random.choice([A for A in L if A!=Enemies.GetOut])
+					else:
+						M=random.choice(L)
+						if M==Enemies.GetOut:R=_A
+					C[A].append(M)
 		for A in C:
 			if len(C[A])>0:random.shuffle(C[A])
 	return C
