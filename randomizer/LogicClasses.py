@@ -17,8 +17,8 @@ class Collectible:
 	def __init__(A,type,kong,logic,coords,amount=1,enabled=_B,vanilla=_B):'Initialize with given parameters.';A.type=type;A.kong=kong;A.logic=logic;A.amount=amount;A.coords=coords;A.added=_A;A.enabled=enabled;A.vanilla=vanilla
 class Region:
 	'Region contains shufflable locations, events, and transitions to other regions.'
-	def __init__(A,name,level,tagbarrel,deathwarp,locations,events,transitionFronts,restart=_C):
-		'Initialize with given parameters.';B=deathwarp;A.name=name;A.level=level;A.tagbarrel=tagbarrel;A.deathwarp=_C;A.locations=locations;A.events=events;A.exits=transitionFronts;A.restart=restart;A.dayAccess=_A;A.nightAccess=_A
+	def __init__(A,name,hint_name,level,tagbarrel,deathwarp,locations,events,transitionFronts,restart=_C):
+		'Initialize with given parameters.';B=deathwarp;A.name=name;A.hint_name=hint_name;A.level=level;A.tagbarrel=tagbarrel;A.deathwarp=_C;A.locations=locations;A.events=events;A.exits=transitionFronts;A.restart=restart;A.dayAccess=_A;A.nightAccess=_A
 		if B is not _C:
 			if isinstance(B,TransitionFront):A.deathwarp=B
 			else:

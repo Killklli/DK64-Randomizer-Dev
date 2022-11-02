@@ -34,7 +34,7 @@ from randomizer.ShuffleExits import ShufflableExits
 class Spoiler:
 	'Class which contains all spoiler data passed into and out of randomizer.'
 	def __init__(A,settings):
-		'Initialize spoiler just with settings.';A.settings=settings;A.playthrough={};A.woth={};A.woth_locations={};A.shuffled_barrel_data={};A.shuffled_exit_data={};A.shuffled_exit_instructions=[];A.music_bgm_data={};A.music_fanfare_data={};A.music_event_data={};A.location_data={};A.enemy_replacements=[];A.debug_human_item_assignment=_C;A.move_data=[]
+		'Initialize spoiler just with settings.';A.settings=settings;A.playthrough={};A.woth={};A.woth_locations={};A.woth_paths={};A.shuffled_barrel_data={};A.shuffled_exit_data={};A.shuffled_exit_instructions=[];A.music_bgm_data={};A.music_fanfare_data={};A.music_event_data={};A.location_data={};A.enemy_replacements=[];A.debug_human_item_assignment=_C;A.move_data=[]
 		for C in range(3):
 			B=[]
 			if C==0:
@@ -54,8 +54,8 @@ class Spoiler:
 			A.move_data.append(B)
 		A.hint_list={}
 	def createJson(A):
-		'Convert spoiler to JSON and save it.';AG='Unknown Shop';AF='Castle';AE='Galleon';AD='Factory';AC='Special';AB='Miscellaneous';AA='Klaptrap Model';t='Colored Banana Locations';s='randomized';r=', ';q='King Kut Out Properties';p='Hideout Helm';c='End Game';X=' ';W='DK Isles';V='Items';U='Requirements';T='Colors and Models';O='Creepy Castle';N='Crystal Caves';M='Fungi Forest';L='Gloomy Galleon';K='Angry Aztec';I='Bosses';H='';G='Kongs';F='Cosmetics';A.settings.verify_hash();B=OrderedDict();C=OrderedDict();C['Seed']=A.settings.seed_id;C['No Logic']=A.settings.no_logic;C['Shuffle Enemies']=A.settings.enemy_rando;C['Move Randomization type']=A.settings.move_rando;C['Loading Zones Shuffled']=A.settings.shuffle_loading_zones;C['Decoupled Loading Zones']=A.settings.decoupled_loading_zones;u=[]
-		for AH in A.settings.starting_kong_list:u.append(AH.name.capitalize())
+		'Convert spoiler to JSON and save it.';AI='Unknown Shop';AH='Castle';AG='Galleon';AF='Factory';AE='Special';AD='Miscellaneous';AC='Klaptrap Model';t='Colored Banana Locations';s='randomized';r=', ';q='King Kut Out Properties';p='Hideout Helm';c='End Game';X=' ';W='DK Isles';V='Items';U='Requirements';T='Colors and Models';O='Creepy Castle';N='Crystal Caves';M='Fungi Forest';L='Gloomy Galleon';K='Angry Aztec';I='Bosses';H='';G='Kongs';F='Cosmetics';A.settings.verify_hash();B=OrderedDict();C=OrderedDict();C['Seed']=A.settings.seed_id;C['No Logic']=A.settings.no_logic;C['Shuffle Enemies']=A.settings.enemy_rando;C['Move Randomization type']=A.settings.move_rando;C['Loading Zones Shuffled']=A.settings.shuffle_loading_zones;C['Decoupled Loading Zones']=A.settings.decoupled_loading_zones;u=[]
+		for AJ in A.settings.starting_kong_list:u.append(AJ.name.capitalize())
 		if A.settings.randomize_blocker_required_amounts:C['Maximum B Locker']=A.settings.blocker_text
 		if A.settings.randomize_cb_required_amounts:C['Maximum Troff N Scoff']=A.settings.troff_text
 		C['Open Lobbies']=A.settings.open_lobbies;C['Open Levels']=A.settings.open_levels;C['Randomize Pickups']=A.settings.randomize_pickups;C['Randomize Patches']=A.settings.random_patches;C['Randomize CB Locations']=A.settings.cb_rando;C['Puzzle Randomization']=A.settings.puzzle_rando;C['Crown Door Open']=A.settings.crown_door_open;C['Coin Door Open']=A.settings.coin_door_open;C['Shockwave Shuffle']=A.settings.shockwave_status;C['Random Medal Requirement']=A.settings.random_medal_requirement;C['Random Shop Prices']=A.settings.random_prices;C['Banana Port Randomization']=A.settings.bananaport_rando;C['Shuffle Shop Locations']=A.settings.shuffle_shops;C['Shuffle Kasplats']=A.settings.kasplat_rando_setting;C['Key 8 Required']=A.settings.krool_access;C['Number of Keys Required']=A.settings.krool_key_count;C['Fast Start']=A.settings.fast_start_beginning_of_game;C['Helm Setting']=A.settings.helm_setting;C['Quality of Life']=A.settings.quality_of_life;C['Tag Anywhere']=A.settings.enable_tag_anywhere;C['Fast GBs']=A.settings.fast_gbs;C['High Requirements']=A.settings.high_req;C['Win Condition']=A.settings.win_condition;B['Settings']=C;B[F]={}
@@ -65,20 +65,24 @@ class Spoiler:
 				if Y=='dk':B[F][T]['DK Color']=A.settings.colors[Y]
 				else:B[F][T][f"{Y.capitalize()} Color"]=A.settings.colors[Y]
 			v={25:'Beaver',30:'Klobber',32:'Kaboom',33:'Green Klaptrap',34:'Purple Klaptrap',35:'Red Klaptrap',36:'Klaptrap Teeth',38:'Krash',39:'Troff',48:'N64 Logo',52:'Mech Fish',66:'Krossbones',71:'Rabbit',75:'Minecart Skeleton Head',81:'Tomato',98:'Ice Tomato',105:'Golden Banana',112:'Microbuffer',114:'Bell',150:'Missile (Car Race)',176:'Red Buoy',177:'Green Buoy',189:'Rareware Logo'}
-			if A.settings.klaptrap_model_index in v:B[F][T][AA]=v[A.settings.klaptrap_model_index]
-			else:B[F][T][AA]=f"Unknown Model {hex(A.settings.klaptrap_model_index)}"
+			if A.settings.klaptrap_model_index in v:B[F][T][AC]=v[A.settings.klaptrap_model_index]
+			else:B[F][T][AC]=f"Unknown Model {hex(A.settings.klaptrap_model_index)}"
 		B[U]={};w={};x=[_E,K,_F,L,M,N,O,p]
 		for (d,e) in enumerate(A.settings.EntryGBs):w[x[d]]=e
 		B[U]['B Locker GBs']=w;y={}
 		for (d,e) in enumerate(A.settings.BossBananas):y[x[d]]=e
-		B[U]['Troff N Scoff Bananas']=y;B[U][AB]={};B[G]={};B[G]['Starting Kong List']=u;B[G]['Japes Kong Puzzle Solver']=ItemList[ItemFromKong(A.settings.diddy_freeing_kong)].name;B[G]['Tiny Temple Puzzle Solver']=ItemList[ItemFromKong(A.settings.tiny_freeing_kong)].name;B[G]['Llama Temple Puzzle Solver']=ItemList[ItemFromKong(A.settings.lanky_freeing_kong)].name;B[G]['Factory Kong Puzzle Solver']=ItemList[ItemFromKong(A.settings.chunky_freeing_kong)].name
-		if A.settings.coin_door_open in['need_both','need_rw']:B[U][AB]['Medal Requirement']=A.settings.medal_requirement
+		B[U]['Troff N Scoff Bananas']=y;B[U][AD]={};B[G]={};B[G]['Starting Kong List']=u;B[G]['Japes Kong Puzzle Solver']=ItemList[ItemFromKong(A.settings.diddy_freeing_kong)].name;B[G]['Tiny Temple Puzzle Solver']=ItemList[ItemFromKong(A.settings.tiny_freeing_kong)].name;B[G]['Llama Temple Puzzle Solver']=ItemList[ItemFromKong(A.settings.lanky_freeing_kong)].name;B[G]['Factory Kong Puzzle Solver']=ItemList[ItemFromKong(A.settings.chunky_freeing_kong)].name
+		if A.settings.coin_door_open in['need_both','need_rw']:B[U][AD]['Medal Requirement']=A.settings.medal_requirement
 		B[c]={};B[c]['Keys Required for K Rool']=A.GetKroolKeysRequired(A.settings.krool_keys_required);z=[]
 		for f in A.settings.krool_order:z.append(ItemList[ItemFromKong(f)].name.capitalize())
-		B[c]['K Rool Phases']=z;AI=[Kongs.donkey,Kongs.chunky,Kongs.tiny,Kongs.lanky,Kongs.diddy];A0=[]
-		for AJ in A.settings.helm_order:A0.append(AI[AJ].name.capitalize())
-		B[c]['Helm Rooms']=A0;B[V]={G:{},'Shops':{},W:{},_E:{},K:{},_F:{},L:{},M:{},N:{},O:{},p:{},AC:{}};B['Playthrough']=A.playthrough;B['Way of the Hoard']=A.woth
-		for (AK,D) in LocationList.items():
+		B[c]['K Rool Phases']=z;AK=[Kongs.donkey,Kongs.chunky,Kongs.tiny,Kongs.lanky,Kongs.diddy];A0=[]
+		for AL in A.settings.helm_order:A0.append(AK[AL].name.capitalize())
+		B[c]['Helm Rooms']=A0;B[V]={G:{},'Shops':{},W:{},_E:{},K:{},_F:{},L:{},M:{},N:{},O:{},p:{},AE:{}};B['Playthrough']=A.playthrough;B['Way of the Hoard']=A.woth;B['Paths']={}
+		for (AM,AN) in A.woth_paths.items():
+			AO=ItemList[LocationList[AM].item];A1={}
+			for AP in AN:A2=LocationList[AP];AQ=ItemList[A2.item];A1[A2.name]=AQ.name
+			B['Paths'][AO.name]=A1
+		for (AR,D) in LocationList.items():
 			if D.type==Types.Constant:continue
 			if D.item is _C:Z=Items.NoItem
 			else:Z=ItemList[D.item]
@@ -90,23 +94,23 @@ class Spoiler:
 					if D.item==Items.ProgressiveSlam:P=f"{A.settings.prices[Items.ProgressiveSlam][0]}->{A.settings.prices[Items.ProgressiveSlam][1]}"
 					elif D.item==Items.ProgressiveAmmoBelt:P=f"{A.settings.prices[Items.ProgressiveAmmoBelt][0]}->{A.settings.prices[Items.ProgressiveAmmoBelt][1]}"
 					elif D.item==Items.ProgressiveInstrumentUpgrade:P=f"{A.settings.prices[Items.ProgressiveInstrumentUpgrade][0]}->{A.settings.prices[Items.ProgressiveInstrumentUpgrade][1]}->{A.settings.prices[Items.ProgressiveInstrumentUpgrade][2]}"
-				else:P=str(A.settings.prices[AK])
+				else:P=str(A.settings.prices[AR])
 				B[V]['Shops'][D.name]=Z.name+f" ({P})"
 			else:
-				E=AC
+				E=AE
 				if'Isles'in D.name:E=W
 				elif'Japes'in D.name:E=_E
 				elif'Aztec'in D.name:E=K
-				elif AD in D.name:E=_F
-				elif AE in D.name:E=L
+				elif AF in D.name:E=_F
+				elif AG in D.name:E=L
 				elif'Forest'in D.name:E=M
 				elif'Caves'in D.name:E=N
-				elif AF in D.name:E=O
+				elif AH in D.name:E=O
 				elif'Helm'in D.name:E=p
 				B[V][E][D.name]=Z.name
 		if A.settings.shuffle_loading_zones=='levels':
-			Q=OrderedDict();AL={Transitions.IslesMainToJapesLobby:Levels.JungleJapes,Transitions.IslesMainToAztecLobby:Levels.AngryAztec,Transitions.IslesMainToFactoryLobby:Levels.FranticFactory,Transitions.IslesMainToGalleonLobby:Levels.GloomyGalleon,Transitions.IslesMainToForestLobby:Levels.FungiForest,Transitions.IslesMainToCavesLobby:Levels.CrystalCaves,Transitions.IslesMainToCastleLobby:Levels.CreepyCastle};AM={Transitions.IslesJapesLobbyToMain:Levels.JungleJapes,Transitions.IslesAztecLobbyToMain:Levels.AngryAztec,Transitions.IslesFactoryLobbyToMain:Levels.FranticFactory,Transitions.IslesGalleonLobbyToMain:Levels.GloomyGalleon,Transitions.IslesForestLobbyToMain:Levels.FungiForest,Transitions.IslesCavesLobbyToMain:Levels.CrystalCaves,Transitions.IslesCastleLobbyToMain:Levels.CreepyCastle}
-			for (AN,AO) in AL.items():AP=AM[A.shuffled_exit_data[AN].reverse];Q[AO.name]=AP.name
+			Q=OrderedDict();AS={Transitions.IslesMainToJapesLobby:Levels.JungleJapes,Transitions.IslesMainToAztecLobby:Levels.AngryAztec,Transitions.IslesMainToFactoryLobby:Levels.FranticFactory,Transitions.IslesMainToGalleonLobby:Levels.GloomyGalleon,Transitions.IslesMainToForestLobby:Levels.FungiForest,Transitions.IslesMainToCavesLobby:Levels.CrystalCaves,Transitions.IslesMainToCastleLobby:Levels.CreepyCastle};AT={Transitions.IslesJapesLobbyToMain:Levels.JungleJapes,Transitions.IslesAztecLobbyToMain:Levels.AngryAztec,Transitions.IslesFactoryLobbyToMain:Levels.FranticFactory,Transitions.IslesGalleonLobbyToMain:Levels.GloomyGalleon,Transitions.IslesForestLobbyToMain:Levels.FungiForest,Transitions.IslesCavesLobbyToMain:Levels.CrystalCaves,Transitions.IslesCastleLobbyToMain:Levels.CreepyCastle}
+			for (AU,AV) in AS.items():AW=AT[A.shuffled_exit_data[AU].reverse];Q[AV.name]=AW.name
 			B['Shuffled Level Order']=Q
 		elif A.settings.shuffle_loading_zones!='none':
 			Q=OrderedDict();g={W:[W,'Japes Lobby','Aztec Lobby','Factory Lobby','Galleon Lobby','Fungi Lobby','Caves Lobby','Castle Lobby',"Snide's Room",'Training Grounds','Banana Fairy Isle',"DK's Treehouse"],_E:[_E],K:[K],_F:[_F],L:[L],M:[M],N:[N],O:[O]};h={'Other':{}}
@@ -114,32 +118,32 @@ class Spoiler:
 			for (exit,i) in A.shuffled_exit_data.items():
 				R='Other'
 				for E in g:
-					for AQ in g[E]:
-						if i.spoilerName.find(AQ)==0:R=E
+					for AX in g[E]:
+						if i.spoilerName.find(AX)==0:R=E
 				Q[ShufflableExits[exit].name]=i.spoilerName;h[R][ShufflableExits[exit].name]=i.spoilerName
 			B['Shuffled Exits']=Q;B['Shuffled Exits (Sorted by destination)']=h
 		B[I]={}
 		if A.settings.boss_location_rando:
-			A1=OrderedDict();AR={'JapesBoss':'Army Dillo 1','AztecBoss':'Dogadon 1','FactoryBoss':'Mad Jack','GalleonBoss':'Pufftoss','FungiBoss':'Dogadon 2','CavesBoss':'Army Dillo 2','CastleBoss':'King Kut Out'}
-			for S in range(7):A1[H.join(map(lambda x:x if x.islower()else X+x,Levels(S).name)).strip()]=AR[Maps(A.settings.boss_maps[S]).name]
-			B[I]['Shuffled Boss Order']=A1
+			A3=OrderedDict();AY={'JapesBoss':'Army Dillo 1','AztecBoss':'Dogadon 1','FactoryBoss':'Mad Jack','GalleonBoss':'Pufftoss','FungiBoss':'Dogadon 2','CavesBoss':'Army Dillo 2','CastleBoss':'King Kut Out'}
+			for S in range(7):A3[H.join(map(lambda x:x if x.islower()else X+x,Levels(S).name)).strip()]=AY[Maps(A.settings.boss_maps[S]).name]
+			B[I]['Shuffled Boss Order']=A3
 		B[I][q]={}
 		if A.settings.boss_kong_rando:
-			A2=OrderedDict()
-			for S in range(7):A2[H.join(map(lambda x:x if x.islower()else X+x,Levels(S).name)).strip()]=Kongs(A.settings.boss_kongs[S]).name.capitalize()
-			B[I]['Shuffled Boss Kongs']=A2;j=H
-			for AS in A.settings.kutout_kongs:j=j+Kongs(AS).name.capitalize()+r
+			A4=OrderedDict()
+			for S in range(7):A4[H.join(map(lambda x:x if x.islower()else X+x,Levels(S).name)).strip()]=Kongs(A.settings.boss_kongs[S]).name.capitalize()
+			B[I]['Shuffled Boss Kongs']=A4;j=H
+			for AZ in A.settings.kutout_kongs:j=j+Kongs(AZ).name.capitalize()+r
 			B[I][q]['Shuffled Kutout Kong Order']=j.removesuffix(r)
 		if A.settings.hard_bosses:
-			A3=[]
-			for f in A.settings.kko_phase_order:A3.append(f"Phase {f+1}")
-			B[I][q]['Shuffled Kutout Phases']=r.join(A3)
+			A5=[]
+			for f in A.settings.kko_phase_order:A5.append(f"Phase {f+1}")
+			B[I][q]['Shuffled Kutout Phases']=r.join(A5)
 		if A.settings.bonus_barrels in('random','selected'):
 			k=OrderedDict()
-			for (D,AT) in A.shuffled_barrel_data.items():
+			for (D,Aa) in A.shuffled_barrel_data.items():
 				if D in HelmMinigameLocations and A.settings.helm_barrels=='skip':continue
 				if D not in HelmMinigameLocations and A.settings.bonus_barrels=='skip':continue
-				k[LocationList[D].name]=MinigameRequirements[AT].name
+				k[LocationList[D].name]=MinigameRequirements[Aa].name
 			if len(k)>0:B['Shuffled Bonus Barrels']=k
 		if A.settings.music_bgm==s:B[F]['Background Music']=A.music_bgm_data
 		if A.settings.music_fanfares==s:B[F]['Fanfares']=A.music_fanfare_data
@@ -153,32 +157,32 @@ class Spoiler:
 		if A.settings.crown_placement_rando:B['Shuffled Crowns']=A.human_crowns
 		l={Levels.DKIsles:W,Levels.JungleJapes:_E,Levels.AngryAztec:K,Levels.FranticFactory:_F,Levels.GloomyGalleon:L,Levels.FungiForest:M,Levels.CrystalCaves:N,Levels.CreepyCastle:O}
 		if A.settings.shuffle_shops:
-			A4={}
+			A6={}
 			for E in A.shuffled_shop_locations:
 				R='Unknown Level';a={Regions.CrankyGeneric:'Cranky',Regions.CandyGeneric:'Candy',Regions.FunkyGeneric:'Funky',Regions.Snide:'Snide'}
 				if E in l:R=l[E]
 				for m in A.shuffled_shop_locations[E]:
-					A5=AG;A6=AG;A7=A.shuffled_shop_locations[E][m]
-					if m in a:A5=a[m]
-					if A7 in a:A6=a[A7]
-					A4[f"{R} - {A5}"]=A6
-			B['Shop Locations']=A4
+					A7=AI;A8=AI;A9=A.shuffled_shop_locations[E][m]
+					if m in a:A7=a[m]
+					if A9 in a:A8=a[A9]
+					A6[f"{R} - {A7}"]=A8
+			B['Shop Locations']=A6
 		for n in (V,I):
-			A8=True
-			for AU in B[n]:
-				if B[n][AU]!={}:A8=False
-			if A8:del B[n]
+			AA=True
+			for Ab in B[n]:
+				if B[n][Ab]!={}:AA=False
+			if AA:del B[n]
 		if A.settings.cb_rando:
-			AV={'cb':' Bananas','balloons':' Balloons'};B[t]={};AW=['Japes','Aztec',AD,AE,'Fungi','Caves',AF];AX=['Donkey','Diddy','Lanky','Tiny','Chunky']
-			for AY in AW:
-				for AZ in AX:B[t][f"{AY} {AZ}"]={'Balloons':H,'Bananas':H}
+			Ac={'cb':' Bananas','balloons':' Balloons'};B[t]={};Ad=['Japes','Aztec',AF,AG,'Fungi','Caves',AH];Ae=['Donkey','Diddy','Lanky','Tiny','Chunky']
+			for Af in Ad:
+				for Ag in Ae:B[t][f"{Af} {Ag}"]={'Balloons':H,'Bananas':H}
 			for J in A.cb_placements:
-				Aa=l[J['level']];A9=1
-				if J['level']==Levels.FungiForest:A9=0
-				b=H.join(map(lambda x:x if x.islower()else X+x,Maps(J['map']).name)).strip();Ab=['2 D Ship','5 D Ship','5 D Temple']
-				for o in Ab:
+				Ah=l[J['level']];AB=1
+				if J['level']==Levels.FungiForest:AB=0
+				b=H.join(map(lambda x:x if x.islower()else X+x,Maps(J['map']).name)).strip();Ai=['2 D Ship','5 D Ship','5 D Temple']
+				for o in Ai:
 					if o in b:b=b.replace(o,o.replace(X,H))
-				B[t][f"{Aa.split(X)[A9]} {NameFromKong(J[_G])}"][AV[J['type']].strip()]+=f"{b.strip()}: {J['name']}<br>"
+				B[t][f"{Ah.split(X)[AB]} {NameFromKong(J[_G])}"][Ac[J['type']].strip()]+=f"{b.strip()}: {J['name']}<br>"
 		A.json=json.dumps(B,indent=4)
 	def UpdateKasplats(A,kasplat_map):
 		'Update kasplat data.';C='kasplat_swaps'

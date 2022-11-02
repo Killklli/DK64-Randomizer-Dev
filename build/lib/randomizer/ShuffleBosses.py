@@ -69,7 +69,7 @@ def ShuffleBossesBasedOnOwnedItems(settings,ownedKongs,ownedMoves):
 			elif F==Z:C.append(Maps.CastleBoss);E.append(a)
 		if len(C)<7:raise FillException('Invalid boss order with fewer than the 7 required main levels.')
 	except Exception as P:
-		if isinstance(P.args[0],str)and'index out of range'in P.args[0]:raise BossOutOfLocationsException('No valid locations to place '+N)
+		if isinstance(P.args[0],str)and'index out of range'in P.args[0]:print('Unlucky move placement fill :(');raise BossOutOfLocationsException('No valid locations to place '+N)
 		raise FillException(P)
 	if A.kong_rando or A.boss_location_rando:A.boss_maps=C
 	else:A.boss_maps=BossMapList.copy()
