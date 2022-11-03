@@ -30,30 +30,24 @@ def getWarpFromSwapIndex(index):
 	for A in BananaportVanilla.values():
 		if A.swap_index==index:return A
 def ShuffleWarpsCrossMap(bananaport_replacements,human_ports,is_coupled):
-	'Shuffles warps with the cross-map setting.';M=is_coupled;L=human_ports;K=True;I=bananaport_replacements;H=False
-	for A in BananaportVanilla.values():A.cross_map_placed=H;I.append(0)
-	E=[]
+	'Shuffles warps with the cross-map setting.';K=is_coupled;J=human_ports;I=True;H=bananaport_replacements;G=False
+	for A in BananaportVanilla.values():A.cross_map_placed=G;H.append(0)
+	L=[]
 	for (P,A) in enumerate(BananaportVanilla.values()):
-		if not A.cross_map_placed or not M:
-			J=[];N=[]
+		if not A.cross_map_placed or not K:
+			M=[];N=[]
 			for B in BananaportVanilla.values():
-				F=K
-				if B.swap_index==A.swap_index:F=H
-				if B.cross_map_placed:F=H
+				E=I
+				if B.swap_index==A.swap_index:E=G
+				if B.cross_map_placed:E=G
 				else:N.append(B.swap_index)
-				if A.restricted and B.restricted:F=H
-				if F:J.append(B.swap_index)
-			print(f"{P} ({len(J)} | {len(N)})");C=random.choice(J);G=random.randint(0,4);A.tied_index=C
+				if A.restricted and B.restricted:E=G
+				if E:M.append(B.swap_index)
+			C=random.choice(M);F=random.randint(0,4);A.tied_index=C
 			for B in BananaportVanilla.values():
-				if B.swap_index==C:B.cross_map_placed=K
-			A.new_warp=G;D=getWarpFromSwapIndex(C);L[A.name]=D.name;I[A.swap_index]=[C,G];A.destination_region_id=D.region_id;O=[C]
-			if C in E:print(f"Selected {C} which is a duplicate")
-			E.append(C)
-			if M:
-				A.cross_map_placed=K
+				if B.swap_index==C:B.cross_map_placed=I
+			A.new_warp=F;D=getWarpFromSwapIndex(C);J[A.name]=D.name;H[A.swap_index]=[C,F];A.destination_region_id=D.region_id;O=[C];L.append(C)
+			if K:
+				A.cross_map_placed=I
 				for B in BananaportVanilla.values():
-					if B.swap_index==C:
-						B.tied_index=A.swap_index;O.append(A.swap_index);B.new_warp=G;D=getWarpFromSwapIndex(A.swap_index);L[B.name]=D.name;I[B.swap_index]=[A.swap_index,G];A.destination_region_id=D.region_id
-						if A.swap_index in E:print(f"Selected {A.swap_index} which is a duplicate")
-						E.append(A.swap_index)
-			print(f"Selected {O}")
+					if B.swap_index==C:B.tied_index=A.swap_index;O.append(A.swap_index);B.new_warp=F;D=getWarpFromSwapIndex(A.swap_index);J[B.name]=D.name;H[B.swap_index]=[A.swap_index,F];A.destination_region_id=D.region_id;L.append(A.swap_index)

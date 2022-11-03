@@ -12,38 +12,38 @@ class CrownPlacementShortData:
 def randomize_crown_pads(spoiler):
 	'Place Crown Pads.';E=spoiler;D='big'
 	if E.settings.crown_placement_rando:
-		M=[];N=[Maps.JungleJapes,Maps.AztecTinyTemple,Maps.FranticFactory,Maps.GloomyGalleon,Maps.FungiForest,Maps.CavesRotatingCabin,Maps.CastleGreenhouse,Maps.IslesSnideRoom,Maps.FungiForestLobby,Maps.HideoutHelm];F=[];K=N.copy()
-		for O in E.crown_locations:
-			for B in E.crown_locations[O]:
-				A=CrownLocations[O][B];M.append(CrownPlacementShortData(A.map,A.coords,A.scale,A.default_index,A.is_vanilla))
-				if A.is_vanilla and A.map in F:F.append(A.map)
-				if not A.is_vanilla:
-					if A.map not in K:K.append(A.map)
+		N=[];O=[Maps.JungleJapes,Maps.AztecTinyTemple,Maps.FranticFactory,Maps.GloomyGalleon,Maps.FungiForest,Maps.CavesRotatingCabin,Maps.CastleGreenhouse,Maps.IslesSnideRoom,Maps.FungiForestLobby,Maps.HideoutHelm];F=[];K=O.copy()
+		for L in E.crown_locations:
+			for A in E.crown_locations[L]:
+				B=CrownLocations[L][A];X=E.crown_locations[L][A];N.append(CrownPlacementShortData(B.map,B.coords,B.scale,X,B.is_vanilla))
+				if B.is_vanilla and B.map in F:F.append(B.map)
+				if not B.is_vanilla:
+					if B.map not in K:K.append(B.map)
 		for C in K:
 			if C==Maps.CavesRotatingCabin:
-				if C not in F:X=E.settings.rom_data;ROM().seek(X+405);ROM().write(1)
+				if C not in F:Y=E.settings.rom_data;ROM().seek(Y+405);ROM().write(1)
 			else:
 				G=js.pointer_addresses[9]['entries'][C]['pointing_to'];ROM().seek(G);P=int.from_bytes(ROM().readBytes(4),D);H=[]
-				for Y in range(P):
-					Q=True;R=G+4+Y*48;ROM().seek(R+40);Z=int.from_bytes(ROM().readBytes(2),D)
-					if C in N and C not in F and Z==454:Q=False
+				for Z in range(P):
+					Q=True;R=G+4+Z*48;ROM().seek(R+40);a=int.from_bytes(ROM().readBytes(2),D)
+					if C in O and C not in F and a==454:Q=False
 					if Q:
 						ROM().seek(R);S=[]
 						for T in range(int(48/4)):S.append(int.from_bytes(ROM().readBytes(4),D))
 						H.append(S)
 				U=[]
-				for B in M:
-					if B.map==C and not B.vanilla:
-						I=getNextFreeID(C,U);U.append(I);H.append([int(float_to_hex(B.coords[0]),16),int(float_to_hex(B.coords[1]),16),int(float_to_hex(B.coords[2]),16),int(float_to_hex(B.scale),16),1795943986,2605527663,0,0,0,0,454<<16|I,1<<16])
-						if B.default==0:addNewScript(C,[I],ScriptTypes.CrownMain)
-						elif B.default==1:addNewScript(C,[I],ScriptTypes.CrownIsles2)
+				for A in N:
+					if A.map==C and not A.vanilla:
+						I=getNextFreeID(C,U);U.append(I);H.append([int(float_to_hex(A.coords[0]),16),int(float_to_hex(A.coords[1]),16),int(float_to_hex(A.coords[2]),16),int(float_to_hex(A.scale),16),1795943986,2605527663,0,0,0,0,454<<16|I,1<<16])
+						if A.default==0:addNewScript(C,[I],ScriptTypes.CrownMain)
+						elif A.default==1:addNewScript(C,[I],ScriptTypes.CrownIsles2)
 				ROM().seek(G+4+P*48);V=int.from_bytes(ROM().readBytes(4),D);J=[V]
-				for b in range(V):
+				for c in range(V):
 					for T in range(int(36/4)):J.append(int.from_bytes(ROM().readBytes(4),D))
 				W=int.from_bytes(ROM().readBytes(4),D);J.append(W)
-				for c in range(W):
+				for d in range(W):
 					for T in range(int(56/4)):J.append(int.from_bytes(ROM().readBytes(4),D))
 				ROM().seek(G);ROM().writeMultipleBytes(len(H),4)
-				for a in H:
-					for L in a:ROM().writeMultipleBytes(L,4)
-				for L in J:ROM().writeMultipleBytes(L,4)
+				for b in H:
+					for M in b:ROM().writeMultipleBytes(M,4)
+				for M in J:ROM().writeMultipleBytes(M,4)

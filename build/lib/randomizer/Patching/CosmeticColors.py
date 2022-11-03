@@ -127,7 +127,7 @@ def applyKrushaKong(spoiler):
 		C=[_F,_G,_H]
 		if not A.settings.disco_chunky:C.append(_D)
 		A.settings.krusha_slot=random.choice(C)
-	print(A.settings.krusha_slot);ROM().seek(A.settings.rom_data+284)
+	ROM().seek(A.settings.rom_data+284)
 	if A.settings.krusha_slot=='no_slot':ROM().write(255)
 	elif A.settings.krusha_slot in B:D=B.index(A.settings.krusha_slot);ROM().write(D);placeKrushaHead(D)
 def placeKrushaHead(slot):
