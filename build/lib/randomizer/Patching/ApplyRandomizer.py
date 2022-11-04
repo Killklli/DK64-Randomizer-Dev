@@ -111,7 +111,7 @@ def patching_response(responded_data):
 		for Y in range(3):ROM().seek(B+379+Y);ROM().write(A.settings.kko_phase_order[Y])
 	if A.settings.disco_chunky:ROM().seek(B+303);ROM().write(1)
 	if A.settings.tns_location_rando:ROM().seek(B+270);ROM().write(1)
-	if A.settings.cb_rando:ROM().seek(B+175);ROM().write(1)
+	if A.settings.cb_rando:ROM().seek(B+175);ROM().write(1);ROM().seek(B+267);ROM().write(1)
 	if A.settings.wrinkly_location_rando:ROM().seek(B+287);ROM().write(1)
 	if A.settings.helm_hurry:ROM().seek(B+174);ROM().write(1)
 	if A.settings.remove_water_oscillation:ROM().seek(B+271);ROM().write(1)

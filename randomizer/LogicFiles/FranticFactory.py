@@ -1,7 +1,7 @@
 'Logic file for Frantic Factory.'
 _H="Troff 'N' Scoff"
 _G='Frantic Factory Start'
-_F='R&D Area'
+_F='Research and Development Area'
 _E='Production Room'
 _D='Storage Room'
 _C=None
