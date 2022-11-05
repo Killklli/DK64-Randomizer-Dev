@@ -723,7 +723,7 @@ def Generate_Spoiler(spoiler):
 def ShuffleMisc(spoiler):
 	'Shuffle miscellaneous objects outside of main fill algorithm, including Kasplats, Bonus barrels, and bananaport warps.';N='isles';M='crossmap_coupled';L='in_level';A=spoiler
 	if A.settings.wrinkly_location_rando or A.settings.tns_location_rando:ShuffleDoors(A)
-	if A.settings.crown_placement_rando:H={};I={};ShuffleCrowns(H,I);A.crown_locations=H;A.human_crowns=I
+	if A.settings.crown_placement_rando:H={};I={};ShuffleCrowns(H,I);A.crown_locations=H;A.human_crowns=dict(sorted(I.items()))
 	KasplatShuffle(A,LogicVariables);A.human_kasplats={};A.UpdateKasplats(LogicVariables.kasplat_map)
 	if A.settings.bonus_barrels in(_F,'selected'):BarrelShuffle(A.settings);A.UpdateBarrels()
 	if A.settings.cb_rando:ShuffleCBs(A)
