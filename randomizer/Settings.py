@@ -93,7 +93,7 @@ class Settings:
 			elif B==Kongs.chunky:A.helm_chunky=_C;F.append(1)
 		A.helm_order=F;K=[Events.JapesKeyTurnedIn,Events.AztecKeyTurnedIn,Events.FactoryKeyTurnedIn,Events.GalleonKeyTurnedIn,Events.ForestKeyTurnedIn,Events.CavesKeyTurnedIn,Events.CastleKeyTurnedIn,Events.HelmKeyTurnedIn];C=K.copy();I=0
 		if A.keys_random:I=randint(0,8)
-		elif A.select_keys:
+		if A.select_keys:
 			A.krool_keys_required=K.copy()
 			for D in A.starting_keys_list_selected:
 				if D=='key1':A.krool_keys_required.remove(C[0])
