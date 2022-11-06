@@ -333,7 +333,7 @@ def compileHints(spoiler):
 			if F.item in Y:Y.remove(F.item)
 		B3=2-Y.count(Items.ProgressiveSlam);random.shuffle(Y)
 		for I in range(hint_distribution[HintType.FoolishMove]):
-			if len(Y)==0:hint_distribution[HintType.FoolishMove]-=1;hint_distribution[HintType.WothLocation]+=1
+			if len(Y)==0:hint_distribution[HintType.FoolishMove]-=1;hint_distribution[HintType.WothLocation]+=1;continue
 			Ah=Y.pop()
 			if Ah==Items.ProgressiveSlam:
 				if B3==0:k='Super Simian Slam'

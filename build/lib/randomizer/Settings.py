@@ -163,7 +163,7 @@ class Settings:
 				A.valid_locations[Types.Shop][Kongs.donkey]=B;A.valid_locations[Types.Shop][Kongs.diddy]=B;A.valid_locations[Types.Shop][Kongs.lanky]=B;A.valid_locations[Types.Shop][Kongs.tiny]=B;A.valid_locations[Types.Shop][Kongs.chunky]=B
 			A.valid_locations[Types.Shop][Kongs.any]=SharedShopLocations
 			if A.shockwave_status not in(_D,_G)and Types.Shockwave not in A.shuffled_location_types:A.valid_locations[Types.Shop][Kongs.any].add(Locations.CameraAndShockwave)
-			else:A.valid_locations[Types.Shop][Kongs.tiny].remove(Locations.CameraAndShockwave)
+			elif Locations.CameraAndShockwave in A.valid_locations[Types.Shop][Kongs.tiny]:A.valid_locations[Types.Shop][Kongs.tiny].remove(Locations.CameraAndShockwave)
 			if A.training_barrels==G and Types.TrainingBarrel not in A.shuffled_location_types:
 				for H in Kongs:A.valid_locations[Types.Shop][H].update(TrainingBarrelLocations.copy())
 			A.valid_locations[Types.Shockwave]=A.valid_locations[Types.Shop][Kongs.any];A.valid_locations[Types.TrainingBarrel]=A.valid_locations[Types.Shop][Kongs.any]
