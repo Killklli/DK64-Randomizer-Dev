@@ -117,7 +117,6 @@ class Settings:
 		if Events.CavesKeyTurnedIn not in A.krool_keys_required:ItemList[Items.CrystalCavesKey].playthrough=_A
 		if Events.CastleKeyTurnedIn not in A.krool_keys_required:ItemList[Items.CreepyCastleKey].playthrough=_A
 		if Events.HelmKeyTurnedIn not in A.krool_keys_required:ItemList[Items.HideoutHelmKey].playthrough=_A
-		if A.key_8_helm:LocationList[Locations.HelmKey].type=Types.Constant
 		if A.random_medal_requirement:A.medal_requirement=round(random.normalvariate(10,1.5))
 		A.boss_maps=ShuffleBosses(A.boss_location_rando);A.boss_kongs=ShuffleBossKongs(A);A.kutout_kongs=ShuffleKutoutKongs(A.boss_maps,A.boss_kongs,A.boss_kong_rando);A.kko_phase_order=ShuffleKKOPhaseOrder(A)
 		if A.bonus_barrel_auto_complete:A.bonus_barrels=M
@@ -154,7 +153,7 @@ class Settings:
 	def update_valid_locations(A):
 		'Calculate (or recalculate) valid locations for items by type.';G='shuffled';A.valid_locations={};A.valid_locations[Types.Kong]=[Locations.DiddyKong,Locations.LankyKong,Locations.TinyKong,Locations.ChunkyKong]
 		if A.move_rando not in(_E,_L):
-			A.valid_locations[Types.Shop]={}
+			A.valid_locations[Types.Shop]={};A.valid_locations[Types.Shop][Kongs.donkey]=[];A.valid_locations[Types.Shop][Kongs.diddy]=[];A.valid_locations[Types.Shop][Kongs.lanky]=[];A.valid_locations[Types.Shop][Kongs.tiny]=[];A.valid_locations[Types.Shop][Kongs.chunky]=[]
 			if A.move_rando=='on':A.valid_locations[Types.Shop][Kongs.donkey]=DonkeyMoveLocations.copy();A.valid_locations[Types.Shop][Kongs.diddy]=DiddyMoveLocations.copy();A.valid_locations[Types.Shop][Kongs.lanky]=LankyMoveLocations.copy();A.valid_locations[Types.Shop][Kongs.tiny]=TinyMoveLocations.copy();A.valid_locations[Types.Shop][Kongs.chunky]=ChunkyMoveLocations.copy()
 			elif A.move_rando=='cross_purchase':
 				B=DonkeyMoveLocations.copy();B.update(DiddyMoveLocations.copy());B.update(TinyMoveLocations.copy());B.update(ChunkyMoveLocations.copy());B.update(LankyMoveLocations.copy())

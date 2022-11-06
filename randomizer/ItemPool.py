@@ -15,6 +15,7 @@ from randomizer.Lists.Location import DonkeyMoveLocations,DiddyMoveLocations,Lan
 from randomizer.Lists.ShufflableExit import ShufflableExits
 def PlaceConstants(settings):
 	'Place items which are to be put in a hard-coded location.';E='levels';A=settings
+	if A.key_8_helm:LocationList[Locations.HelmKey].PlaceItem(Items.HideoutHelmKey)
 	if A.shuffle_loading_zones==E and Types.Key not in A.shuffled_location_types:
 		for C in LevelInfoList.values():
 			if not ShufflableExits[C.TransitionTo].shuffled:LocationList[C.KeyLocation].PlaceConstantItem(C.KeyItem)
