@@ -50,4 +50,4 @@ def ShuffleWarpsCrossMap(bananaport_replacements,human_ports,is_coupled):
 			if K:
 				A.cross_map_placed=I
 				for B in BananaportVanilla.values():
-					if B.swap_index==C:B.tied_index=A.swap_index;O.append(A.swap_index);B.new_warp=F;D=getWarpFromSwapIndex(A.swap_index);J[B.name]=D.name;H[B.swap_index]=[A.swap_index,F];A.destination_region_id=D.region_id;L.append(A.swap_index)
+					if B.swap_index==C:B.tied_index=A.swap_index;O.append(A.swap_index);B.new_warp=F;D=getWarpFromSwapIndex(A.swap_index);J[B.name]=D.name;H[B.swap_index]=[A.swap_index,F];B.destination_region_id=D.region_id;L.append(A.swap_index)
