@@ -93,18 +93,18 @@ shop_cryptic=[['The shop owner with a walking stick','The shop owner who is old'
 crankys_cryptic=['a location out of this world','a location 5000 points deep',"a mad scientist's laboratory"]
 moves_data=[MoveInfo(name='Baboon Blast',move_level=1,move_type=_D,kong=Kongs.donkey),MoveInfo(name='Strong Kong',move_level=2,move_type=_D,kong=Kongs.donkey),MoveInfo(name='Gorilla Grab',move_level=3,move_type=_D,kong=Kongs.donkey),MoveInfo(name='Chimpy Charge',move_level=1,move_type=_D,kong=Kongs.diddy),MoveInfo(name=_c,move_level=2,move_type=_D,kong=Kongs.diddy,important=_A),MoveInfo(name='Simian Spring',move_level=3,move_type=_D,kong=Kongs.diddy),MoveInfo(name='Orangstand',move_level=1,move_type=_D,kong=Kongs.lanky),MoveInfo(name='Baboon Balloon',move_level=2,move_type=_D,kong=Kongs.lanky),MoveInfo(name='Orangstand Sprint',move_level=3,move_type=_D,kong=Kongs.lanky),MoveInfo(name=_d,move_level=1,move_type=_D,kong=Kongs.tiny,important=_A),MoveInfo(name='Ponytail Twirl',move_level=2,move_type=_D,kong=Kongs.tiny),MoveInfo(name='Monkeyport',move_level=3,move_type=_D,kong=Kongs.tiny,important=_A),MoveInfo(name='Hunky Chunky',move_level=1,move_type=_D,kong=Kongs.chunky,important=_A),MoveInfo(name='Primate Punch',move_level=2,move_type=_D,kong=Kongs.chunky,important=_A),MoveInfo(name=_e,move_level=3,move_type=_D,kong=Kongs.chunky,important=_A),MoveInfo(name=_V,move_level=1,move_type=_M,kong=Kongs.any),MoveInfo(name=_V,move_level=2,move_type=_M,kong=Kongs.any),MoveInfo(name=_V,move_level=3,move_type=_M,kong=Kongs.any),MoveInfo(name='Coconut Shooter',move_level=1,move_type=_J,kong=Kongs.donkey,important=_A),MoveInfo(name='Peanut Popguns',move_level=1,move_type=_J,kong=Kongs.diddy,important=_A),MoveInfo(name='Grape Shooter',move_level=1,move_type=_J,kong=Kongs.lanky),MoveInfo(name='Feather Bow',move_level=1,move_type=_J,kong=Kongs.tiny,important=_A),MoveInfo(name='Pineapple Launcher',move_level=1,move_type=_J,kong=Kongs.chunky),MoveInfo(name='Homing Ammo',move_level=2,move_type=_J,kong=Kongs.any),MoveInfo(name='Sniper Scope',move_level=3,move_type=_J,kong=Kongs.any),MoveInfo(name=_f,move_level=1,move_type=_T,kong=Kongs.any),MoveInfo(name=_f,move_level=2,move_type=_T,kong=Kongs.any),MoveInfo(name='Bongo Blast',move_level=1,move_type=_I,kong=Kongs.donkey,important=_A),MoveInfo(name='Guitar Gazump',move_level=1,move_type=_I,kong=Kongs.diddy,important=_A),MoveInfo(name='Trombone Tremor',move_level=1,move_type=_I,kong=Kongs.lanky,important=_A),MoveInfo(name='Saxophone Slam',move_level=1,move_type=_I,kong=Kongs.tiny,important=_A),MoveInfo(name='Triangle Trample',move_level=1,move_type=_I,kong=Kongs.chunky,important=_A),MoveInfo(name=_W,move_level=2,move_type=_I,kong=Kongs.any),MoveInfo(name=_W,move_level=3,move_type=_I,kong=Kongs.any),MoveInfo(name=_W,move_level=4,move_type=_I,kong=Kongs.any)]
 kong_placement_levels=[{_F:_K,_G:0},{_F:_g,_G:1},{_F:_h,_G:1},{_F:_L,_G:2}]
-hint_distribution={HintType.Joke:1,HintType.KRoolOrder:2,HintType.HelmOrder:2,HintType.FullShop:8,HintType.MoveLocation:7,HintType.BLocker:2,HintType.TroffNScoff:0,HintType.KongLocation:1,HintType.Entrance:8,HintType.RequiredKeyHint:-1,HintType.RequiredKRoolHint:0,HintType.WothLocation:8,HintType.FullShopWithItems:4,HintType.FoolishMove:4}
+hint_distribution={HintType.Joke:1,HintType.KRoolOrder:2,HintType.HelmOrder:2,HintType.MoveLocation:7,HintType.BLocker:2,HintType.TroffNScoff:0,HintType.KongLocation:1,HintType.Entrance:8,HintType.RequiredKeyHint:-1,HintType.RequiredKRoolHint:0,HintType.WothLocation:8,HintType.FullShopWithItems:4,HintType.FoolishMove:4}
 HINT_CAP=35
 def compileHints(spoiler):
-	'Create a hint distribution, generate buff hints, and place them in locations.';Ao=', then ';An='beat_krool';A=spoiler;N=not A.settings.no_logic and A.settings.shuffle_loading_zones!=_X;G=[HintType.Joke]
-	if A.settings.krool_phase_count<5 and A.settings.win_condition==An:G.append(HintType.KRoolOrder)
+	'Create a hint distribution, generate buff hints, and place them in locations.';Ah=', then ';Ag='beat_krool';A=spoiler;O=not A.settings.no_logic and A.settings.shuffle_loading_zones!=_X;G=[HintType.Joke]
+	if A.settings.krool_phase_count<5 and A.settings.win_condition==Ag:G.append(HintType.KRoolOrder)
 	if A.settings.helm_setting!='skip_all'and A.settings.helm_phase_count<5:G.append(HintType.HelmOrder)
-	if not A.settings.unlock_all_moves and A.settings.move_rando not in('off','item_shuffle'):G.append(HintType.FullShop);G.append(HintType.MoveLocation)
+	if not A.settings.unlock_all_moves and A.settings.move_rando not in('off','item_shuffle'):hint_distribution[HintType.FullShopWithItems]*=2;G.append(HintType.FullShopWithItems);G.append(HintType.MoveLocation)
 	if A.settings.shuffle_items and Types.Shop in A.settings.shuffled_location_types:
 		G.append(HintType.FullShopWithItems)
 		if not A.settings.no_logic:
 			G.append(HintType.FoolishMove);G.append(HintType.WothLocation)
-			if A.settings.win_condition==An:
+			if A.settings.win_condition==Ag:
 				G.append(HintType.RequiredKRoolHint)
 				if Kongs.diddy in A.settings.krool_order:hint_distribution[HintType.RequiredKRoolHint]+=1
 				if Kongs.tiny in A.settings.krool_order:hint_distribution[HintType.RequiredKRoolHint]+=1
@@ -112,261 +112,238 @@ def compileHints(spoiler):
 	if A.settings.randomize_blocker_required_amounts:G.append(HintType.BLocker)
 	if A.settings.randomize_cb_required_amounts and len(A.settings.krool_keys_required)>0 and A.settings.krool_keys_required!=[Events.HelmKeyTurnedIn]:G.append(HintType.TroffNScoff)
 	if A.settings.kong_rando:G.append(HintType.KongLocation)
-	if A.settings.shuffle_loading_zones==_X:Ap=hint_distribution[HintType.BLocker];hint_distribution[HintType.BLocker]=max(1,hint_distribution[HintType.TroffNScoff]);hint_distribution[HintType.TroffNScoff]=Ap;G.append(HintType.Entrance)
+	if A.settings.shuffle_loading_zones==_X:Ai=hint_distribution[HintType.BLocker];hint_distribution[HintType.BLocker]=max(1,hint_distribution[HintType.TroffNScoff]);hint_distribution[HintType.TroffNScoff]=Ai;G.append(HintType.Entrance)
 	if Types.Key in A.settings.shuffled_location_types:
-		G.append(HintType.RequiredKeyHint);g=[LocationList[B].item for B in A.woth_locations if ItemList[LocationList[B].item].type==Types.Key]
-		if not N or A.settings.hard_level_progression:p=g;q=[]
-		else:q=[A for A in g if A<=Items.AngryAztecKey];p=[A for A in g if A>Items.AngryAztecKey]
-		hint_distribution[HintType.RequiredKeyHint]=len(q)+2*len(p)
-	b=0
+		G.append(HintType.RequiredKeyHint);d=[LocationList[B].item for B in A.woth_locations if ItemList[LocationList[B].item].type==Types.Key]
+		if not O or A.settings.hard_level_progression:o=d;p=[]
+		else:p=[A for A in d if A<=Items.AngryAztecKey];o=[A for A in d if A>Items.AngryAztecKey]
+		hint_distribution[HintType.RequiredKeyHint]=len(p)+2*len(o)
+	X=0
 	for type in hint_distribution:
-		if type in G:b+=hint_distribution[type]
+		if type in G:X+=hint_distribution[type]
 		else:hint_distribution[type]=0
-	while b<HINT_CAP:
-		AE=random.choice(G)
-		if AE in(HintType.RequiredKeyHint,HintType.RequiredKRoolHint):continue
-		hint_distribution[AE]+=1;b+=1
-	while b>HINT_CAP:
-		r=random.choice(G)
-		if r in(HintType.RequiredKeyHint,HintType.RequiredKRoolHint):continue
-		if hint_distribution[r]>0:hint_distribution[r]-=1;b-=1
-	Z=_C
-	if N:
-		Z=[]
+	while X<HINT_CAP:
+		e=random.choice(G)
+		if e==HintType.Joke:e=random.choice(G)
+		if e in(HintType.RequiredKeyHint,HintType.RequiredKRoolHint):continue
+		hint_distribution[e]+=1;X+=1
+	while X>HINT_CAP:
+		q=random.choice(G)
+		if q in(HintType.RequiredKeyHint,HintType.RequiredKRoolHint):continue
+		if hint_distribution[q]>0:hint_distribution[q]-=1;X-=1
+	V=_C
+	if O:
+		V=[]
 		for D in all_levels:
-			for R in A.settings.owned_kongs_by_level[D]:
+			for Y in A.settings.owned_kongs_by_level[D]:
 				if not A.settings.wrinkly_location_rando:
-					if D==Levels.FranticFactory and R not in[Kongs.donkey,Kongs.chunky]and(Kongs.donkey not in A.settings.owned_kongs_by_level[D]or Items.GorillaGrab not in A.settings.owned_moves_by_level[D]):continue
-					if D==Levels.FungiForest and R is not Kongs.chunky and(Kongs.donkey not in A.settings.owned_kongs_by_level[D]or Items.GorillaGrab not in A.settings.owned_moves_by_level[D]):continue
-					if D==Levels.CrystalCaves and R is Kongs.diddy and(Kongs.chunky not in A.settings.owned_kongs_by_level[D]or Items.PrimatePunch not in A.settings.owned_moves_by_level[D]or Items.RocketbarrelBoost not in A.settings.owned_moves_by_level[D]or Items.Barrels not in A.settings.owned_moves_by_level[D]):continue
+					if D==Levels.FranticFactory and Y not in[Kongs.donkey,Kongs.chunky]and(Kongs.donkey not in A.settings.owned_kongs_by_level[D]or Items.GorillaGrab not in A.settings.owned_moves_by_level[D]):continue
+					if D==Levels.FungiForest and Y is not Kongs.chunky and(Kongs.donkey not in A.settings.owned_kongs_by_level[D]or Items.GorillaGrab not in A.settings.owned_moves_by_level[D]):continue
+					if D==Levels.CrystalCaves and Y is Kongs.diddy and(Kongs.chunky not in A.settings.owned_kongs_by_level[D]or Items.PrimatePunch not in A.settings.owned_moves_by_level[D]or Items.RocketbarrelBoost not in A.settings.owned_moves_by_level[D]or Items.Barrels not in A.settings.owned_moves_by_level[D]):continue
 					if D==Levels.CrystalCaves and(Kongs.chunky not in A.settings.owned_kongs_by_level[D]or Items.PrimatePunch not in A.settings.owned_moves_by_level[D]or Items.Barrels not in A.settings.owned_moves_by_level[D]):continue
-					if D==Levels.AngryAztec and R is Kongs.chunky and(Kongs.tiny not in A.settings.owned_kongs_by_level[D]or Items.Feather not in A.settings.owned_moves_by_level[D]or Items.HunkyChunky not in A.settings.owned_moves_by_level[D]):continue
-				Aq=[A for A in hints if A.level==D and A.kong==R][0];Z.append(Aq)
-	AF=[];AG=0
-	while AG<hint_distribution[HintType.KongLocation]:
-		h=random.choice(kong_placement_levels);K=A.shuffled_kong_placement[h[_F]][_i][_H];AH=A.shuffled_kong_placement[h[_F]][_j][_H];AI=h[_G];s=_C
-		if N and K not in AF:s=[B for B in all_levels if A.settings.EntryGBs[B]<=A.settings.EntryGBs[h[_G]]]
-		t=A.settings.starting_kong_list.copy();t.append(AH);B=getRandomHintLocation(kongs=t,levels=s)
+					if D==Levels.AngryAztec and Y is Kongs.chunky and(Kongs.tiny not in A.settings.owned_kongs_by_level[D]or Items.Feather not in A.settings.owned_moves_by_level[D]or Items.HunkyChunky not in A.settings.owned_moves_by_level[D]):continue
+				Aj=[A for A in hints if A.level==D and A.kong==Y][0];V.append(Aj)
+	A9=[];AA=0
+	while AA<hint_distribution[HintType.KongLocation]:
+		f=random.choice(kong_placement_levels);K=A.shuffled_kong_placement[f[_F]][_i][_H];AB=A.shuffled_kong_placement[f[_F]][_j][_H];AC=f[_G];r=_C
+		if O and K not in A9:r=[B for B in all_levels if A.settings.EntryGBs[B]<=A.settings.EntryGBs[f[_G]]]
+		s=A.settings.starting_kong_list.copy();s.append(AB);B=getRandomHintLocation(kongs=s,levels=r)
 		if B is _C:
-			if s is not _C:B=getRandomHintLocation(kongs=t)
+			if r is not _C:B=getRandomHintLocation(kongs=s)
 			else:hint_distribution[HintType.Joke]+=1;hint_distribution[HintType.KongLocation]-=1;continue
-		Ar=kong_list[AH]
+		Ak=kong_list[AB]
 		if A.settings.wrinkly_hints==_E:
-			if not K==Kongs.any:a=random.choice(kong_cryptic[K])
-			E=random.choice(level_cryptic[AI])
+			if not K==Kongs.any:W=random.choice(kong_cryptic[K])
+			E=random.choice(level_cryptic[AC])
 		else:
-			if not K==Kongs.any:a=kong_list[K]
-			E=level_list[AI]
-		AJ='frees'
-		if K==Kongs.any:AJ='accesses';a='an empty cage'
-		C=f"{Ar} {AJ} {a} in {E}.";AF.append(K);B.hint_type=HintType.KongLocation;UpdateHint(B,C);AG+=1
-	AK=[]
+			if not K==Kongs.any:W=kong_list[K]
+			E=level_list[AC]
+		AD='frees'
+		if K==Kongs.any:AD='accesses';W='an empty cage'
+		C=f"{Ak} {AD} {W} in {E}.";A9.append(K);B.hint_type=HintType.KongLocation;UpdateHint(B,C);AA+=1
+	AE=[]
 	for I in range(hint_distribution[HintType.BLocker]):
-		c=_C
-		if N:c=Z
+		Z=_C
+		if O:Z=V
 		H=[]
 		while len(H)==0:
-			B=getRandomHintLocation(location_list=c);H=[C for C in all_levels if(not N or A.settings.EntryGBs[C]>A.settings.EntryGBs[B.level])and(B.level,C)not in AK]
+			B=getRandomHintLocation(location_list=Z);H=[C for C in all_levels if(not O or A.settings.EntryGBs[C]>A.settings.EntryGBs[B.level])and(B.level,C)not in AE]
 			if not A.settings.maximize_helm_blocker:
 				if I==0:H=[Levels.HideoutHelm]
 				else:H.append(Levels.HideoutHelm)
-		O=random.choice(H);AK.append((B.level,O));E=level_list[O]
-		if A.settings.wrinkly_hints==_E:E=random.choice(level_cryptic[O])
-		C=f"The barrier to {E} can be cleared by obtaining {A.settings.EntryGBs[O]} Golden Bananas.";B.hint_type=HintType.BLocker;UpdateHint(B,C)
-	AL=_B
+		P=random.choice(H);AE.append((B.level,P));E=level_list[P]
+		if A.settings.wrinkly_hints==_E:E=random.choice(level_cryptic[P])
+		C=f"The barrier to {E} can be cleared by obtaining {A.settings.EntryGBs[P]} Golden Bananas.";B.hint_type=HintType.BLocker;UpdateHint(B,C)
+	AF=_B
 	for I in range(hint_distribution[HintType.HelmOrder]):
-		c=_C
-		if N and not AL and I==hint_distribution[HintType.HelmOrder]-1:c=Z
-		B=getRandomHintLocation(location_list=c)
-		if Z is _C or B in Z:AL=_A
-		As=[Kongs.donkey,Kongs.chunky,Kongs.tiny,Kongs.lanky,Kongs.diddy];At=[As[B]for B in A.settings.helm_order];Au=[NameFromKong(A)for A in At];Av=Ao.join(Au);u=f"The Blast-O-Matic can be disabled by using {Av}.";B.hint_type=HintType.HelmOrder;UpdateHint(B,u)
+		Z=_C
+		if O and not AF and I==hint_distribution[HintType.HelmOrder]-1:Z=V
+		B=getRandomHintLocation(location_list=Z)
+		if V is _C or B in V:AF=_A
+		Al=[Kongs.donkey,Kongs.chunky,Kongs.tiny,Kongs.lanky,Kongs.diddy];Am=[Al[B]for B in A.settings.helm_order];An=[NameFromKong(A)for A in Am];Ao=Ah.join(An);t=f"The Blast-O-Matic can be disabled by using {Ao}.";B.hint_type=HintType.HelmOrder;UpdateHint(B,t)
 	if hint_distribution[HintType.RequiredKeyHint]>0:
-		v={}
+		u={}
 		for (J,F) in LocationList.items():
-			if F.item in g:v[F.item]=J
-		for AM in q:
-			F=LocationList[v[AM]];d=ItemList[AM];K=F.kong
+			if F.item in d:u[F.item]=J
+		for AG in p:
+			F=LocationList[u[AG]];a=ItemList[AG];K=F.kong
 			if F.kong==Kongs.any and F.type==Types.Key:K=A.settings.boss_kongs[F.level]
 			if A.settings.wrinkly_hints==_E:
 				if F.level==Levels.Shops:E="Cranky's Lab"
 				else:E=random.choice(level_cryptic_helm_isles[F.level])
-				a=random.choice(kong_cryptic[K])
+				W=random.choice(kong_cryptic[K])
 			else:
 				if F.level==Levels.Shops:E=random.choice(crankys_cryptic)
 				else:E=level_list_helm_isles[F.level]
-				a=kong_list[K]
+				W=kong_list[K]
 			H=[]
-			for (i,D) in A.settings.level_order.items():
-				if i<=d.index:H.append(D)
+			for (g,D) in A.settings.level_order.items():
+				if g<=a.index:H.append(D)
 			B=getRandomHintLocation(levels=H)
 			if B is _C:B=getRandomHintLocation()
-			C=f"{d.name} can be acquired with {a} in {E}.";B.hint_type=HintType.RequiredKeyHint;UpdateHint(B,C)
-		for AN in p:
-			S=A.woth_paths[v[AN]];d=ItemList[AN]
+			C=f"{a.name} can be acquired with {W} in {E}.";B.hint_type=HintType.RequiredKeyHint;UpdateHint(B,C)
+		for AH in o:
+			R=A.woth_paths[u[AH]];a=ItemList[AH]
 			for I in range(2):
-				M=random.choice(S);T=GetRegionOfLocation(M);w=T.hint_name;B=getRandomHintLocation()
-				if M in TrainingBarrelLocations:Aw=ItemList[LocationList[M].item].name;C=f"Your training with {Aw} will aid in unlocking {d.name}."
-				else:C=f"Investigating the {w} will aid in unlocking {d.name}."
+				M=random.choice(R);S=GetRegionOfLocation(M);v=S.hint_name;B=getRandomHintLocation()
+				if M in TrainingBarrelLocations:Ap=ItemList[LocationList[M].item].name;C=f"Your training with {Ap} will aid in unlocking {a.name}."
+				else:C=f"Investigating the {v} will aid in unlocking {a.name}."
 				B.hint_type=HintType.RequiredKeyHint;UpdateHint(B,C)
 	if hint_distribution[HintType.RequiredKRoolHint]>0:
-		j={};AO=_C;AP=_C;AQ=_C
+		h={};AI=_C;AJ=_C;AK=_C
 		for J in A.woth_paths.keys():
-			if LocationList[J].item==Items.RocketbarrelBoost:AO=J
-			if LocationList[J].item==Items.MiniMonkey:AP=J
-			if LocationList[J].item==Items.GorillaGone:AQ=J
-		if Kongs.diddy in A.settings.krool_order:S=A.woth_paths[AO];M=random.choice(S);T=GetRegionOfLocation(M);j[_c]=T.hint_name
-		if Kongs.tiny in A.settings.krool_order:S=A.woth_paths[AP];M=random.choice(S);T=GetRegionOfLocation(M);j[_d]=T.hint_name
-		if Kongs.chunky in A.settings.krool_order:S=A.woth_paths[AQ];M=random.choice(S);T=GetRegionOfLocation(M);j[_e]=T.hint_name
-		for (k,w) in j.items():B=getRandomHintLocation();C=f"Investigating the {w} will aid in your fight against K. Rool.";B.hint_type=HintType.RequiredKRoolHint;UpdateHint(B,C)
-	l={};AR=[];x=0
-	while x<hint_distribution[HintType.MoveLocation]:
-		U=_C;AS=[B for B in A.woth.keys()if B not in AR and any((A in B for A in shop_owners))]
-		if len(AS)==0:P=hint_distribution[HintType.MoveLocation]-x;hint_distribution[HintType.Joke]+=P;hint_distribution[HintType.MoveLocation]-=P;break
-		e=random.choice(AS);m=level_list_isles.index([A for A in level_list_isles if e[:5]in A][0])
-		for y in ItemList:
-			if ItemList[y].name==A.woth[e]:
-				if y==Items.ProgressiveSlam:continue
-				U=y;break
+			if LocationList[J].item==Items.RocketbarrelBoost:AI=J
+			if LocationList[J].item==Items.MiniMonkey:AJ=J
+			if LocationList[J].item==Items.GorillaGone:AK=J
+		if Kongs.diddy in A.settings.krool_order:R=A.woth_paths[AI];M=random.choice(R);S=GetRegionOfLocation(M);h[_c]=S.hint_name
+		if Kongs.tiny in A.settings.krool_order:R=A.woth_paths[AJ];M=random.choice(R);S=GetRegionOfLocation(M);h[_d]=S.hint_name
+		if Kongs.chunky in A.settings.krool_order:R=A.woth_paths[AK];M=random.choice(R);S=GetRegionOfLocation(M);h[_e]=S.hint_name
+		for (i,v) in h.items():B=getRandomHintLocation();C=f"Investigating the {v} will aid in your fight against K. Rool.";B.hint_type=HintType.RequiredKRoolHint;UpdateHint(B,C)
+	j={};AL=[];w=0
+	while w<hint_distribution[HintType.MoveLocation]:
+		N=_C;AM=[B for B in A.woth_locations if B not in AL and LocationList[B].type==Types.Shop]
+		if len(AM)==0:b=hint_distribution[HintType.MoveLocation]-w;hint_distribution[HintType.Joke]+=b;hint_distribution[HintType.MoveLocation]-=b;break
+		k=random.choice(AM);l=LocationList[k].level;N=LocationList[k].item
+		if N==Items.ProgressiveSlam:continue
 		H=all_levels.copy()
-		if N and not A.settings.hard_level_progression:
-			AT=all_levels.copy();AT.sort(key=lambda l:A.settings.EntryGBs[l]);H=[];z=[]
-			for D in AT:
-				if U not in A.settings.owned_moves_by_level[D]:H.append(D)
+		if O and not A.settings.hard_level_progression:
+			AN=all_levels.copy();AN.sort(key=lambda l:A.settings.EntryGBs[l]);H=[];x=[]
+			for D in AN:
+				if N not in A.settings.owned_moves_by_level[D]:H.append(D)
 				else:
-					A0=[B for B in all_levels if A.settings.EntryGBs[B]==A.settings.EntryGBs[D]and B not in H]
-					if len(A0)==1 or m>=7:z=A0
+					y=[B for B in all_levels if A.settings.EntryGBs[B]==A.settings.EntryGBs[D]and B not in H]
+					if len(y)==1 or l>=7:x=y
 					else:
-						AU=-1
-						for i in A.settings.level_order:
-							if m==A.settings.level_order[i]:AU=i;break
-						for AV in A0:
-							Ax=[B for B in A.settings.level_order if AV==A.settings.level_order[B]][0]
-							if Ax<=AU:z.append(AV)
+						AO=-1
+						for g in A.settings.level_order:
+							if l==A.settings.level_order[g]:AO=g;break
+						for AP in y:
+							Aq=[B for B in A.settings.level_order if AP==A.settings.level_order[B]][0]
+							if Aq<=AO:x.append(AP)
 					break
-			H.extend(z)
-		if U in l.keys():
-			for AW in l[U]:
-				if AW in H:H.remove(AW)
-		else:l[U]=[]
-		B=getRandomHintLocation(levels=H,move_name=A.woth[e])
-		if B is _C:AR.append(e);continue
-		AX=level_list_isles[m]
-		if A.settings.wrinkly_hints==_E:AX=random.choice(level_cryptic_isles[m])
-		A1=[A for A in shop_owners if A in e][0];C=f"On the Way of the Hoard, {ItemList[U].name} is bought from {A1} in {AX}.";l[U].append(B.level);B.hint_type=HintType.MoveLocation;UpdateHint(B,C);x+=1
+			H.extend(x)
+		if N in j.keys():
+			for AQ in j[N]:
+				if AQ in H:H.remove(AQ)
+		else:j[N]=[]
+		B=getRandomHintLocation(levels=H,move_name=ItemList[N].name)
+		if B is _C:AL.append(k);continue
+		AR=level_list_helm_isles[l]
+		if A.settings.wrinkly_hints==_E:AR=random.choice(level_cryptic_helm_isles[l])
+		Ar=shop_owners[LocationList[k].vendor];C=f"On the Way of the Hoard, {ItemList[N].name} is bought from {Ar} in {AR}.";j[N].append(B.level);B.hint_type=HintType.MoveLocation;UpdateHint(B,C);w+=1
 	if hint_distribution[HintType.TroffNScoff]>0:
 		Q=[]
-		for V in A.settings.krool_keys_required:
-			if V==Events.JapesKeyTurnedIn:Q.append(A.settings.level_order[1])
-			if V==Events.AztecKeyTurnedIn:Q.append(A.settings.level_order[2])
-			if V==Events.FactoryKeyTurnedIn:Q.append(A.settings.level_order[3])
-			if V==Events.GalleonKeyTurnedIn:Q.append(A.settings.level_order[4])
-			if V==Events.ForestKeyTurnedIn:Q.append(A.settings.level_order[5])
-			if V==Events.CavesKeyTurnedIn:Q.append(A.settings.level_order[6])
-			if V==Events.CastleKeyTurnedIn:Q.append(A.settings.level_order[7])
-		A2=0
-		while A2<hint_distribution[HintType.TroffNScoff]:
-			A3=0;A4=[]
-			while not any(A4):
-				A3+=1
-				if A3>15:break
-				B=getRandomHintLocation();A4=[C for C in all_levels if C in Q and(not N or A.settings.EntryGBs[C]>=A.settings.EntryGBs[B.level])]
-			if A3>15:P=hint_distribution[HintType.TroffNScoff]-A2;hint_distribution[HintType.Joke]+=P;hint_distribution[HintType.TroffNScoff]-=P;break
-			O=random.choice(A4);E=level_list[O]
-			if A.settings.wrinkly_hints==_E:E=random.choice(level_cryptic[O])
-			AY=A.settings.BossBananas[O];AZ=_k
-			if AY==1:AZ=_l
-			C=f"The barrier to the boss in {E} can be cleared by obtaining {AY} {AZ}.";B.hint_type=HintType.TroffNScoff;UpdateHint(B,C);A2+=1
+		for T in A.settings.krool_keys_required:
+			if T==Events.JapesKeyTurnedIn:Q.append(A.settings.level_order[1])
+			if T==Events.AztecKeyTurnedIn:Q.append(A.settings.level_order[2])
+			if T==Events.FactoryKeyTurnedIn:Q.append(A.settings.level_order[3])
+			if T==Events.GalleonKeyTurnedIn:Q.append(A.settings.level_order[4])
+			if T==Events.ForestKeyTurnedIn:Q.append(A.settings.level_order[5])
+			if T==Events.CavesKeyTurnedIn:Q.append(A.settings.level_order[6])
+			if T==Events.CastleKeyTurnedIn:Q.append(A.settings.level_order[7])
+		z=0
+		while z<hint_distribution[HintType.TroffNScoff]:
+			A0=0;A1=[]
+			while not any(A1):
+				A0+=1
+				if A0>15:break
+				B=getRandomHintLocation();A1=[C for C in all_levels if C in Q and(not O or A.settings.EntryGBs[C]>=A.settings.EntryGBs[B.level])]
+			if A0>15:b=hint_distribution[HintType.TroffNScoff]-z;hint_distribution[HintType.Joke]+=b;hint_distribution[HintType.TroffNScoff]-=b;break
+			P=random.choice(A1);E=level_list[P]
+			if A.settings.wrinkly_hints==_E:E=random.choice(level_cryptic[P])
+			AS=A.settings.BossBananas[P];AT=_k
+			if AS==1:AT=_l
+			C=f"The barrier to the boss in {E} can be cleared by obtaining {AS} {AT}.";B.hint_type=HintType.TroffNScoff;UpdateHint(B,C);z+=1
 	if hint_distribution[HintType.Entrance]>0:
-		A5=[Regions.JungleJapesMain,Regions.JapesBeyondFeatherGate,Regions.TinyHive,Regions.JapesLankyCave,Regions.Mine];A6=[Regions.AngryAztecStart,Regions.AngryAztecOasis,Regions.AngryAztecMain];A7=[Regions.FranticFactoryStart,Regions.ChunkyRoomPlatform,Regions.PowerHut,Regions.BeyondHatch,Regions.InsideCore];Ay=[A5,A6,A7,[Regions.BananaFairyRoom],[Regions.TrainingGrounds],[Regions.GloomyGalleonStart,Regions.LighthousePlatform,Regions.LighthouseUnderwater,Regions.Shipyard],[Regions.FungiForestStart,Regions.GiantMushroomArea,Regions.MushroomLowerExterior,Regions.MushroomNightExterior,Regions.MushroomUpperExterior,Regions.MillArea],[Regions.CrystalCavesMain,Regions.IglooArea,Regions.CabinArea],[Regions.CreepyCastleMain,Regions.CastleWaterfall],[Regions.LowerCave],[Regions.UpperCave]]
+		A2=[Regions.JungleJapesMain,Regions.JapesBeyondFeatherGate,Regions.TinyHive,Regions.JapesLankyCave,Regions.Mine];A3=[Regions.AngryAztecStart,Regions.AngryAztecOasis,Regions.AngryAztecMain];A4=[Regions.FranticFactoryStart,Regions.ChunkyRoomPlatform,Regions.PowerHut,Regions.BeyondHatch,Regions.InsideCore];As=[A2,A3,A4,[Regions.BananaFairyRoom],[Regions.TrainingGrounds],[Regions.GloomyGalleonStart,Regions.LighthousePlatform,Regions.LighthouseUnderwater,Regions.Shipyard],[Regions.FungiForestStart,Regions.GiantMushroomArea,Regions.MushroomLowerExterior,Regions.MushroomNightExterior,Regions.MushroomUpperExterior,Regions.MillArea],[Regions.CrystalCavesMain,Regions.IglooArea,Regions.CabinArea],[Regions.CreepyCastleMain,Regions.CastleWaterfall],[Regions.LowerCave],[Regions.UpperCave]]
 		for I in range(hint_distribution[HintType.Entrance]):
 			C=''
 			if I==0:
-				A8=[B for(B,C)in A.shuffled_exit_data.items()if C.regionId in A5];random.shuffle(A8);Aa=_B
-				while len(A8)>0:
-					Az=A8.pop();C=TryCreatingLoadingZoneHint(A,Az,A5)
-					if C!='':Aa=_A;break
-				if not Aa:print(_m)
+				A5=[B for(B,C)in A.shuffled_exit_data.items()if C.regionId in A2];random.shuffle(A5);AU=_B
+				while len(A5)>0:
+					At=A5.pop();C=TryCreatingLoadingZoneHint(A,At,A2)
+					if C!='':AU=_A;break
+				if not AU:print(_m)
 			elif I==1:
-				A9=[B for(B,C)in A.shuffled_exit_data.items()if C.regionId in A6];random.shuffle(A9);Ab=_B
-				while len(A9)>0:
-					A_=A9.pop();C=TryCreatingLoadingZoneHint(A,A_,A6)
-					if C!='':Ab=_A;break
-				if not Ab:print(_n)
+				A6=[B for(B,C)in A.shuffled_exit_data.items()if C.regionId in A3];random.shuffle(A6);AV=_B
+				while len(A6)>0:
+					Au=A6.pop();C=TryCreatingLoadingZoneHint(A,Au,A3)
+					if C!='':AV=_A;break
+				if not AV:print(_n)
 			elif I==2:
-				AA=[B for(B,C)in A.shuffled_exit_data.items()if C.regionId in A7];random.shuffle(AA);Ac=_B
-				while len(AA)>0:
-					B0=AA.pop();C=TryCreatingLoadingZoneHint(A,B0,A7)
-					if C!='':Ac=_A;break
-				if not Ac:print(_o)
+				A7=[B for(B,C)in A.shuffled_exit_data.items()if C.regionId in A4];random.shuffle(A7);AW=_B
+				while len(A7)>0:
+					Av=A7.pop();C=TryCreatingLoadingZoneHint(A,Av,A4)
+					if C!='':AW=_A;break
+				if not AW:print(_o)
 			else:
-				Ad=random.choice(Ay);AB=[B for(B,C)in A.shuffled_exit_data.items()if C.regionId in Ad];random.shuffle(AB);Ae=_B
-				while len(AB)>0:
-					Af=AB.pop();C=TryCreatingLoadingZoneHint(A,Af,Ad)
-					if C!='':Ae=_A;break
-				if not Ae:print(f"Useful LZR hint to {Af.name} unable to be placed!")
+				AX=random.choice(As);A8=[B for(B,C)in A.shuffled_exit_data.items()if C.regionId in AX];random.shuffle(A8);AY=_B
+				while len(A8)>0:
+					AZ=A8.pop();C=TryCreatingLoadingZoneHint(A,AZ,AX)
+					if C!='':AY=_A;break
+				if not AY:print(f"Useful LZR hint to {AZ.name} unable to be placed!")
 			B=getRandomHintLocation();B.hint_type=HintType.Entrance;UpdateHint(B,C)
-	if hint_distribution[HintType.FullShop]>0:
-		n=[]
-		for Ag in range(3):
-			for D in range(8):
-				W=[]
-				for R in range(5):
-					B1=A.move_data[0][Ag][R][D]
-					for AC in moves_data:
-						if AC.item_key==B1:
-							if AC.name not in W:W.append(AC.name)
-				if len(W)==0:continue
-				X=W[0]
-				if len(W)>1:X=f"{', '.join(W[:-1])} and {W[-1]}"
-				A1=shop_owners[Ag];E=level_list_isles[D]
-				if A.settings.wrinkly_hints==_E:E=random.choice(level_cryptic_isles[D])
-				B2=f"{A1}'s in {E} contains {X}";n.append(B2)
-		random.shuffle(n);AD=0
-		while AD<hint_distribution[HintType.FullShop]:
-			B=getRandomHintLocation()
-			if len(n)==0:P=hint_distribution[HintType.FullShop]-AD;hint_distribution[HintType.Joke]+=P;hint_distribution[HintType.FullShop]-=P;break
-			C=n.pop();B.hint_type=HintType.FullShop;UpdateHint(B,C);AD+=1
 	if hint_distribution[HintType.FoolishMove]>0:
-		Y=AllKongMoves();Y.append(Items.Shockwave)
+		U=AllKongMoves();U.append(Items.Shockwave)
 		for J in A.woth_locations:
 			F=LocationList[J]
-			if F.item in Y:Y.remove(F.item)
-		B3=2-Y.count(Items.ProgressiveSlam);random.shuffle(Y)
+			if F.item in U:U.remove(F.item)
+		Aw=2-U.count(Items.ProgressiveSlam);random.shuffle(U)
 		for I in range(hint_distribution[HintType.FoolishMove]):
-			if len(Y)==0:hint_distribution[HintType.FoolishMove]-=1;hint_distribution[HintType.WothLocation]+=1;continue
-			Ah=Y.pop()
-			if Ah==Items.ProgressiveSlam:
-				if B3==0:k='Super Simian Slam'
-				else:k='Super Duper Simian Slam'
-			else:k=ItemList[Ah].name
-			B=getRandomHintLocation();C=f"It would be foolish to seek out {k}.";B.hint_type=HintType.FoolishMove;UpdateHint(B,C)
+			if len(U)==0:hint_distribution[HintType.FoolishMove]-=1;hint_distribution[HintType.WothLocation]+=1;continue
+			Aa=U.pop()
+			if Aa==Items.ProgressiveSlam:
+				if Aw==0:i='Super Simian Slam'
+				else:i='Super Duper Simian Slam'
+			else:i=ItemList[Aa].name
+			B=getRandomHintLocation();C=f"It would be foolish to seek out {i}.";B.hint_type=HintType.FoolishMove;UpdateHint(B,C)
 	if hint_distribution[HintType.WothLocation]>0:
-		o=[]
+		m=[]
 		for J in A.woth_locations:
 			F=LocationList[J]
-			if F.type in A.settings.shuffled_location_types and F.type!=Types.TrainingBarrel:o.append(F)
-		random.shuffle(o)
+			if F.type in A.settings.shuffled_location_types and F.type!=Types.TrainingBarrel:m.append(F)
+		random.shuffle(m)
 		for I in range(hint_distribution[HintType.WothLocation]):
-			if len(o)==0:hint_distribution[HintType.WothLocation]-=1;hint_distribution[HintType.Joke]+=1;continue
-			B4=o.pop();B=getRandomHintLocation();C=f"{B4.name} is on the Way of the Hoard.";B.hint_type=HintType.WothLocation;UpdateHint(B,C)
-	Ai=[]
+			if len(m)==0:hint_distribution[HintType.WothLocation]-=1;hint_distribution[HintType.Joke]+=1;continue
+			Ax=m.pop();B=getRandomHintLocation();C=f"{Ax.name} is on the Way of the Hoard.";B.hint_type=HintType.WothLocation;UpdateHint(B,C)
+	Ab=[]
 	for I in range(hint_distribution[HintType.FullShopWithItems]):
-		Aj=random.choice([A for A in SharedShopLocations if A not in Ai]);Ai.append(Aj);L=LocationList[Aj];Ak=[A for(id,A)in LocationList.items()if A.type==Types.Shop and A.level==L.level and A.vendor==L.vendor and A.kong!=Kongs.any]
+		Ac=random.choice([A for A in SharedShopLocations if A not in Ab]);Ab.append(Ac);L=LocationList[Ac];Ad=[A for(id,A)in LocationList.items()if A.type==Types.Shop and A.level==L.level and A.vendor==L.vendor and A.kong!=Kongs.any]
 		if L.item is not _C and L.item!=Items.NoItem:
-			Al=shop_owners[L.vendor];E=level_list_helm_isles[L.level]
+			Ae=shop_owners[L.vendor];E=level_list_helm_isles[L.level]
 			if A.settings.wrinkly_hints==_E:E=random.choice(level_cryptic_helm_isles[L.level])
-			X=ItemList[L.item].name
+			n=ItemList[L.item].name
 		else:
-			random.shuffle(Ak);f=[ItemList[A.item].name for A in Ak if A.item is not _C and A.item!=Items.NoItem]
-			if len(f)==0:X='nothing'
+			random.shuffle(Ad);c=[ItemList[A.item].name for A in Ad if A.item is not _C and A.item!=Items.NoItem]
+			if len(c)==0:n='nothing'
 			else:
-				X=f[0]
-				if len(f)>1:X=f"{', '.join(f[:-1])} and {f[-1]}"
-		Al=shop_owners[L.vendor];E=level_list_helm_isles[L.level]
+				n=c[0]
+				if len(c)>1:n=f"{', '.join(c[:-1])} and {c[-1]}"
+		Ae=shop_owners[L.vendor];E=level_list_helm_isles[L.level]
 		if A.settings.wrinkly_hints==_E:E=random.choice(level_cryptic_helm_isles[L.level])
-		B=getRandomHintLocation();C=f"{Al}'s in {E} contains {X}.";B.hint_type=HintType.FullShopWithItems;UpdateHint(B,C)
-	for I in range(hint_distribution[HintType.KRoolOrder]):B=getRandomHintLocation();B5=[NameFromKong(B)for B in A.settings.krool_order];B6=Ao.join(B5);u=f"King K. Rool will face off in the ring against {B6}.";B.hint_type=HintType.KRoolOrder;UpdateHint(B,u)
-	for I in range(hint_distribution[HintType.Joke]):B=getRandomHintLocation();Am=hint_list.copy();random.shuffle(Am);C=Am.pop().hint;B.hint_type=HintType.Joke;UpdateHint(B,C)
+		B=getRandomHintLocation();C=f"{Ae}'s in {E} contains {n}.";B.hint_type=HintType.FullShopWithItems;UpdateHint(B,C)
+	for I in range(hint_distribution[HintType.KRoolOrder]):B=getRandomHintLocation();Ay=[NameFromKong(B)for B in A.settings.krool_order];Az=Ah.join(Ay);t=f"King K. Rool will face off in the ring against {Az}.";B.hint_type=HintType.KRoolOrder;UpdateHint(B,t)
+	for I in range(hint_distribution[HintType.Joke]):B=getRandomHintLocation();Af=hint_list.copy();random.shuffle(Af);C=Af.pop().hint;B.hint_type=HintType.Joke;UpdateHint(B,C)
 	UpdateSpoilerHintList(A);A.hint_distribution=hint_distribution;return _A
 def getRandomHintLocation(location_list=_C,kongs=_C,levels=_C,move_name=_C):
 	'Return an unoccupied hint location. The parameters can be used to specify location requirements.';D=levels;C=kongs;B=location_list;A=[A for A in hints if A.hint==''and(B is _C or A in B)and(C is _C or A.kong in C)and(D is _C or A.level in D)and move_name not in A.banned_keywords]

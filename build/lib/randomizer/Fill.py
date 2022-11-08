@@ -290,16 +290,17 @@ def AssumedFill(settings,itemsToPlace,ownedItems=_A,inOrder=_C):
 		if not M:js.postMessage(L+ItemList[B].name+' in any of remaining '+str(ItemList[B].type)+' type possible locations');return len(G)+1
 	return 0
 def GetMaxCoinsSpent(settings,purchasedShops):
-	'Calculate the max number of coins each kong could have spent given the ownedItems and the price settings.';D=settings;B=[0,0,0,0,0,0];E=0;F=0;G=0
+	'Calculate the max number of coins each kong could have spent given the ownedItems and the price settings.';B=settings;D=[0,0,0,0,0,0];E=0;F=0;G=0
 	for H in purchasedShops:
 		A=LocationList[H]
-		if A.item==Items.ProgressiveSlam:C=D.prices[A.item][E];E+=1
-		elif A.item==Items.ProgressiveAmmoBelt:C=D.prices[A.item][F];F+=1
-		elif A.item==Items.ProgressiveInstrumentUpgrade:C=D.prices[A.item][G];G+=1
-		else:C=D.prices[H]
-		if C is not _A:B[A.kong]+=C
-	for I in range(5):B[I]+=B[int(Kongs.any)]
-	B.pop();return B
+		if A.item==Items.ProgressiveSlam:C=B.prices[A.item][E];E+=1
+		elif A.item==Items.ProgressiveAmmoBelt:C=B.prices[A.item][F];F+=1
+		elif A.item==Items.ProgressiveInstrumentUpgrade:C=B.prices[A.item][G];G+=1
+		elif B.random_prices=='vanilla':C=B.prices[A.item]
+		else:C=B.prices[H]
+		if C is not _A:D[A.kong]+=C
+	for I in range(5):D[I]+=D[int(Kongs.any)]
+	D.pop();return D
 def GetUnplacedItemPrerequisites(spoiler,targetItemId,ownedKongs=[],isOneSlamPlaced=_C):
 	'Given the target item and the current world state, find a valid, minimal, unplaced set of items required to reach the location it is in.';M='Item placed in an inaccessible location: ';L=isOneSlamPlaced;J=ownedKongs;C=targetItemId;B=spoiler;E=[]
 	if Types.Key in B.settings.shuffled_location_types:E=ItemPool.BlueprintAssumedItems().copy()
@@ -631,40 +632,40 @@ def SetNewProgressionRequirements(settings):
 			if A.EntryGBs[H]>A.EntryGBs[H+1]:O=A.EntryGBs[H];A.EntryGBs[H]=A.EntryGBs[H+1];A.EntryGBs[H+1]=O
 	A.BossBananas=[min(A.troff_0,sum(B[0]),round(A.troff_0/(A.troff_max*A.troff_weight_0)*sum(B[0]))),min(A.troff_1,sum(B[1]),round(A.troff_1/(A.troff_max*A.troff_weight_1)*sum(B[1]))),min(A.troff_2,sum(B[2]),round(A.troff_2/(A.troff_max*A.troff_weight_2)*sum(B[2]))),min(A.troff_3,sum(B[3]),round(A.troff_3/(A.troff_max*A.troff_weight_3)*sum(B[3]))),min(A.troff_4,sum(B[4]),round(A.troff_4/(A.troff_max*A.troff_weight_4)*sum(B[4]))),min(A.troff_5,sum(B[5]),round(A.troff_5/(A.troff_max*A.troff_weight_5)*sum(B[5]))),min(A.troff_6,sum(B[6]),round(A.troff_6/(A.troff_max*A.troff_weight_6)*sum(B[6])))];ShuffleExits.UpdateLevelProgression(A);ShuffleBossesBasedOnOwnedItems(A,K,I);A.owned_kongs_by_level=K;A.owned_moves_by_level=I
 def SetNewProgressionRequirementsUnordered(settings):
-	'Set level progression requirements based on a random path of accessible levels.';A=settings;a=A.shuffle_items and Types.Key in A.shuffled_location_types;I={};G={};J=ItemPool.DonkeyMoves.copy();J.extend(ItemPool.DiddyMoves);J.extend(ItemPool.LankyMoves);J.extend(ItemPool.TinyMoves);J.extend(ItemPool.ChunkyMoves);J.extend(ItemPool.ImportantSharedMoves);J.extend(ItemPool.TrainingBarrelAbilities());j=[Events.JapesKeyTurnedIn,Events.AztecKeyTurnedIn,Events.FactoryKeyTurnedIn,Events.GalleonKeyTurnedIn,Events.ForestKeyTurnedIn,Events.CavesKeyTurnedIn,Events.CastleKeyTurnedIn,Events.HelmKeyTurnedIn];BlockAccessToLevel(A,0);Reset();L=GetAccessibleLocations(A,[]);P=LogicVariables.GoldenBananas;Q=0;A.EntryGBs=[A.blocker_0,A.blocker_1,A.blocker_2,A.blocker_3,A.blocker_4,A.blocker_5,A.blocker_6,A.blocker_7];A.BossBananas=[A.troff_0,A.troff_1,A.troff_2,A.troff_3,A.troff_4,A.troff_5,A.troff_6];M=[A.troff_0,A.troff_1,A.troff_2,A.troff_3,A.troff_4,A.troff_5,A.troff_6];f=0.4;V=0.7
-	if A.hard_blockers:f=0.6;V=0.95
-	K=[];W=[]
-	while len(K)<7:
-		R=GetAccessibleOpenLevels(A,L);X=[B for B in R if B not in K and A.EntryGBs[B]<=round(P*V)]
-		if len(X)==0:
-			g=[A for A in R if A not in K]
+	'Set level progression requirements based on a random path of accessible levels.';A=settings;Z=A.shuffle_items and Types.Key in A.shuffled_location_types;K={};G={};I=ItemPool.DonkeyMoves.copy();I.extend(ItemPool.DiddyMoves);I.extend(ItemPool.LankyMoves);I.extend(ItemPool.TinyMoves);I.extend(ItemPool.ChunkyMoves);I.extend(ItemPool.ImportantSharedMoves);I.extend(ItemPool.TrainingBarrelAbilities());j=[Events.JapesKeyTurnedIn,Events.AztecKeyTurnedIn,Events.FactoryKeyTurnedIn,Events.GalleonKeyTurnedIn,Events.ForestKeyTurnedIn,Events.CavesKeyTurnedIn,Events.CastleKeyTurnedIn,Events.HelmKeyTurnedIn];BlockAccessToLevel(A,0);Reset();J=GetAccessibleLocations(A,[]);O=LogicVariables.GoldenBananas;P=0;A.EntryGBs=[A.blocker_0,A.blocker_1,A.blocker_2,A.blocker_3,A.blocker_4,A.blocker_5,A.blocker_6,A.blocker_7];A.BossBananas=[A.troff_0,A.troff_1,A.troff_2,A.troff_3,A.troff_4,A.troff_5,A.troff_6];L=[A.troff_0,A.troff_1,A.troff_2,A.troff_3,A.troff_4,A.troff_5,A.troff_6];f=0.4;U=0.7
+	if A.hard_blockers:f=0.6;U=0.95
+	H=[];V=[]
+	while len(H)<7:
+		Q=GetAccessibleOpenLevels(A,J);W=[B for B in Q if B not in H and A.EntryGBs[B]<=round(O*U)]
+		if len(W)==0:
+			g=[A for A in Q if A not in H]
 			if len(g)==0:raise Ex.FillException('E1: Hard level order shuffler failed to progress through levels.')
 			E=random.choice(g)
 			if A.randomize_blocker_required_amounts:
-				Y=E
-				for H in range(0,len(A.EntryGBs)):
-					if H not in K and A.EntryGBs[H]<A.EntryGBs[Y]:Y=H
-				k=A.EntryGBs[Y];A.EntryGBs[Y]=A.EntryGBs[E];A.EntryGBs[E]=k
-			if A.EntryGBs[E]>round(P*V):
-				b=round(P*V);c=max(Q,round(P*f))
+				X=E
+				for a in range(0,len(A.EntryGBs)):
+					if a not in H and A.EntryGBs[a]<A.EntryGBs[X]:X=a
+				k=A.EntryGBs[X];A.EntryGBs[X]=A.EntryGBs[E];A.EntryGBs[E]=k
+			if A.EntryGBs[E]>round(O*U):
+				b=round(O*U);c=max(P,round(O*f))
 				if c>b:print("this shouldn't happen but here we are");c=b
 				A.EntryGBs[E]=random.randint(c,b)
-			X=[E]
+			W=[E]
 		else:
-			E=random.choice(X)
-			if A.randomize_blocker_required_amounts and P>A.blocker_max and A.EntryGBs[E]<Q:A.EntryGBs[E]=random.randint(Q,A.blocker_max)
-		Q=A.EntryGBs[E];K.append(E)
-		if not a:BlockCompletionOfLevelSet(A,X)
-		Reset();L=GetAccessibleLocations(A,[]);P=LogicVariables.GoldenBananas
-		if a:
+			E=random.choice(W)
+			if A.randomize_blocker_required_amounts and O>A.blocker_max and A.EntryGBs[E]<P:A.EntryGBs[E]=random.randint(P,A.blocker_max)
+		P=A.EntryGBs[E];H.append(E)
+		if not Z:BlockCompletionOfLevelSet(A,W)
+		Reset();J=GetAccessibleLocations(A,[]);O=LogicVariables.GoldenBananas
+		if Z:
 			while _B:
-				R=GetAccessibleOpenLevels(A,L)
-				if len(R)<7 and len(R)==len(K):
-					Z=[A for(id,A)in LocationList.items()if A.type==Types.Key and A.level in K];random.shuffle(Z);C=_A;D=-1
-					for B in Z:
+				Q=GetAccessibleOpenLevels(A,J)
+				if len(Q)<7 and len(Q)==len(H):
+					Y=[A for(id,A)in LocationList.items()if A.type==Types.Key and A.level in H];random.shuffle(Y);C=_A;D=-1
+					for B in Y:
 						if B.item is _A or B.item==Items.NoItem:continue
-						N=sum(LogicVariables.ColoredBananas[B.level])
-						if N<A.BossBananas[B.level]:
+						M=sum(LogicVariables.ColoredBananas[B.level])
+						if M<A.BossBananas[B.level]:
 							if B.item==Items.Barrels:C=B;D=1000
 							d=ItemList[B.item]
 							if d.type==Types.Key and D<100:C=B;D=100
@@ -675,9 +676,9 @@ def SetNewProgressionRequirementsUnordered(settings):
 							elif d.type in(Types.TrainingBarrel,Types.Shockwave)and D<9:C=B;D=9
 							elif D<0:C=B;D=0
 					if C is _A:raise Ex.FillException('E2: Hard level order shuffler failed to progress through levels.')
-					S=M[C.level]/A.troff_max;A.BossBananas[C.level]=round(N*S);O=[LocationList[A].item for A in L if LocationList[A].item!=Items.NoItem and LocationList[A].item is not _A and ItemList[LocationList[A].item].type in(Types.TrainingBarrel,Types.Shop,Types.Shockwave)]
-					if C.item in O:O.remove(C.item)
-					G[C.level]=O;I[C.level]=LogicVariables.GetKongs();Reset();L=GetAccessibleLocations(A,[])
+					R=L[C.level]/A.troff_max;A.BossBananas[C.level]=round(M*R);N=[LocationList[A].item for A in J if LocationList[A].item!=Items.NoItem and LocationList[A].item is not _A and ItemList[LocationList[A].item].type in(Types.TrainingBarrel,Types.Shop,Types.Shockwave)]
+					if C.item in N:N.remove(C.item)
+					G[C.level]=N;K[C.level]=LogicVariables.GetKongs();Reset();J=GetAccessibleLocations(A,[])
 				else:break
 		else:
 			if not A.open_lobbies:
@@ -685,35 +686,33 @@ def SetNewProgressionRequirementsUnordered(settings):
 				for i in A.level_order.keys():
 					if A.level_order[i]==E:h=i-1;break
 				e=j[h]
-				if e in A.krool_keys_required and e not in[Events.FactoryKeyTurnedIn,Events.CavesKeyTurnedIn,Events.CastleKeyTurnedIn]:W.append(e)
-			if len(R)==len(K)and any(W):
-				T=random.choice(W);W.remove(T)
-				if T==Events.JapesKeyTurnedIn:LogicVariables.Events.append(Events.JapesKeyTurnedIn);F=A.level_order[1]
-				elif T==Events.AztecKeyTurnedIn:LogicVariables.Events.append(Events.AztecKeyTurnedIn);F=A.level_order[2]
-				elif T==Events.GalleonKeyTurnedIn:LogicVariables.Events.append(Events.GalleonKeyTurnedIn);F=A.level_order[4]
-				elif T==Events.ForestKeyTurnedIn:LogicVariables.Events.append(Events.ForestKeyTurnedIn);F=A.level_order[5]
-				N=sum(LogicVariables.ColoredBananas[F])
-				if N<M[F]:S=M[F]/A.troff_max;A.BossBananas[F]=round(N*S)
-				else:A.BossBananas[F]=M[F]
-				I[F]=LogicVariables.GetKongs()
-				if A.unlock_all_moves:G[F]=J
-				else:O=[LocationList[A].item for A in L if LocationList[A].item!=Items.NoItem and LocationList[A].item is not _A and ItemList[LocationList[A].item].type in(Types.TrainingBarrel,Types.Shop,Types.Shockwave)];G[F]=O
-	for H in range(len(A.BossBananas)):
-		if A.BossBananas[H]>500:A.BossBananas[H]=M[H]
-		if Levels(H)not in I.keys():I[Levels(H)]=LogicVariables.GetKongs();G[Levels(H)]=J
-	Z=[B for(id,B)in LocationList.items()if B.type==Types.Key and B.level in K and A.BossBananas[B.level]>=M[B.level]]
-	for B in Z:
-		if A.BossBananas[B.level]>500:A.BossBananas[B.level]=M[B.level]
-		if B.level not in I.keys():I[B.level]=LogicVariables.GetKongs();G[B.level]=J
-		if a:
-			U=B.item
-			if U is _A or ItemList[U].type not in(Types.TrainingBarrel,Types.Shop,Types.Shockwave,Types.Key):continue
-			if U in G[B.level]:G[B.level].remove(U)
-			B.PlaceItem(Items.TestItem);Reset();L=GetAccessibleLocations(A,[])
-			if not LogicVariables.found_test_item:S=M[B.level]/A.troff_max;N=sum(LogicVariables.ColoredBananas[B.level]);A.BossBananas[B.level]=round(N*S);O=[LocationList[A].item for A in L if LocationList[A].item!=Items.NoItem and LocationList[A].item is not _A and ItemList[LocationList[A].item].type in(Types.TrainingBarrel,Types.Shop,Types.Shockwave)];G[B.level]=O;I[B.level]=LogicVariables.GetKongs()
-			B.PlaceItem(U)
-	if A.randomize_blocker_required_amounts and not A.maximize_helm_blocker and A.EntryGBs[7]<Q:A.EntryGBs[7]=random.randint(Q,A.blocker_max)
-	ShuffleBossesBasedOnOwnedItems(A,I,G);A.owned_kongs_by_level=I;A.owned_moves_by_level=G
+				if e in A.krool_keys_required and e not in[Events.FactoryKeyTurnedIn,Events.CavesKeyTurnedIn,Events.CastleKeyTurnedIn]:V.append(e)
+			if len(Q)==len(H)and any(V):
+				S=random.choice(V);V.remove(S)
+				if S==Events.JapesKeyTurnedIn:LogicVariables.Events.append(Events.JapesKeyTurnedIn);F=A.level_order[1]
+				elif S==Events.AztecKeyTurnedIn:LogicVariables.Events.append(Events.AztecKeyTurnedIn);F=A.level_order[2]
+				elif S==Events.GalleonKeyTurnedIn:LogicVariables.Events.append(Events.GalleonKeyTurnedIn);F=A.level_order[4]
+				elif S==Events.ForestKeyTurnedIn:LogicVariables.Events.append(Events.ForestKeyTurnedIn);F=A.level_order[5]
+				M=sum(LogicVariables.ColoredBananas[F])
+				if M<L[F]:R=L[F]/A.troff_max;A.BossBananas[F]=round(M*R)
+				else:A.BossBananas[F]=L[F]
+				K[F]=LogicVariables.GetKongs()
+				if A.unlock_all_moves:G[F]=I
+				else:N=[LocationList[A].item for A in J if LocationList[A].item!=Items.NoItem and LocationList[A].item is not _A and ItemList[LocationList[A].item].type in(Types.TrainingBarrel,Types.Shop,Types.Shockwave)];G[F]=N
+	Y=[B for(id,B)in LocationList.items()if B.type==Types.Key and B.level in H and A.BossBananas[B.level]>=L[B.level]]
+	for B in Y:
+		if A.BossBananas[B.level]>500:A.BossBananas[B.level]=L[B.level]
+		if B.level not in K.keys():K[B.level]=[Kongs.donkey,Kongs.diddy,Kongs.lanky,Kongs.tiny,Kongs.chunky];G[B.level]=I
+		if Z:
+			T=B.item
+			if T is _A or ItemList[T].type not in(Types.TrainingBarrel,Types.Shop,Types.Shockwave,Types.Key):continue
+			if T in G[B.level]:G[B.level].remove(T)
+			B.PlaceItem(Items.TestItem);Reset();J=GetAccessibleLocations(A,[])
+			if not LogicVariables.found_test_item:R=L[B.level]/A.troff_max;M=sum(LogicVariables.ColoredBananas[B.level]);A.BossBananas[B.level]=round(M*R);N=[LocationList[A].item for A in J if LocationList[A].item!=Items.NoItem and LocationList[A].item is not _A and ItemList[LocationList[A].item].type in(Types.TrainingBarrel,Types.Shop,Types.Shockwave)];G[B.level]=N;K[B.level]=LogicVariables.GetKongs()
+			B.PlaceItem(T)
+	if A.randomize_blocker_required_amounts and not A.maximize_helm_blocker and A.EntryGBs[7]<P:A.EntryGBs[7]=random.randint(P,A.blocker_max)
+	ShuffleBossesBasedOnOwnedItems(A,K,G);A.owned_kongs_by_level=K;A.owned_moves_by_level=G;Reset()
+	if not GetAccessibleLocations(A,[],SearchMode.CheckAllReachable):raise Ex.GameNotBeatableException('Complex progression generation prevented 101%.')
 def GetAccessibleOpenLevels(settings,accessible):
 	'Return the list of levels (not lobbies) you have access to after running GetAccessibleLocations().';B=settings;E=[Events.JapesKeyTurnedIn,Events.AztecKeyTurnedIn,Events.FactoryKeyTurnedIn,Events.GalleonKeyTurnedIn,Events.ForestKeyTurnedIn,Events.CavesKeyTurnedIn,Events.CastleKeyTurnedIn,Events.HelmKeyTurnedIn];F=[A for A in LogicVariables.Events if A in E];A=[1]
 	if not B.open_lobbies:

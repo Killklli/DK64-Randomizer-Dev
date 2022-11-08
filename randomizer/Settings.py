@@ -160,7 +160,7 @@ class Settings:
 				if A.training_barrels==G and Types.TrainingBarrel not in A.shuffled_location_types:B.update(TrainingBarrelLocations.copy())
 				if A.shockwave_status in(_D,_G)and Types.Shockwave not in A.shuffled_location_types:B.remove(Locations.CameraAndShockwave)
 				A.valid_locations[Types.Shop][Kongs.donkey]=B;A.valid_locations[Types.Shop][Kongs.diddy]=B;A.valid_locations[Types.Shop][Kongs.lanky]=B;A.valid_locations[Types.Shop][Kongs.tiny]=B;A.valid_locations[Types.Shop][Kongs.chunky]=B
-			A.valid_locations[Types.Shop][Kongs.any]=SharedShopLocations
+			A.valid_locations[Types.Shop][Kongs.any]=SharedShopLocations.copy()
 			if A.shockwave_status not in(_D,_G)and Types.Shockwave not in A.shuffled_location_types:A.valid_locations[Types.Shop][Kongs.any].add(Locations.CameraAndShockwave)
 			elif Locations.CameraAndShockwave in A.valid_locations[Types.Shop][Kongs.tiny]:A.valid_locations[Types.Shop][Kongs.tiny].remove(Locations.CameraAndShockwave)
 			if A.training_barrels==G and Types.TrainingBarrel not in A.shuffled_location_types:
@@ -183,7 +183,7 @@ class Settings:
 		'Return the valid locations the input item id can be placed in.';A=ItemList[item_id];B=[]
 		if A.type in(Types.Shop,Types.Blueprint):B=C.valid_locations[A.type][A.kong]
 		else:B=C.valid_locations[A.type]
-		if C.progressives_locked_in_shops and A in SharedShopLocations:B=SharedShopLocations
+		if C.progressives_locked_in_shops and A in SharedShopLocations:B=SharedShopLocations.copy()
 		return B
 	def SelectKongLocations(B):
 		'Select which random kong locations to use depending on number of starting kongs.';A=[Locations.DiddyKong,Locations.LankyKong,Locations.TinyKong,Locations.ChunkyKong]

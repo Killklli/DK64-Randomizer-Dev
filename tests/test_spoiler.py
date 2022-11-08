@@ -1,21 +1,10 @@
 'Temp file used for testing new logic system.'
-_B='forward'
-_A='algorithm'
-import json,random
-from copy import deepcopy
-import pytest
+import json,random,pytest,randomizer.Lists.Exceptions as Ex
 from randomizer.Fill import Generate_Spoiler
-from randomizer.Lists import Exceptions
 from randomizer.Settings import Settings
 from randomizer.Spoiler import Spoiler
 @pytest.fixture
-def generate_settings():A=json.load(open('static/presets/default.json'));A['seed']=random.randint(0,100000000);return A
-def test_forward(generate_settings):A=generate_settings;A[_A]=_B;C=Settings(A);B=Spoiler(C);Generate_Spoiler(B);B.toJson()
-def test_shuffles(generate_settings):
-	C=generate_settings;B=True;C[_A]=_B;E=Settings(C);A=deepcopy(E);A.training_barrels=B;A.unlock_all_moves=B;A.starting_kongs_count=5;A.unlock_fairy_shockwave=B;A.shuffle_items='moves';A.shuffle_loading_zones='all';A.decoupled_loading_zones=B;D=Spoiler(A)
-	try:Generate_Spoiler(D);D.toJson()
-	except Exception:pass
-def test_assumed(generate_settings):
-	A=generate_settings;A[_A]='assumed';C=Settings(A);B=Spoiler(C)
-	try:Generate_Spoiler(B);B.toJson()
-	except Exception:pass
+def generate_lo_rando_race_settings():'Generate a data dictionary that mimics what the front end passes to the shuffler.';C=False;B=True;A={};A['seed']=random.randint(0,100000000);A['fast_start_beginning_of_game']=B;A['enemy_rando']=B;A['crown_enemy_rando']=B;A['enemy_speed_rando']=B;A['boss_kong_rando']=B;A['boss_location_rando']=B;A['random_medal_requirement']=C;A['kasplat_rando_setting']='vanilla_locations';A['kong_rando']=B;A['bananaport_rando']='off';A['activate_all_bananaports']='isles';A['move_rando']='on';A['shuffle_items']=C;A['item_rando_list_selected']=['shop','banana','crown','blueprint','key','medal'];A['random_prices']='vanilla';A['randomize_blocker_required_amounts']=B;A['blocker_0']=0;A['blocker_1']=0;A['blocker_2']=0;A['blocker_3']=0;A['blocker_4']=0;A['blocker_5']=0;A['blocker_6']=0;A['blocker_7']=50;A['blocker_text']=69;A['maximize_helm_blocker']=B;A['randomize_cb_required_amounts']=B;A['troff_0']=500;A['troff_1']=500;A['troff_2']=500;A['troff_3']=500;A['troff_4']=500;A['troff_5']=500;A['troff_6']=500;A['troff_text']=400;A['level_randomization']='level_order';A['damage_amount']='default';A['no_healing']=C;A['no_melons']=C;A['hard_shooting']=C;A['hard_mad_jack']=C;A['perma_death']=C;A['crown_door_open']=C;A['coin_door_open']=B;A['bonus_barrel_rando']=B;A['gnawty_barrels']=C;A['bonus_barrel_auto_complete']=C;A['open_lobbies']=C;A['open_levels']=C;A['randomize_pickups']=B;A['krool_phase_order_rando']=B;A['krool_random']=C;A['krool_phase_count']=3;A['helm_random']=C;A['helm_phase_count']=3;A['krool_access']=B;A['keys_random']=C;A['krool_key_count']=5;A['starting_random']=C;A['starting_kongs_count']=2;A['quality_of_life']=B;A['enable_tag_anywhere']=B;A['wrinkly_hints']='standard';A['disable_shop_hints']=C;A['warp_to_isles']=B;A['helm_setting']='skip_start';A['portal_numbers']=B;A['shop_indicator']=B;A['puzzle_rando']=B;A['fast_gbs']=B;A['high_req']=B;A['random_patches']=C;A['shuffle_shops']=C;A['training_barrels']='shuffled';A['shockwave_status']='shuffled_decoupled';A['free_trade_setting']='none';A['crown_placement_rando']=C;A['hard_blockers']=C;A['hard_troff_n_scoff']=C;A['cb_rando']=C;A['win_condition']='all_keys';A['wrinkly_location_rando']=B;A['tns_location_rando']=B;A['key_8_helm']=B;A['hard_level_progression']=C;A['no_logic']=C;return A
+@pytest.fixture
+def generate_settings():'Asdf.';A=json.load(open('static/presets/default.json'));A['seed']=random.randint(0,100000000);return A
+def test_forward_fill(generate_lo_rando_race_settings):'Asdf.';B=generate_lo_rando_race_settings;B['algorithm']='forward';C=Settings(B);A=Spoiler(C);Generate_Spoiler(A);print(A);print(A.json);D=1/0;print(D);raise Exception

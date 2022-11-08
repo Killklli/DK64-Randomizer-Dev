@@ -1,4 +1,5 @@
 'Functions and data for setting and calculating prices.'
+_B='vanilla'
 _A=None
 from math import ceil
 import random
@@ -37,27 +38,29 @@ def GenerateRandomPrice(weight,avg,stddev,upperLimit):
 		elif A>B:A=B
 	return A
 def GetMaxForKong(settings,kong):
-	'Get the maximum amount of coins the given kong can spend.';F=kong;C=settings;G=0;H=0;I=0;B=0;J=SharedMoveLocations-TrainingBarrelLocations-{Locations.CameraAndShockwave}
+	'Get the maximum amount of coins the given kong can spend.';F=kong;B=settings;G=0;H=0;I=0;C=0;J=SharedMoveLocations-TrainingBarrelLocations-{Locations.CameraAndShockwave}
 	for E in J:
 		A=LocationList[E].item
 		if A is not _A and A!=Items.NoItem:
-			if A==Items.ProgressiveSlam:B+=C.prices[A][G];G+=1
-			elif A==Items.ProgressiveInstrumentUpgrade:B+=C.prices[A][H];H+=1
-			elif A==Items.ProgressiveAmmoBelt:B+=C.prices[A][I];I+=1
-			else:B+=C.prices[E]
+			if A==Items.ProgressiveSlam:C+=B.prices[A][G];G+=1
+			elif A==Items.ProgressiveInstrumentUpgrade:C+=B.prices[A][H];H+=1
+			elif A==Items.ProgressiveAmmoBelt:C+=B.prices[A][I];I+=1
+			elif B.random_prices==_B:C+=B.prices[A]
+			else:C+=B.prices[E]
 	D=DiddyMoveLocations.copy()
-	if F==Kongs.donkey:D=DonkeyMoveLocations.copy();B+=2
+	if F==Kongs.donkey:D=DonkeyMoveLocations.copy();C+=2
 	elif F==Kongs.lanky:D=LankyMoveLocations.copy()
 	elif F==Kongs.tiny:D=TinyMoveLocations.copy();D.remove(Locations.CameraAndShockwave)
 	elif F==Kongs.chunky:D=ChunkyMoveLocations.copy()
 	for E in D:
 		A=LocationList[E].item
 		if A is not _A and A!=Items.NoItem:
-			if A==Items.ProgressiveSlam:B+=C.prices[A][G];G+=1
-			elif A==Items.ProgressiveInstrumentUpgrade:B+=C.prices[A][H];H+=1
-			elif A==Items.ProgressiveAmmoBelt:B+=C.prices[A][I];I+=1
-			else:B+=C.prices[E]
-	return B
+			if A==Items.ProgressiveSlam:C+=B.prices[A][G];G+=1
+			elif A==Items.ProgressiveInstrumentUpgrade:C+=B.prices[A][H];H+=1
+			elif A==Items.ProgressiveAmmoBelt:C+=B.prices[A][I];I+=1
+			elif B.random_prices==_B:C+=B.prices[A]
+			else:C+=B.prices[E]
+	return C
 SlamProgressiveSequence=[Locations.SuperSimianSlam,Locations.SuperDuperSimianSlam]
 FunkySequence=[[Locations.CoconutGun,Locations.PeanutGun,Locations.GrapeGun,Locations.FeatherGun,Locations.PineappleGun],Locations.AmmoBelt1,Locations.HomingAmmo,Locations.AmmoBelt2,Locations.SniperSight]
 CandySequence=[[Locations.Bongos,Locations.Guitar,Locations.Trombone,Locations.Saxophone,Locations.Triangle],Locations.MusicUpgrade1,Locations.ThirdMelon,Locations.MusicUpgrade2]
@@ -80,6 +83,7 @@ def GetPriceAtLocation(settings,location_id,location,slamLevel,ammoBelts,instUpg
 	elif A==Items.ProgressiveInstrumentUpgrade:
 		if E in[0,1,2]:return B.prices[A][E]
 		else:return 0
+	elif B.random_prices==_B:return B.prices[A]
 	else:return B.prices[location_id]
 def KongCanBuy(location_id,logic,kong):
 	'Check if given kong can logically purchase the specified location.';C=location_id;A=logic;B=LocationList[C]
