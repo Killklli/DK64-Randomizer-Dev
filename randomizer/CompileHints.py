@@ -226,7 +226,7 @@ def compileHints(spoiler):
 				if'whole of'in R.hint_name:C=f"A {level_list[R.level]} Medal is on the path to {T.name}."
 				elif'Training Grounds'in i:b=ItemList[LocationList[E].item].name;C=f"Your training with {b} is on the path to aiding your fight against K. Rool."
 				else:C=f"An item in the {R.hint_name} is on the path to aiding your fight against K. Rool."
-				B=getRandomHintLocation();B.hint_type=HintType.RequiredKRoolHint;UpdateHint(B,C)
+				B=getRandomHintLocation();B.hint_type=HintType.RequiredWinConditionHint;UpdateHint(B,C)
 		if A.settings.win_condition==Ai:
 			for J in A.woth_paths.keys():
 				if LocationList[J].item==Items.Camera:Ar=J;break
@@ -236,7 +236,7 @@ def compileHints(spoiler):
 				if LocationList[E].type==Types.Medal:C=f"A {level_list[LocationList[E].level]} Medal is on the path to taking photos."
 				elif E in TrainingBarrelLocations:b=ItemList[LocationList[E].item].name;C=f"Your training with {b} is on the path to taking photos."
 				else:C=f"An item in the {i} is on the path to taking photos."
-				B.hint_type=HintType.RequiredKeyHint;UpdateHint(B,C)
+				B.hint_type=HintType.RequiredWinConditionHint;UpdateHint(B,C)
 	l={};AN=[];x=0
 	while x<hint_distribution[HintType.MoveLocation]:
 		O=_C;AO=[B for B in A.woth_locations if B not in AN and LocationList[B].type==Types.Shop]
