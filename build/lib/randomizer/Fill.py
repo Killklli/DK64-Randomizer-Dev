@@ -763,7 +763,7 @@ def Generate_Spoiler(spoiler):
 	Reset();ShuffleExits.Reset();A.createJson();js.postMessage('Patching ROM...');return A
 def ShuffleMisc(spoiler):
 	'Shuffle miscellaneous objects outside of main fill algorithm, including Kasplats, Bonus barrels, and bananaport warps.';N='isles';M='crossmap_coupled';L='in_level';A=spoiler
-	if A.settings.wrinkly_location_rando or A.settings.tns_location_rando:ShuffleDoors(A)
+	if A.settings.wrinkly_location_rando or A.settings.tns_location_rando or('remove_wrinkly_puzzles'in A.settings.misc_changes_selected or len(A.settings.misc_changes_selected)==0):ShuffleDoors(A)
 	if A.settings.crown_placement_rando:H={};I={};ShuffleCrowns(H,I);A.crown_locations=H;A.human_crowns=dict(sorted(I.items()))
 	KasplatShuffle(A,LogicVariables);A.human_kasplats={};A.UpdateKasplats(LogicVariables.kasplat_map)
 	if A.settings.bonus_barrels in(_F,'selected'):BarrelShuffle(A.settings);A.UpdateBarrels()
