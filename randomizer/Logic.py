@@ -152,7 +152,7 @@ class LogicVarHolder:
 	def IsLevelEnterable(A,level):'Check if level entry requirement is met.';B=level;return A.HasEnoughKongs(B,forPreviousLevel=_B)and A.GoldenBananas>=A.settings.EntryGBs[B]
 	def WinConditionMet(A):
 		'Check if the current game state has met the win condition.'
-		if A.settings.win_condition=='beat_krool':return A.bananaHoard
+		if A.settings.win_condition=='beat_krool'or A.settings.win_condition=='poke_snap':return A.bananaHoard
 		elif A.settings.win_condition=='get_key8':return A.HelmKey
 		elif A.settings.win_condition=='all_fairies':return A.BananaFairies>=20
 		elif A.settings.win_condition=='all_blueprints':return len(A.Blueprints)>=40
