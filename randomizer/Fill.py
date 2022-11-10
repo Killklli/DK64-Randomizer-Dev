@@ -379,6 +379,7 @@ def Fill(spoiler):
 	if Types.Banana in A.settings.shuffled_location_types:
 		Reset();G=PlaceItems(A.settings,_F,ItemPool.GoldenBananaItems(),[])
 		if G>0:raise Ex.ItemPlacementException(str(G)+' unplaced GBs.')
+	if LocationList[Locations.JapesDonkeyFreeDiddy].item is _A:LocationList[Locations.JapesDonkeyFreeDiddy].PlaceItem(Items.NoItem)
 	Reset()
 	if not GetAccessibleLocations(A.settings,[],SearchMode.CheckAllReachable):raise Ex.GameNotBeatableException('Game not able to complete 101% after placing all items.')
 	return

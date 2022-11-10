@@ -4,7 +4,9 @@ _B=True
 _A=False
 from math import ceil
 import randomizer.CollectibleLogicFiles.AngryAztec,randomizer.CollectibleLogicFiles.CreepyCastle,randomizer.CollectibleLogicFiles.CrystalCaves,randomizer.CollectibleLogicFiles.DKIsles,randomizer.CollectibleLogicFiles.FranticFactory,randomizer.CollectibleLogicFiles.FungiForest,randomizer.CollectibleLogicFiles.GloomyGalleon,randomizer.CollectibleLogicFiles.JungleJapes
+from randomizer.Enums.Locations import Locations
 from randomizer.Enums.Types import Types
+from randomizer.Lists.Item import ItemList
 import randomizer.LogicFiles.AngryAztec,randomizer.LogicFiles.CreepyCastle,randomizer.LogicFiles.CrystalCaves,randomizer.LogicFiles.DKIsles,randomizer.LogicFiles.FranticFactory,randomizer.LogicFiles.FungiForest,randomizer.LogicFiles.GloomyGalleon,randomizer.LogicFiles.HideoutHelm,randomizer.LogicFiles.JungleJapes,randomizer.LogicFiles.Shops
 from randomizer.Enums.Collectibles import Collectibles
 from randomizer.Enums.Events import Events
@@ -81,7 +83,11 @@ class LogicVarHolder:
 		if B==Kongs.tiny:return A.saxophone and A.istiny
 		if B==Kongs.chunky:return A.triangle and A.ischunky
 		if B==Kongs.any:return A.bongos and A.isdonkey or A.guitar and A.isdiddy or A.trombone and A.islanky or A.saxophone and A.istiny or A.triangle and A.ischunky
-	def CanFreeDiddy(A):'Check if kong at Diddy location can be freed.';return A.HasGun(A.settings.diddy_freeing_kong)
+	def CanFreeDiddy(A):"Check if the cage locking Diddy's vanilla location can be opened.";return LocationList[Locations.DiddyKong].item==Items.NoItem or A.HasGun(A.settings.diddy_freeing_kong)
+	def CanOpenJapesGates(A):
+		"Check if we can pick up the item inside Diddy's cage, thus opening the gates in Japes.";B=LocationList[Locations.JapesDonkeyFreeDiddy].item
+		if B==Items.NoItem:return _B
+		return A.CanFreeDiddy()and(B is _C or ItemList[B].type==Types.Blueprint and A.BlueprintAccess(ItemList[B])or ItemList[B].type!=Types.Blueprint and A.settings.free_trade_items or A.IsKong(A.settings.diddy_freeing_kong))
 	def CanFreeTiny(A):
 		'Check if kong at Tiny location can be freed,r equires either chimpy charge or primate punch.'
 		if A.settings.tiny_freeing_kong==Kongs.diddy:return A.charge and A.isdiddy
