@@ -29,19 +29,25 @@ def setPkmnSnapEnemy(focused_enemy):
 def getBalancedCrownEnemyRando(spoiler,crown_setting,damage_ohko_setting):
 	'Get array of weighted enemies.';L=spoiler;K=crown_setting;C={}
 	if K!=_C:
-		C={Maps.JapesCrown:[],Maps.AztecCrown:[],Maps.FactoryCrown:[],Maps.GalleonCrown:[],Maps.ForestCrown:[],Maps.CavesCrown:[],Maps.CastleCrown:[],Maps.HelmCrown:[],Maps.SnidesCrown:[],Maps.LobbyCrown:[]};M=[];F=[];I=[];G=[];N=[];O=_A
+		C={Maps.JapesCrown:[],Maps.AztecCrown:[],Maps.FactoryCrown:[],Maps.GalleonCrown:[],Maps.ForestCrown:[],Maps.CavesCrown:[],Maps.CastleCrown:[],Maps.HelmCrown:[],Maps.SnidesCrown:[],Maps.LobbyCrown:[]};M=[];G=[];I=[];F=[];N=[];O=_A
 		for A in EnemyMetaData:
 			if convertEnemyName(EnemyMetaData[A].name)in L.settings.enemies_selected and EnemyMetaData[A].crown_enabled is _B:O=_B;break
 		for A in EnemyMetaData:
 			if EnemyMetaData[A].crown_enabled and A is not Enemies.GetOut:
 				if convertEnemyName(EnemyMetaData[A].name)in L.settings.enemies_selected or O is _A:
 					M.append(A)
-					if EnemyMetaData[A].disruptive<=1:F.append(A)
+					if EnemyMetaData[A].disruptive<=1:G.append(A)
 					if EnemyMetaData[A].kasplat is _B:I.append(A)
-					elif EnemyMetaData[A].disruptive==0:I.append(A);G.append(A)
-		if len(F)==0:F.append(M.copy())
-		if len(I)==0:I.append(F.copy())
-		if len(G)==0:F.append(I)
+					elif EnemyMetaData[A].disruptive==0:I.append(A);F.append(A)
+		if len(G)==0:
+			G.append(M.copy())
+			for A in EnemyMetaData:
+				if EnemyMetaData[A].disruptive>1:EnemyMetaData[A].disruptive=1
+		if len(I)==0:I.append(G.copy())
+		if len(F)==0:
+			F.append(I)
+			for A in EnemyMetaData:
+				if EnemyMetaData[A].disruptive>0:EnemyMetaData[A].disruptive=0
 		T=2
 		for A in EnemyMetaData.keys():
 			if EnemyMetaData[A].crown_enabled:
@@ -52,8 +58,8 @@ def getBalancedCrownEnemyRando(spoiler,crown_setting,damage_ohko_setting):
 						for R in range(Q):N.append(A)
 		if K=='easy':
 			for B in C:
-				C[B].append(random.choice(F));C[B].append(random.choice(G));C[B].append(random.choice(G))
-				if B==Maps.GalleonCrown or B==Maps.LobbyCrown or B==Maps.HelmCrown:C[B].append(random.choice(G))
+				C[B].append(random.choice(G));C[B].append(random.choice(F));C[B].append(random.choice(F))
+				if B==Maps.GalleonCrown or B==Maps.LobbyCrown or B==Maps.HelmCrown:C[B].append(random.choice(F))
 		elif K==_D:
 			E=0
 			for B in C:
@@ -62,15 +68,15 @@ def getBalancedCrownEnemyRando(spoiler,crown_setting,damage_ohko_setting):
 				for R in range(J):
 					if H==0:
 						if D<2:E=random.choice(M)
-						elif D==2:E=random.choice(F)
-						elif D==3:E=random.choice(G)
-					elif H==1:
-						if D<2:E=random.choice(F)
 						elif D==2:E=random.choice(G)
+						elif D==3:E=random.choice(F)
+					elif H==1:
+						if D<2:E=random.choice(G)
+						elif D==2:E=random.choice(F)
 					elif H==2:
 						if D==0:E=random.choice(I)
-						elif D==1:E=random.choice(G)
-					elif D>3 or D>2 and H>1 or D==2 and H==2:print('This is a mistake in the crown enemy algorithm. Report this to the devs.');E=Enemies.BeaverGold
+						elif D==1:E=random.choice(F)
+					if D>3 or D>2 and H>1 or D==2 and H==2:print('This is a mistake in the crown enemy algorithm. Report this to the devs.');E=Enemies.BeaverGold
 					if EnemyMetaData[E].kasplat is _B:D=D+1
 					H=EnemyMetaData[E].disruptive+H;C[B].append(E)
 		elif K=='hard':
