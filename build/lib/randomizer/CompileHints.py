@@ -116,9 +116,9 @@ def compileHints(spoiler):
 	if A.settings.shuffle_loading_zones==_X:Am=hint_distribution[HintType.BLocker];hint_distribution[HintType.BLocker]=max(1,hint_distribution[HintType.TroffNScoff]);hint_distribution[HintType.TroffNScoff]=Am;F.append(HintType.Entrance)
 	if Types.Key in A.settings.shuffled_location_types:
 		F.append(HintType.RequiredKeyHint);f=[LocationList[B].item for B in A.woth_locations if ItemList[LocationList[B].item].type==Types.Key]
-		if not Q or A.settings.hard_level_progression:q=f;r=[]
-		else:r=[A for A in f if A<=Items.AngryAztecKey];q=[A for A in f if A>Items.AngryAztecKey]
-		hint_distribution[HintType.RequiredKeyHint]=len(r)+2*len(q)
+		if not Q or A.settings.hard_level_progression:p=f;q=[]
+		else:q=[A for A in f if A<=Items.AngryAztecKey];p=[A for A in f if A>Items.AngryAztecKey]
+		hint_distribution[HintType.RequiredKeyHint]=len(q)+2*len(p)
 	X=0
 	for type in hint_distribution:
 		if type in F:X+=hint_distribution[type]
@@ -129,9 +129,9 @@ def compileHints(spoiler):
 		if g in(HintType.RequiredKeyHint,HintType.RequiredWinConditionHint):continue
 		hint_distribution[g]+=1;X+=1
 	while X>HINT_CAP:
-		s=random.choice(F)
-		if s in(HintType.RequiredKeyHint,HintType.RequiredWinConditionHint):continue
-		if hint_distribution[s]>0:hint_distribution[s]-=1;X-=1
+		r=random.choice(F)
+		if r in(HintType.RequiredKeyHint,HintType.RequiredWinConditionHint):continue
+		if hint_distribution[r]>0:hint_distribution[r]-=1;X-=1
 	V=_C
 	if Q:
 		V=[]
@@ -146,22 +146,22 @@ def compileHints(spoiler):
 				An=[A for A in hints if A.level==D and A.kong==Y][0];V.append(An)
 	AC=[];AD=0
 	while AD<hint_distribution[HintType.KongLocation]:
-		h=random.choice(kong_placement_levels);L=A.shuffled_kong_placement[h[_F]][_i][_H];AE=A.shuffled_kong_placement[h[_F]][_j][_H];AF=h[_G];t=_C
-		if Q and L not in AC:t=[B for B in all_levels if A.settings.EntryGBs[B]<=A.settings.EntryGBs[h[_G]]]
-		u=A.settings.starting_kong_list.copy();u.append(AE);B=getRandomHintLocation(kongs=u,levels=t)
+		h=random.choice(kong_placement_levels);M=A.shuffled_kong_placement[h[_F]][_i][_H];AE=A.shuffled_kong_placement[h[_F]][_j][_H];AF=h[_G];s=_C
+		if Q and M not in AC:s=[B for B in all_levels if A.settings.EntryGBs[B]<=A.settings.EntryGBs[h[_G]]]
+		t=A.settings.starting_kong_list.copy();t.append(AE);B=getRandomHintLocation(kongs=t,levels=s)
 		if B is _C:
-			if t is not _C:B=getRandomHintLocation(kongs=u)
+			if s is not _C:B=getRandomHintLocation(kongs=t)
 			else:hint_distribution[HintType.Joke]+=1;hint_distribution[HintType.KongLocation]-=1;continue
 		Ao=kong_list[AE]
 		if A.settings.wrinkly_hints==_E:
-			if not L==Kongs.any:W=random.choice(kong_cryptic[L])
+			if not M==Kongs.any:W=random.choice(kong_cryptic[M])
 			G=random.choice(level_cryptic[AF])
 		else:
-			if not L==Kongs.any:W=kong_list[L]
+			if not M==Kongs.any:W=kong_list[M]
 			G=level_list[AF]
 		AG='frees'
-		if L==Kongs.any:AG='accesses';W='an empty cage'
-		C=f"{Ao} {AG} {W} in {G}.";AC.append(L);B.hint_type=HintType.KongLocation;UpdateHint(B,C);AD+=1
+		if M==Kongs.any:AG='accesses';W='an empty cage'
+		C=f"{Ao} {AG} {W} in {G}.";AC.append(M);B.hint_type=HintType.KongLocation;UpdateHint(B,C);AD+=1
 	AH=[]
 	for J in range(hint_distribution[HintType.BLocker]):
 		Z=_C
@@ -181,64 +181,64 @@ def compileHints(spoiler):
 		if Q and not AI and J==hint_distribution[HintType.HelmOrder]-1:Z=V
 		B=getRandomHintLocation(location_list=Z)
 		if V is _C or B in V:AI=_A
-		Ap=[Kongs.donkey,Kongs.chunky,Kongs.tiny,Kongs.lanky,Kongs.diddy];Aq=[Ap[B]for B in A.settings.helm_order];Ar=[NameFromKong(A)for A in Aq];As=Al.join(Ar);v=f"The Blast-O-Matic can be disabled by using {As}.";B.hint_type=HintType.HelmOrder;UpdateHint(B,v)
+		Ap=[Kongs.donkey,Kongs.chunky,Kongs.tiny,Kongs.lanky,Kongs.diddy];Aq=[Ap[B]for B in A.settings.helm_order];Ar=[NameFromKong(A)for A in Aq];As=Al.join(Ar);u=f"The Blast-O-Matic can be disabled by using {As}.";B.hint_type=HintType.HelmOrder;UpdateHint(B,u)
 	if hint_distribution[HintType.RequiredKeyHint]>0:
-		w={}
+		v={}
 		for (K,E) in LocationList.items():
-			if E.item in f:w[E.item]=K
-		for AJ in r:
-			E=LocationList[w[AJ]];a=ItemList[AJ];L=E.kong
-			if E.kong==Kongs.any and E.type==Types.Key:L=A.settings.boss_kongs[E.level]
+			if E.item in f:v[E.item]=K
+		for AJ in q:
+			E=LocationList[v[AJ]];a=ItemList[AJ];M=E.kong
+			if E.kong==Kongs.any and E.type==Types.Key:M=A.settings.boss_kongs[E.level]
 			if A.settings.wrinkly_hints==_E:
 				if E.level==Levels.Shops:G="Cranky's Lab"
 				else:G=random.choice(level_cryptic_helm_isles[E.level])
-				W=random.choice(kong_cryptic[L])
+				W=random.choice(kong_cryptic[M])
 			else:
 				if E.level==Levels.Shops:G=random.choice(crankys_cryptic)
 				else:G=level_list_helm_isles[E.level]
-				W=kong_list[L]
+				W=kong_list[M]
 			H=[]
 			for (i,D) in A.settings.level_order.items():
 				if i<=a.index:H.append(D)
 			B=getRandomHintLocation(levels=H)
 			if B is _C:B=getRandomHintLocation()
 			C=f"{a.name} can be acquired with {W} in {G}.";B.hint_type=HintType.RequiredKeyHint;UpdateHint(B,C)
-		for AK in q:
-			O=A.woth_paths[w[AK]];a=ItemList[AK]
+		for AK in p:
+			O=A.woth_paths[v[AK]];a=ItemList[AK]
 			for J in range(2):
-				I=random.choice(O);M=GetRegionOfLocation(I);j=M.hint_name;B=getRandomHintLocation()
+				I=random.choice(O);L=GetRegionOfLocation(I);w=L.hint_name;B=getRandomHintLocation()
 				if I in TrainingBarrelLocations:b=ItemList[LocationList[I].item].name;C=f"Your training with {b} is on the path to {a.name}."
-				else:C=f"An item in the {j} is on the path to {a.name}."
+				else:C=f"An item in the {w} is on the path to {a.name}."
 				B.hint_type=HintType.RequiredKeyHint;UpdateHint(B,C)
 	if hint_distribution[HintType.RequiredWinConditionHint]>0:
 		if A.settings.win_condition==AB:
-			k={};AL=_C;AM=_C;AN=_C
+			j={};AL=_C;AM=_C;AN=_C
 			for K in A.woth_paths.keys():
 				if LocationList[K].item==Items.RocketbarrelBoost:AL=K
 				if LocationList[K].item==Items.MiniMonkey:AM=K
 				if LocationList[K].item==Items.GorillaGone:AN=K
-			if Kongs.diddy in A.settings.krool_order:O=A.woth_paths[AL];I=random.choice(O);k[_c]=I
-			if Kongs.tiny in A.settings.krool_order:O=A.woth_paths[AM];I=random.choice(O);k[_d]=I
-			if Kongs.chunky in A.settings.krool_order:O=A.woth_paths[AN];I=random.choice(O);k[_e]=I
-			for (x,I) in k.items():
-				M=GetRegionOfLocation(I)
-				if'Training Grounds'in j:b=ItemList[LocationList[I].item].name;C=f"Your training with {b} is on the path to aiding your fight against K. Rool."
-				else:C=f"An item in the {M.hint_name} is on the path to aiding your fight against K. Rool."
+			if Kongs.diddy in A.settings.krool_order:O=A.woth_paths[AL];I=random.choice(O);j[_c]=I
+			if Kongs.tiny in A.settings.krool_order:O=A.woth_paths[AM];I=random.choice(O);j[_d]=I
+			if Kongs.chunky in A.settings.krool_order:O=A.woth_paths[AN];I=random.choice(O);j[_e]=I
+			for (x,I) in j.items():
+				L=GetRegionOfLocation(I)
+				if'Training Grounds'in L.hint_name:b=ItemList[LocationList[I].item].name;C=f"Your training with {b} is on the path to aiding your fight against K. Rool."
+				else:C=f"An item in the {L.hint_name} is on the path to aiding your fight against K. Rool."
 				B=getRandomHintLocation();B.hint_type=HintType.RequiredWinConditionHint;UpdateHint(B,C)
 		if A.settings.win_condition==Ak:
 			for K in A.woth_paths.keys():
 				if LocationList[K].item==Items.Camera:At=K;break
 			O=A.woth_paths[At]
 			for J in range(hint_distribution[HintType.RequiredWinConditionHint]):
-				I=random.choice(O);M=GetRegionOfLocation(I);j=M.hint_name;B=getRandomHintLocation()
+				I=random.choice(O);L=GetRegionOfLocation(I);w=L.hint_name;B=getRandomHintLocation()
 				if I in TrainingBarrelLocations:b=ItemList[LocationList[I].item].name;C=f"Your training with {b} is on the path to taking photos."
-				else:C=f"An item in the {j} is on the path to taking photos."
+				else:C=f"An item in the {w} is on the path to taking photos."
 				B.hint_type=HintType.RequiredWinConditionHint;UpdateHint(B,C)
-	l={};AO=[];y=0
+	k={};AO=[];y=0
 	while y<hint_distribution[HintType.MoveLocation]:
 		P=_C;AP=[B for B in A.woth_locations if B not in AO and LocationList[B].type==Types.Shop]
 		if len(AP)==0:c=hint_distribution[HintType.MoveLocation]-y;hint_distribution[HintType.Joke]+=c;hint_distribution[HintType.MoveLocation]-=c;break
-		m=random.choice(AP);n=LocationList[m].level;P=LocationList[m].item
+		l=random.choice(AP);m=LocationList[l].level;P=LocationList[l].item
 		if P==Items.ProgressiveSlam:continue
 		H=all_levels.copy()
 		if Q and not A.settings.hard_level_progression:
@@ -247,25 +247,25 @@ def compileHints(spoiler):
 				if P not in A.settings.owned_moves_by_level[D]:H.append(D)
 				else:
 					A0=[B for B in all_levels if A.settings.EntryGBs[B]==A.settings.EntryGBs[D]and B not in H]
-					if len(A0)==1 or n>=7:z=A0
+					if len(A0)==1 or m>=7:z=A0
 					else:
 						AR=-1
 						for i in A.settings.level_order:
-							if n==A.settings.level_order[i]:AR=i;break
+							if m==A.settings.level_order[i]:AR=i;break
 						for AS in A0:
 							Au=[B for B in A.settings.level_order if AS==A.settings.level_order[B]][0]
 							if Au<=AR:z.append(AS)
 					break
 			H.extend(z)
-		if P in l.keys():
-			for AT in l[P]:
+		if P in k.keys():
+			for AT in k[P]:
 				if AT in H:H.remove(AT)
-		else:l[P]=[]
+		else:k[P]=[]
 		B=getRandomHintLocation(levels=H,move_name=ItemList[P].name)
-		if B is _C:AO.append(m);continue
-		AU=level_list_helm_isles[n]
-		if A.settings.wrinkly_hints==_E:AU=random.choice(level_cryptic_helm_isles[n])
-		Av=shop_owners[LocationList[m].vendor];C=f"On the Way of the Hoard, {ItemList[P].name} is bought from {Av} in {AU}.";l[P].append(B.level);B.hint_type=HintType.MoveLocation;UpdateHint(B,C);y+=1
+		if B is _C:AO.append(l);continue
+		AU=level_list_helm_isles[m]
+		if A.settings.wrinkly_hints==_E:AU=random.choice(level_cryptic_helm_isles[m])
+		Av=shop_owners[LocationList[l].vendor];C=f"On the Way of the Hoard, {ItemList[P].name} is bought from {Av} in {AU}.";k[P].append(B.level);B.hint_type=HintType.MoveLocation;UpdateHint(B,C);y+=1
 	if hint_distribution[HintType.TroffNScoff]>0:
 		S=[]
 		for U in A.settings.krool_keys_required:
@@ -336,38 +336,38 @@ def compileHints(spoiler):
 		Ae=['K. Rool Arena','Snide']
 		if Types.Coin not in A.settings.shuffled_location_types:Ae.append('Jetpac Game')
 		d=[]
-		for (B3,M) in RegionList.items():
-			if M.hint_name not in Ae and M.hint_name not in d and any(M.locations)and not any([B for B in M.locations if B.id in A.woth_locations]):d.append(M.hint_name)
+		for (B3,L) in RegionList.items():
+			if L.hint_name not in Ae and L.hint_name not in d and any(L.locations)and not any([B for B in L.locations if B.id in A.woth_locations]):d.append(L.hint_name)
 		random.shuffle(d)
 		for J in range(hint_distribution[HintType.FoolishRegion]):
 			if len(d)==0:hint_distribution[HintType.FoolishRegion]-=1;hint_distribution[HintType.WothLocation]+=1;continue
 			A_=d.pop();B=getRandomHintLocation();C=f"It would be foolish to explore the {A_}.";B.hint_type=HintType.FoolishRegion;UpdateHint(B,C)
 	if hint_distribution[HintType.WothLocation]>0:
-		o=[]
+		n=[]
 		for K in A.woth_locations:
 			E=LocationList[K]
-			if E.type in A.settings.shuffled_location_types and E.type!=Types.TrainingBarrel and not(A.settings.key_8_helm and E==Locations.HelmKey):o.append(E)
-		random.shuffle(o)
+			if E.type in A.settings.shuffled_location_types and E.type!=Types.TrainingBarrel and not(A.settings.key_8_helm and E==Locations.HelmKey):n.append(E)
+		random.shuffle(n)
 		for J in range(hint_distribution[HintType.WothLocation]):
-			if len(o)==0:hint_distribution[HintType.WothLocation]-=1;hint_distribution[HintType.Joke]+=1;continue
-			B0=o.pop();B=getRandomHintLocation();C=f"{B0.name} is on the Way of the Hoard.";B.hint_type=HintType.WothLocation;UpdateHint(B,C)
+			if len(n)==0:hint_distribution[HintType.WothLocation]-=1;hint_distribution[HintType.Joke]+=1;continue
+			B0=n.pop();B=getRandomHintLocation();C=f"{B0.name} is on the Way of the Hoard.";B.hint_type=HintType.WothLocation;UpdateHint(B,C)
 	Af=[]
 	for J in range(hint_distribution[HintType.FullShopWithItems]):
 		Ag=random.choice([A for A in SharedShopLocations if A not in Af]);Af.append(Ag);N=LocationList[Ag];Ah=[A for(id,A)in LocationList.items()if A.type==Types.Shop and A.level==N.level and A.vendor==N.vendor and A.kong!=Kongs.any]
 		if N.item is not _C and N.item!=Items.NoItem:
 			Ai=shop_owners[N.vendor];G=level_list_helm_isles[N.level]
 			if A.settings.wrinkly_hints==_E:G=random.choice(level_cryptic_helm_isles[N.level])
-			p=ItemList[N.item].name
+			o=ItemList[N.item].name
 		else:
 			random.shuffle(Ah);e=[ItemList[A.item].name for A in Ah if A.item is not _C and A.item!=Items.NoItem]
-			if len(e)==0:p='nothing'
+			if len(e)==0:o='nothing'
 			else:
-				p=e[0]
-				if len(e)>1:p=f"{', '.join(e[:-1])}, and {e[-1]}"
+				o=e[0]
+				if len(e)>1:o=f"{', '.join(e[:-1])}, and {e[-1]}"
 		Ai=shop_owners[N.vendor];G=level_list_helm_isles[N.level]
 		if A.settings.wrinkly_hints==_E:G=random.choice(level_cryptic_helm_isles[N.level])
-		B=getRandomHintLocation();C=f"{Ai}'s in {G} contains {p}.";B.hint_type=HintType.FullShopWithItems;UpdateHint(B,C)
-	for J in range(hint_distribution[HintType.KRoolOrder]):B=getRandomHintLocation();B1=[NameFromKong(B)for B in A.settings.krool_order];B2=Al.join(B1);v=f"King K. Rool will face off in the ring against {B2}.";B.hint_type=HintType.KRoolOrder;UpdateHint(B,v)
+		B=getRandomHintLocation();C=f"{Ai}'s in {G} contains {o}.";B.hint_type=HintType.FullShopWithItems;UpdateHint(B,C)
+	for J in range(hint_distribution[HintType.KRoolOrder]):B=getRandomHintLocation();B1=[NameFromKong(B)for B in A.settings.krool_order];B2=Al.join(B1);u=f"King K. Rool will face off in the ring against {B2}.";B.hint_type=HintType.KRoolOrder;UpdateHint(B,u)
 	for J in range(hint_distribution[HintType.Joke]):B=getRandomHintLocation();Aj=hint_list.copy();random.shuffle(Aj);C=Aj.pop().hint;B.hint_type=HintType.Joke;UpdateHint(B,C)
 	UpdateSpoilerHintList(A);A.hint_distribution=hint_distribution;return _A
 def getRandomHintLocation(location_list=_C,kongs=_C,levels=_C,move_name=_C):
