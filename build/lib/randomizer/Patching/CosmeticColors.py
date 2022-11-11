@@ -1,8 +1,8 @@
 'Apply cosmetic skins to kongs.'
 _K='big'
-_J='lanky'
-_I=True
-_H='tiny'
+_J=True
+_I='tiny'
+_H='lanky'
 _G='diddy'
 _F='dk'
 _E='#000000'
@@ -33,22 +33,22 @@ def apply_cosmetic_colors(spoiler):
 		for A5 in range(24):ROM().writeMultipleBytes(random.randint(0,255),1)
 		ROM().seek(T+431)
 		for A6 in range(2):ROM().writeMultipleBytes(random.randint(0,2),1)
-	ROM().seek(T+310);ROM().writeMultipleBytes(N,1);Y=[];p={};U={};A0=[{C:_F,I:[{G:b,D:3724,B:M}],J:c,L:d,H:0},{C:_G,I:[{G:'cap_shirt',D:3686,B:M}],J:e,L:f,H:1},{C:_J,I:[{G:u,D:3689,B:M},{G:v,D:3734,B:v}],J:g,L:h,H:2},{C:_H,I:[{G:u,D:6014,B:M}],J:i,L:j,H:3},{C:_D,I:[{G:'shirt_back',D:3769,B:w},{G:'shirt_front',D:3687,B:M}],J:W,L:X,H:4},{C:x,I:[{G:'shirt',D:3777,B:y},{G:'gloves',D:3778,B:y}],J:W,L:X,H:4},{C:'rambi',I:[{G:b,D:3826,B:M}],J:k,L:l,H:5},{C:'enguarde',I:[{G:b,D:3847,B:M}],J:m,L:n,H:6}]
+	ROM().seek(T+310);ROM().writeMultipleBytes(N,1);Y=[];p={};U={};A0=[{C:_F,I:[{G:b,D:3724,B:M}],J:c,L:d,H:0},{C:_G,I:[{G:'cap_shirt',D:3686,B:M}],J:e,L:f,H:1},{C:_H,I:[{G:u,D:3689,B:M},{G:v,D:3734,B:v}],J:g,L:h,H:2},{C:_I,I:[{G:u,D:6014,B:M}],J:i,L:j,H:3},{C:_D,I:[{G:'shirt_back',D:3769,B:w},{G:'shirt_front',D:3687,B:M}],J:W,L:X,H:4},{C:x,I:[{G:'shirt',D:3777,B:y},{G:'gloves',D:3778,B:y}],J:W,L:X,H:4},{C:'rambi',I:[{G:b,D:3826,B:M}],J:k,L:l,H:5},{C:'enguarde',I:[{G:b,D:3847,B:M}],J:m,L:n,H:6}]
 	if js.document.getElementById(t).checked:
 		if js.document.getElementById('random_colors').checked:A.settings.dk_colors=E;A.settings.diddy_colors=E;A.settings.lanky_colors=E;A.settings.tiny_colors=E;A.settings.chunky_colors=E;A.settings.rambi_colors=E;A.settings.enguarde_colors=E
 		else:A.settings.dk_colors=js.document.getElementById(c).value;A.settings.dk_custom_color=js.document.getElementById(d).value;A.settings.diddy_colors=js.document.getElementById(e).value;A.settings.diddy_custom_color=js.document.getElementById(f).value;A.settings.lanky_colors=js.document.getElementById(g).value;A.settings.lanky_custom_color=js.document.getElementById(h).value;A.settings.tiny_colors=js.document.getElementById(i).value;A.settings.tiny_custom_color=js.document.getElementById(j).value;A.settings.chunky_colors=js.document.getElementById(W).value;A.settings.chunky_custom_color=js.document.getElementById(X).value;A.settings.rambi_colors=js.document.getElementById(k).value;A.settings.rambi_custom_color=js.document.getElementById(l).value;A.settings.enguarde_colors=js.document.getElementById(m).value;A.settings.enguarde_custom_color=js.document.getElementById(n).value
 	elif A.settings.random_colors:A.settings.dk_colors=E;A.settings.diddy_colors=E;A.settings.lanky_colors=E;A.settings.tiny_colors=E;A.settings.chunky_colors=E;A.settings.rambi_colors=E;A.settings.enguarde_colors=E
 	U={c:A.settings.dk_colors,d:A.settings.dk_custom_color,e:A.settings.diddy_colors,f:A.settings.diddy_custom_color,g:A.settings.lanky_colors,h:A.settings.lanky_custom_color,i:A.settings.tiny_colors,j:A.settings.tiny_custom_color,W:A.settings.chunky_colors,X:A.settings.chunky_custom_color,k:A.settings.rambi_colors,l:A.settings.rambi_custom_color,m:A.settings.enguarde_colors,n:A.settings.enguarde_custom_color}
 	for F in A0:
-		V=_I
+		V=_J
 		if F[H]==4:
 			Z=A.settings.disco_chunky
 			if A.settings.krusha_slot==_D:Z=_C
 			if Z and F[C]==_D:V=_C
 			elif not Z and F[C]==x:V=_C
-		q=[_F,_G,_J,_H,_D];r=_C
+		q=[_F,_G,_H,_I,_D];r=_C
 		if A.settings.krusha_slot in q:
-			if q.index(A.settings.krusha_slot)==F[H]:r=_I;F[I]=[{G:'krusha_skin',D:4971,B:M},{G:'krusha_indicator',D:4966,B:C}];V=_I
+			if q.index(A.settings.krusha_slot)==F[H]:r=_J;F[I]=[{G:'krusha_skin',D:4971,B:M},{G:'krusha_indicator',D:4966,B:C}];V=_J
 		if V:
 			P={C:F[C],Q:[]}
 			for R in F[I]:
@@ -120,11 +120,11 @@ def overwrite_object_colors(spoiler):
 			for A in range(152,160):F=getFile(7,A,_C,44,44);F=maskImage(F,B,0);I=[168,152,232,208,240];writeColorImageToROM(F,7,I[B]+(A-152),44,44)
 			for A in range(216,224):G=getFile(7,A,_C,48,42);G=maskImage(G,B,0);J=[224,256,248,216,264];writeColorImageToROM(G,7,J[B]+(A-216),48,42)
 			for A in range(274,286):H=getFile(7,A,_C,44,44);H=maskImage(H,B,0);K=[274,854,818,842,830];writeColorImageToROM(H,7,K[B]+(A-274),44,44)
-			for A in range(5819,5827):D=getFile(25,A,_I,32,64);D=maskImage(D,B,33);D.paste(C,balloon_single_frames[A-5819],C);L=[5835,5827,5843,5851,5819];writeColorImageToROM(D,25,L[B]+(A-5819),32,64)
+			for A in range(5819,5827):D=getFile(25,A,_J,32,64);D=maskImage(D,B,33);D.paste(C,balloon_single_frames[A-5819],C);L=[5835,5827,5843,5851,5819];writeColorImageToROM(D,25,L[B]+(A-5819),32,64)
 def applyKrushaKong(spoiler):
-	'Apply Krusha Kong setting.';A=spoiler;B=[_F,_G,_J,_H,_D]
+	'Apply Krusha Kong setting.';A=spoiler;B=[_F,_G,_H,_I,_D]
 	if A.settings.krusha_slot=='random':
-		C=[_F,_G,_H]
+		C=[_F,_G,_H,_I]
 		if not A.settings.disco_chunky:C.append(_D)
 		A.settings.krusha_slot=random.choice(C)
 	ROM().seek(A.settings.rom_data+284)
