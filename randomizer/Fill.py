@@ -1,13 +1,14 @@
 'Module used to distribute items randomly.'
-_P='Retrying fill. Tries: '
-_O='Retrying fill really hard. Tries: '
-_N='Fill failed, out of retries.'
-_M='Game potentially unbeatable after placing all items.'
-_L='normal'
-_K='levels'
-_J='none'
-_I='shuffled'
-_H='skip'
+_Q='Retrying fill. Tries: '
+_P='Retrying fill really hard. Tries: '
+_O='Fill failed, out of retries.'
+_N='Game potentially unbeatable after placing all items.'
+_M='shuffled_decoupled'
+_L='all_blueprints'
+_K='all_medals'
+_J='levels'
+_I='normal'
+_H='shuffled'
 _G='off'
 _F='random'
 _E='assumed'
@@ -32,12 +33,13 @@ from randomizer.Enums.Transitions import Transitions
 from randomizer.Enums.Types import Types
 from randomizer.Enums.Warps import Warps
 from randomizer.Lists.Item import ItemList,KongFromItem
-from randomizer.Lists.Location import LocationList,SharedShopLocations,TrainingBarrelLocations,DonkeyMoveLocations,DiddyMoveLocations,LankyMoveLocations,TinyMoveLocations,ChunkyMoveLocations,SharedMoveLocations
+from randomizer.Lists.Location import LocationList,TrainingBarrelLocations,DonkeyMoveLocations,DiddyMoveLocations,LankyMoveLocations,TinyMoveLocations,ChunkyMoveLocations,SharedMoveLocations
 from randomizer.Lists.MapsAndExits import Maps
 from randomizer.Lists.Minigame import BarrelMetaData,MinigameRequirements
 from randomizer.Lists.ShufflableExit import GetLevelShuffledToIndex,GetShuffledLevelIndex
 from randomizer.Lists.Warps import BananaportVanilla
-from randomizer.Logic import STARTING_SLAM,LogicVarHolder,LogicVariables
+from randomizer.Logic import LogicVarHolder,LogicVariables
+from randomizer.Logic import Regions as RegionList
 from randomizer.LogicClasses import Sphere,TransitionFront
 from randomizer.Prices import GetMaxForKong
 from randomizer.Settings import Settings
@@ -61,28 +63,28 @@ def GetExitLevelExit(region):
 	elif A==Levels.CrystalCaves:return ShuffleExits.ShufflableExits[Transitions.CavesToIsles].shuffledId
 	elif A==Levels.CreepyCastle:return ShuffleExits.ShufflableExits[Transitions.CastleToIsles].shuffledId
 def GetAccessibleLocations(settings,ownedItems,searchType=SearchMode.GetReachable,purchaseList=_A,targetItemId=_A):
-	'Search to find all reachable locations given owned items.';W=ownedItems;Q=purchaseList;E=settings;D=searchType
-	if E.no_logic and D in[SearchMode.CheckAllReachable,SearchMode.CheckBeatable,SearchMode.CheckSpecificItemReachable]:return _B
+	'Search to find all reachable locations given owned items.';b='skip';W=ownedItems;Q=purchaseList;F=settings;D=searchType
+	if F.no_logic and D in[SearchMode.CheckAllReachable,SearchMode.CheckBeatable,SearchMode.CheckSpecificItemReachable]:return _B
 	if Q is _A:Q=[]
 	G=[];J=[];X=[];R=[];K=_B
 	while len(J)>0 or K:
-		F=Sphere()
-		if R:F.availableGBs=R[-1].availableGBs
+		E=Sphere()
+		if R:E.availableGBs=R[-1].availableGBs
 		for L in J:
 			G.append(L);A=LocationList[L]
 			if A.item is not _A:
 				if A.type==Types.Shop and D==SearchMode.GetReachableWithControlledPurchases and L not in Q:continue
 				W.append(A.item);X.append(A.item)
 				if D==SearchMode.GeneratePlaythrough and ItemList[A.item].playthrough:
-					if E.win_condition=='beat_krool'and A.item==Items.BananaHoard:F.locations=[L];break
-					if A.item==Items.GoldenBanana:F.availableGBs+=1
-					F.locations.append(L)
+					if A.item==Items.BananaHoard:E.locations=[L];break
+					if A.item==Items.GoldenBanana:E.availableGBs+=1
+					E.locations.append(L)
 				if D==SearchMode.CheckSpecificItemReachable and A.item==targetItemId:return _B
 		K=_C;J=[];LogicVariables.Update(W);X=[]
-		if len(F.locations)>0:
-			if D==SearchMode.GeneratePlaythrough:F.seedBeaten=LogicVariables.WinConditionMet()
-			R.append(F)
-		if D==SearchMode.CheckBeatable and LogicVariables.WinConditionMet():return _B
+		if len(E.locations)>0:
+			if D==SearchMode.GeneratePlaythrough:E.seedBeaten=LogicVariables.bananaHoard
+			R.append(E)
+		if D==SearchMode.CheckBeatable and LogicVariables.bananaHoard:return _B
 		for S in LogicVariables.GetKongs():
 			LogicVariables.SetKong(S);T=Logic.Regions[Regions.IslesMain];T.id=Regions.IslesMain;T.dayAccess=_B;T.nightAccess=Events.Night in LogicVariables.Events;M=[T];H=[Regions.IslesMain];Y=[(A,B)for(A,B)in Logic.Regions.items()if B.HasAccess(S)and A not in H];H.extend([A[0]for A in Y]);M.extend([A[1]for A in Y])
 			while len(M)>0:
@@ -96,21 +98,21 @@ def GetAccessibleLocations(settings,ownedItems,searchType=SearchMode.GetReachabl
 				for A in B.locations:
 					if A.logic(LogicVariables)and A.id not in J and A.id not in G:
 						I=LocationList[A.id]
-						if A.bonusBarrel is MinigameType.BonusBarrel and E.bonus_barrels!=_H or A.bonusBarrel is MinigameType.HelmBarrel and E.helm_barrels!=_H:
-							b=BarrelMetaData[A.id].minigame
-							if not MinigameRequirements[b].logic(LogicVariables):continue
+						if A.bonusBarrel is MinigameType.BonusBarrel and F.bonus_barrels!=b or A.bonusBarrel is MinigameType.HelmBarrel and F.helm_barrels!=b:
+							c=BarrelMetaData[A.id].minigame
+							if not MinigameRequirements[c].logic(LogicVariables):continue
 						elif I.item is not _A and ItemList[LocationList[A.id].item].type==Types.Blueprint:
 							if not LogicVariables.BlueprintAccess(ItemList[LocationList[A.id].item]):continue
 						elif I.type==Types.Blueprint:
-							if not LogicVariables.IsKong(I.kong)and not E.free_trade_items:continue
+							if not LogicVariables.IsKong(I.kong)and not F.free_trade_items:continue
 						elif I.type==Types.Shop and I.item is not _A and I.item!=Items.NoItem:
 							if D!=SearchMode.GetReachableWithControlledPurchases or A.id in Q:LogicVariables.PurchaseShopItem(A.id)
 						elif A.id==Locations.NintendoCoin:LogicVariables.Coins[Kongs.donkey]-=2
 						J.append(A.id)
 				Z=B.exits.copy()
-				if E.shuffle_loading_zones and B.level!=Levels.DKIsles and B.level!=Levels.Shops:
+				if F.shuffle_loading_zones and B.level!=Levels.DKIsles and B.level!=Levels.Shops:
 					a=GetExitLevelExit(B)
-					if a is not _A:c=ShuffleExits.ShufflableExits[a].back.regionId;Z.append(TransitionFront(c,lambda l:_B))
+					if a is not _A:d=ShuffleExits.ShufflableExits[a].back.regionId;Z.append(TransitionFront(d,lambda l:_B))
 				for exit in Z:
 					C=exit.dest
 					if exit.exitShuffleId is not _A and not exit.assumed:
@@ -129,7 +131,7 @@ def GetAccessibleLocations(settings,ownedItems,searchType=SearchMode.GetReachabl
 					C=B.deathwarp.dest
 					if C not in H and B.deathwarp.logic(LogicVariables):H.append(C);P=Logic.Regions[C];P.id=C;M.append(P)
 	if D in(SearchMode.GetReachable,SearchMode.GetReachableWithControlledPurchases):return G
-	elif D==SearchMode.CheckBeatable or D==SearchMode.CheckSpecificItemReachable:E.debug_accessible=G;return _C
+	elif D==SearchMode.CheckBeatable or D==SearchMode.CheckSpecificItemReachable:F.debug_accessible=G;return _C
 	elif D==SearchMode.GeneratePlaythrough:return R
 	elif D==SearchMode.CheckAllReachable:return len(G)==len(LocationList)
 	elif D==SearchMode.GetUnreachable:return[A for A in LocationList if A not in G]
@@ -144,7 +146,7 @@ def VerifyWorldWithWorstCoinUsage(settings):
 	while _B:
 		Reset();I=GetAccessibleLocations(A,[],SearchMode.GetReachableWithControlledPurchases,C);X=[LocationList[A].item for A in C];O=GetMaxCoinsSpent(A,C);F=[N[A]-O[A]for A in range(0,5)];E=LogicVariables.Coins.copy()
 		if E[Kongs.donkey]>=F[Kongs.donkey]and E[Kongs.diddy]>=F[Kongs.diddy]and E[Kongs.lanky]>=F[Kongs.lanky]and E[Kongs.tiny]>=F[Kongs.tiny]and E[Kongs.chunky]>=F[Kongs.chunky]:Reset();return _B
-		if LogicVariables.WinConditionMet():Reset();return _B
+		if LogicVariables.bananaHoard:Reset();return _B
 		K=[A for A in I if LocationList[A].type==Types.Shop and LocationList[A].item is not _A and LocationList[A].item!=Items.NoItem and A not in C and LogicVariables.CanBuy(A)];H={};G={}
 		if len(K)==0:print('Seed is invalid, coin locked with purchase order: '+str([LocationList[A].name+': '+LocationList[A].item.name+', 'for A in C]));Reset();return _C
 		D=_A
@@ -175,10 +177,10 @@ def ParePlaythrough(settings,PlaythroughLocations):
 				if A.win_condition!='all_fairies':B.locations.remove(F)
 				continue
 			if D.item==Items.BananaMedal:
-				if A.win_condition!='all_medals':B.locations.remove(F)
+				if A.win_condition!=_K:B.locations.remove(F)
 				continue
 			if D.item is not _A and ItemList[D.item].type==Types.Blueprint:
-				if A.win_condition!='all_blueprints':B.locations.remove(F)
+				if A.win_condition!=_L:B.locations.remove(F)
 				continue
 			H=D.item;D.item=_A;Reset()
 			if GetAccessibleLocations(A,[],SearchMode.CheckBeatable):B.locations.remove(F);D.SetDelayedItem(H);G.append(F)
@@ -188,23 +190,46 @@ def ParePlaythrough(settings,PlaythroughLocations):
 		if len(B.locations)==0:C.remove(B)
 	for F in G:LocationList[F].PlaceDelayedItem()
 def PareWoth(spoiler,PlaythroughLocations):
-	'Pare playthrough to locations which are Way of the Hoard (hard required by logic).';C=spoiler;A=[]
+	'Pare playthrough to locations which are Way of the Hoard (hard required by logic).';B=spoiler;A=[]
 	for E in PlaythroughLocations:
 		for F in [A for A in E.locations if not LocationList[A].constant and ItemList[LocationList[A].item].type not in(Types.Banana,Types.BlueprintBanana,Types.Crown,Types.Medal,Types.Blueprint)]:A.append(F)
+	A.append(Locations.BananaHoard)
 	for G in range(len(A)-1,-1,-1):
-		D=A[G];B=LocationList[D];H=B.item;B.item=_A;Reset()
-		if GetAccessibleLocations(C.settings,[],SearchMode.CheckBeatable):A.remove(D)
-		B.PlaceItem(H)
-	CalculateWothPaths(C,A);return A
+		D=A[G];C=LocationList[D];H=C.item;C.item=_A;Reset()
+		if GetAccessibleLocations(B.settings,[],SearchMode.CheckBeatable):A.remove(D)
+		C.PlaceItem(H)
+	CalculateWothPaths(B,A);CalculateFoolish(B,A);return A
 def CalculateWothPaths(spoiler,WothLocations):
-	'Calculate the Paths (dependencies) for each Way of the Hoard item.';C=WothLocations;A=spoiler;F=A.settings.helm_barrels;A.settings.helm_barrels=_H
-	for B in C:A.woth_paths[B]=[B]
-	for B in C:
-		D=LocationList[B];G=D.item;D.item=_A;H=ItemPool.Keys()+ItemPool.Kongs(A.settings);Reset();LogicVariables.GainInfiniteCoins();I=GetAccessibleLocations(A.settings,H,SearchMode.GetReachable)
-		for E in C:
-			if E not in I:A.woth_paths[E].append(B)
-		D.PlaceItem(G)
-	A.settings.helm_barrels=F
+	'Calculate the Paths (dependencies) for each Way of the Hoard item.';C=WothLocations;B=spoiler;G=[]
+	for A in C:B.woth_paths[A]=[A]
+	for A in C:
+		D=LocationList[A];E=D.item;D.item=_A;F=ItemPool.Keys()+ItemPool.Kongs(B.settings);F.extend([Items.Vines,Items.Swim]);Reset();LogicVariables.GainInfiniteCoins();J=GetAccessibleLocations(B.settings,F,SearchMode.GetReachable);H=_C
+		for I in C:
+			if I not in J:B.woth_paths[I].append(A);H=_B
+		D.PlaceItem(E)
+		if E not in F and E!=Items.BananaHoard and not H:G.append(A)
+	for A in G:C.remove(A);del B.woth_paths[A]
+def CalculateFoolish(spoiler,WothLocations):
+	'Calculate the items and regions that are foolish (blocking no major items).';G='need_both';A=spoiler;H=[LocationList[A].item for A in WothLocations];C=[];B=ItemPool.AllKongMoves()
+	if A.settings.training_barrels!=_I:B.extend([Items.Vines,Items.Swim,Items.Barrels])
+	if A.settings.shockwave_status==_H:B.append(Items.CameraAndShockwave)
+	if A.settings.shockwave_status==_M:B.append(Items.Camera);B.append(Items.Shockwave)
+	for D in B:
+		if D in H:continue
+		Reset();LogicVariables.BanItem(D);GetAccessibleLocations(A.settings,[],SearchMode.GetReachable)
+		if LogicVariables.HasAllItems():C.append(D)
+	A.foolish_moves=C;B=[A for A in B if A not in C];B.extend(ItemPool.Keys());B.append(Items.Oranges)
+	if Types.Coin in A.settings.shuffled_location_types and A.settings.coin_door_open in[G,'need_rw']:B.append(Items.RarewareCoin)
+	if Types.Coin in A.settings.shuffled_location_types and A.settings.coin_door_open in[G,'need_nin']:B.append(Items.NintendoCoin)
+	if Types.Blueprint in A.settings.shuffled_location_types and A.settings.win_condition==_L:B.extend(ItemPool.Blueprints(A.settings))
+	if Types.Medal in A.settings.shuffled_location_types and A.settings.win_condition==_K:B.append(Items.BananaMedal)
+	if Types.Crown in A.settings.shuffled_location_types and not A.settings.crown_door_open:B.append(Items.BattleCrown)
+	E={'K. Rool Arena','Snide','Candy Generic','Funky Generic','Credits'}
+	if Types.Coin not in A.settings.shuffled_location_types:E.add('Jetpac Game')
+	for (id,F) in RegionList.items():
+		I=[A for A in F.locations if A.id in LocationList.keys()]
+		if any([A for A in I if LocationList[A.id].item in B]):E.add(F.hint_name)
+	A.foolish_region_names=list(set([A.hint_name for(id,A)in RegionList.items()if any(A.locations)and A.hint_name not in E]))
 def RandomFill(settings,itemsToPlace,inOrder=_C):
 	'Randomly place given items in any location disregarding logic.';A=itemsToPlace
 	if not inOrder:random.shuffle(A)
@@ -386,12 +411,12 @@ def Fill(spoiler):
 def ShuffleSharedMoves(spoiler,placedMoves):
 	'Shuffles shared kong moves into shops and then returns the remaining ones and their valid locations.';B=placedMoves;A=spoiler;ItemPool.PlaceConstants(A.settings);F=[A for A in SharedMoveLocations if LocationList[A].item is _A];G=[A for A in B if A in ItemPool.ImportantSharedMoves or A in ItemPool.JunkSharedMoves]
 	if len(F)<len(ItemPool.ImportantSharedMoves)+len(ItemPool.JunkSharedMoves)-len(G):raise Ex.ItemPlacementException('Too many kong moves placed before shared moves. Only '+len(F)+' available for '+len(ItemPool.ImportantSharedMoves)+len(ItemPool.JunkSharedMoves)-len(G)+' remaining shared moves.')
-	if A.settings.training_barrels!=_L and Items.Oranges not in B:
+	if A.settings.training_barrels!=_I and Items.Oranges not in B:
 		J=PlaceItems(A.settings,_E,[Items.Oranges],[C for C in ItemPool.AllItems(A.settings)if C!=Items.Oranges and C not in B])
 		if J>0:raise Ex.ItemPlacementException('Failed to place Orange training barrel move.')
 	C=ItemPool.ImportantSharedMoves.copy()
-	if A.settings.shockwave_status==_I and Items.CameraAndShockwave not in B:C.append(Items.CameraAndShockwave)
-	elif A.settings.shockwave_status=='shuffled_decoupled'and(Items.Camera not in B or Items.Shockwave not in B):C.append(Items.Camera);C.append(Items.Shockwave)
+	if A.settings.shockwave_status==_H and Items.CameraAndShockwave not in B:C.append(Items.CameraAndShockwave)
+	elif A.settings.shockwave_status==_M and(Items.Camera not in B or Items.Shockwave not in B):C.append(Items.Camera);C.append(Items.Shockwave)
 	for D in B:
 		if D in C:C.remove(D)
 	H=PlaceItems(A.settings,_E,C,[D for D in ItemPool.AllItems(A.settings)if D not in C and D not in B])
@@ -402,20 +427,17 @@ def ShuffleSharedMoves(spoiler,placedMoves):
 	I=PlaceItems(A.settings,_F,E,[B for B in ItemPool.AllItems(A.settings)if B not in E])
 	if I>0:raise Ex.ItemPlacementException(str(I)+' unplaced shared junk items.')
 def FillKongsAndMovesGeneric(spoiler):
-	'Facilitate shuffling individual pools of items in lieu of full item rando.';A=spoiler;B=0
+	'Facilitate shuffling individual pools of items in lieu of full item rando.';B=spoiler;A=0
 	while _B:
 		try:
-			Fill(A);Reset()
-			if not VerifyWorldWithWorstCoinUsage(A.settings):raise Ex.GameNotBeatableException(_M)
+			Fill(B);Reset()
+			if not VerifyWorldWithWorstCoinUsage(B.settings):raise Ex.GameNotBeatableException(_N)
 			return
 		except Ex.FillException as C:
-			if B==20:js.postMessage(_N);raise C
-			B+=1
-			if B%5==0:
-				js.postMessage(_O+str(B))
-				if A.settings.shuffle_loading_zones!=_J:ShuffleExits.Reset();ShuffleExits.ExitShuffle(A.settings);A.UpdateExits()
-				A.settings.shuffle_prices()
-			else:js.postMessage(_P+str(B))
+			if A==20:js.postMessage(_O);raise C
+			A+=1
+			if A%5==0:js.postMessage(_P+str(A));B.settings.shuffle_prices()
+			else:js.postMessage(_Q+str(A))
 			Reset();Logic.ClearAllLocations()
 def GeneratePlaythrough(spoiler):
 	'Generate playthrough and way of the hoard and update spoiler.';A=spoiler;js.postMessage('Seed generated! Finalizing spoiler...');Reset();B=GetAccessibleLocations(A.settings,[],SearchMode.GeneratePlaythrough);ParePlaythrough(A.settings,B);C=PareWoth(A,B);A.UpdateLocations(LocationList)
@@ -437,7 +459,7 @@ def PlaceKongsInKongLocations(spoiler,kongItems,kongLocations):
 		if Locations.DiddyKong in E:C=D.pop();LocationList[Locations.DiddyKong].PlaceItem(C);A.settings.diddy_freeing_kong=random.choice(B);B.append(ItemPool.GetKongForItem(C))
 		if Locations.LankyKong in E:C=D.pop();LocationList[Locations.LankyKong].PlaceItem(C);A.settings.lanky_freeing_kong=random.choice(B);B.append(ItemPool.GetKongForItem(C))
 		if Locations.TinyKong in E:C=D.pop();LocationList[Locations.TinyKong].PlaceItem(C);J=list(set(B).intersection([Kongs.diddy,Kongs.chunky]));A.settings.tiny_freeing_kong=random.choice(J);B.append(ItemPool.GetKongForItem(C))
-	elif A.settings.shuffle_loading_zones in(_K,_J):
+	elif A.settings.shuffle_loading_zones in(_J,'none'):
 		H=len(B)+1
 		if A.settings.hard_level_progression:H=7
 		F=GetLogicallyAccessibleKongLocations(A,E,B,H)
@@ -474,7 +496,7 @@ def FillKongs(spoiler):
 def FillKongsAndMoves(spoiler):
 	'Fill kongs, then progression moves, then shared moves, then rest of moves.';A=spoiler;L=[];G=[]
 	if A.settings.kong_rando:FillKongs(A)
-	if not A.settings.unlock_all_moves and A.settings.move_rando!=_G and A.settings.training_barrels==_I:
+	if not A.settings.unlock_all_moves and A.settings.move_rando!=_G and A.settings.training_barrels==_H:
 		if not A.settings.no_logic and A.settings.shuffle_loading_zones!=_D and not A.settings.hard_level_progression:h=2;BlockAccessToLevel(A.settings,h)
 		Reset();V=ItemPool.AllKongMoves().copy();V.append(Items.Vines);V.append(Items.Swim);i=PlaceItems(A.settings,_E,[Items.Barrels],ownedItems=V)
 		if i>0:raise Ex.ItemPlacementException('Failed to place barrel training somehow.')
@@ -559,7 +581,7 @@ def FillKongsAndMoves(spoiler):
 				if W in SharedMoveLocations:t.append(B)
 		raise Ex.ItemPlacementException(str(U)+' unplaced items.')
 	if not A.settings.unlock_all_moves and A.settings.move_rando!=_G:
-		if A.settings.training_barrels==_I:
+		if A.settings.training_barrels==_H:
 			e=[A for A in TrainingBarrelLocations if LocationList[A].item is _A]
 			if len(e)>0:
 				K=[]
@@ -594,15 +616,15 @@ def FillKongsAndMovesForLevelOrder(spoiler):
 			if A.settings.hard_level_progression:SetNewProgressionRequirementsUnordered(A.settings)
 			else:SetNewProgressionRequirements(A.settings)
 			A.settings.kongs_for_progression=_C
-			if not VerifyWorldWithWorstCoinUsage(A.settings):raise Ex.GameNotBeatableException(_M)
+			if not VerifyWorldWithWorstCoinUsage(A.settings):raise Ex.GameNotBeatableException(_N)
 			return
 		except Ex.FillException as C:
 			Reset();Logic.ClearAllLocations();B+=1
-			if B==20:js.postMessage(_N);raise C
+			if B==20:js.postMessage(_O);raise C
 			if B%5==0:
-				js.postMessage(_O+str(B));A.settings.shuffle_prices()
-				if A.settings.shuffle_loading_zones==_K:ShuffleExits.ShuffleExits(A.settings);A.UpdateExits()
-			else:js.postMessage(_P+str(B))
+				js.postMessage(_P+str(B));A.settings.shuffle_prices()
+				if A.settings.shuffle_loading_zones==_J:ShuffleExits.ShuffleExits(A.settings);A.UpdateExits()
+			else:js.postMessage(_Q+str(B))
 def GetAccessibleKongLocations(levels,ownedKongs):
 	'Get all kong locations within the provided levels which are reachable by owned kongs.';A=ownedKongs;B=[]
 	for C in levels:
@@ -724,7 +746,7 @@ def GetAccessibleOpenLevels(settings,accessible):
 			elif C==Events.ForestKeyTurnedIn:A.append(6);A.append(7)
 	else:A=[1,2,3,4,5,6,7]
 	if 6 in A and not LogicVariables.donkey and not LogicVariables.chunky and not(LogicVariables.tiny and LogicVariables.twirl):A.remove(6)
-	if B.training_barrels!=_L:
+	if B.training_barrels!=_I:
 		if B.activate_all_bananaports==_G and not LogicVariables.vines:
 			if 2 in A:A.remove(2)
 			if 6 in A:A.remove(6)
@@ -750,11 +772,11 @@ def BlockCompletionOfLevelSet(settings,lockedLevels):
 def Generate_Spoiler(spoiler):
 	'Generate a complete spoiler based on input settings.';A=spoiler;global LogicVariables;LogicVariables=LogicVarHolder(A.settings);InitKasplatMap(LogicVariables)
 	if A.settings.kongs_for_progression:
-		if A.settings.shuffle_loading_zones==_K:ShuffleExits.ShuffleExits(A.settings);A.UpdateExits()
+		if A.settings.shuffle_loading_zones==_J:ShuffleExits.ShuffleExits(A.settings);A.UpdateExits()
 		WipeProgressionRequirements(A.settings);ShuffleMisc(A);FillKongsAndMovesForLevelOrder(A)
 	else:
 		ShuffleMisc(A)
-		if A.settings.shuffle_loading_zones!=_J:ShuffleExits.ExitShuffle(A.settings);A.UpdateExits()
+		if A.settings.shuffle_loading_zones!='none':ShuffleExits.ExitShuffle(A.settings);A.UpdateExits()
 		if A.settings.move_rando!=_G and not A.settings.unlock_all_moves or A.settings.kong_rando or any(A.settings.shuffled_location_types):FillKongsAndMovesGeneric(A)
 		else:
 			ItemPool.PlaceConstants(A.settings)
