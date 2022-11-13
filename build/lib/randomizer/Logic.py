@@ -164,7 +164,14 @@ class LogicVarHolder:
 		elif B==Maps.FungiBoss:C=A.hunkyChunky and A.barrels
 		elif B==Maps.JapesBoss or B==Maps.AztecBoss or B==Maps.CavesBoss:C=A.barrels
 		return A.IsKong(E)and C
-	def IsLevelEnterable(A,level):'Check if level entry requirement is met.';B=level;return A.HasEnoughKongs(B,forPreviousLevel=_B)and A.GoldenBananas>=A.settings.EntryGBs[B]
+	def IsLevelEnterable(A,level):
+		'Check if level entry requirement is met.';B=level
+		if B>=3:
+			C=not A.settings.hard_level_progression and A.settings.shuffle_loading_zones in('none','levels')
+			if C:
+				if not A.barrels:return _A
+				if not A.settings.hard_bosses and B>=7 and not(A.twirl or A.hunkyChunky):return _A
+		return A.HasEnoughKongs(B,forPreviousLevel=_B)and A.GoldenBananas>=A.settings.EntryGBs[B]
 	def WinConditionMet(A):
 		'Check if the current game state has met the win condition.'
 		if A.settings.win_condition=='beat_krool'or A.settings.win_condition=='poke_snap':return Events.KRoolDefeated in A.Events
@@ -174,7 +181,7 @@ class LogicVarHolder:
 		elif A.settings.win_condition=='all_medals':return A.BananaMedals>=40
 		elif A.settings.win_condition=='all_keys':return Events.JapesKeyTurnedIn in A.Events and Events.AztecKeyTurnedIn in A.Events and Events.FactoryKeyTurnedIn in A.Events and Events.GalleonKeyTurnedIn in A.Events and Events.ForestKeyTurnedIn in A.Events and Events.CavesKeyTurnedIn in A.Events and Events.CastleKeyTurnedIn in A.Events and Events.HelmKeyTurnedIn in A.Events
 		else:return _A
-	def CanGetRarewareCoin(A):'Check if you meet the logical requirements to obtain the Rareware Coin.';B=A.BananaMedals>=A.settings.medal_requirement;C=min(ceil(A.settings.medal_requirement/5),6);return B and A.IsLevelEnterable(C)
+	def CanGetRarewareCoin(A):'Check if you meet the logical requirements to obtain the Rareware Coin.';B=A.BananaMedals>=A.settings.medal_requirement;C=min(ceil(A.settings.medal_requirement/4),6);return B and A.IsLevelEnterable(C)
 	def BanItem(A,item):'Prevent an item from being picked up by the logic.';A.banned_item=item
 	def HasAllItems(A):
 		'Return if you have all progression items.';A.latest_owned_items.append(A.banned_item);A.banned_item=_C;A.Update(A.latest_owned_items)

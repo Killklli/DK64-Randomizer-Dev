@@ -1,8 +1,8 @@
 'Logic file for Creepy Castle.'
 _G="Troff 'N' Scoff"
 _F='Castle Underground'
-_E='Castle Interior'
-_D='Castle Exterior'
+_E='Castle Rooms'
+_D='Castle Surroundings'
 _C=None
 _B=False
 _A=True
