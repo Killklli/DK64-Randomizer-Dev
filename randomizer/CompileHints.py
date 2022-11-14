@@ -116,7 +116,9 @@ def compileHints(spoiler):
 			if A.settings.win_condition==Aj:E.append(HintType.RequiredWinConditionHint);hint_distribution[HintType.RequiredWinConditionHint]=2
 	if A.settings.randomize_blocker_required_amounts:E.append(HintType.BLocker)
 	if A.settings.randomize_cb_required_amounts and len(A.settings.krool_keys_required)>0 and A.settings.krool_keys_required!=[Events.HelmKeyTurnedIn]:E.append(HintType.TroffNScoff)
-	if A.settings.kong_rando:E.append(HintType.KongLocation)
+	if A.settings.kong_rando:
+		if A.settings.shuffle_items and Types.Kong in A.settings.shuffled_location_types:print('item rando kong hints under construction')
+		else:E.append(HintType.KongLocation)
 	if A.settings.shuffle_loading_zones==_X:Al=hint_distribution[HintType.BLocker];hint_distribution[HintType.BLocker]=max(1,hint_distribution[HintType.TroffNScoff]);hint_distribution[HintType.TroffNScoff]=Al;E.append(HintType.Entrance)
 	if A.settings.shuffle_items and Types.Key in A.settings.shuffled_location_types:
 		E.append(HintType.RequiredKeyHint);e=[LocationList[B].item for B in A.woth_locations if ItemList[LocationList[B].item].type==Types.Key]

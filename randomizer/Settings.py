@@ -67,7 +67,7 @@ class Settings:
 				if A.move_rando!=_G:A.move_rando=_L
 				if A.shockwave_status not in(_D,_G):A.shuffled_location_types.append(Types.Shockwave)
 				if A.training_barrels!=_I:A.shuffled_location_types.append(Types.TrainingBarrel)
-		A.progressives_locked_in_shops=_A;A.shuffle_prices();A.update_progression_totals();A.krool_donkey=_A;A.krool_diddy=_A;A.krool_lanky=_A;A.krool_tiny=_A;A.krool_chunky=_A;G=J.copy()
+		A.shuffle_prices();A.update_progression_totals();A.krool_donkey=_A;A.krool_diddy=_A;A.krool_lanky=_A;A.krool_tiny=_A;A.krool_chunky=_A;G=J.copy()
 		if A.krool_phase_order_rando:random.shuffle(G)
 		if A.krool_random:A.krool_phase_count=randint(1,5)
 		if isinstance(A.krool_phase_count,str)is _C:A.krool_phase_count=5
@@ -130,7 +130,10 @@ class Settings:
 		elif A.level_randomization==_D:A.shuffle_loading_zones=_F
 		if A.starting_random:A.starting_kongs_count=randint(1,5)
 		if A.starting_kongs_count==5:A.kong_rando=_A
-		if A.kong_rando:A.starting_kong_list=random.sample(J,A.starting_kongs_count);A.starting_kong=random.choice(A.starting_kong_list);A.diddy_freeing_kong=Kongs.any;A.lanky_freeing_kong=Kongs.any;A.tiny_freeing_kong=Kongs.any;A.chunky_freeing_kong=Kongs.any;A.kong_locations=A.SelectKongLocations()
+		if A.kong_rando:
+			A.starting_kong_list=random.sample(J,A.starting_kongs_count);A.starting_kong=random.choice(A.starting_kong_list);A.diddy_freeing_kong=Kongs.any;A.lanky_freeing_kong=Kongs.any;A.tiny_freeing_kong=Kongs.any;A.chunky_freeing_kong=Kongs.any
+			if A.shuffle_items and Types.Kong in A.shuffled_location_types:A.kong_locations=[Locations.DiddyKong,Locations.LankyKong,Locations.TinyKong,Locations.ChunkyKong]
+			else:A.kong_locations=A.SelectKongLocations()
 		else:
 			A.possible_kong_list=J.copy();A.possible_kong_list.remove(0);A.starting_kong_list=random.sample(A.possible_kong_list,A.starting_kongs_count-1);A.starting_kong_list.append(Kongs.donkey);A.starting_kong=Kongs.donkey;A.diddy_freeing_kong=Kongs.donkey;A.lanky_freeing_kong=Kongs.donkey;A.tiny_freeing_kong=Kongs.diddy;A.chunky_freeing_kong=Kongs.lanky;A.kong_locations=[Locations.DiddyKong,Locations.LankyKong,Locations.TinyKong,Locations.ChunkyKong]
 			if Kongs.diddy in A.starting_kong_list:A.kong_locations.remove(Locations.DiddyKong)
@@ -151,7 +154,7 @@ class Settings:
 		if not A.crown_door_open:ItemList[Items.BattleCrown].playthrough=_C
 		A.free_trade_items=A.free_trade_setting!=_F;A.free_trade_blueprints=A.free_trade_setting=='major_collectibles'
 	def update_valid_locations(A):
-		'Calculate (or recalculate) valid locations for items by type.';G='shuffled';A.valid_locations={};A.valid_locations[Types.Kong]=[Locations.DiddyKong,Locations.LankyKong,Locations.TinyKong,Locations.ChunkyKong]
+		'Calculate (or recalculate) valid locations for items by type.';G='shuffled';A.valid_locations={};A.valid_locations[Types.Kong]=A.kong_locations.copy()
 		if A.move_rando not in(_E,_L):
 			A.valid_locations[Types.Shop]={};A.valid_locations[Types.Shop][Kongs.donkey]=[];A.valid_locations[Types.Shop][Kongs.diddy]=[];A.valid_locations[Types.Shop][Kongs.lanky]=[];A.valid_locations[Types.Shop][Kongs.tiny]=[];A.valid_locations[Types.Shop][Kongs.chunky]=[]
 			if A.move_rando=='on':A.valid_locations[Types.Shop][Kongs.donkey]=DonkeyMoveLocations.copy();A.valid_locations[Types.Shop][Kongs.diddy]=DiddyMoveLocations.copy();A.valid_locations[Types.Shop][Kongs.lanky]=LankyMoveLocations.copy();A.valid_locations[Types.Shop][Kongs.tiny]=TinyMoveLocations.copy();A.valid_locations[Types.Shop][Kongs.chunky]=ChunkyMoveLocations.copy()
@@ -166,8 +169,8 @@ class Settings:
 			if A.training_barrels==G and Types.TrainingBarrel not in A.shuffled_location_types:
 				for H in Kongs:A.valid_locations[Types.Shop][H].update(TrainingBarrelLocations.copy())
 			A.valid_locations[Types.Shockwave]=A.valid_locations[Types.Shop][Kongs.any];A.valid_locations[Types.TrainingBarrel]=A.valid_locations[Types.Shop][Kongs.any]
-		if any(A.shuffled_location_types):
-			C=[B for B in LocationList if LocationList[B].type in A.shuffled_location_types]
+		if A.shuffle_items and any(A.shuffled_location_types):
+			C=[B for B in LocationList if LocationList[B].type in A.shuffled_location_types and LocationList[B].type!=Types.Kong]
 			if Types.Shop in A.shuffled_location_types:
 				A.valid_locations[Types.Shop]={};B=DonkeyMoveLocations.copy();B.update(DiddyMoveLocations.copy());B.update(TinyMoveLocations.copy());B.update(ChunkyMoveLocations.copy());B.update(LankyMoveLocations.copy());F=[A for A in C if A not in B];A.valid_locations[Types.Shop][Kongs.any]=F
 				if Types.Shockwave in A.shuffled_location_types:F.append(Locations.CameraAndShockwave);A.valid_locations[Types.Shockwave]=F
@@ -179,11 +182,11 @@ class Settings:
 			if Types.Key in A.shuffled_location_types:A.valid_locations[Types.Key]=C
 			if Types.Medal in A.shuffled_location_types:A.valid_locations[Types.Medal]=C
 			if Types.Coin in A.shuffled_location_types:A.valid_locations[Types.Coin]=C
+			if Types.Kong in A.shuffled_location_types:L=Locations.IslesSwimTrainingBarrel,Locations.IslesVinesTrainingBarrel,Locations.IslesBarrelsTrainingBarrel,Locations.IslesOrangesTrainingBarrel,Locations.IslesDonkeyJapesRock;A.valid_locations[Types.Kong].extend(C)
 	def GetValidLocationsForItem(C,item_id):
 		'Return the valid locations the input item id can be placed in.';A=ItemList[item_id];B=[]
 		if A.type in(Types.Shop,Types.Blueprint):B=C.valid_locations[A.type][A.kong]
 		else:B=C.valid_locations[A.type]
-		if C.progressives_locked_in_shops and A in SharedShopLocations:B=SharedShopLocations.copy()
 		return B
 	def SelectKongLocations(B):
 		'Select which random kong locations to use depending on number of starting kongs.';A=[Locations.DiddyKong,Locations.LankyKong,Locations.TinyKong,Locations.ChunkyKong]

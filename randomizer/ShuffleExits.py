@@ -3,7 +3,9 @@ _D='levels'
 _C=False
 _B=True
 _A=None
-import random,js,randomizer.Fill as Fill,randomizer.Lists.Exceptions as Ex,randomizer.Logic as Logic
+import random,js
+from randomizer.Enums.Types import Types
+import randomizer.Fill as Fill,randomizer.Lists.Exceptions as Ex,randomizer.Logic as Logic
 from randomizer.Enums.Kongs import Kongs
 from randomizer.Enums.Levels import Levels
 from randomizer.Enums.Locations import Locations
@@ -63,7 +65,7 @@ def AssumeExits(settings,frontpool,backpool,newpool):
 def ShuffleExits(settings):
 	'Shuffle exit pools depending on settings.';A=settings
 	if A.shuffle_loading_zones==_D:
-		if A.kongs_for_progression:ShuffleLevelOrderWithRestrictions(A)
+		if A.kongs_for_progression and not(A.shuffle_items and Types.Kong in A.shuffled_location_types):ShuffleLevelOrderWithRestrictions(A)
 		else:ShuffleLevelExits(A)
 	elif A.shuffle_loading_zones=='all':B=[];C=[];AssumeExits(A,B,C,list(ShufflableExits.keys()));ShuffleExitsInPool(A,B,C)
 	if A.shuffle_loading_zones==_D:UpdateLevelProgression(A)

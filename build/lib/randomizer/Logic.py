@@ -24,7 +24,7 @@ class LogicVarHolder:
 	def __init__(A,settings=_C):
 		'Initialize with given parameters.';B=settings
 		if B is _C:return
-		A.settings=B;A.startkong=A.settings.starting_kong;A.Reset()
+		A.settings=B;A.pathMode=_A;A.startkong=A.settings.starting_kong;A.Reset()
 	def Reset(A):
 		'Reset all logic variables.\n\n        Done between reachability searches and upon initialization.\n        ';D='start_with';B='normal';A.latest_owned_items=[];A.found_test_item=_A;A.banned_item=_C;A.donkey=Kongs.donkey in A.settings.starting_kong_list;A.diddy=Kongs.diddy in A.settings.starting_kong_list;A.lanky=Kongs.lanky in A.settings.starting_kong_list;A.tiny=Kongs.tiny in A.settings.starting_kong_list;A.chunky=Kongs.chunky in A.settings.starting_kong_list;A.vines=A.settings.training_barrels==B;A.swim=A.settings.training_barrels==B;A.oranges=A.settings.training_barrels==B;A.barrels=A.settings.training_barrels==B;A.progDonkey=3 if A.settings.unlock_all_moves else 0;A.blast=A.settings.unlock_all_moves;A.strongKong=A.settings.unlock_all_moves;A.grab=A.settings.unlock_all_moves;A.progDiddy=3 if A.settings.unlock_all_moves else 0;A.charge=A.settings.unlock_all_moves;A.jetpack=A.settings.unlock_all_moves;A.spring=A.settings.unlock_all_moves;A.progLanky=3 if A.settings.unlock_all_moves else 0;A.handstand=A.settings.unlock_all_moves;A.balloon=A.settings.unlock_all_moves;A.sprint=A.settings.unlock_all_moves;A.progTiny=3 if A.settings.unlock_all_moves else 0;A.mini=A.settings.unlock_all_moves;A.twirl=A.settings.unlock_all_moves;A.monkeyport=A.settings.unlock_all_moves;A.progChunky=3 if A.settings.unlock_all_moves else 0;A.hunkyChunky=A.settings.unlock_all_moves;A.punch=A.settings.unlock_all_moves;A.gorillaGone=A.settings.unlock_all_moves;A.coconut=A.settings.unlock_all_moves;A.peanut=A.settings.unlock_all_moves;A.grape=A.settings.unlock_all_moves;A.feather=A.settings.unlock_all_moves;A.pineapple=A.settings.unlock_all_moves;A.bongos=A.settings.unlock_all_moves;A.guitar=A.settings.unlock_all_moves;A.trombone=A.settings.unlock_all_moves;A.saxophone=A.settings.unlock_all_moves;A.triangle=A.settings.unlock_all_moves;A.nintendoCoin=_A;A.rarewareCoin=_A;A.camera=A.settings.shockwave_status==D;A.shockwave=A.settings.shockwave_status==D;A.scope=A.settings.unlock_all_moves;A.homing=A.settings.unlock_all_moves;A.JapesKey=_A;A.AztecKey=_A;A.FactoryKey=_A;A.GalleonKey=_A;A.ForestKey=_A;A.CavesKey=_A;A.CastleKey=_A;A.HelmKey=_A;A.HelmDonkey1=_A;A.HelmDonkey2=_A;A.HelmDiddy1=_A;A.HelmDiddy2=_A;A.HelmLanky1=_A;A.HelmLanky2=_A;A.HelmTiny1=_A;A.HelmTiny2=_A;A.HelmChunky1=_A;A.HelmChunky2=_A;A.Slam=3 if A.settings.unlock_all_moves else STARTING_SLAM;A.AmmoBelts=2 if A.settings.unlock_all_moves else 0;A.InstUpgrades=3 if A.settings.unlock_all_moves else 0;A.GoldenBananas=0;A.BananaFairies=0;A.BananaMedals=0;A.BattleCrowns=0;A.superSlam=A.settings.unlock_all_moves;A.superDuperSlam=A.settings.unlock_all_moves;A.Blueprints=[];A.Events=[];E=[Events.JapesKeyTurnedIn,Events.AztecKeyTurnedIn,Events.FactoryKeyTurnedIn,Events.GalleonKeyTurnedIn,Events.ForestKeyTurnedIn,Events.CavesKeyTurnedIn,Events.CastleKeyTurnedIn,Events.HelmKeyTurnedIn]
 		for C in E:
@@ -166,7 +166,7 @@ class LogicVarHolder:
 		return A.IsKong(E)and C
 	def IsLevelEnterable(A,level):
 		'Check if level entry requirement is met.';B=level
-		if B>=3:
+		if not A.pathMode and B>=3:
 			C=not A.settings.hard_level_progression and A.settings.shuffle_loading_zones in('none','levels')
 			if C:
 				if not A.barrels:return _A
