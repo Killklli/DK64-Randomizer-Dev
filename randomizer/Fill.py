@@ -202,16 +202,16 @@ def PareWoth(spoiler,PlaythroughLocations):
 	if B.settings.shuffle_items:CalculateWothPaths(B,A);CalculateFoolish(B,A)
 	return A
 def CalculateWothPaths(spoiler,WothLocations):
-	'Calculate the Paths (dependencies) for each Way of the Hoard item.';C=WothLocations;B=spoiler;LogicVariables.pathMode=_B;G=[]
+	'Calculate the Paths (dependencies) for each Way of the Hoard item.';C=WothLocations;B=spoiler;LogicVariables.pathMode=_B;J=B.settings.open_lobbies;B.settings.open_lobbies=_B;F=[]
 	for A in C:B.woth_paths[A]=[A]
 	for A in C:
-		D=LocationList[A];E=D.item;D.item=_A;F=ItemPool.Keys()+ItemPool.Kongs(B.settings);F.extend([Items.Vines,Items.Swim]);Reset();LogicVariables.GainInfiniteCoins();J=GetAccessibleLocations(B.settings,F,SearchMode.GetReachable);H=_C
+		D=LocationList[A];E=D.item;D.item=_A;G=ItemPool.Kongs(B.settings);Reset();LogicVariables.GainInfiniteCoins();K=GetAccessibleLocations(B.settings,G,SearchMode.GetReachable);H=_C
 		for I in C:
-			if I not in J:B.woth_paths[I].append(A);H=_B
+			if I not in K:B.woth_paths[I].append(A);H=_B
 		D.PlaceItem(E)
-		if E not in F and E!=Items.BananaHoard and not H:G.append(A)
-	for A in G:C.remove(A);del B.woth_paths[A]
-	LogicVariables.pathMode=_C
+		if E not in G and E!=Items.BananaHoard and not H:F.append(A)
+	for A in F:C.remove(A);del B.woth_paths[A]
+	LogicVariables.pathMode=_C;B.settings.open_lobbies=J
 def CalculateFoolish(spoiler,WothLocations):
 	'Calculate the items and regions that are foolish (blocking no major items).';G='need_both';A=spoiler;H=[LocationList[A].item for A in WothLocations];C=[];B=ItemPool.AllKongMoves()
 	if A.settings.training_barrels!=_G:B.extend([Items.Vines,Items.Swim,Items.Barrels])
@@ -419,6 +419,7 @@ def ShuffleSharedMoves(spoiler,placedMoves):
 	if A.settings.training_barrels!=_G and Items.Oranges not in B:
 		J=PlaceItems(A.settings,_H,[Items.Oranges],[C for C in ItemPool.AllItems(A.settings)if C!=Items.Oranges and C not in B])
 		if J>0:raise Ex.ItemPlacementException('Failed to place Orange training barrel move.')
+		B.append(Items.Oranges)
 	C=ItemPool.ImportantSharedMoves.copy()
 	if A.settings.shockwave_status==_I and Items.CameraAndShockwave not in B:C.append(Items.CameraAndShockwave)
 	elif A.settings.shockwave_status==_N and(Items.Camera not in B or Items.Shockwave not in B):C.append(Items.Camera);C.append(Items.Shockwave)
