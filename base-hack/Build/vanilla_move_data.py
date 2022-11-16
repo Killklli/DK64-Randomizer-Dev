@@ -36,8 +36,7 @@ def convertItem(item,kong):
 	elif A.type in E:
 		B=(E.index(A.type)&7)<<5;D=kong&7
 		if A.type in G:D=0
-		elif A.type==_E:
-			if A.index>1:D=0
+		elif A.type==_E and A.index>1:D=0
 		H=A.index-1&3;B|=H<<3;B|=D
 		if A.type in F:
 			C=A.index

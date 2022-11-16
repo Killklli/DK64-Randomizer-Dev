@@ -406,8 +406,7 @@ def compileHintsOld(spoiler):
 				for AR in range(5):
 					AS=A.move_data[0][d][AR][G]
 					for K in moves_data:
-						if K.item_key==AS:
-							if K.name not in e:e.append(K.name)
+						if K.item_key==AS and K.name not in e:e.append(K.name)
 				u.append(e)
 			t.append(u)
 		f=[];g=[]
@@ -429,10 +428,9 @@ def compileHintsOld(spoiler):
 		random.shuffle(f);j=[3,6,10];W=1;y=_A
 		for z in f:
 			if y:hint_list.append(Hint(hint=z[b],important=_B,keywords=z['moves'],subtype='shop_dump'))
-			if W<=len(j):
-				if h+1>=j[W-1]:
-					if W==len(j):y=_B
-					else:W+=1
+			if W<=len(j)and h+1>=j[W-1]:
+				if W==len(j):y=_B
+				else:W+=1
 		random.shuffle(g)
 		for k in g:hint_list.append(Hint(hint=k[b],priority=2,important=k[AM],keywords=[k['move']],subtype='move_location'))
 	if A.settings.kong_rando:
@@ -465,7 +463,7 @@ def compileHintsOld(spoiler):
 		for Y in range(2):
 			for T in range(4):AX=A5[T+Y*4];o=f"There is a dirt patch located at {AX}";hint_list.append(Hint(hint=o,priority=T+4,important=Y==0,subtype='patch_location'))
 	if A.settings.shuffle_loading_zones==_X:AddLoadingZoneHints(A)
-	if A.settings.coin_door_open=='need_both'or A.settings.coin_door_open=='need_rw':hint_list.append(Hint(hint=f"{A.settings.medal_requirement} medals are required to access Jetpac.",priority=4,subtype='medal'))
+	if A.settings.coin_door_open in('need_both','need_rw'):hint_list.append(Hint(hint=f"{A.settings.medal_requirement} medals are required to access Jetpac.",priority=4,subtype='medal'))
 	if A.settings.perma_death:hint_list.append(Hint(hint='The curse can only be removed upon disabling K. Rools machine.',subtype='permadeath'))
 	if A.settings.level_randomization!='level_order':
 		for C in A.settings.krool_keys_required:
@@ -635,6 +633,5 @@ def GetRegionOfLocation(location_id):
 			if B in[B.id for B in A.locations]:return A
 	for D in Regions:
 		A=RegionList[D]
-		if A.level==C.level:
-			if B in[B.id for B in A.locations]:return A
+		if A.level==C.level and B in[B.id for B in A.locations]:return A
 	raise Exception('Unable to find Region for Location')

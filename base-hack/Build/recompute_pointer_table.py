@@ -131,8 +131,7 @@ def writeModifiedPointerTablesToROM(fh):
 		F=A[_E]+I;H=F
 		for B in A[_C]:
 			D=getFileInfo(A[_A],B[_A]);B[_E]=F
-			if D:
-				if len(D[_M])>0:F+=len(D[_M]);C.seek(B[_E]);C.write(D[_M])
+			if D and len(D[_M])>0:F+=len(D[_M]);C.seek(B[_E]);C.write(D[_M])
 		if J:next_available_free_space+=I;next_available_free_space+=F-H
 	for A in reversed(pointer_tables):
 		C.seek(main_pointer_table_offset+26*4);print(f"Pointer Table {A[_A]}. New Location: {hex(main_pointer_table_offset+int.from_bytes(C.read(4),_D))}. Write Location:")

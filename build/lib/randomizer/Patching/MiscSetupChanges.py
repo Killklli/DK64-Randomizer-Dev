@@ -118,11 +118,10 @@ def randomize_setup(spoiler):
 			ROM().seek(O+4+W*48);A0=int.from_bytes(ROM().readBytes(4),G);A1=O+4+W*48+4+A0*36;ROM().seek(O+4+W*48+4+A0*36);A2=int.from_bytes(ROM().readBytes(4),G);h=[];i=[]
 			for A3 in range(A2):
 				J=A1+4+A3*56;ROM().seek(J+50);Q=int.from_bytes(ROM().readBytes(2),G)+16
-				if A.settings.random_patches:
-					if not Q==139:
-						j=[];ROM().seek(J+52);i.append(int.from_bytes(ROM().readBytes(2),G));ROM().seek(J)
-						for Y in range(int(56/4)):j.append(int.from_bytes(ROM().readBytes(4),G))
-						h.append(j.copy())
+				if A.settings.random_patches and not Q==139:
+					j=[];ROM().seek(J+52);i.append(int.from_bytes(ROM().readBytes(2),G));ROM().seek(J)
+					for Y in range(int(56/4)):j.append(int.from_bytes(ROM().readBytes(4),G))
+					h.append(j.copy())
 			if A.settings.random_patches:
 				R=32
 				for AT in A.dirt_patch_placement:

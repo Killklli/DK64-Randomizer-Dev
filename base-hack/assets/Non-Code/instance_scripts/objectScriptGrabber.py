@@ -76,7 +76,7 @@ _D='big'
 _C='index'
 _B='}'
 _A='-'
-import gzip,math,os,shutil,tkinter as tk,zlib
+import gzip,math,os,shutil,sys,tkinter as tk,zlib
 from tkinter import filedialog
 from typing import BinaryIO
 root=tk.Tk()
@@ -116,8 +116,7 @@ def getSetOrNot(value):
 	return'Set'
 def display(file,string):
 	'Display function upon being passed a string.';A=string;global tab_indentation
-	if A[-1:]!='{':
-		if A[-1:]!=_B:A+=';'
+	if A[-1:]!='{'and A[-1:]!=_B:A+=';'
 	for B in range(tab_indentation):A='\t'+A
 	if A[-1:]=='{':tab_indentation+=1
 	elif A[-1:]==_B:tab_indentation-=1
@@ -532,16 +531,16 @@ def extractScripts():
 	'Extract scripts from ROM.';G='Invalid version';global folder_removal;global pointer_table_offsets;global main_pointer_table_offset;global folder_append;global version;D=folder_append[0];A=filedialog.askopenfilename()
 	with open(A,'rb')as B:
 		H=int.from_bytes(B.read(1),_D)
-		if H!=128:print('File is little endian. Convert to big endian and re-run');exit()
+		if H!=128:print('File is little endian. Convert to big endian and re-run');sys.exit()
 		else:
 			B.seek(61);I=int.from_bytes(B.read(1),_D);E=int.from_bytes(B.read(1),_D);version=-1
 			if I==80:version=3
 			elif E==69:version=0
 			elif E==74:version=2
 			elif E==80:version=1
-			else:print(G);exit()
+			else:print(G);sys.exit()
 			main_pointer_table_offset=pointer_table_offsets[version];D=folder_append[version]
-	if version<0 or version>3:print(G);exit()
+	if version<0 or version>3:print(G);sys.exit()
 	folder_removal=[];F=f"./map_scripts{D}"
 	if os.path.exists(F):shutil.rmtree(F)
 	os.mkdir(f"./map_scripts{D}");extractMaps(A)

@@ -47,8 +47,7 @@ def apply_cosmetic_colors(spoiler):
 			if Z and F[C]==_D:V=_C
 			elif not Z and F[C]==x:V=_C
 		q=[_F,_G,_H,_I,_D];r=_C
-		if A.settings.krusha_slot in q:
-			if q.index(A.settings.krusha_slot)==F[H]:r=_J;F[I]=[{G:'krusha_skin',D:4971,B:M},{G:'krusha_indicator',D:4966,B:C}];V=_J
+		if A.settings.krusha_slot in q and q.index(A.settings.krusha_slot)==F[H]:r=_J;F[I]=[{G:'krusha_skin',D:4971,B:M},{G:'krusha_indicator',D:4966,B:C}];V=_J
 		if V:
 			P={C:F[C],Q:[]}
 			for R in F[I]:
@@ -141,7 +140,7 @@ def placeKrushaHead(slot):
 			if A<32:L.extend([D,E])
 			else:K.extend([D,E])
 			if A%2+B%2==0:I.extend([D,E]);J.extend(V)
-		if len(I)>0 and len(J):G.append(I);H.append(J)
+		if len(I)>0 and J:G.append(I);H.append(J)
 	G.reverse()
 	for B in G:M.extend(B)
 	H.reverse()

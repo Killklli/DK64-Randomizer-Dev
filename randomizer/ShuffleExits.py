@@ -138,8 +138,7 @@ def ShuffleLevelOrderForMultipleStartingKongs(settings):
 			if G==A.starting_kongs_count:
 				if B[C]==Levels.AngryAztec and(Locations.TinyKong in A.kong_locations or Locations.LankyKong in A.kong_locations):
 					H=Locations.TinyKong in A.kong_locations;I=Locations.LankyKong in A.kong_locations
-					if H:
-						if Kongs.diddy not in A.starting_kong_list and Kongs.chunky not in A.starting_kong_list:H=_C
+					if H and Kongs.diddy not in A.starting_kong_list and Kongs.chunky not in A.starting_kong_list:H=_C
 					if I:
 						P=Kongs.diddy in A.starting_kong_list or A.open_levels or Kongs.donkey in A.starting_kong_list and A.activate_all_bananaports=='all'
 						if not P or Kongs.donkey not in A.starting_kong_list and Kongs.lanky not in A.starting_kong_list and Kongs.tiny not in A.starting_kong_list:I=_C

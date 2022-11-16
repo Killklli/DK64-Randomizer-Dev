@@ -141,7 +141,7 @@ class Settings:
 			if Kongs.tiny in A.starting_kong_list:A.kong_locations.remove(Locations.TinyKong)
 			if Kongs.chunky in A.starting_kong_list:A.kong_locations.remove(Locations.ChunkyKong)
 		LocationList[Locations.IslesDonkeyJapesRock].kong=A.starting_kong
-		if A.starting_kongs_count<5 and(A.shuffle_loading_zones==O or A.shuffle_loading_zones==_F)and not A.no_logic:A.kongs_for_progression=_C
+		if A.starting_kongs_count<5 and A.shuffle_loading_zones in(O,_F)and not A.no_logic:A.kongs_for_progression=_C
 		if A.move_rando==_G:A.unlock_all_moves=_C
 		A.kasplat_rando=_A;A.kasplat_location_rando=_A
 		if A.kasplat_rando_setting=='vanilla_locations':A.kasplat_rando=_C

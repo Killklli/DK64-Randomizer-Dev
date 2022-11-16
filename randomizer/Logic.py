@@ -159,11 +159,11 @@ class LogicVarHolder:
 			else:return len(A.GetKongs())==5
 		else:return _B
 	def IsBossBeatable(A,level):
-		'Return true if the boss for a given level is beatable according to boss location rando and boss kong rando.';D=level;E=A.settings.boss_kongs[D];B=A.settings.boss_maps[D];C=_B
-		if B==Maps.FactoryBoss and E==Kongs.tiny:C=A.twirl
-		elif B==Maps.FungiBoss:C=A.hunkyChunky and A.barrels
-		elif B==Maps.JapesBoss or B==Maps.AztecBoss or B==Maps.CavesBoss:C=A.barrels
-		return A.IsKong(E)and C
+		'Return true if the boss for a given level is beatable according to boss location rando and boss kong rando.';D=level;E=A.settings.boss_kongs[D];C=A.settings.boss_maps[D];B=_B
+		if C==Maps.FactoryBoss and E==Kongs.tiny:B=A.twirl
+		elif C==Maps.FungiBoss:B=A.hunkyChunky and A.barrels
+		elif C in(Maps.JapesBoss,Maps.AztecBoss,Maps.CavesBoss):B=A.barrels
+		return A.IsKong(E)and B
 	def IsLevelEnterable(A,level):
 		'Check if level entry requirement is met.';B=level
 		if not A.pathMode and B>=3:
@@ -174,7 +174,7 @@ class LogicVarHolder:
 		return A.HasEnoughKongs(B,forPreviousLevel=_B)and A.GoldenBananas>=A.settings.EntryGBs[B]
 	def WinConditionMet(A):
 		'Check if the current game state has met the win condition.'
-		if A.settings.win_condition=='beat_krool'or A.settings.win_condition=='poke_snap':return Events.KRoolDefeated in A.Events
+		if A.settings.win_condition in('beat_krool','poke_snap'):return Events.KRoolDefeated in A.Events
 		elif A.settings.win_condition=='get_key8':return A.HelmKey
 		elif A.settings.win_condition=='all_fairies':return A.BananaFairies>=20
 		elif A.settings.win_condition=='all_blueprints':return len(A.Blueprints)>=40

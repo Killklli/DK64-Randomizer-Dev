@@ -23,5 +23,4 @@ with open('dk64-randomizer-base-dev.z64','r+b')as fh:
 			if lz_type in valid_lz_types:
 				fh.seek(dk_isles_lzs+start+18);lz_map=int.from_bytes(fh.read(2),_A);fh.seek(dk_isles_lzs+start+20);lz_exit=int.from_bytes(fh.read(2),_A)
 				for y in cont_map['zones']:
-					if lz_map==y[_B]:
-						if lz_exit==y[_C]:fh.seek(dk_isles_lzs+start+18);map_bytes=intToArr(y[_D],2);fh.write(bytearray(map_bytes));fh.seek(dk_isles_lzs+start+20);exit_bytes=intToArr(y[_E],2);fh.write(bytearray(exit_bytes))
+					if lz_map==y[_B]and lz_exit==y[_C]:fh.seek(dk_isles_lzs+start+18);map_bytes=intToArr(y[_D],2);fh.write(bytearray(map_bytes));fh.seek(dk_isles_lzs+start+20);exit_bytes=intToArr(y[_E],2);fh.write(bytearray(exit_bytes))

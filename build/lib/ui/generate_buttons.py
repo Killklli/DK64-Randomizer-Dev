@@ -83,8 +83,7 @@ def serialize_settings():
 		elif J(B.value):C[B.name]=int(B.value)
 		else:C[B.name]=B.value
 	for A in js.document.getElementsByTagName(G):
-		if A.type=='checkbox'and not A.checked:
-			if not C.get(A.name):C[A.name]=_G
+		if A.type=='checkbox'and not A.checked and not C.get(A.name):C[A.name]=_G
 	for A in D:A.setAttribute(_F,_F)
 	for A in js.document.getElementsByTagName(H):
 		if'selected'in A.className:

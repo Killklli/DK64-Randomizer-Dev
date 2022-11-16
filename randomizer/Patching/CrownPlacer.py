@@ -17,8 +17,7 @@ def randomize_crown_pads(spoiler):
 			for A in E.crown_locations[L]:
 				B=CrownLocations[L][A];X=E.crown_locations[L][A];N.append(CrownPlacementShortData(B.map,B.coords,B.scale,X,B.is_vanilla))
 				if B.is_vanilla:J.append(B.map)
-				if not B.is_vanilla:
-					if B.map not in K:K.append(B.map)
+				if not B.is_vanilla and B.map not in K:K.append(B.map)
 		for C in K:
 			if C==Maps.CavesRotatingCabin:
 				if C not in J:Y=E.settings.rom_data;ROM().seek(Y+405);ROM().write(1)

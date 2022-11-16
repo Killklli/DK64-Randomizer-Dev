@@ -44,7 +44,7 @@ def ShuffleItems(spoiler):
 					K.append(D)
 				else:G.append(D)
 			else:D.new_item=_A;D.new_kong=_A;D.new_flag=_A;K.append(D)
-			if A.type not in B.keys():
+			if A.type not in B:
 				if A.type==Types.Blueprint:B[A.type]={};B[A.type][Kongs.donkey]=[];B[A.type][Kongs.diddy]=[];B[A.type][Kongs.lanky]=[];B[A.type][Kongs.tiny]=[];B[A.type][Kongs.chunky]=[]
 				else:B[A.type]=[]
 			if A.type==Types.Blueprint:B[A.type][M].append(H)
@@ -54,7 +54,7 @@ def ShuffleItems(spoiler):
 		if C.new_flag is _A:
 			if C.new_item==Types.Blueprint:C.new_flag=B[C.new_item][C.new_kong].pop()
 			else:C.new_flag=B[C.new_item].pop()
-	if any([A for A in G if A.new_flag is _A]):T=[A for A in G if A.new_flag is _A];raise Ex.FillException('ERROR: Failed to create a valid flag assignment for this fill!')
+	if any((A for A in G if A.new_flag is _A)):T=[A for A in G if A.new_flag is _A];raise Ex.FillException('ERROR: Failed to create a valid flag assignment for this fill!')
 	E.item_assignment=G+K;Q={}
 	for I in E.item_assignment:
 		R='Nothing'

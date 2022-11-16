@@ -25,7 +25,8 @@ class Balloon:
 		if B is _B:A.logic=lambda l:_A
 		else:A.logic=B
 		A.spawnPoint=A.setSpawnPoint(C)
-	def setSpawnPoint(F,points=[]):
+	@staticmethod
+	def setSpawnPoint(points=[]):
 		'Set the spawn point of a balloon based on its path.';A=points;C=0;B=0;D=0
 		for E in A:C+=E[0];B+=E[1];D+=E[2]
 		C/=len(A);B/=len(A);B-=100;D/=len(A);return[int(C),int(B),int(D)]
