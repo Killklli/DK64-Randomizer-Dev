@@ -19,7 +19,9 @@ def place_door_locations(spoiler):
 					if D==Maps.AngryAztecLobby and I in(572,24):F=K
 					if D==Maps.FungiForestLobby and I in(573,40):F=K
 					if D==Maps.CrystalCavesLobby and I in(53,206):F=K
-				if B.settings.tns_location_rando and D!=42 and I in(683,684):F=K
+				if B.settings.tns_location_rando:
+					if D!=42:
+						if I in(683,684):F=K
 				if F:
 					ROM().seek(W);A=[]
 					for b in range(int(48/4)):A.append(int.from_bytes(ROM().readBytes(4),G))

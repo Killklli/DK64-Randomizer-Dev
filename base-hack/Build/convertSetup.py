@@ -35,7 +35,8 @@ def modify(file_name,map_index):
 					for l in range(2):A2=50.167;j.append({Q:B,P:[684,683][l],K:int(float_to_hex(120.997),16),L:[int(float_to_hex(A2),16),int(float_to_hex(A2-30),16)][l],M:int(float_to_hex(1182.974),16),Y:0,R:int(float_to_hex(75.146),16),Z:0,N:[368,b][l],S:[int(float_to_hex(1),16),int(float_to_hex(0.35),16)][l]})
 					b+=1;z=g
 				base_stream=B;A3=int.from_bytes(H[D+0:D+4],_A);q=int.from_bytes(H[D+4:D+8],_A);AF=int_to_float(q)-30;q=int(float_to_hex(AF),16);A4=int.from_bytes(H[D+8:D+12],_A);AX=int.from_bytes(H[D+24:D+28],_A);c=int.from_bytes(H[D+28:D+32],_A);AY=int.from_bytes(H[D+32:D+36],_A);G=int.from_bytes(H[D+42:D+44],_A)
-				if F==7 and b==544:A3=int(float_to_hex(805.6618),16);A4=int(float_to_hex(2226.797),16)
+				if F==7:
+					if b==544:A3=int(float_to_hex(805.6618),16);A4=int(float_to_hex(2226.797),16)
 				j.append({Q:B,P:683,K:A3,L:q,M:A4,Y:0,R:c,Z:0,N:b,S:int(float_to_hex(0.35),16)});b+=1
 			if F==34 and not y and G==6:y=g;j.append({Q:B,P:132,K:int(float_to_hex(2457.471),16),L:int(float_to_hex(1280),16),M:int(float_to_hex(3458.604),16),Y:0,R:int(float_to_hex(166),16),Z:0,N:256,S:int(float_to_hex(1.18),16)})
 			if F==7 and G==26 or F==176 and G==57:
@@ -64,12 +65,13 @@ def modify(file_name,map_index):
 				C+=c.to_bytes(4,_A)
 				for A in range(48-32):C+=B[A+32].to_bytes(1,_A)
 				B=C;c=int(float_to_hex(180),16)
-			if F==72 and G in(87,207):
-				C=V;AL=176.505;AM=1089.408;C+=int(float_to_hex(AL),16).to_bytes(4,_A)
-				for A in range(4):C+=B[A+4].to_bytes(1,_A)
-				C+=int(float_to_hex(AM),16).to_bytes(4,_A)
-				for A in range(48-12):C+=B[A+12].to_bytes(1,_A)
-				B=C
+			if F==72:
+				if G==87 or G==207:
+					C=V;AL=176.505;AM=1089.408;C+=int(float_to_hex(AL),16).to_bytes(4,_A)
+					for A in range(4):C+=B[A+4].to_bytes(1,_A)
+					C+=int(float_to_hex(AM),16).to_bytes(4,_A)
+					for A in range(48-12):C+=B[A+12].to_bytes(1,_A)
+					B=C
 			if F==205:
 				A7=14,15,16,17;AN=13,19,20,18;A8=(780,419.629),(1135.232,780),(780,1116.334),(438.904,780);A9=(778.365,396.901),(1158.427,778.632),(780.283,1138.851),(416.092,778.456)
 				if G>=13 and G<=20:

@@ -57,4 +57,5 @@ def adjustExits(fh):
 			for N in exit_adjustments:
 				if D==N[_E]:
 					for exit in N[_F]:H=exit[_A]*10;A.seek(H);A.write(shortToUshort(exit[_B]).to_bytes(2,B));A.write(shortToUshort(exit[_C]).to_bytes(2,B));A.write(shortToUshort(exit[_D]).to_bytes(2,B))
-		if os.path.exists(F)and os.path.getsize(F)==0:os.remove(F)
+		if os.path.exists(F):
+			if os.path.getsize(F)==0:os.remove(F)

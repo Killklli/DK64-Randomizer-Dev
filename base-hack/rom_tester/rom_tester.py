@@ -29,7 +29,8 @@ def getTrueFalse(fh,offset,size):
 def getMapExit(fh,offset):'Get the current map exit.';A=offset;B=getValue(fh,A,1);C=getValue(fh,A+1,1);return f"Map {B}, Exit {C}"
 def getKong(fh,offset):
 	'Get the current kong.';A=getValue(fh,offset,1)
-	if A>=0 and A<8:return kongs[A]
+	if A>=0:
+		if A<8:return kongs[A]
 	return f"Kong {hex(A)}"
 def getMove(fh,offset,kong,shop,level):
 	'Get the current move.';fh.seek(33484800+offset*4);B=int.from_bytes(fh.read(4),'big');C=B&65535

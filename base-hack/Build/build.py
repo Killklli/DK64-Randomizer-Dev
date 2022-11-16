@@ -128,7 +128,8 @@ for x in maps_to_expand:
 		if is_compressed:fh.seek(item_start);data=fh.read(item_size);data=zlib.decompress(data,15+32);item_size=len(data)
 		file_dict.append({_C:f"Script {x}",_D:10,_E:x,_B:f"script{x}.bin",_J:item_size+script_expansion_size,_U:item_size+script_expansion_size,_V:_A})
 for x in range(175):
-	if x>0 and x not in changed_song_indexes:file_dict.append({_C:'Song '+str(x),_D:0,_E:x,_B:'song'+str(x)+_c,_J:11742})
+	if x>0:
+		if x not in changed_song_indexes:file_dict.append({_C:'Song '+str(x),_D:0,_E:x,_B:'song'+str(x)+_c,_J:11742})
 for x in range(6):file_dict.append({_C:'DKTV Inputs '+str(x),_D:17,_E:x,_B:'dktv'+str(x)+_c,_J:1816})
 for x in range(221):file_dict.append({_C:'Zones for map '+str(x),_D:18,_E:x,_B:'lz'+str(x)+_c,_J:2128,_V:_A})
 setup_expansion_size=4800
@@ -197,7 +198,8 @@ with open(ROMName,_Q)as fh:
 			found_geometry=_b;found_floors=_b;found_walls=_b;should_compress_walls=_A;should_compress_floors=_A
 			for y in pointer_tables:
 				if _a not in y:continue
-				if _p in y and callable(y[_p])and _q in y and os.path.exists(x[_X]+y[_q]):y[_p](x[_X]+y[_q],x[_X]+y[_a])
+				if _p in y and callable(y[_p]):
+					if _q in y and os.path.exists(x[_X]+y[_q]):y[_p](x[_X]+y[_q],x[_X]+y[_a])
 				if os.path.exists(x[_X]+y[_a]):
 					if y[_M]==1:
 						with open(x[_X]+y[_a],_Q)as fg:byte_read=fg.read(10);should_compress_walls=byte_read[9]&1!=0;should_compress_floors=byte_read[9]&2!=0
@@ -265,10 +267,11 @@ with open(newROMName,_r)as fh:
 				compress=bytearray(precomp);compress[4]=0;compress[5]=0;compress[6]=0;compress[7]=0
 			with open(x[_B],'wb')as fg:fg.write(compress)
 			x[_O]=x[_B]
-		if _S in x and x[_S]and os.path.exists(x[_B]):
-			result=subprocess.check_output(['./build/gzip.exe','-f','-n','-k','-q','-9',x[_O].replace('.gz','')])
-			if os.path.exists(x[_O]):
-				with open(x[_O],_r)as outputFile:outputFile.truncate(len(outputFile.read())-8)
+		if _S in x and x[_S]:
+			if os.path.exists(x[_B]):
+				result=subprocess.check_output(['./build/gzip.exe','-f','-n','-k','-q','-9',x[_O].replace('.gz','')])
+				if os.path.exists(x[_O]):
+					with open(x[_O],_r)as outputFile:outputFile.truncate(len(outputFile.read())-8)
 		if os.path.exists(x[_O]):
 			byte_read=bytes()
 			if _J not in x:uncompressed_size=0
@@ -287,8 +290,10 @@ with open(newROMName,_r)as fh:
 			else:print("  - WARNING: Can't find address information in file_dict entry to write "+x[_O]+' ('+hex(len(compress))+') to ROM')
 		else:print(x[_O]+' does not exist')
 		if not(_A5 in x and x[_A5]):
-			if not(_A6 in x and x[_A6])and os.path.exists(x[_O])and x[_O]!=x[_B]:os.remove(x[_O])
-			if not(_H in x and x[_H])and os.path.exists(x[_B]):os.remove(x[_B])
+			if not(_A6 in x and x[_A6]):
+				if os.path.exists(x[_O])and x[_O]!=x[_B]:os.remove(x[_O])
+			if not(_H in x and x[_H]):
+				if os.path.exists(x[_B]):os.remove(x[_B])
 	print('[5 / 7] - Writing recomputed pointer tables to ROM');writeModifiedPointerTablesToROM(fh);writeModifiedOverlaysToROM(fh);print('[6 / 7] - Dumping details of all pointer tables to rom/build.log');dumpPointerTableDetails('rom/build.log',fh);main_pointer_table_offset=1055824;fh.seek(main_pointer_table_offset+4);geo_table=main_pointer_table_offset+int.from_bytes(fh.read(4),_F);fh.seek(geo_table+17*4);helm_geo=main_pointer_table_offset+int.from_bytes(fh.read(4),_F);helm_geo_end=main_pointer_table_offset+int.from_bytes(fh.read(4),_F);helm_geo_size=helm_geo_end-helm_geo;fh.seek(helm_geo)
 	for by_i in range(helm_geo_size):fh.write((0).to_bytes(1,_F))
 	fh.seek(helm_geo)
@@ -341,7 +346,8 @@ with open(newROMName,_r)as fh:
 		for file in os.listdir(folder):
 			file=f"{folder}/{file}"
 			for shop in shop_files:
-				if shop in file and os.path.exists(file):os.remove(file)
+				if shop in file:
+					if os.path.exists(file):os.remove(file)
 	for hash_item in hash_items:
 		for f_t in [_I,'png']:
 			pth=f"assets/Non-Code/hash/{hash_item}.{f_t}"

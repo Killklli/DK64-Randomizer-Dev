@@ -99,7 +99,8 @@ move_names_arr=[]
 for move in move_names:
 	init_len=len(move_names_arr);move_names_arr.append([{_H:[move[_B].upper()]}])
 	if _K in move:move_names_arr.append([{_H:[f"({move[_K].upper()})"]}])
-	if'print'in move and move['print']:print(f"{move[_B]}: {init_len}")
+	if'print'in move:
+		if move['print']:print(f"{move[_B]}: {init_len}")
 index_data={_T:{_J:[],_N:'SimianSlamNames',_O:True},_M:{_J:[],_N:'SpecialMovesNames',_O:True},_Q:{_J:[],_N:'GunNames',_O:_c},_Z:{_J:[],_N:'GunUpgNames',_O:_c},_a:{_J:[],_N:'AmmoBeltNames',_O:_c},_R:{_J:[],_N:'InstrumentNames',_O:_c},_b:{_J:[],_N:'InstrumentUpgNames',_O:_c}}
 for kong_index in range(5):
 	for move_index in range(4):

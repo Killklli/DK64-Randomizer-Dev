@@ -93,7 +93,7 @@ def Upgrades(settings):
 		else:A.extend([Items.BaboonBlast,Items.StrongKong,Items.GorillaGrab,Items.ChimpyCharge,Items.RocketbarrelBoost,Items.SimianSpring,Items.Orangstand,Items.BaboonBalloon,Items.OrangstandSprint,Items.MiniMonkey,Items.PonyTailTwirl,Items.Monkeyport,Items.HunkyChunky,Items.PrimatePunch,Items.GorillaGone])
 		A.append(Items.HomingAmmo);A.append(Items.SniperSight);A.extend(itertools.repeat(Items.ProgressiveAmmoBelt,2));A.extend(itertools.repeat(Items.ProgressiveInstrumentUpgrade,3))
 	if B.shockwave_status!='start_with':
-		if B.shockwave_status in(_B,_A):A.append(Items.CameraAndShockwave)
+		if B.shockwave_status==_B or B.shockwave_status==_A:A.append(Items.CameraAndShockwave)
 		else:A.append(Items.Camera);A.append(Items.Shockwave)
 	return A
 def HighPriorityItems(settings):'Get all items which are of high importance logically.';B=settings;A=[];A.extend(Kongs(B));A.extend(Guns(B));A.extend(Instruments(B));A.extend(Upgrades(B));return A

@@ -12,14 +12,15 @@ def read_h_file(symbols_data):
 		I=H.readlines()
 		for C in symbols_data:
 			for A in I:
-				if G in A and'('not in A and')'not in A:
-					A=A.split(G)[1]
-					if'//'in A:A=A.split('//')[0]
-					D=A.split(' ');B='';J=D[-1].split(';')[-1]
-					if J==list(C)[1]:
-						for K in range(len(D)-1):B+=D[K]+' '
-						if B not in F:F.append(B)
-						E.append([list(C)[0],list(C)[1],B])
+				if G in A:
+					if'('not in A and')'not in A:
+						A=A.split(G)[1]
+						if'//'in A:A=A.split('//')[0]
+						D=A.split(' ');B='';J=D[-1].split(';')[-1]
+						if J==list(C)[1]:
+							for K in range(len(D)-1):B+=D[K]+' '
+							if B not in F:F.append(B)
+							E.append([list(C)[0],list(C)[1],B])
 	return E
 def create_wch_file(_data,watch_file_name):
 	'Create an update WCH file.';E='w';C='d';A='h';H=[['*',C,A],['float',C,'f'],['unsigned int',C,A],['int',C,A],['unsigned short',E,A],['short',E,A],['unsigned char','b',A],['char','b',A]]

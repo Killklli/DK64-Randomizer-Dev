@@ -93,7 +93,7 @@ def GetAccessibleLocations(settings,startingOwnedItems,searchType=SearchMode.Get
 				for N in B.events:
 					if N.name not in LogicVariables.Events and N.logic(LogicVariables):K=_B;LogicVariables.Events.append(N.name)
 					if N.name==Events.Night and N.logic(LogicVariables):B.nightAccess=_B
-				if B.id in Logic.CollectibleRegions:
+				if B.id in Logic.CollectibleRegions.keys():
 					for O in Logic.CollectibleRegions[B.id]:
 						if not O.added and O.kong in(S,Kongs.any)and O.logic(LogicVariables)and O.enabled:LogicVariables.AddCollectible(O,B.level)
 				for A in B.locations:
@@ -132,7 +132,7 @@ def GetAccessibleLocations(settings,startingOwnedItems,searchType=SearchMode.Get
 					C=B.deathwarp.dest
 					if C not in H and B.deathwarp.logic(LogicVariables):H.append(C);P=Logic.Regions[C];P.id=C;M.append(P)
 	if D in(SearchMode.GetReachable,SearchMode.GetReachableWithControlledPurchases):return G
-	elif D in(SearchMode.CheckBeatable,SearchMode.CheckSpecificItemReachable):F.debug_accessible=G;return _C
+	elif D==SearchMode.CheckBeatable or D==SearchMode.CheckSpecificItemReachable:F.debug_accessible=G;return _C
 	elif D==SearchMode.GeneratePlaythrough:return R
 	elif D==SearchMode.CheckAllReachable:return len(G)==len(LocationList)
 	elif D==SearchMode.GetUnreachable:return[A for A in LocationList if A not in G]
@@ -230,9 +230,9 @@ def CalculateFoolish(spoiler,WothLocations):
 	E={'K. Rool Arena','Snide','Candy Generic','Funky Generic','Credits'}
 	if Types.Coin not in A.settings.shuffled_location_types:E.add('Jetpac Game')
 	for (id,F) in RegionList.items():
-		I=[A for A in F.locations if A.id in LocationList]
-		if any((A for A in I if LocationList[A.id].item in B)):E.add(F.hint_name)
-	A.foolish_region_names=list({A.hint_name for(id,A)in RegionList.items()if any(A.locations)and A.hint_name not in E})
+		I=[A for A in F.locations if A.id in LocationList.keys()]
+		if any([A for A in I if LocationList[A.id].item in B]):E.add(F.hint_name)
+	A.foolish_region_names=list(set([A.hint_name for(id,A)in RegionList.items()if any(A.locations)and A.hint_name not in E]))
 def RandomFill(settings,itemsToPlace,inOrder=_C):
 	'Randomly place given items in any location disregarding logic.';A=itemsToPlace
 	if not inOrder:random.shuffle(A)
@@ -336,7 +336,7 @@ def GetUnplacedItemPrerequisites(spoiler,targetItemId,placedMoves,ownedKongs=[])
 	if GetAccessibleLocations(A.settings,E.copy(),SearchMode.CheckSpecificItemReachable,targetItemId=C):return[]
 	B=[]
 	if K==[]:K=GetKongs()
-	D=list(ItemPool.AllMovesForOwnedKongs(K))
+	D=[A for A in ItemPool.AllMovesForOwnedKongs(K)]
 	if A.settings.shockwave_status!=_J:D.append(Items.Shockwave)
 	if A.settings.training_barrels!=_G:D.extend(ItemPool.TrainingBarrelAbilities())
 	D=[A for A in D if A not in J]
@@ -479,7 +479,7 @@ def PlacePriorityItems(spoiler,itemsToPlace,beforePlacedItems,levelBlock=_A):
 			if A not in F or A==Items.ProgressiveSlam and O>1 and F.count(Items.ProgressiveSlam)<2:F.append(A)
 	B.extend(PlacePriorityItems(D,F,E,G));return B
 def PlaceKongsInKongLocations(spoiler,kongItems,kongLocations):
-	'For these settings, Kongs to place, and locations to place them in, place the Kongs in such a way the generation will never error here.';N=' SEND THIS TO THE DEVS!';E=kongLocations;D=kongItems;A=spoiler;B=list(A.settings.starting_kong_list)
+	'For these settings, Kongs to place, and locations to place them in, place the Kongs in such a way the generation will never error here.';N=' SEND THIS TO THE DEVS!';E=kongLocations;D=kongItems;A=spoiler;B=[B for B in A.settings.starting_kong_list]
 	if A.settings.shuffle_loading_zones==_D or A.settings.no_logic:
 		random.shuffle(D)
 		if Locations.ChunkyKong in E:C=D.pop();LocationList[Locations.ChunkyKong].PlaceItem(C);A.settings.chunky_freeing_kong=random.choice(B);B.append(ItemPool.GetKongForItem(C))
@@ -504,7 +504,7 @@ def PlaceKongsInKongLocations(spoiler,kongItems,kongLocations):
 				if not any(F):
 					K=[]
 					for L in D:
-						M=list(B);M.append(ItemPool.GetKongForItem(L));O=GetLogicallyAccessibleKongLocations(A,E,M,H)
+						M=[A for A in B];M.append(ItemPool.GetKongForItem(L));O=GetLogicallyAccessibleKongLocations(A,E,M,H)
 						if any(O):K.append(L)
 					if len(K)==0:raise Ex.FillException('Kongs placed in a way that is impossible to unlock everyone. SEND THIS TO THE DEVS! '+json.dumps(A.settings.__dict__)+N)
 					I=random.choice(K)
@@ -617,7 +617,8 @@ def GetAccessibleKongLocations(levels,ownedKongs):
 		elif C==Levels.AngryAztec:
 			if Kongs.donkey in A or Kongs.lanky in A or Kongs.tiny in A:B.append(Locations.LankyKong)
 			if Kongs.diddy in A:B.append(Locations.TinyKong)
-		elif C==Levels.FranticFactory and Kongs.lanky in A or Kongs.tiny in A:B.append(Locations.ChunkyKong)
+		elif C==Levels.FranticFactory:
+			if Kongs.lanky in A or Kongs.tiny in A:B.append(Locations.ChunkyKong)
 	return B
 def WipeProgressionRequirements(settings):
 	'Wipe out progression requirements to assume access through main 7 levels.';A=settings
@@ -709,7 +710,7 @@ def SetNewProgressionRequirementsUnordered(settings):
 	Y=[B for(id,B)in LocationList.items()if B.type==Types.Key and B.level in H and A.BossBananas[B.level]>=L[B.level]]
 	for B in Y:
 		if A.BossBananas[B.level]>500:A.BossBananas[B.level]=L[B.level]
-		if B.level not in K:K[B.level]=[Kongs.donkey,Kongs.diddy,Kongs.lanky,Kongs.tiny,Kongs.chunky];G[B.level]=I
+		if B.level not in K.keys():K[B.level]=[Kongs.donkey,Kongs.diddy,Kongs.lanky,Kongs.tiny,Kongs.chunky];G[B.level]=I
 		if Z:
 			T=B.item
 			if T is _A or ItemList[T].type not in(Types.TrainingBarrel,Types.Shop,Types.Shockwave,Types.Key):continue
@@ -736,7 +737,8 @@ def GetAccessibleOpenLevels(settings,accessible):
 			if 6 in A:A.remove(6)
 		if 4 in A and not LogicVariables.swim:A.remove(4)
 	D=[B.level_order[C]for C in A]
-	if Levels.AngryAztec in D and not LogicVariables.vines and not(LogicVariables.tiny and LogicVariables.twirl):D.remove(Levels.AngryAztec)
+	if Levels.AngryAztec in D:
+		if not LogicVariables.vines and not(LogicVariables.tiny and LogicVariables.twirl):D.remove(Levels.AngryAztec)
 	return D
 def BlockAccessToLevel(settings,level):
 	'Assume the level index passed in is the furthest level you have access to in the level order.';B=settings
@@ -781,7 +783,7 @@ def ShuffleMisc(spoiler):
 	A.human_item_assignment={}
 	if A.settings.activate_all_bananaports in[_D,N]:
 		if A.settings.bananaport_rando in(L,_F):
-			P={BananaportVanilla[A].map_id for A in Warps}
+			P=set([BananaportVanilla[A].map_id for A in Warps])
 			for J in P:
 				Q=[BananaportVanilla[A]for A in Warps if BananaportVanilla[A].map_id==J]
 				for D in Q:
@@ -790,5 +792,5 @@ def ShuffleMisc(spoiler):
 		else:
 			for E in BananaportVanilla.values():
 				F=Logic.Regions[E.region_id]
-				if A.settings.activate_all_bananaports!=N or E.region_id in IslesLogic.LogicRegions and E.destination_region_id in IslesLogic.LogicRegions:G=TransitionFront(E.destination_region_id,lambda l:_B);F.exits.append(G)
+				if A.settings.activate_all_bananaports!=N or E.region_id in IslesLogic.LogicRegions.keys()and E.destination_region_id in IslesLogic.LogicRegions.keys():G=TransitionFront(E.destination_region_id,lambda l:_B);F.exits.append(G)
 	A.settings.update_valid_locations()

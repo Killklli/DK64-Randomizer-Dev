@@ -24,7 +24,8 @@ def randomize_entrances(spoiler):
 				if N in valid_lz_types:
 					ROM().seek(C+D+18);H=int.from_bytes(ROM().readBytes(2),F);ROM().seek(C+D+20);O=int.from_bytes(ROM().readBytes(2),F)
 					for E in G['zones']:
-						if H==E['vanilla_map']and O==E['vanilla_exit']or H==Maps.FactoryCrusher:ROM().seek(C+D+18);P=intToArr(E['new_map'],2);ROM().writeBytes(bytearray(P));ROM().seek(C+D+20);Q=intToArr(E['new_exit'],2);ROM().writeBytes(bytearray(Q))
+						if H==E['vanilla_map']:
+							if O==E['vanilla_exit']or H==Maps.FactoryCrusher:ROM().seek(C+D+18);P=intToArr(E['new_map'],2);ROM().writeBytes(bytearray(P));ROM().seek(C+D+20);Q=intToArr(E['new_exit'],2);ROM().writeBytes(bytearray(Q))
 		I=B.settings.rom_data;R=93;ROM().seek(I+R);ROM().write(1);A=B.shuffled_exit_data[Transitions.AztecMainToRace];ROM().write(GetMapId(A.regionId));ROM().write(GetExitId(A));A=B.shuffled_exit_data[Transitions.AztecRaceToMain];ROM().write(GetMapId(A.regionId));ROM().write(GetExitId(A));A=B.shuffled_exit_data[Transitions.CavesRaceToMain];ROM().write(GetMapId(A.regionId));ROM().write(GetExitId(A));A=B.shuffled_exit_data[Transitions.GalleonSealToShipyard];ROM().write(GetMapId(A.regionId));ROM().write(GetExitId(A));A=B.shuffled_exit_data[Transitions.FactoryRaceToRandD];ROM().write(GetMapId(A.regionId));ROM().write(GetExitId(A));A=B.shuffled_exit_data[Transitions.CastleRaceToMuseum];ROM().write(GetMapId(A.regionId));ROM().write(GetExitId(A));A=B.shuffled_exit_data[Transitions.GalleonLighthouseAreaToSickBay];ROM().write(GetMapId(A.regionId));ROM().write(GetExitId(A))
 		if Transitions.ForestMainToCarts in B.shuffled_exit_data:A=B.shuffled_exit_data[Transitions.ForestMainToCarts];ROM().write(GetMapId(A.regionId));ROM().write(GetExitId(A))
 		else:ROM().write(Maps.ForestMinecarts);ROM().write(0)

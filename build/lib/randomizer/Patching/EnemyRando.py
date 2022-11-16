@@ -27,17 +27,18 @@ def setPkmnSnapEnemy(focused_enemy):
 	for A in pkmn_snap_enemies:
 		if A.enemy==focused_enemy:A.addEnemy()
 def getBalancedCrownEnemyRando(spoiler,crown_setting,damage_ohko_setting):
-	'Get array of weighted enemies.';L=spoiler;K=crown_setting;B={}
+	'Get array of weighted enemies.';L=spoiler;K=crown_setting;C={}
 	if K!=_C:
-		B={Maps.JapesCrown:[],Maps.AztecCrown:[],Maps.FactoryCrown:[],Maps.GalleonCrown:[],Maps.ForestCrown:[],Maps.CavesCrown:[],Maps.CastleCrown:[],Maps.HelmCrown:[],Maps.SnidesCrown:[],Maps.LobbyCrown:[]};M=[];G=[];I=[];F=[];N=[];O=_A
+		C={Maps.JapesCrown:[],Maps.AztecCrown:[],Maps.FactoryCrown:[],Maps.GalleonCrown:[],Maps.ForestCrown:[],Maps.CavesCrown:[],Maps.CastleCrown:[],Maps.HelmCrown:[],Maps.SnidesCrown:[],Maps.LobbyCrown:[]};M=[];G=[];I=[];F=[];N=[];O=_A
 		for A in EnemyMetaData:
 			if convertEnemyName(EnemyMetaData[A].name)in L.settings.enemies_selected and EnemyMetaData[A].crown_enabled is _B:O=_B;break
 		for A in EnemyMetaData:
-			if EnemyMetaData[A].crown_enabled and A is not Enemies.GetOut and convertEnemyName(EnemyMetaData[A].name)in L.settings.enemies_selected or O is _A:
-				M.append(A)
-				if EnemyMetaData[A].disruptive<=1:G.append(A)
-				if EnemyMetaData[A].kasplat is _B:I.append(A)
-				elif EnemyMetaData[A].disruptive==0:I.append(A);F.append(A)
+			if EnemyMetaData[A].crown_enabled and A is not Enemies.GetOut:
+				if convertEnemyName(EnemyMetaData[A].name)in L.settings.enemies_selected or O is _A:
+					M.append(A)
+					if EnemyMetaData[A].disruptive<=1:G.append(A)
+					if EnemyMetaData[A].kasplat is _B:I.append(A)
+					elif EnemyMetaData[A].disruptive==0:I.append(A);F.append(A)
 		if len(G)==0:
 			G.append(M.copy())
 			for A in EnemyMetaData:
@@ -48,21 +49,22 @@ def getBalancedCrownEnemyRando(spoiler,crown_setting,damage_ohko_setting):
 			for A in EnemyMetaData:
 				if EnemyMetaData[A].disruptive>0:EnemyMetaData[A].disruptive=0
 		T=2
-		for A in EnemyMetaData:
-			if EnemyMetaData[A].crown_enabled and convertEnemyName(EnemyMetaData[A].name)in L.settings.enemies_selected or O is _A:
-				U=EnemyMetaData[A].crown_weight;V=abs(U-T);Q=abs(10-V)
-				if A==Enemies.GetOut:Q=1
-				if damage_ohko_setting is _A or A is not Enemies.GetOut:
-					for R in range(Q):N.append(A)
+		for A in EnemyMetaData.keys():
+			if EnemyMetaData[A].crown_enabled:
+				if convertEnemyName(EnemyMetaData[A].name)in L.settings.enemies_selected or O is _A:
+					U=EnemyMetaData[A].crown_weight;V=abs(U-T);Q=abs(10-V)
+					if A==Enemies.GetOut:Q=1
+					if damage_ohko_setting is _A or A is not Enemies.GetOut:
+						for R in range(Q):N.append(A)
 		if K=='easy':
-			for C in B:
-				B[C].append(random.choice(G));B[C].append(random.choice(F));B[C].append(random.choice(F))
-				if C in(Maps.GalleonCrown,Maps.LobbyCrown,Maps.HelmCrown):B[C].append(random.choice(F))
+			for B in C:
+				C[B].append(random.choice(G));C[B].append(random.choice(F));C[B].append(random.choice(F))
+				if B==Maps.GalleonCrown or B==Maps.LobbyCrown or B==Maps.HelmCrown:C[B].append(random.choice(F))
 		elif K==_D:
 			E=0
-			for C in B:
+			for B in C:
 				H=0;D=0;J=3
-				if C in(Maps.GalleonCrown,Maps.LobbyCrown,Maps.HelmCrown):J=4
+				if B==Maps.GalleonCrown or B==Maps.LobbyCrown or B==Maps.HelmCrown:J=4
 				for R in range(J):
 					if H==0:
 						if D<2:E=random.choice(M)
@@ -76,21 +78,21 @@ def getBalancedCrownEnemyRando(spoiler,crown_setting,damage_ohko_setting):
 						elif D==1:E=random.choice(F)
 					if D>3 or D>2 and H>1 or D==2 and H==2:print('This is a mistake in the crown enemy algorithm. Report this to the devs.');E=Enemies.BeaverGold
 					if EnemyMetaData[E].kasplat is _B:D=D+1
-					H=EnemyMetaData[E].disruptive+H;B[C].append(E)
+					H=EnemyMetaData[E].disruptive+H;C[B].append(E)
 		elif K=='hard':
-			for C in B:
+			for B in C:
 				J=3
-				if C in(Maps.GalleonCrown,Maps.LobbyCrown,Maps.HelmCrown):J=4
+				if B==Maps.GalleonCrown or B==Maps.LobbyCrown or B==Maps.HelmCrown:J=4
 				S=_A
 				for R in range(J):
 					if S:P=random.choice([A for A in N if A!=Enemies.GetOut])
 					else:
 						P=random.choice(N)
 						if P==Enemies.GetOut:S=_B
-					B[C].append(P)
-		for C in B:
-			if len(B[C])>0:random.shuffle(B[C])
-	return B
+					C[B].append(P)
+		for B in C:
+			if len(C[B])>0:random.shuffle(C[B])
+	return C
 def randomize_enemies(spoiler):
 	'Write replaced enemies to ROM.';d='replace_with';c='vanilla_location';W='enemy_id';L='index';I='big';F=spoiler;D='offset';AG=[{'container_map':7,'kasplat_swaps':[{c:0,d:1},{c:1,d:3},{c:2,d:0},{c:3,d:2}]}];resetPkmnSnap();h=[Maps.JapesMountain,Maps.JungleJapes,Maps.JapesTinyHive,Maps.JapesLankyCave,Maps.AztecTinyTemple,Maps.HideoutHelm,Maps.AztecDonkey5DTemple,Maps.AztecDiddy5DTemple,Maps.AztecLanky5DTemple,Maps.AztecTiny5DTemple,Maps.AztecChunky5DTemple,Maps.AztecLlamaTemple,Maps.FranticFactory,Maps.FactoryPowerHut,Maps.GloomyGalleon,Maps.GalleonSickBay,Maps.JapesUnderGround,Maps.Isles,Maps.FactoryCrusher,Maps.AngryAztec,Maps.GalleonSealRace,Maps.JapesBaboonBlast,Maps.AztecBaboonBlast,Maps.Galleon2DShip,Maps.Galleon5DShipDiddyLankyChunky,Maps.Galleon5DShipDKTiny,Maps.GalleonTreasureChest,Maps.GalleonMermaidRoom,Maps.FungiForest,Maps.GalleonLighthouse,Maps.GalleonMechafish,Maps.ForestAnthill,Maps.GalleonBaboonBlast,Maps.ForestMinecarts,Maps.ForestMillAttic,Maps.ForestRafters,Maps.ForestMillAttic,Maps.ForestThornvineBarn,Maps.ForestMillFront,Maps.ForestMillBack,Maps.ForestLankyMushroomsRoom,Maps.CrystalCaves,Maps.CavesDonkeyIgloo,Maps.CavesDiddyIgloo,Maps.CavesLankyIgloo,Maps.CavesTinyIgloo,Maps.CavesDonkeyCabin,Maps.CavesDiddyLowerCabin,Maps.CavesDiddyUpperCabin,Maps.CavesLankyCabin,Maps.CavesTinyCabin,Maps.CavesChunkyCabin,Maps.CreepyCastle,Maps.CastleBallroom,Maps.CavesRotatingCabin,Maps.CavesFrozenCastle,Maps.CastleCrypt,Maps.CastleMausoleum,Maps.CastleUpperCave,Maps.CastleLowerCave,Maps.CastleTower,Maps.CastleMinecarts,Maps.FactoryBaboonBlast,Maps.CastleMuseum,Maps.CastleLibrary,Maps.CastleDungeon,Maps.CastleTree,Maps.CastleShed,Maps.CastleTrashCan,Maps.JungleJapesLobby,Maps.AngryAztecLobby,Maps.FranticFactoryLobby,Maps.GloomyGalleonLobby,Maps.FungiForestLobby,Maps.CrystalCavesLobby,Maps.CreepyCastleLobby,Maps.HideoutHelmLobby,Maps.GalleonSubmarine,Maps.CavesBaboonBlast,Maps.CastleBaboonBlast,Maps.ForestBaboonBlast,Maps.IslesSnideRoom,Maps.ForestGiantMushroom,Maps.ForestLankyZingersRoom,Maps.CastleBoss];A1=[Maps.JapesCrown,Maps.AztecCrown,Maps.FactoryCrown,Maps.GalleonCrown,Maps.ForestCrown,Maps.CavesCrown,Maps.CastleCrown,Maps.HelmCrown,Maps.SnidesCrown,Maps.LobbyCrown];i=[Maps.BusyBarrelBarrageEasy,Maps.BusyBarrelBarrageHard,Maps.BusyBarrelBarrageNormal,Maps.HelmBarrelChunkyHidden,Maps.HelmBarrelChunkyShooting];j=[Maps.MadMazeMaulEasy,Maps.MadMazeMaulNormal,Maps.MadMazeMaulHard,Maps.MadMazeMaulInsane];k=[Maps.HelmBarrelLankyMaze,Maps.StashSnatchEasy,Maps.StashSnatchNormal,Maps.StashSnatchHard,Maps.StashSnatchInsane];R=[Maps.BeaverBotherEasy,Maps.BeaverBotherNormal,Maps.BeaverBotherHard];X=i.copy();X.extend(j);X.extend(k);X.extend(R);e=Maps.BusyBarrelBarrageEasy,Maps.BusyBarrelBarrageNormal,Maps.BusyBarrelBarrageHard;P={EnemySubtype.GroundSimple:[Enemies.BeaverBlue,Enemies.KlaptrapGreen,Enemies.BeaverGold,Enemies.MushroomMan,Enemies.Ruler,Enemies.Kremling,Enemies.Krossbones,Enemies.MrDice0,Enemies.MrDice1,Enemies.SirDomino,Enemies.FireballGlasses,Enemies.SpiderSmall,Enemies.Ghost],EnemySubtype.Air:[Enemies.ZingerCharger,Enemies.ZingerLime,Enemies.ZingerRobo,Enemies.Bat],EnemySubtype.GroundBeefy:[Enemies.Klump,Enemies.RoboKremling,Enemies.Kosha,Enemies.Klobber,Enemies.Kaboom,Enemies.KlaptrapPurple,Enemies.KlaptrapRed,Enemies.Guard],EnemySubtype.Water:[Enemies.Shuri,Enemies.Gimpfish,Enemies.Pufftup]};A2={EnemySubtype.GroundSimple:[EnemySubtype.GroundBeefy,EnemySubtype.Water,EnemySubtype.Air],EnemySubtype.GroundBeefy:[EnemySubtype.GroundSimple,EnemySubtype.Water,EnemySubtype.Air],EnemySubtype.Water:[EnemySubtype.Air,EnemySubtype.GroundSimple,EnemySubtype.GroundBeefy],EnemySubtype.Air:[EnemySubtype.GroundSimple,EnemySubtype.GroundBeefy,EnemySubtype.Water]};l={};m=[]
 	for J in P:
@@ -132,23 +134,30 @@ def randomize_enemies(spoiler):
 				for J in f:
 					Y=f[J];AA=P[J];w=0
 					for A in S:
-						if A[W]in AA and E!=Maps.FranticFactory or A[L]<35 or A[L]>44 and E!=Maps.AztecTinyTemple or A[L]<20 or A[L]>23:
-							B=Y[w];w+=1
-							if E!=Maps.ForestSpider or EnemyMetaData[B].aggro!=4 and B!=Enemies.Book or E not in(Maps.CavesDonkeyCabin,Maps.JapesLankyCave,Maps.AngryAztecLobby)and B!=Enemies.Kosha or E not in(Maps.CavesDiddyLowerCabin,Maps.CavesTinyCabin)and B!=Enemies.Guard or E not in(Maps.CavesDiddyLowerCabin,Maps.CavesTinyIgloo,Maps.CavesTinyCabin):
-								ROM().seek(C+A[D]);ROM().writeMultipleBytes(B,1)
-								if B in EnemyMetaData:
-									ROM().seek(C+A[D]+16);ROM().writeMultipleBytes(EnemyMetaData[B].aggro,1)
-									if B==Enemies.RoboKremling:ROM().seek(C+A[D]+11);ROM().writeMultipleBytes(200,1)
-									ROM().seek(C+A[D]+15);T=int.from_bytes(ROM().readBytes(1),I)
-									if EnemyMetaData[B].size_cap>0 and T>EnemyMetaData[B].size_cap:ROM().seek(C+A[D]+15);ROM().writeMultipleBytes(EnemyMetaData[B].size_cap,1)
-									if F.settings.enemy_speed_rando:
-										K=EnemyMetaData[B].min_speed;M=EnemyMetaData[B].max_speed
-										if K>0 and M>0:ROM().seek(C+A[D]+13);N=random.randint(K,M);ROM().writeMultipleBytes(N,1);ROM().seek(C+A[D]+12);ROM().writeMultipleBytes(random.randint(K,N),1)
+						if A[W]in AA:
+							if E!=Maps.FranticFactory or A[L]<35 or A[L]>44:
+								if E!=Maps.AztecTinyTemple or A[L]<20 or A[L]>23:
+									B=Y[w];w+=1
+									if E!=Maps.ForestSpider or EnemyMetaData[B].aggro!=4:
+										if B!=Enemies.Book or E not in(Maps.CavesDonkeyCabin,Maps.JapesLankyCave,Maps.AngryAztecLobby):
+											if B!=Enemies.Kosha or E not in(Maps.CavesDiddyLowerCabin,Maps.CavesTinyCabin):
+												if B!=Enemies.Guard or E not in(Maps.CavesDiddyLowerCabin,Maps.CavesTinyIgloo,Maps.CavesTinyCabin):
+													ROM().seek(C+A[D]);ROM().writeMultipleBytes(B,1)
+													if B in EnemyMetaData.keys():
+														ROM().seek(C+A[D]+16);ROM().writeMultipleBytes(EnemyMetaData[B].aggro,1)
+														if B==Enemies.RoboKremling:ROM().seek(C+A[D]+11);ROM().writeMultipleBytes(200,1)
+														ROM().seek(C+A[D]+15);T=int.from_bytes(ROM().readBytes(1),I)
+														if EnemyMetaData[B].size_cap>0:
+															if T>EnemyMetaData[B].size_cap:ROM().seek(C+A[D]+15);ROM().writeMultipleBytes(EnemyMetaData[B].size_cap,1)
+														if F.settings.enemy_speed_rando:
+															K=EnemyMetaData[B].min_speed;M=EnemyMetaData[B].max_speed
+															if K>0 and M>0:ROM().seek(C+A[D]+13);N=random.randint(K,M);ROM().writeMultipleBytes(N,1);ROM().seek(C+A[D]+12);ROM().writeMultipleBytes(random.randint(K,N),1)
 			if F.settings.enemy_rando and E in X:
 				O=[]
 				if E in i:
 					O=p.copy()
-					if E in e and Enemies.KlaptrapGreen in O:O.remove(Enemies.KlaptrapGreen)
+					if E in e:
+						if Enemies.KlaptrapGreen in O:O.remove(Enemies.KlaptrapGreen)
 				elif E in j:O=q.copy()
 				elif E in k:O=r.copy()
 				elif E in R:O=s.copy()
@@ -157,12 +166,13 @@ def randomize_enemies(spoiler):
 						B=random.choice(O)
 						if E in R:B=random.choice([Enemies.BeaverBlue,Enemies.BeaverBlue,Enemies.BeaverGold])
 						ROM().seek(C+A[D]);ROM().writeMultipleBytes(B,1)
-						if B in EnemyMetaData:
+						if B in EnemyMetaData.keys():
 							ROM().seek(C+A[D]+16);ROM().writeMultipleBytes(EnemyMetaData[B].aggro,1)
 							if B==Enemies.RoboKremling:ROM().seek(C+A[D]+11);ROM().writeMultipleBytes(200,1)
 							if EnemyMetaData[B].air:ROM().seek(C+A[D]+6);ROM().writeMultipleBytes(300,2)
 							ROM().seek(C+A[D]+15);T=int.from_bytes(ROM().readBytes(1),I)
-							if EnemyMetaData[B].size_cap>0 and T>EnemyMetaData[B].size_cap:ROM().seek(C+A[D]+15);ROM().writeMultipleBytes(EnemyMetaData[B].size_cap,1)
+							if EnemyMetaData[B].size_cap>0:
+								if T>EnemyMetaData[B].size_cap:ROM().seek(C+A[D]+15);ROM().writeMultipleBytes(EnemyMetaData[B].size_cap,1)
 							ROM().seek(C+A[D]+15);AB=int.from_bytes(ROM().readBytes(1),I)
 							if AB<EnemyMetaData[B].bbbarrage_min_scale and E in e:ROM().seek(C+A[D]+15);ROM().writeMultipleBytes(EnemyMetaData[B].bbbarrage_min_scale,1)
 							if F.settings.enemy_speed_rando and E not in R and E not in e:
@@ -182,7 +192,7 @@ def randomize_enemies(spoiler):
 				for A in S:
 					if A[W]in o:
 						B=n[E].pop();ROM().seek(C+A[D]);ROM().writeMultipleBytes(B,1)
-						if B in EnemyMetaData:
+						if B in EnemyMetaData.keys():
 							ROM().seek(C+A[D]+16);ROM().writeMultipleBytes(EnemyMetaData[B].aggro,1)
 							if B==Enemies.RoboKremling:ROM().seek(C+A[D]+11);ROM().writeMultipleBytes(200,1)
 							if EnemyMetaData[B].air:ROM().seek(C+A[D]+6);ROM().writeMultipleBytes(300,2)
@@ -195,7 +205,8 @@ def randomize_enemies(spoiler):
 								if U==0:U=1
 								ROM().writeMultipleBytes(U,1);ROM().writeMultipleBytes(U,1)
 							ROM().seek(C+A[D]+15);T=int.from_bytes(ROM().readBytes(1),I)
-							if EnemyMetaData[B].size_cap>0 and T>EnemyMetaData[B].size_cap:ROM().seek(C+A[D]+15);ROM().writeMultipleBytes(EnemyMetaData[B].size_cap,1)
+							if EnemyMetaData[B].size_cap>0:
+								if T>EnemyMetaData[B].size_cap:ROM().seek(C+A[D]+15);ROM().writeMultipleBytes(EnemyMetaData[B].size_cap,1)
 							if F.settings.enemy_speed_rando:
 								K=EnemyMetaData[B].min_speed;M=EnemyMetaData[B].max_speed
 								if K>0 and M>0:ROM().seek(C+A[D]+13);N=random.randint(K,M);ROM().writeMultipleBytes(N,1);ROM().seek(C+A[D]+12);ROM().writeMultipleBytes(random.randint(K,N),1)

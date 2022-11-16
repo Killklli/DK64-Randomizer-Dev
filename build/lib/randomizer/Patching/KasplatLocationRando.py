@@ -8,7 +8,7 @@ from randomizer.Spoiler import Spoiler
 def randomize_kasplat_locations(spoiler):
 	'Write replaced enemies to ROM.';K=spoiler;G='big';Q=[Enemies.KasplatDK,Enemies.KasplatDiddy,Enemies.KasplatLanky,Enemies.KasplatTiny,Enemies.KasplatChunky];o=[Maps.JungleJapes,Maps.JapesUnderGround,Maps.AngryAztec,Maps.AztecChunky5DTemple,Maps.AztecLlamaTemple,Maps.FranticFactory,Maps.GloomyGalleon,Maps.FungiForest,Maps.ForestGiantMushroom,Maps.CrystalCaves,Maps.CreepyCastle,Maps.CastleUpperCave,Maps.CastleLowerCave,Maps.CastleTree,Maps.HideoutHelmLobby,Maps.CreepyCastleLobby,Maps.CrystalCavesLobby,Maps.FranticFactoryLobby,Maps.GloomyGalleonLobby]
 	if K.settings.kasplat_rando:
-		c=list(K.shuffled_kasplat_map.keys())
+		c=[A for A in K.shuffled_kasplat_map.keys()]
 		for L in range(216):
 			E=js.pointer_addresses[16]['entries'][L]['pointing_to'];ROM().seek(E);d=int.from_bytes(ROM().readBytes(2),G);D=2;M=[];N=[]
 			if d>0:

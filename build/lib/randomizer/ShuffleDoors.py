@@ -12,8 +12,10 @@ def ShuffleDoors(spoiler):
 	for A in door_locations:
 		for E in door_locations[A]:
 			E.placed=E.default_placed
-			if B.settings.wrinkly_location_rando and E.placed==J:E.placed=Q
-			if B.settings.tns_location_rando and E.placed==N:E.placed=Q
+			if B.settings.wrinkly_location_rando:
+				if E.placed==J:E.placed=Q
+			if B.settings.tns_location_rando:
+				if E.placed==N:E.placed=Q
 	for A in door_locations:
 		G[A]=[];C=[]
 		for (R,E) in enumerate(door_locations[A]):

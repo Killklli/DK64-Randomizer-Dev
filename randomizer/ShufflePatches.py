@@ -23,7 +23,7 @@ def ShufflePatches(spoiler,human_spoiler):
 	for D in DirtPatchLocations:D.setPatch(_A);A[D.level_name].append(D)
 	select_random_dirt_from_area(A[Levels.DKIsles],4,B,C);del A[Levels.DKIsles]
 	for D in range(5):E=random.choice(list(A.keys()));F=A[E];select_random_dirt_from_area(F,2,B,C);del A[E]
-	for E in A:F=A[E];select_random_dirt_from_area(F,1,B,C)
+	for E in A.keys():F=A[E];select_random_dirt_from_area(F,1,B,C)
 	return C.copy()
 def select_random_dirt_from_area(area_dirt,amount,spoiler,human_spoiler):
 	'Select <amount> random dirt patches from <area_dirt>, which is a list of dirt patches. Makes sure max 1 dirt patch per group is selected.';D=amount;B=area_dirt

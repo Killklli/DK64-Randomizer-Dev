@@ -86,7 +86,8 @@ def ShuffleMusicWithSizeCheck(spoiler,song_list):
 							if D[C]>F[C]:continue
 						elif H[B]+D[C]>G[B]+F[C]:continue
 						G[B]+=F[C];H[B]+=D[C]
-					elif A.type==SongType.Fanfare and D[C]>F[C]*1.5:continue
+					elif A.type==SongType.Fanfare:
+						if D[C]>F[C]*1.5:continue
 					K.remove(D);N.append(F);O.append(D)
 					if A.type==SongType.BGM:E.music_bgm_data[A.name]=I.name
 					elif A.type==SongType.Fanfare:E.music_fanfare_data[A.name]=I.name
