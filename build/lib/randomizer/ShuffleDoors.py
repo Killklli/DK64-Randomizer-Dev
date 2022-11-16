@@ -6,43 +6,42 @@ from randomizer.Enums.Regions import Regions
 from randomizer.Lists.DoorLocations import door_locations
 level_list=['Jungle Japes','Angry Aztec','Frantic Factory','Gloomy Galleon','Fungi Forest','Crystal Caves','Creepy Castle','Hideout Helm']
 def ShuffleDoors(spoiler):
-	'Shuffle Wrinkly and T&S Doors based on settings.';V=' T&S #';U='remove_wrinkly_puzzles';Q='none';O=True;N='tns';J='wrinkly';C=spoiler;K={};L={}
+	'Shuffle Wrinkly and T&S Doors based on settings.';W=' T&S #';V='remove_wrinkly_puzzles';Q='none';O=True;N='tns';J='wrinkly';B=spoiler;K={};L={}
 	for A in level_list:K[A]={};L[A]={}
-	H={}
+	G={}
 	for A in door_locations:
 		for E in door_locations[A]:
 			E.placed=E.default_placed
-			if C.settings.wrinkly_location_rando:
+			if B.settings.wrinkly_location_rando:
 				if E.placed==J:E.placed=Q
-			if C.settings.tns_location_rando:
+			if B.settings.tns_location_rando:
 				if E.placed==N:E.placed=Q
 	for A in door_locations:
-		H[A]=[];B=[]
+		G[A]=[];C=[]
 		for (R,E) in enumerate(door_locations[A]):
-			if E.placed==Q and(C.settings.wrinkly_location_rando or C.settings.tns_location_rando):B.append(R)
-			elif(U in C.settings.misc_changes_selected or len(C.settings.misc_changes_selected)==0)and E.default_placed==J:B.append(R)
-		random.shuffle(B)
-		if C.settings.wrinkly_location_rando:
+			if E.placed==Q and(B.settings.wrinkly_location_rando or B.settings.tns_location_rando):C.append(R)
+			elif(V in B.settings.misc_changes_selected or len(B.settings.misc_changes_selected)==0)and E.default_placed==J:C.append(R)
+		random.shuffle(C)
+		if B.settings.wrinkly_location_rando:
 			for M in range(5):
-				I=Kongs(M%5)
-				if len(B)>0:
-					D=B.pop(0)
-					while I not in door_locations[A][D].kongs or door_locations[A][D].door_type==N:B.append(D);D=B.pop(0)
-					F=door_locations[A][D];F.assignDoor(I);K[level_list[A]][str(Kongs(M%5).name).capitalize()]=F.name;H[A].append((D,J,M%5))
-		elif U in C.settings.misc_changes_selected or len(C.settings.misc_changes_selected)==0:
+				H=Kongs(M%5)
+				if len(C)>0:
+					D=C.pop(0)
+					while H not in door_locations[A][D].kongs or door_locations[A][D].door_type==N:C.append(D);D=C.pop(0)
+					I=door_locations[A][D];I.assignDoor(H);K[level_list[A]][str(Kongs(M%5).name).capitalize()]=I.name;G[A].append((D,J,M%5))
+		elif V in B.settings.misc_changes_selected or len(B.settings.misc_changes_selected)==0:
+			S=[B for B in C if door_locations[A][B].default_placed==J]
 			for M in range(5):
-				if len(B)>0:
-					D=B.pop();F=door_locations[A][D]
-					if F.default_placed==J:I=F.default_kong;F.assignDoor(I);K[level_list[A]][str(I).capitalize()]=F.name;H[A].append((D,J,int(I)))
-		if C.settings.tns_location_rando:
-			S=random.choice([3,4,5]);T=False;B=[C for C in B if door_locations[A][C].door_type!=J]
-			for P in range(S):
-				if len(B)>0:
-					if P<S-1 or T is O:
-						D=B.pop();G=door_locations[A][D]
-						if G.moveless is O:T=O
-						B=[C for C in B if door_locations[A][C].group!=G.group];G.assignPortal();L[level_list[A]][V+str(P+1)]=G.name;H[A].append((D,N))
-					else:D=random.choice([C for C in B if door_locations[A][C].moveless is O]);G=door_locations[A][D];G.assignPortal();L[level_list[A]][V+str(P+1)]=G.name;H[A].append((D,N))
-	C.shuffled_door_data=H
-	if C.settings.wrinkly_location_rando:C.human_hint_doors=K
-	if C.settings.tns_location_rando:C.human_portal_doors=L
+				if len(S)>0:D=S.pop();I=door_locations[A][D];H=I.default_kong;I.assignDoor(H);K[level_list[A]][str(H).capitalize()]=I.name;G[A].append((D,J,int(H)))
+		if B.settings.tns_location_rando:
+			T=random.choice([3,4,5]);U=False;C=[B for B in C if door_locations[A][B].door_type!=J]
+			for P in range(T):
+				if len(C)>0:
+					if P<T-1 or U is O:
+						D=C.pop();F=door_locations[A][D]
+						if F.moveless is O:U=O
+						C=[B for B in C if door_locations[A][B].group!=F.group];F.assignPortal();L[level_list[A]][W+str(P+1)]=F.name;G[A].append((D,N))
+					else:D=random.choice([B for B in C if door_locations[A][B].moveless is O]);F=door_locations[A][D];F.assignPortal();L[level_list[A]][W+str(P+1)]=F.name;G[A].append((D,N))
+	B.shuffled_door_data=G
+	if B.settings.wrinkly_location_rando:B.human_hint_doors=K
+	if B.settings.tns_location_rando:B.human_portal_doors=L
