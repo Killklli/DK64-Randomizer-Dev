@@ -8,7 +8,7 @@ from randomizer.Patching.BossRando import randomize_bosses
 from randomizer.Patching.CosmeticColors import apply_cosmetic_colors,overwrite_object_colors,applyKrushaKong
 from randomizer.Patching.DKTV import randomize_dktv
 from randomizer.Patching.EnemyRando import randomize_enemies
-from randomizer.Patching.EntranceRando import randomize_entrances
+from randomizer.Patching.EntranceRando import randomize_entrances,filterEntranceType
 from randomizer.Patching.Hash import get_hash_images
 from randomizer.Patching.KasplatLocationRando import randomize_kasplat_locations
 from randomizer.Patching.KongRando import apply_kongrando_cosmetic
@@ -127,12 +127,13 @@ def patching_response(responded_data):
 	for D in M:N=N|1<<D
 	ROM().seek(B+295);ROM().write(N)
 	if A.settings.medal_requirement!=15:ROM().seek(B+336);ROM().write(A.settings.medal_requirement)
+	if A.settings.rareware_gb_fairies!=20:ROM().seek(B+54);ROM().write(A.settings.rareware_gb_fairies)
 	if A.settings.medal_cb_req!=75:ROM().seek(B+274);ROM().write(A.settings.medal_cb_req)
 	if len(A.settings.enemies_selected)==0 and(A.settings.enemy_rando or A.settings.crown_enemy_rando!='off'):
 		c=[]
 		for w in EnemySelector:c.append(w[R])
 		A.settings.enemies_selected=c
-	randomize_entrances(A);randomize_moves(A);randomize_prices(A);randomize_bosses(A);randomize_krool(A);randomize_helm(A);randomize_barrels(A);randomize_bananaport(A);randomize_kasplat_locations(A);randomize_enemies(A);apply_kongrando_cosmetic(A);randomize_setup(A);randomize_puzzles(A);randomize_cbs(A);ApplyShopRandomizer(A);place_randomized_items(A);place_door_locations(A);randomize_crown_pads(A);random.seed(A.settings.seed);randomize_music(A);applyKrushaKong(A);apply_cosmetic_colors(A);overwrite_object_colors(A);random.seed(A.settings.seed)
+	randomize_entrances(A);randomize_moves(A);randomize_prices(A);randomize_bosses(A);randomize_krool(A);randomize_helm(A);randomize_barrels(A);randomize_bananaport(A);randomize_kasplat_locations(A);randomize_enemies(A);apply_kongrando_cosmetic(A);randomize_setup(A);randomize_puzzles(A);randomize_cbs(A);ApplyShopRandomizer(A);place_randomized_items(A);place_door_locations(A);randomize_crown_pads(A);filterEntranceType();random.seed(A.settings.seed);randomize_music(A);applyKrushaKong(A);apply_cosmetic_colors(A);overwrite_object_colors(A);random.seed(A.settings.seed)
 	if A.settings.wrinkly_hints in['standard','cryptic']:wipeHints();PushHints(A)
 	C=0;x=get_hash_images()
 	for F in A.settings.seed_hash:ROM().seek(B+297+C);ROM().write(F);js.document.getElementById('hash'+str(C)).src='data:image/jpeg;base64,'+x[F];C+=1
