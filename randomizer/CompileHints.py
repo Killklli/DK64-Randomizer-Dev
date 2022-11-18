@@ -113,7 +113,7 @@ def compileHints(spoiler):
 				if Kongs.diddy in A.settings.krool_order:hint_distribution[HintType.RequiredWinConditionHint]+=1
 				if Kongs.tiny in A.settings.krool_order:hint_distribution[HintType.RequiredWinConditionHint]+=1
 				if Kongs.chunky in A.settings.krool_order:hint_distribution[HintType.RequiredWinConditionHint]+=1
-			if A.settings.win_condition==Aj:E.append(HintType.RequiredWinConditionHint);hint_distribution[HintType.RequiredWinConditionHint]=2
+			if A.settings.win_condition==Aj and A.settings.shockwave_status!='start_with':E.append(HintType.RequiredWinConditionHint);hint_distribution[HintType.RequiredWinConditionHint]=2
 	if A.settings.randomize_blocker_required_amounts:E.append(HintType.BLocker)
 	if A.settings.randomize_cb_required_amounts and len(A.settings.krool_keys_required)>0 and A.settings.krool_keys_required!=[Events.HelmKeyTurnedIn]:E.append(HintType.TroffNScoff)
 	if A.settings.kong_rando:
