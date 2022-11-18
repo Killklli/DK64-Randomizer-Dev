@@ -133,6 +133,7 @@ def patching_response(responded_data):
 		c=[]
 		for w in EnemySelector:c.append(w[R])
 		A.settings.enemies_selected=c
+	if A.settings.random_starting_region:ROM().seek(B+268);ROM().write(A.settings.starting_region['map']);ROM().write(A.settings.starting_region['exit'])
 	randomize_entrances(A);randomize_moves(A);randomize_prices(A);randomize_bosses(A);randomize_krool(A);randomize_helm(A);randomize_barrels(A);randomize_bananaport(A);randomize_kasplat_locations(A);randomize_enemies(A);apply_kongrando_cosmetic(A);randomize_setup(A);randomize_puzzles(A);randomize_cbs(A);ApplyShopRandomizer(A);place_randomized_items(A);place_door_locations(A);randomize_crown_pads(A);filterEntranceType();random.seed(A.settings.seed);randomize_music(A);applyKrushaKong(A);apply_cosmetic_colors(A);overwrite_object_colors(A);random.seed(A.settings.seed)
 	if A.settings.wrinkly_hints in['standard','cryptic']:wipeHints();PushHints(A)
 	C=0;x=get_hash_images()
