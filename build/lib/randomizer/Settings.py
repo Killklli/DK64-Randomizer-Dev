@@ -196,7 +196,7 @@ class Settings:
 			if Types.Key in A.shuffled_location_types:A.valid_locations[Types.Key]=C
 			if Types.Medal in A.shuffled_location_types:A.valid_locations[Types.Medal]=C
 			if Types.Coin in A.shuffled_location_types:A.valid_locations[Types.Coin]=C
-			if Types.Kong in A.shuffled_location_types:L=Locations.IslesSwimTrainingBarrel,Locations.IslesVinesTrainingBarrel,Locations.IslesBarrelsTrainingBarrel,Locations.IslesOrangesTrainingBarrel,Locations.IslesDonkeyJapesRock;A.valid_locations[Types.Kong].extend(C)
+			if Types.Kong in A.shuffled_location_types:L=Locations.IslesSwimTrainingBarrel,Locations.IslesVinesTrainingBarrel,Locations.IslesBarrelsTrainingBarrel,Locations.IslesOrangesTrainingBarrel,Locations.IslesDonkeyJapesRock;A.valid_locations[Types.Kong].extend([A for A in C if A not in L])
 	def GetValidLocationsForItem(C,item_id):
 		'Return the valid locations the input item id can be placed in.';A=ItemList[item_id];B=[]
 		if A.type in(Types.Shop,Types.Blueprint):B=C.valid_locations[A.type][A.kong]

@@ -90,7 +90,13 @@ class LogicVarHolder:
 	def CanOpenJapesGates(A):
 		"Check if we can pick up the item inside Diddy's cage, thus opening the gates in Japes.";B=LocationList[Locations.JapesDonkeyFreeDiddy].item
 		if B==Items.NoItem:return _B
-		return A.CanFreeDiddy()and(B is _C or ItemList[B].type==Types.Blueprint and A.BlueprintAccess(ItemList[B])or ItemList[B].type!=Types.Blueprint and A.settings.free_trade_items or A.IsKong(A.settings.diddy_freeing_kong))
+		if not A.CanFreeDiddy():return _A
+		if A.IsKong(A.settings.diddy_freeing_kong):return _B
+		elif A.settings.free_trade_items:
+			if B is _C:return _A
+			if ItemList[B].type!=Types.Blueprint:return _B
+			else:return A.BlueprintAccess(ItemList[B])
+		return _A
 	def CanFreeTiny(A):
 		'Check if kong at Tiny location can be freed,r equires either chimpy charge or primate punch.'
 		if A.settings.tiny_freeing_kong==Kongs.diddy:return A.charge and A.isdiddy

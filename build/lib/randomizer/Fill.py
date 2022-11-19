@@ -205,7 +205,7 @@ def CalculateWothPaths(spoiler,WothLocations):
 	'Calculate the Paths (dependencies) for each Way of the Hoard item.';C=WothLocations;B=spoiler;LogicVariables.pathMode=_B;J=B.settings.open_lobbies;B.settings.open_lobbies=_B;F=[]
 	for A in C:B.woth_paths[A]=[A]
 	for A in C:
-		D=LocationList[A];E=D.item;D.item=_A;G=ItemPool.Kongs(B.settings);Reset();LogicVariables.GainInfiniteCoins();K=GetAccessibleLocations(B.settings,G,SearchMode.GetReachable);H=_C
+		D=LocationList[A];E=D.item;D.item=_A;G=ItemPool.Kongs(B.settings);Reset();LogicVariables.GainInfiniteCoins();LogicVariables.GoldenBananas=201;K=GetAccessibleLocations(B.settings,G,SearchMode.GetReachable);H=_C
 		for I in C:
 			if I not in K:B.woth_paths[I].append(A);H=_B
 		D.PlaceItem(E)
@@ -520,7 +520,9 @@ def FillKongs(spoiler):
 		B=ItemPool.AllKongMoves().copy()
 		if A.settings.training_barrels!=_G:B.extend(ItemPool.TrainingBarrelAbilities())
 		if A.settings.shockwave_status!=_J:B.append(Items.Shockwave)
-		Reset();PlaceItems(A.settings,A.settings.algorithm,C,B);A.settings.diddy_freeing_kong=random.choice(GetKongs());A.settings.lanky_freeing_kong=random.choice(GetKongs());A.settings.tiny_freeing_kong=random.choice([Kongs.diddy,Kongs.chunky]);A.settings.chunky_freeing_kong=random.choice(GetKongs());LocationList[Locations.JapesDonkeyFrontofCage].kong=A.settings.diddy_freeing_kong;LocationList[Locations.JapesDonkeyFreeDiddy].kong=A.settings.diddy_freeing_kong;LocationList[Locations.AztecDonkeyFreeLanky].kong=A.settings.lanky_freeing_kong;LocationList[Locations.AztecDiddyFreeTiny].kong=A.settings.tiny_freeing_kong;LocationList[Locations.FactoryLankyFreeChunky].kong=A.settings.chunky_freeing_kong;A.settings.update_valid_locations()
+		Reset();PlaceItems(A.settings,A.settings.algorithm,C,B);A.settings.diddy_freeing_kong=random.choice(GetKongs());A.settings.lanky_freeing_kong=random.choice(GetKongs());A.settings.tiny_freeing_kong=random.choice([Kongs.diddy,Kongs.chunky]);A.settings.chunky_freeing_kong=random.choice(GetKongs());LocationList[Locations.JapesDonkeyFrontofCage].kong=A.settings.diddy_freeing_kong;LocationList[Locations.JapesDonkeyFreeDiddy].kong=A.settings.diddy_freeing_kong;LocationList[Locations.AztecDonkeyFreeLanky].kong=A.settings.lanky_freeing_kong;LocationList[Locations.AztecDiddyFreeTiny].kong=A.settings.tiny_freeing_kong;LocationList[Locations.FactoryLankyFreeChunky].kong=A.settings.chunky_freeing_kong
+		if LocationList[Locations.DiddyKong].item is _A:LocationList[Locations.DiddyKong].PlaceItem(Items.NoItem)
+		A.settings.update_valid_locations()
 	else:
 		if any(A.settings.kong_locations):
 			E=[B for B in[Locations.DiddyKong,Locations.LankyKong,Locations.TinyKong,Locations.ChunkyKong]if B not in A.settings.kong_locations]

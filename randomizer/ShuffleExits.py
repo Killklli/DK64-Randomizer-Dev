@@ -80,7 +80,7 @@ def ExitShuffle(settings):
 			if A==20:js.postMessage('Entrance placement failed, out of retries.');raise Ex.EntranceAttemptCountExceeded
 			A+=1;js.postMessage('Entrance placement failed. Retrying. Tries: '+str(A));Reset()
 def UpdateLevelProgression(settings):
-	'Update level progression.';A=settings;D=A.EntryGBs.copy();E=A.BossBananas.copy();F=[Regions.JungleJapesLobby,Regions.AngryAztecLobby,Regions.FranticFactoryLobby,Regions.GloomyGalleonLobby,Regions.FungiForestLobby,Regions.CrystalCavesLobby,Regions.CreepyCastleLobby]
+	'Update level progression.';A=settings;D=A.EntryGBs.copy();E=A.BossBananas.copy();F=[Regions.JungleJapesLobby,Regions.AngryAztecLobby,Regions.FranticFactoryLobby,Regions.GloomyGalleonLobbyEntrance,Regions.FungiForestLobby,Regions.CrystalCavesLobby,Regions.CreepyCastleLobby]
 	for B in range(len(F)):
 		C=B
 		if A.shuffle_loading_zones==_D:G=ShufflableExits[LobbyEntrancePool[B]].shuffledId;H=ShufflableExits[G].back.regionId;C=F.index(H)
