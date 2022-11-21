@@ -11,7 +11,8 @@ _D='vanilla'
 _C=True
 _B=None
 _A=False
-import hashlib,inspect,json,random,sys
+import hashlib,inspect,json,random
+from version import whl_hash
 from random import randint
 from randomizer.Enums.Events import Events
 from randomizer.Enums.Items import Items
@@ -211,12 +212,7 @@ class Settings:
 		return A
 	def __repr__(A):'Return printable version of the object as json.\n\n        Returns:\n            str: Json string of the dict.\n        ';return json.dumps(A.__dict__)
 	@staticmethod
-	def __get_hash():
-		'Get the hash value of all of the source code loaded.';B=[];A=[];A.append(inspect.getsource(Settings));A.append(inspect.getsource(__import__('randomizer.Spoiler')));A.append(inspect.getsource(__import__('randomizer.Fill')));A.append(inspect.getsource(__import__('randomizer.BackgroundRandomizer')))
-		try:A.append(inspect.getsource(__import__('version')))
-		except Exception:pass
-		for C in sorted(A):B.append(hashlib.md5(C.encode('utf-8')).hexdigest())
-		return ''.join(B)
+	def __get_hash():'Get the hash value of all of the source code loaded.';return whl_hash
 	def compare_hash(A,hash):
 		'Compare our hash with a passed hash value.'
 		if A.__hash!=hash:raise Exception('Error: Comparison failed, Hashes do not match.')
