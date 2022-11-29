@@ -1,1 +1,1 @@
-'Enum data for item types.'
+"""Enum data for item types."""

@@ -1,157 +1,414 @@
-'Convert file setup.'
-_C='_.bin'
-_B='.bin'
-_A='big'
-import os,shutil,struct
+"""Convert file setup."""
+import os
+import shutil
+import struct
+
 from getMoveSignLocations import getMoveSignData
 from place_vines import generateVineSeries
+
+
 def convertSetup(file_name):
-	'Convert file type setup.\n\n    Args:\n        file_name (str): File name to convert.\n    ';B='_';A=file_name
-	with open(A,'rb')as C:
-		with open(B+A,'wb')as D:D.write(C.read())
-	E=int(A.split('setup')[1].split(_B)[0]);modify(B+A,E)
-	if os.path.exists(A):os.remove(A)
-	shutil.copyfile(B+A.replace(_B,_C),A)
-	if os.path.exists(B+A):os.remove(B+A)
-	if os.path.exists(B+A.replace(_B,_C)):os.remove(B+A.replace(_B,_C))
-def writedatatoarr(stream,value,size,location):
-	'Write data to an array.';A=stream
-	for B in range(size):A[location+B]=bytearray(value.to_bytes(size,_A))[B]
-	return A
-def int_to_float(val):'Convert a hex int to a float.';return struct.unpack('!f',bytes.fromhex(hex(val).split('0x')[1]))[0]
+    """Convert file type setup.
+
+    Args:
+        file_name (str): File name to convert.
+    """
+    with open(file_name, "rb") as source:
+        with open("_" + file_name, "wb") as modified:
+            modified.write(source.read())
+    map_index = int(file_name.split("setup")[1].split(".bin")[0])
+    modify("_" + file_name, map_index)
+    if os.path.exists(file_name):
+        os.remove(file_name)
+    shutil.copyfile("_" + file_name.replace(".bin", "_.bin"), file_name)
+    if os.path.exists("_" + file_name):
+        os.remove("_" + file_name)
+    if os.path.exists("_" + file_name.replace(".bin", "_.bin")):
+        os.remove("_" + file_name.replace(".bin", "_.bin"))
+
+
+def writedatatoarr(stream, value, size, location):
+    """Write data to an array."""
+    for x in range(size):
+        stream[location + x] = bytearray(value.to_bytes(size, "big"))[x]
+    return stream
+
+
+def int_to_float(val):
+    """Convert a hex int to a float."""
+    return struct.unpack("!f", bytes.fromhex(hex(val).split("0x")[1]))[0]
+
+
 def float_to_hex(f):
-	'Convert float to hex.'
-	if f==0:return'0x00000000'
-	return hex(struct.unpack('<I',struct.pack('<f',f))[0])
-base_stream=0
-def modify(file_name,map_index):
-	'Modify the file to be updated.\n\n    Args:\n        file_name (str): File name.\n        map_index (int): Map index.\n    ';AC='change';x=file_name;w='use_byte_stream';o=False;g=True;Z='rz';Y='rx';V=b'';T='stream';S='scale';R='ry';Q='base_byte_stream';P='type';N='id';M='z';L='y';K='x';F=map_index;global base_stream
-	with open(x,'r+b')as AD:
-		H=AD.read();AE=int.from_bytes(H[:4],_A);D=4;h=[];p=[];i=[];j=[];a=[];b=544;y=o;z=o;A0=o;A1=o
-		for A in range(AE):
-			B=H[D:D+48];k=int.from_bytes(H[D+40:D+42],_A);G=int.from_bytes(H[D+42:D+44],_A)
-			if k==684 and F!=42:
-				if F==72 and not z and G==38:
-					for l in range(2):A2=50.167;j.append({Q:B,P:[684,683][l],K:int(float_to_hex(120.997),16),L:[int(float_to_hex(A2),16),int(float_to_hex(A2-30),16)][l],M:int(float_to_hex(1182.974),16),Y:0,R:int(float_to_hex(75.146),16),Z:0,N:[368,b][l],S:[int(float_to_hex(1),16),int(float_to_hex(0.35),16)][l]})
-					b+=1;z=g
-				base_stream=B;A3=int.from_bytes(H[D+0:D+4],_A);q=int.from_bytes(H[D+4:D+8],_A);AF=int_to_float(q)-30;q=int(float_to_hex(AF),16);A4=int.from_bytes(H[D+8:D+12],_A);AX=int.from_bytes(H[D+24:D+28],_A);c=int.from_bytes(H[D+28:D+32],_A);AY=int.from_bytes(H[D+32:D+36],_A);G=int.from_bytes(H[D+42:D+44],_A)
-				if F==7:
-					if b==544:A3=int(float_to_hex(805.6618),16);A4=int(float_to_hex(2226.797),16)
-				j.append({Q:B,P:683,K:A3,L:q,M:A4,Y:0,R:c,Z:0,N:b,S:int(float_to_hex(0.35),16)});b+=1
-			if F==34 and not y and G==6:y=g;j.append({Q:B,P:132,K:int(float_to_hex(2457.471),16),L:int(float_to_hex(1280),16),M:int(float_to_hex(3458.604),16),Y:0,R:int(float_to_hex(166),16),Z:0,N:256,S:int(float_to_hex(1.18),16)})
-			if F==7 and G==26 or F==176 and G==57:
-				k=206;C=V
-				for A in range(41):C+=B[A].to_bytes(1,_A)
-				C+=k.to_bytes(1,_A)
-				for A in range(48-42):C+=B[A+42].to_bytes(1,_A)
-				B=C
-			elif F==26 and G==318 or F==5 and G==2:
-				C=V;AG=int(float_to_hex(0.2),16)
-				for A in range(12):C+=B[A].to_bytes(1,_A)
-				C+=AG.to_bytes(4,_A)
-				for A in range(48-16):C+=B[A+16].to_bytes(1,_A)
-				B=C
-			if F==26 and G==36:
-				C=V;O=[0,0,0];r=[1455.853,6.5,522.716];O[0]=int(float_to_hex(r[0]),16);O[1]=int(float_to_hex(r[1]),16);O[2]=int(float_to_hex(r[2]),16);c=int(float_to_hex(0),16)
-				for A in O:C+=A.to_bytes(4,_A)
-				for A in range(28-12):C+=B[A+12].to_bytes(1,_A)
-				C+=c.to_bytes(4,_A)
-				for A in range(48-32):C+=B[A+32].to_bytes(1,_A)
-				B=C
-			if F==26 and G>=103 and G<=118:
-				C=V;A5=G-103;AH=A5%4;AI=int(A5/4);AJ=2606.114;AK=1767.899;A6=37.7;O=[0,0,0];O[0]=int(float_to_hex(AJ+A6*AI),16);O[1]=int(float_to_hex(1002),16);O[2]=int(float_to_hex(AK+A6*AH),16)
-				for A in O:C+=A.to_bytes(4,_A)
-				for A in range(28-12):C+=B[A+12].to_bytes(1,_A)
-				C+=c.to_bytes(4,_A)
-				for A in range(48-32):C+=B[A+32].to_bytes(1,_A)
-				B=C;c=int(float_to_hex(180),16)
-			if F==72:
-				if G==87 or G==207:
-					C=V;AL=176.505;AM=1089.408;C+=int(float_to_hex(AL),16).to_bytes(4,_A)
-					for A in range(4):C+=B[A+4].to_bytes(1,_A)
-					C+=int(float_to_hex(AM),16).to_bytes(4,_A)
-					for A in range(48-12):C+=B[A+12].to_bytes(1,_A)
-					B=C
-			if F==205:
-				A7=14,15,16,17;AN=13,19,20,18;A8=(780,419.629),(1135.232,780),(780,1116.334),(438.904,780);A9=(778.365,396.901),(1158.427,778.632),(780.283,1138.851),(416.092,778.456)
-				if G>=13 and G<=20:
-					A=0;s=0
-					if G in A7:d=A7.index(G);A=A8[d][0];s=A8[d][1]
-					else:d=AN.index(G);A=A9[d][0];s=A9[d][1]
-					C=V;C+=int(float_to_hex(A),16).to_bytes(4,_A)
-					for A in range(4):C+=B[A+4].to_bytes(1,_A)
-					C+=int(float_to_hex(s),16).to_bytes(4,_A)
-					for A in range(48-12):C+=B[A+12].to_bytes(1,_A)
-					B=C
-			if F==7 and G==201:
-				C=V;U=int(float_to_hex(400),16)
-				for A in range(4):C+=B[A].to_bytes(1,_A)
-				C+=U.to_bytes(4,_A)
-				for A in range(48-8):C+=B[A+8].to_bytes(1,_A)
-				B=C
-			e={T:B,P:k};h.append(e);D+=48
-		AO=getMoveSignData(F,base_stream);m=generateVineSeries(F)
-		for AP in AO:a.append(AP)
-		AQ=int.from_bytes(H[D:D+4],_A);D+=4
-		for A in range(AQ):B=H[D:D+36];e={T:B};p.append(e);D+=36
-		AR=int.from_bytes(H[D:D+4],_A);D+=4
-		for A in range(AR):
-			B=H[D:D+56];W=int.from_bytes(H[D+52:D+54],_A)
-			if F==26 and W==13:
-				J=[]
-				for I in range(56):J.append(B[I])
-				B=J.copy();t=1237.001;U=175;u=840.569;writedatatoarr(B,int(float_to_hex(t),16),4,0);writedatatoarr(B,int(float_to_hex(U),16),4,4);writedatatoarr(B,int(float_to_hex(u),16),4,8)
-			elif F==30 and W==36:
-				J=[]
-				for I in range(56):J.append(B[I])
-				B=J.copy();U=383.8333;writedatatoarr(B,int(float_to_hex(U),16),4,4)
-			elif F==30 and W in(23,25):
-				J=[]
-				for I in range(56):J.append(B[I])
-				B=J.copy();t=1296;U=1600;u=2028
-				if W==23:writedatatoarr(B,int(float_to_hex(t),16),4,0);writedatatoarr(B,int(float_to_hex(u),16),4,8)
-				writedatatoarr(B,int(float_to_hex(U),16),4,4)
-			elif F==17 and not A0:
-				AS=5423.538;AA=160;v=104.5;AT=[[575.763,AA],[494.518,AA],[606.161,v],[534.567,v],[463.642,v]]
-				for (AU,AB) in enumerate(AT):a.append({Q:B,K:int(float_to_hex(AB[0]),16),L:int(float_to_hex(AB[1]),16),M:int(float_to_hex(AS),16),N:256+AU,P:70-16,Y:0,R:0,Z:0,S:int(float_to_hex(0.35),16)})
-				A0=g
-			elif F==86 and not A1:a.append({Q:B,K:int(float_to_hex(118.011),16),L:int(float_to_hex(20),16),M:int(float_to_hex(462.749),16),N:32,P:57-16,Y:0,R:1024,Z:0,S:int(float_to_hex(1),16)});A1=g
-			if len(m['add'])>0:
-				for f in m['add']:
-					if W==f['id_base']:a.append({Q:B,K:int(float_to_hex(f[K]),16),L:int(float_to_hex(f[L]),16),M:int(float_to_hex(f[M]),16),N:f[N],w:g})
-			if len(m[AC])>0:
-				for n in m[AC]:
-					if W==n[N]:
-						J=[]
-						for I in range(56):J.append(B[I])
-						B=J.copy();writedatatoarr(B,int(float_to_hex(n[K]),16),4,0);writedatatoarr(B,int(float_to_hex(n[L]),16),4,4);writedatatoarr(B,int(float_to_hex(n[M]),16),4,8)
-			e={T:B};i.append(e);D+=56
-		for A in a:
-			E=[]
-			for I in range(56):
-				if w in A and A[w]and Q in A:E.append(A[Q][I])
-				else:E.append(0)
-			if K in A:writedatatoarr(E,A[K],4,0)
-			if L in A:writedatatoarr(E,A[L],4,4)
-			if M in A:writedatatoarr(E,A[M],4,8)
-			if S in A:writedatatoarr(E,A[S],4,12)
-			if R in A:writedatatoarr(E,A[R],2,48)
-			if P in A:writedatatoarr(E,A[P],2,50)
-			if N in A:writedatatoarr(E,A[N],2,52)
-			i.append({T:E})
-		for A in j:
-			E=[]
-			for I in range(16):E.append(0)
-			AV=[255,251,0,0,21,0,0,0,64,192,0,0,67,179,0,0]
-			for I in AV:E.append(I)
-			for I in range(12):E.append(0)
-			AW=[0,1,0,0]
-			for I in AW:E.append(I)
-			E=writedatatoarr(E,A[P],2,40);E=writedatatoarr(E,A[N],2,42);E=writedatatoarr(E,A[S],4,12);E=writedatatoarr(E,A[K],4,0);E=writedatatoarr(E,A[L],4,4);E=writedatatoarr(E,A[M],4,8);E=writedatatoarr(E,A[Y],4,24);E=writedatatoarr(E,A[R],4,28);E=writedatatoarr(E,A[Z],4,32);h.append({T:E})
-		with open(x.replace(_B,_C),'wb')as X:
-			X.write(len(h).to_bytes(4,_A))
-			for A in h:X.write(bytearray(A[T]))
-			X.write(len(p).to_bytes(4,_A))
-			for A in p:X.write(bytearray(A[T]))
-			X.write(len(i).to_bytes(4,_A))
-			for A in i:X.write(bytearray(A[T]))
+    """Convert float to hex."""
+    if f == 0:
+        return "0x00000000"
+    return hex(struct.unpack("<I", struct.pack("<f", f))[0])
+
+
+base_stream = 0
+
+
+def modify(file_name, map_index):
+    """Modify the file to be updated.
+
+    Args:
+        file_name (str): File name.
+        map_index (int): Map index.
+    """
+    global base_stream
+    with open(file_name, "r+b") as fh:
+        byte_read = fh.read()
+        model2_count = int.from_bytes(byte_read[:4], "big")
+        read_location = 4
+        model2 = []
+        mystery = []
+        actor = []
+        added_model2 = []
+        added_actor = []
+        model2_index = 0x220
+        added_factory_barracade = False
+        added_caves_tns = False
+        added_helm_faces = False
+        added_5di_strongkong = False
+        for x in range(model2_count):
+            byte_stream = byte_read[read_location : read_location + 0x30]
+            _type = int.from_bytes(byte_read[read_location + 0x28 : read_location + 0x2A], "big")
+            _id = int.from_bytes(byte_read[read_location + 0x2A : read_location + 0x2C], "big")
+            if _type == 0x2AC and map_index != 0x2A:
+                if map_index == 0x48 and not added_caves_tns and _id == 0x26:
+                    # New T&S Portal
+                    for k in range(2):
+                        # First add T&S
+                        # Second add display
+                        portal_y = 50.167
+                        added_model2.append(
+                            {
+                                "base_byte_stream": byte_stream,
+                                "type": [0x2AC, 0x2AB][k],
+                                "x": int(float_to_hex(120.997), 16),
+                                "y": [int(float_to_hex(portal_y), 16), int(float_to_hex(portal_y - 30), 16)][k],
+                                "z": int(float_to_hex(1182.974), 16),
+                                "rx": 0,
+                                "ry": int(float_to_hex(75.146), 16),
+                                "rz": 0,
+                                "id": [0x170, model2_index][k],
+                                "scale": [int(float_to_hex(1), 16), int(float_to_hex(0.35), 16)][k],
+                            }
+                        )
+                    model2_index += 1
+                    added_caves_tns = True
+                base_stream = byte_stream
+                _x = int.from_bytes(byte_read[read_location + 0 : read_location + 4], "big")
+                _y = int.from_bytes(byte_read[read_location + 4 : read_location + 8], "big")
+                _yf = int_to_float(_y) - 30
+                _y = int(float_to_hex(_yf), 16)
+                _z = int.from_bytes(byte_read[read_location + 8 : read_location + 12], "big")
+                _ax = int.from_bytes(byte_read[read_location + 0x18 : read_location + 0x1C], "big")
+                _ay = int.from_bytes(byte_read[read_location + 0x1C : read_location + 0x20], "big")
+                _az = int.from_bytes(byte_read[read_location + 0x20 : read_location + 0x24], "big")
+                _id = int.from_bytes(byte_read[read_location + 0x2A : read_location + 0x2C], "big")
+                if map_index == 7:
+                    if model2_index == 0x220:
+                        _x = int(float_to_hex(805.6618), 16)
+                        _z = int(float_to_hex(2226.797), 16)
+                added_model2.append({"base_byte_stream": byte_stream, "type": 0x2AB, "x": _x, "y": _y, "z": _z, "rx": 0, "ry": _ay, "rz": 0, "id": model2_index, "scale": int(float_to_hex(0.35), 16)})
+                model2_index += 1
+            if map_index == 0x22 and not added_factory_barracade and _id == 0x6:
+                added_factory_barracade = True
+                added_model2.append(
+                    {
+                        "base_byte_stream": byte_stream,
+                        "type": 132,
+                        "x": int(float_to_hex(2457.471), 16),
+                        "y": int(float_to_hex(1280), 16),
+                        "z": int(float_to_hex(3458.604), 16),
+                        "rx": 0,
+                        "ry": int(float_to_hex(166), 16),
+                        "rz": 0,
+                        "id": 0x100,
+                        "scale": int(float_to_hex(1.18), 16),
+                    }
+                )
+            if (map_index == 7 and _id == 0x1A) or (map_index == 0xB0 and _id == 0x39):
+                # Type 0x94
+                _type = 0xCE
+                repl_byte = b""
+                for x in range(0x29):
+                    repl_byte += byte_stream[x].to_bytes(1, "big")
+                repl_byte += _type.to_bytes(1, "big")
+                for x in range(0x30 - 0x2A):
+                    repl_byte += byte_stream[x + 0x2A].to_bytes(1, "big")
+                byte_stream = repl_byte
+            elif (map_index == 0x1A and _id == 0x13E) or (map_index == 5 and _id == 2):
+                # Nintendo/Rareware Coin
+                repl_byte = b""
+                scale = int(float_to_hex(0.2), 16)
+                for x in range(0xC):
+                    repl_byte += byte_stream[x].to_bytes(1, "big")
+                repl_byte += scale.to_bytes(4, "big")
+                for x in range(0x30 - 0x10):
+                    repl_byte += byte_stream[x + 0x10].to_bytes(1, "big")
+                byte_stream = repl_byte
+            if map_index == 0x1A and _id == 0x24:
+                repl_byte = b""
+                coord = [0, 0, 0]
+                # raw_coords = [1418,725,6.5,522.716]
+                raw_coords = [1455.853, 6.5, 522.716]
+                coord[0] = int(float_to_hex(raw_coords[0]), 16)
+                coord[1] = int(float_to_hex(raw_coords[1]), 16)
+                coord[2] = int(float_to_hex(raw_coords[2]), 16)
+                _ay = int(float_to_hex(0), 16)
+                for x in coord:
+                    repl_byte += x.to_bytes(4, "big")
+                for x in range(0x1C - 0xC):
+                    repl_byte += byte_stream[x + 0xC].to_bytes(1, "big")
+                repl_byte += _ay.to_bytes(4, "big")
+                for x in range(0x30 - 0x20):
+                    repl_byte += byte_stream[x + 0x20].to_bytes(1, "big")
+                byte_stream = repl_byte
+            if map_index == 0x1A and _id >= 0x67 and _id <= 0x76:
+                # Number Game Switches
+                repl_byte = b""
+                switch_index = _id - 0x67
+                switch_y = switch_index % 4
+                switch_x = int(switch_index / 4)
+                tl_x = 2606.114
+                tl_z = 1767.899
+                switch_d = 37.7
+                coord = [0, 0, 0]
+                coord[0] = int(float_to_hex(tl_x + (switch_d * switch_x)), 16)
+                coord[1] = int(float_to_hex(1002), 16)
+                coord[2] = int(float_to_hex(tl_z + (switch_d * switch_y)), 16)
+                for x in coord:
+                    repl_byte += x.to_bytes(4, "big")
+                for x in range(0x1C - 0xC):
+                    repl_byte += byte_stream[x + 0xC].to_bytes(1, "big")
+                repl_byte += _ay.to_bytes(4, "big")
+                for x in range(0x30 - 0x20):
+                    repl_byte += byte_stream[x + 0x20].to_bytes(1, "big")
+                byte_stream = repl_byte
+                _ay = int(float_to_hex(180), 16)
+            if map_index == 0x48:
+                if _id == 0x57 or _id == 0xCF:
+                    # Move W3 and Tiny bunch near 5DI
+                    repl_byte = b""
+                    loc_x = 176.505
+                    loc_z = 1089.408
+                    repl_byte += int(float_to_hex(loc_x), 16).to_bytes(4, "big")
+                    for x in range(4):
+                        repl_byte += byte_stream[x + 4].to_bytes(1, "big")
+                    repl_byte += int(float_to_hex(loc_z), 16).to_bytes(4, "big")
+                    for x in range(0x30 - 0xC):
+                        repl_byte += byte_stream[x + 0xC].to_bytes(1, "big")
+                    byte_stream = repl_byte
+            if map_index == 0xCD:
+                # Standardize lanky phase buttons
+                buttons = (0xE, 0xF, 0x10, 0x11)
+                platforms = (0xD, 0x13, 0x14, 0x12)
+                button_loc = ((780, 419.629), (1135.232, 780), (780, 1116.334), (438.904, 780))
+                platform_loc = ((778.365, 396.901), (1158.427, 778.632), (780.283, 1138.851), (416.092, 778.456))
+                if _id >= 0xD and _id <= 0x14:
+                    x = 0
+                    z = 0
+                    if _id in buttons:
+                        index = buttons.index(_id)
+                        x = button_loc[index][0]
+                        z = button_loc[index][1]
+                    else:
+                        index = platforms.index(_id)
+                        x = platform_loc[index][0]
+                        z = platform_loc[index][1]
+                    repl_byte = b""
+                    repl_byte += int(float_to_hex(x), 16).to_bytes(4, "big")
+                    for x in range(4):
+                        repl_byte += byte_stream[x + 4].to_bytes(1, "big")
+                    repl_byte += int(float_to_hex(z), 16).to_bytes(4, "big")
+                    for x in range(0x30 - 0xC):
+                        repl_byte += byte_stream[x + 0xC].to_bytes(1, "big")
+                    byte_stream = repl_byte
+            if map_index == 0x7 and _id == 0xC9:
+                repl_byte = b""
+                new_y = int(float_to_hex(400), 16)
+                for x in range(0x4):
+                    repl_byte += byte_stream[x].to_bytes(1, "big")
+                repl_byte += new_y.to_bytes(4, "big")
+                for x in range(0x30 - 0x8):
+                    repl_byte += byte_stream[x + 0x8].to_bytes(1, "big")
+                byte_stream = repl_byte
+            data = {"stream": byte_stream, "type": _type}
+            model2.append(data)
+            read_location += 0x30
+        shop_signs = getMoveSignData(map_index, base_stream)
+        vine_data = generateVineSeries(map_index)
+        # if len(shop_signs) != 0:
+        #     print(shop_signs)
+        for sign in shop_signs:
+            added_actor.append(sign)
+        mystery_count = int.from_bytes(byte_read[read_location : read_location + 4], "big")
+        read_location += 4
+        for x in range(mystery_count):
+            byte_stream = byte_read[read_location : read_location + 0x24]
+            data = {"stream": byte_stream}
+            mystery.append(data)
+            read_location += 0x24
+        actor_count = int.from_bytes(byte_read[read_location : read_location + 4], "big")
+        read_location += 4
+        for x in range(actor_count):
+            byte_stream = byte_read[read_location : read_location + 0x38]
+            obj_id = int.from_bytes(byte_read[read_location + 0x34 : read_location + 0x36], "big")
+            if map_index == 0x1A and obj_id == 13:
+                temp = []
+                for y in range(0x38):
+                    temp.append(byte_stream[y])
+                byte_stream = temp.copy()
+                new_x = 1237.001
+                new_y = 175
+                new_z = 840.569
+                writedatatoarr(byte_stream, int(float_to_hex(new_x), 16), 4, 0x0)
+                writedatatoarr(byte_stream, int(float_to_hex(new_y), 16), 4, 0x4)
+                writedatatoarr(byte_stream, int(float_to_hex(new_z), 16), 4, 0x8)
+            elif map_index == 0x1E and obj_id == 36:
+                # tag barrel near mermaid in galleon
+                temp = []
+                for y in range(0x38):
+                    temp.append(byte_stream[y])
+                byte_stream = temp.copy()
+                new_y = 383.8333
+                writedatatoarr(byte_stream, int(float_to_hex(new_y), 16), 4, 0x4)
+            elif map_index == 0x1E and obj_id in (23, 25):
+                temp = []
+                for y in range(0x38):
+                    temp.append(byte_stream[y])
+                byte_stream = temp.copy()
+                new_x = 1296
+                new_y = 1600
+                new_z = 2028
+                if obj_id == 23:
+                    writedatatoarr(byte_stream, int(float_to_hex(new_x), 16), 4, 0x0)
+                    writedatatoarr(byte_stream, int(float_to_hex(new_z), 16), 4, 0x8)
+                writedatatoarr(byte_stream, int(float_to_hex(new_y), 16), 4, 0x4)
+            elif map_index == 0x11 and not added_helm_faces:
+                face_z = 5423.538
+                face_hi = 160
+                face_lo = 104.5
+                face_coords = [[575.763, face_hi], [494.518, face_hi], [606.161, face_lo], [534.567, face_lo], [463.642, face_lo]]
+                for face_index, face in enumerate(face_coords):
+                    added_actor.append(
+                        {
+                            "base_byte_stream": byte_stream,
+                            "x": int(float_to_hex(face[0]), 16),
+                            "y": int(float_to_hex(face[1]), 16),
+                            "z": int(float_to_hex(face_z), 16),
+                            "id": 0x100 + face_index,
+                            "type": 70 - 16,
+                            "rx": 0,
+                            "ry": 0,
+                            "rz": 0,
+                            "scale": int(float_to_hex(0.35), 16),
+                        }
+                    )
+                added_helm_faces = True
+            elif map_index == 0x56 and not added_5di_strongkong:
+                added_actor.append(
+                    {
+                        "base_byte_stream": byte_stream,
+                        "x": int(float_to_hex(118.011), 16),
+                        "y": int(float_to_hex(20), 16),
+                        "z": int(float_to_hex(462.749), 16),
+                        "id": 0x20,
+                        "type": 0x39 - 16,
+                        "rx": 0,
+                        "ry": 1024,
+                        "rz": 0,
+                        "scale": int(float_to_hex(1), 16),
+                    }
+                )
+                added_5di_strongkong = True
+            # Vine Memes
+            if len(vine_data["add"]) > 0:
+                for vine_add in vine_data["add"]:
+                    if obj_id == vine_add["id_base"]:
+                        added_actor.append(
+                            {
+                                "base_byte_stream": byte_stream,
+                                "x": int(float_to_hex(vine_add["x"]), 16),
+                                "y": int(float_to_hex(vine_add["y"]), 16),
+                                "z": int(float_to_hex(vine_add["z"]), 16),
+                                "id": vine_add["id"],
+                                "use_byte_stream": True,
+                            }
+                        )
+            if len(vine_data["change"]) > 0:
+                for vine_change in vine_data["change"]:
+                    if obj_id == vine_change["id"]:
+                        temp = []
+                        for y in range(0x38):
+                            temp.append(byte_stream[y])
+                        byte_stream = temp.copy()
+                        writedatatoarr(byte_stream, int(float_to_hex(vine_change["x"]), 16), 4, 0x0)
+                        writedatatoarr(byte_stream, int(float_to_hex(vine_change["y"]), 16), 4, 0x4)
+                        writedatatoarr(byte_stream, int(float_to_hex(vine_change["z"]), 16), 4, 0x8)
+            data = {"stream": byte_stream}
+            actor.append(data)
+            read_location += 0x38
+        for x in added_actor:
+            byte_stream_arr = []
+            for y in range(0x38):
+                if "use_byte_stream" in x and x["use_byte_stream"] and "base_byte_stream" in x:
+                    byte_stream_arr.append(x["base_byte_stream"][y])
+                else:
+                    byte_stream_arr.append(0)
+            if "x" in x:
+                writedatatoarr(byte_stream_arr, x["x"], 4, 0x0)
+            if "y" in x:
+                writedatatoarr(byte_stream_arr, x["y"], 4, 0x4)
+            if "z" in x:
+                writedatatoarr(byte_stream_arr, x["z"], 4, 0x8)
+            if "scale" in x:
+                writedatatoarr(byte_stream_arr, x["scale"], 4, 0xC)
+            if "ry" in x:
+                writedatatoarr(byte_stream_arr, x["ry"], 2, 0x30)
+            if "type" in x:
+                writedatatoarr(byte_stream_arr, x["type"], 2, 0x32)
+            if "id" in x:
+                writedatatoarr(byte_stream_arr, x["id"], 2, 0x34)
+            actor.append({"stream": byte_stream_arr})
+        for x in added_model2:
+            byte_stream_arr = []
+            for y in range(0x10):
+                byte_stream_arr.append(0)
+            new_data_1 = [0xFF, 0xFB, 0x00, 0x00, 0x15, 0x00, 0x00, 0x00, 0x40, 0xC0, 0x00, 0x00, 0x43, 0xB3, 0x00, 0x00]
+            for y in new_data_1:
+                byte_stream_arr.append(y)
+            for y in range(0xC):
+                byte_stream_arr.append(0)
+            new_data_2 = [0x0, 0x1, 0x0, 0x0]
+            for y in new_data_2:
+                byte_stream_arr.append(y)
+            # byte_stream_arr = []
+            # for y in range(0x30):
+            # 	byte_stream_arr.append(0)
+            byte_stream_arr = writedatatoarr(byte_stream_arr, x["type"], 2, 0x28)
+            byte_stream_arr = writedatatoarr(byte_stream_arr, x["id"], 2, 0x2A)
+            byte_stream_arr = writedatatoarr(byte_stream_arr, x["scale"], 4, 0xC)
+
+            byte_stream_arr = writedatatoarr(byte_stream_arr, x["x"], 4, 0x0)
+            byte_stream_arr = writedatatoarr(byte_stream_arr, x["y"], 4, 0x4)
+            byte_stream_arr = writedatatoarr(byte_stream_arr, x["z"], 4, 0x8)
+
+            byte_stream_arr = writedatatoarr(byte_stream_arr, x["rx"], 4, 0x18)
+            byte_stream_arr = writedatatoarr(byte_stream_arr, x["ry"], 4, 0x1C)
+            byte_stream_arr = writedatatoarr(byte_stream_arr, x["rz"], 4, 0x20)
+
+            model2.append({"stream": byte_stream_arr})
+        with open(file_name.replace(".bin", "_.bin"), "wb") as fg:
+            fg.write(len(model2).to_bytes(4, "big"))
+            for x in model2:
+                fg.write(bytearray(x["stream"]))
+            fg.write(len(mystery).to_bytes(4, "big"))
+            for x in mystery:
+                fg.write(bytearray(x["stream"]))
+            fg.write(len(actor).to_bytes(4, "big"))
+            for x in actor:
+                fg.write(bytearray(x["stream"]))

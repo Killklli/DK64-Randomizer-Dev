@@ -1,1 +1,1 @@
-'List data for randomizer.'
+"""List data for randomizer."""

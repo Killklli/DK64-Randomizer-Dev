@@ -1,99 +1,219 @@
-'Apply CB Rando changes.'
-_B='balloons'
-_A='cb'
+"""Apply CB Rando changes."""
 import js
 from randomizer.Patching.Patcher import ROM
 from randomizer.Enums.Levels import Levels
 from randomizer.Spoiler import Spoiler
-from randomizer.Patching.Lib import float_to_hex,short_to_ushort
-import randomizer.Lists.CBLocations.JungleJapesCBLocations,randomizer.Lists.CBLocations.AngryAztecCBLocations,randomizer.Lists.CBLocations.FranticFactoryCBLocations,randomizer.Lists.CBLocations.GloomyGalleonCBLocations,randomizer.Lists.CBLocations.FungiForestCBLocations,randomizer.Lists.CBLocations.CrystalCavesCBLocations,randomizer.Lists.CBLocations.CreepyCastleCBLocations
-level_data={Levels.JungleJapes:{_A:randomizer.Lists.CBLocations.JungleJapesCBLocations.ColoredBananaGroupList,_B:randomizer.Lists.CBLocations.JungleJapesCBLocations.BalloonList},Levels.AngryAztec:{_A:randomizer.Lists.CBLocations.AngryAztecCBLocations.ColoredBananaGroupList,_B:randomizer.Lists.CBLocations.AngryAztecCBLocations.BalloonList},Levels.FranticFactory:{_A:randomizer.Lists.CBLocations.FranticFactoryCBLocations.ColoredBananaGroupList,_B:randomizer.Lists.CBLocations.FranticFactoryCBLocations.BalloonList},Levels.GloomyGalleon:{_A:randomizer.Lists.CBLocations.GloomyGalleonCBLocations.ColoredBananaGroupList,_B:randomizer.Lists.CBLocations.GloomyGalleonCBLocations.BalloonList},Levels.FungiForest:{_A:randomizer.Lists.CBLocations.FungiForestCBLocations.ColoredBananaGroupList,_B:randomizer.Lists.CBLocations.FungiForestCBLocations.BalloonList},Levels.CrystalCaves:{_A:randomizer.Lists.CBLocations.CrystalCavesCBLocations.ColoredBananaGroupList,_B:randomizer.Lists.CBLocations.CrystalCavesCBLocations.BalloonList},Levels.CreepyCastle:{_A:randomizer.Lists.CBLocations.CreepyCastleCBLocations.ColoredBananaGroupList,_B:randomizer.Lists.CBLocations.CreepyCastleCBLocations.BalloonList}}
-def randomize_cbs(spoiler):
-	'Place Colored Bananas into ROM.';u='pointing_to';t='entries';k=spoiler;j=True;i=False;h='kong';B='big'
-	if k.settings.cb_rando:
-		for W in range(216):
-			v=[10,13,22,30,31,43,517,518,519,520];w=[91,111,112,113,114];G=js.pointer_addresses[9][t][W][u];ROM().seek(G);N=int.from_bytes(ROM().readBytes(4),B);O=[];X=[]
-			for J in range(N):
-				Y=G+4+J*48;ROM().seek(Y+40);x=int.from_bytes(ROM().readBytes(2),B)
-				if x not in v:
-					ROM().seek(Y+42);X.append(int.from_bytes(ROM().readBytes(2),B));ROM().seek(Y);A=[]
-					for C in range(int(48/4)):A.append(int.from_bytes(ROM().readBytes(4),B))
-					O.append(A)
-			ROM().seek(G+4+48*N);l=int.from_bytes(ROM().readBytes(4),B);Z=[]
-			for J in range(l):
-				ROM().seek(G+4+N*48+4+J*36);A=[]
-				for C in range(int(36/4)):A.append(int.from_bytes(ROM().readBytes(4),B))
-				Z.append(A)
-			m=G+4+48*N+4+36*l;ROM().seek(m);y=int.from_bytes(ROM().readBytes(4),B);P=[];a=[];b=[]
-			for J in range(y):
-				Q=m+4+J*56;ROM().seek(Q+50);z=int.from_bytes(ROM().readBytes(2),B)+16
-				if z not in w:
-					ROM().seek(Q+52);a.append(int.from_bytes(ROM().readBytes(2),B));ROM().seek(Q);A=[]
-					for C in range(int(56/4)):A.append(int.from_bytes(ROM().readBytes(4),B))
-					P.append(A)
-				else:
-					ROM().seek(Q+18);K=int.from_bytes(ROM().readBytes(2),B)
-					if K not in b:b.append(K)
-			R=js.pointer_addresses[15][t][W][u];ROM().seek(R);A0=int.from_bytes(ROM().readBytes(2),B);H=[];c=[];d=2
-			for A7 in range(A0):
-				ROM().seek(R+d);K=int.from_bytes(ROM().readBytes(2),B);n=int.from_bytes(ROM().readBytes(2),B)
-				if K not in b:
-					A1=6+n*10;A=[];ROM().seek(R+d)
-					for C in range(int(A1/2)):A.append(int.from_bytes(ROM().readBytes(2),B))
-					H.append(A);c.append(K)
-				d+=6+10*n
-			S=0;T=0;U=0
-			for D in k.cb_placements:
-				if D['map']==W:
-					e=D['type'];A2=level_data[D['level']][e]
-					if e==_A:
-						A3=[13,10,30,22,31];A4=[43,520,517,519,518]
-						for L in D['locations']:
-							A=[];A.extend([int(float_to_hex(L[2]),16),int(float_to_hex(L[3]),16),int(float_to_hex(L[4]),16),int(float_to_hex(L[1]),16)]);A.append(2);A.append(29884415)
-							for C in range(int((36-24)/4)):A.append(0)
-							A.append(1077936128);f=0
-							if L[0]==5:f=A4[D[h]]
-							else:f=A3[D[h]]
-							o=i;p=0
-							while not o:
-								if S not in X:X.append(S);p=S;o=j
-								S+=1
-							A.append((f<<16)+p);A.append((2<<16)+1);O.append(A)
-					for I in A2:
-						if e==_B and I.id==D['id']:
-							A5=[114,91,113,112,111];A=[]
-							for A6 in I.setSpawnPoint(I.points):A.append(int(float_to_hex(A6),16))
-							A.append(int(float_to_hex(1),16));q=i;E=0;r=i;s=0
-							while not q:
-								if U not in c:c.append(U);E=U;q=j
-								U+=1
-							while not r:
-								if T not in a:a.append(T);s=T;r=j
-								T+=1
-							if E<26:A.append(E)
-							else:A.append(65535)
-							A.append(I.speed)
-							for C in range(int((48-24)/4)):A.append(0)
-							A.append(A5[D[h]]-16);A.append((s<<16)+28168);P.append(A)
-							if E<26:
-								A=[];A.append(E);A.append(len(I.points));A.append(0)
-								for g in I.points:A.append(20);A.append(short_to_ushort(g[0]));A.append(short_to_ushort(g[1]));A.append(short_to_ushort(g[2]));A.append((1<<8)+0)
-								V=[]
-								for M in H:
-									if M[0]<E:V.append(M)
-								V.append(A)
-								for M in H:
-									if M[0]>E:V.append(M)
-								H=V.copy()
-			ROM().seek(G);ROM().writeMultipleBytes(len(O),4)
-			for C in O:
-				for F in C:ROM().writeMultipleBytes(F,4)
-			ROM().writeMultipleBytes(len(Z),4)
-			for C in Z:
-				for F in C:ROM().writeMultipleBytes(F,4)
-			ROM().writeMultipleBytes(len(P),4)
-			for C in P:
-				for F in C:ROM().writeMultipleBytes(F,4)
-			ROM().seek(R);ROM().writeMultipleBytes(len(H),2)
-			for C in H:
-				for F in C:ROM().writeMultipleBytes(F,2)
+from randomizer.Patching.Lib import float_to_hex, short_to_ushort
+
+import randomizer.Lists.CBLocations.JungleJapesCBLocations
+import randomizer.Lists.CBLocations.AngryAztecCBLocations
+import randomizer.Lists.CBLocations.FranticFactoryCBLocations
+import randomizer.Lists.CBLocations.GloomyGalleonCBLocations
+import randomizer.Lists.CBLocations.FungiForestCBLocations
+import randomizer.Lists.CBLocations.CrystalCavesCBLocations
+import randomizer.Lists.CBLocations.CreepyCastleCBLocations
+
+level_data = {
+    Levels.JungleJapes: {"cb": randomizer.Lists.CBLocations.JungleJapesCBLocations.ColoredBananaGroupList, "balloons": randomizer.Lists.CBLocations.JungleJapesCBLocations.BalloonList},
+    Levels.AngryAztec: {"cb": randomizer.Lists.CBLocations.AngryAztecCBLocations.ColoredBananaGroupList, "balloons": randomizer.Lists.CBLocations.AngryAztecCBLocations.BalloonList},
+    Levels.FranticFactory: {"cb": randomizer.Lists.CBLocations.FranticFactoryCBLocations.ColoredBananaGroupList, "balloons": randomizer.Lists.CBLocations.FranticFactoryCBLocations.BalloonList},
+    Levels.GloomyGalleon: {"cb": randomizer.Lists.CBLocations.GloomyGalleonCBLocations.ColoredBananaGroupList, "balloons": randomizer.Lists.CBLocations.GloomyGalleonCBLocations.BalloonList},
+    Levels.FungiForest: {"cb": randomizer.Lists.CBLocations.FungiForestCBLocations.ColoredBananaGroupList, "balloons": randomizer.Lists.CBLocations.FungiForestCBLocations.BalloonList},
+    Levels.CrystalCaves: {"cb": randomizer.Lists.CBLocations.CrystalCavesCBLocations.ColoredBananaGroupList, "balloons": randomizer.Lists.CBLocations.CrystalCavesCBLocations.BalloonList},
+    Levels.CreepyCastle: {"cb": randomizer.Lists.CBLocations.CreepyCastleCBLocations.ColoredBananaGroupList, "balloons": randomizer.Lists.CBLocations.CreepyCastleCBLocations.BalloonList},
+}
+
+
+def randomize_cbs(spoiler: Spoiler):
+    """Place Colored Bananas into ROM."""
+    if spoiler.settings.cb_rando:
+        for cont_map_id in range(216):
+            # Wipe setup and paths of CB information
+            # SETUP
+            modeltwo_cbs = [0xA, 0xD, 0x16, 0x1E, 0x1F, 0x2B, 0x205, 0x206, 0x207, 0x208]
+            actor_cbs = [91, 111, 112, 113, 114]
+            setup_table = js.pointer_addresses[9]["entries"][cont_map_id]["pointing_to"]
+            ROM().seek(setup_table)
+            model2_count = int.from_bytes(ROM().readBytes(4), "big")
+            # Model Two CBs
+            persisted_m2_data = []
+            used_m2_ids = []
+            for item in range(model2_count):
+                item_start = setup_table + 4 + (item * 0x30)
+                ROM().seek(item_start + 0x28)
+                item_type = int.from_bytes(ROM().readBytes(2), "big")
+                if item_type not in modeltwo_cbs:  # Not CB
+                    ROM().seek(item_start + 0x2A)
+                    used_m2_ids.append(int.from_bytes(ROM().readBytes(2), "big"))
+                    ROM().seek(item_start)
+                    item_data = []
+                    for x in range(int(0x30 / 4)):
+                        item_data.append(int.from_bytes(ROM().readBytes(4), "big"))
+                    persisted_m2_data.append(item_data)
+            ROM().seek(setup_table + 4 + (0x30 * model2_count))
+            mystery_count = int.from_bytes(ROM().readBytes(4), "big")
+            # Mystery
+            persisted_mys_data = []
+            for item in range(mystery_count):
+                ROM().seek(setup_table + 4 + (model2_count * 0x30) + 4 + (item * 0x24))
+                item_data = []
+                for x in range(int(0x24 / 4)):
+                    item_data.append(int.from_bytes(ROM().readBytes(4), "big"))
+                persisted_mys_data.append(item_data)
+            actor_block = setup_table + 4 + (0x30 * model2_count) + 4 + (0x24 * mystery_count)
+            ROM().seek(actor_block)
+            actor_count = int.from_bytes(ROM().readBytes(4), "big")
+            # Actors
+            persisted_act_data = []
+            used_actor_ids = []
+            remove_paths = []
+            for item in range(actor_count):
+                actor_start = actor_block + 4 + (item * 0x38)
+                ROM().seek(actor_start + 0x32)
+                actor_type = int.from_bytes(ROM().readBytes(2), "big") + 0x10
+                if actor_type not in actor_cbs:
+                    ROM().seek(actor_start + 0x34)
+                    used_actor_ids.append(int.from_bytes(ROM().readBytes(2), "big"))
+                    ROM().seek(actor_start)
+                    item_data = []
+                    for x in range(int(0x38 / 4)):
+                        item_data.append(int.from_bytes(ROM().readBytes(4), "big"))
+                    persisted_act_data.append(item_data)
+                else:
+                    ROM().seek(actor_start + 0x12)
+                    path_id = int.from_bytes(ROM().readBytes(2), "big")
+                    if path_id not in remove_paths:
+                        remove_paths.append(path_id)
+            # PATHS
+            path_table = js.pointer_addresses[15]["entries"][cont_map_id]["pointing_to"]
+            ROM().seek(path_table)
+            path_count = int.from_bytes(ROM().readBytes(2), "big")
+            persisted_paths = []
+            used_path_ids = []
+            path_offset = 2
+            for path_index in range(path_count):
+                ROM().seek(path_table + path_offset)
+                path_id = int.from_bytes(ROM().readBytes(2), "big")
+                point_count = int.from_bytes(ROM().readBytes(2), "big")
+                if path_id not in remove_paths:
+                    path_size = 6 + (point_count * 10)
+                    item_data = []
+                    ROM().seek(path_table + path_offset)
+                    for x in range(int(path_size / 2)):
+                        item_data.append(int.from_bytes(ROM().readBytes(2), "big"))
+                    persisted_paths.append(item_data)
+                    used_path_ids.append(path_id)
+                path_offset += 6 + (10 * point_count)
+            # Place all new colored bananas
+            new_id = 0
+            act_id = 0
+            npath_id = 0
+            for new_cb in spoiler.cb_placements:
+                if new_cb["map"] == cont_map_id:
+                    cb_type = new_cb["type"]
+                    associated_list = level_data[new_cb["level"]][cb_type]
+                    if cb_type == "cb":
+                        # Model Two CBs
+                        singles = [0xD, 0xA, 0x1E, 0x16, 0x1F]
+                        bunches = [0x2B, 0x208, 0x205, 0x207, 0x206]
+                        for loc in new_cb["locations"]:
+                            item_data = []
+                            item_data.extend([int(float_to_hex(loc[2]), 16), int(float_to_hex(loc[3]), 16), int(float_to_hex(loc[4]), 16), int(float_to_hex(loc[1]), 16)])
+                            item_data.append(2)
+                            item_data.append(0x01C7FFFF)
+                            for x in range(int((0x24 - 0x18) / 4)):
+                                item_data.append(0)
+                            item_data.append(0x40400000)
+                            cb_item_type = 0
+                            if loc[0] == 5:
+                                cb_item_type = bunches[new_cb["kong"]]
+                            else:
+                                cb_item_type = singles[new_cb["kong"]]
+                            found_vacant = False
+                            found_id = 0
+                            while not found_vacant:
+                                if new_id not in used_m2_ids:
+                                    used_m2_ids.append(new_id)
+                                    found_id = new_id
+                                    found_vacant = True
+                                new_id += 1
+                            item_data.append((cb_item_type << 16) + found_id)
+                            item_data.append((2 << 16) + 1)
+                            persisted_m2_data.append(item_data)
+                    for list_item in associated_list:
+                        if cb_type == "balloons" and list_item.id == new_cb["id"]:
+                            # Found balloon
+                            # Setup
+                            balloons = [114, 91, 113, 112, 111]
+                            item_data = []
+                            for coord in list_item.setSpawnPoint(list_item.points):
+                                item_data.append(int(float_to_hex(coord), 16))  # x y z
+                            item_data.append(int(float_to_hex(1), 16))  # Scale
+                            found_vacant_path = False
+                            found_path_id = 0
+                            found_vacant_actor = False
+                            found_actor_id = 0
+                            while not found_vacant_path:
+                                if npath_id not in used_path_ids:
+                                    used_path_ids.append(npath_id)
+                                    found_path_id = npath_id
+                                    found_vacant_path = True
+                                npath_id += 1
+                            while not found_vacant_actor:
+                                if act_id not in used_actor_ids:
+                                    used_actor_ids.append(act_id)
+                                    found_actor_id = act_id
+                                    found_vacant_actor = True
+                                act_id += 1
+                            if found_path_id < 26:
+                                item_data.append(found_path_id)
+                            else:
+                                item_data.append(0xFFFF)  # Fixes a crash from too many balloons - might have some side-effects
+                            item_data.append(list_item.speed)
+                            for x in range(int((0x30 - 0x18) / 4)):
+                                item_data.append(0)
+                            item_data.append(balloons[new_cb["kong"]] - 16)
+                            item_data.append((found_actor_id << 16) + 0x6E08)
+                            persisted_act_data.append(item_data)
+                            # Path
+                            if found_path_id < 26:  # Crashing issues with more than 26 paths
+                                item_data = []
+                                item_data.append(found_path_id)
+                                item_data.append(len(list_item.points))
+                                item_data.append(0)
+                                for pt in list_item.points:
+                                    item_data.append(20)
+                                    item_data.append(short_to_ushort(pt[0]))
+                                    item_data.append(short_to_ushort(pt[1]))
+                                    item_data.append(short_to_ushort(pt[2]))
+                                    item_data.append((1 << 8) + 0)
+                                new_paths = []
+                                for path in persisted_paths:
+                                    if path[0] < found_path_id:
+                                        new_paths.append(path)
+                                new_paths.append(item_data)
+                                for path in persisted_paths:
+                                    if path[0] > found_path_id:
+                                        new_paths.append(path)
+                                persisted_paths = new_paths.copy()
+            # Recompile Tables
+            # SETUP
+            ROM().seek(setup_table)
+            ROM().writeMultipleBytes(len(persisted_m2_data), 4)
+            for x in persisted_m2_data:
+                for y in x:
+                    ROM().writeMultipleBytes(y, 4)
+            ROM().writeMultipleBytes(len(persisted_mys_data), 4)
+            for x in persisted_mys_data:
+                for y in x:
+                    ROM().writeMultipleBytes(y, 4)
+            ROM().writeMultipleBytes(len(persisted_act_data), 4)
+            for x in persisted_act_data:
+                for y in x:
+                    ROM().writeMultipleBytes(y, 4)
+            # print(f"{hex(cont_map_id)}: {hex(path_table)}")
+            ROM().seek(path_table)
+            ROM().writeMultipleBytes(len(persisted_paths), 2)
+            for x in persisted_paths:
+                for y in x:
+                    ROM().writeMultipleBytes(y, 2)

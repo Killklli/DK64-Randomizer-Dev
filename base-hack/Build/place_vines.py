@@ -1,24 +1,45 @@
-'Generate vine series with better behavior.'
-_F='map'
-_E='ids'
-_D='points'
-_C='z'
-_B='y'
-_A='x'
+"""Generate vine series with better behavior."""
 import math
-vine_series=[{_F:7,_D:[{_A:1786.297,_B:600.5,_C:2100.627},{_A:1471.689,_B:600.5,_C:2100.627}],_E:[9,10,11]},{_F:7,_D:[{_A:915.847,_B:573.5,_C:1910.881},{_A:804.597,_B:610,_C:2241.639}],_E:[24,25,26]},{_F:176,_D:[{_A:1629.996,_B:320.167,_C:1190.991},{_A:2016.762,_B:300,_C:1176.268}],_E:[0,1,2]},{_F:34,_D:[{_A:2690.722,_B:986,_C:1107.726},{_A:3228.038,_B:986,_C:1169.691}],_E:[1,2,3,4]},{_F:48,_D:[{_A:2056.362,_B:490.081,_C:2366.29},{_A:2153.628,_B:471.435,_C:2662.234}],_E:[31,33,34]},{_F:48,_D:[{_A:2519.823,_B:470.453,_C:2780.688},{_A:2270.045,_B:440,_C:3045.1}],_E:[29,30,32]},{_F:30,_D:[{_A:3074.465,_B:1964,_C:3409.648},{_A:3071.741,_B:1962.337,_C:3060.115}],_E:[8,9,10]},{_F:38,_D:[{_A:2491.337,_B:340.591,_C:1072.511},{_A:2216.48,_B:379.958,_C:1453.899}],_E:[19,20,22,23]},{_F:38,_D:[{_A:3113.786,_B:391.4,_C:4220.393},{_A:3380.865,_B:392.297,_C:4262.602}],_E:[14,15,16]},{_F:64,_D:[{_A:304.701,_B:1071.474,_C:518.836},{_A:710.539,_B:1071.5,_C:510}],_E:[3,4,5,6]}]
-def generateVineSeries(map_id):
-	'Generate vine placements based on point differences.';N='add';M='change';E={M:[],N:[]};O=120;F=240
-	for A in vine_series:
-		if A[_F]==map_id:
-			G=[_A,_B,_C];D={};H=0
-			for B in G:D[B]=A[_D][1][B]-A[_D][0][B];H+=D[B]*D[B]
-			P=math.sqrt(H);I=[{_A:A[_D][0][_A],_B:A[_D][0][_B],_C:A[_D][0][_C]}];J=max(math.ceil(P/O),len(A[_E])-1)
-			for Q in range(J):
-				K={}
-				for B in G:K[B]=A[_D][0][B]+(Q+1)/J*D[B]
-				I.append(K)
-			for (L,C) in enumerate(I):
-				if L>=len(A[_E]):E[N].append({_A:C[_A],_B:C[_B],_C:C[_C],'id_base':A[_E][0],'id':F});F+=1
-				else:E[M].append({_A:C[_A],_B:C[_B],_C:C[_C],'id':A[_E][L]})
-	return E
+
+vine_series = [
+    {"map": 0x7, "points": [{"x": 1786.297, "y": 600.5, "z": 2100.627}, {"x": 1471.689, "y": 600.5, "z": 2100.627}], "ids": [9, 10, 11]},
+    {"map": 0x7, "points": [{"x": 915.847, "y": 573.5, "z": 1910.881}, {"x": 804.597, "y": 610, "z": 2241.639}], "ids": [24, 25, 26]},
+    {"map": 0xB0, "points": [{"x": 1629.996, "y": 320.167, "z": 1190.991}, {"x": 2016.762, "y": 300, "z": 1176.268}], "ids": [0, 1, 2]},
+    {"map": 0x22, "points": [{"x": 2690.722, "y": 986, "z": 1107.726}, {"x": 3228.038, "y": 986, "z": 1169.691}], "ids": [1, 2, 3, 4]},
+    {"map": 0x30, "points": [{"x": 2056.362, "y": 490.081, "z": 2366.29}, {"x": 2153.628, "y": 471.435, "z": 2662.234}], "ids": [31, 33, 34]},
+    {"map": 0x30, "points": [{"x": 2519.823, "y": 470.453, "z": 2780.688}, {"x": 2270.045, "y": 440, "z": 3045.1}], "ids": [29, 30, 32]},
+    {"map": 0x1E, "points": [{"x": 3074.465, "y": 1964, "z": 3409.648}, {"x": 3071.741, "y": 1962.337, "z": 3060.115}], "ids": [8, 9, 10]},
+    {"map": 0x26, "points": [{"x": 2491.337, "y": 340.591, "z": 1072.511}, {"x": 2216.48, "y": 379.958, "z": 1453.899}], "ids": [19, 20, 22, 23]},
+    {"map": 0x26, "points": [{"x": 3113.786, "y": 391.4, "z": 4220.393}, {"x": 3380.865, "y": 392.297, "z": 4262.602}], "ids": [14, 15, 16]},
+    {"map": 0x40, "points": [{"x": 304.701, "y": 1071.474, "z": 518.836}, {"x": 710.539, "y": 1071.5, "z": 510}], "ids": [3, 4, 5, 6]},
+]
+
+
+def generateVineSeries(map_id: int) -> dict:
+    """Generate vine placements based on point differences."""
+    data = {"change": [], "add": []}
+    max_dist = 120
+    new_id = 0xF0
+    for series in vine_series:
+        if series["map"] == map_id:
+            coords = ["x", "y", "z"]
+            delta = {}
+            delta_total = 0
+            for coord in coords:
+                delta[coord] = series["points"][1][coord] - series["points"][0][coord]
+                delta_total += delta[coord] * delta[coord]
+            chain_delta = math.sqrt(delta_total)
+            vine_points = [{"x": series["points"][0]["x"], "y": series["points"][0]["y"], "z": series["points"][0]["z"]}]
+            point_count = max(math.ceil(chain_delta / max_dist), len(series["ids"]) - 1)
+            for point_index in range(point_count):
+                point = {}
+                for coord in coords:
+                    point[coord] = series["points"][0][coord] + (((point_index + 1) / point_count) * delta[coord])
+                vine_points.append(point)
+            for pt_i, pt in enumerate(vine_points):
+                if pt_i >= len(series["ids"]):
+                    data["add"].append({"x": pt["x"], "y": pt["y"], "z": pt["z"], "id_base": series["ids"][0], "id": new_id})
+                    new_id += 1
+                else:
+                    data["change"].append({"x": pt["x"], "y": pt["y"], "z": pt["z"], "id": series["ids"][pt_i]})
+    return data

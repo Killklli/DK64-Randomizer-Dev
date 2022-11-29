@@ -1,61 +1,228 @@
-'Adjust exits to prevent logical problems with LZR.'
-_F='exits'
-_E='containing_map'
-_D='z'
-_C='y'
-_B='x'
-_A='exit_index'
+"""Adjust exits to prevent logical problems with LZR."""
 from typing import BinaryIO
-import zlib,struct,os
-pointer_table_address=1055824
-setup_index=9
-pointer_table_index=23
-new_caves_portal_coords=[120.997,50,1182.974]
+import zlib
+import struct
+import os
+
+pointer_table_address = 0x101C50
+setup_index = 9
+pointer_table_index = 23
+
+new_caves_portal_coords = [120.997, 50, 1182.974]
+
+
 def int_to_float(val):
-	'Convert a hex int to a float.'
-	if val==0:return 0
-	return struct.unpack('!f',bytes.fromhex(hex(val).split('0x')[1]))[0]
-exit_adjustments=[{_E:48,_F:[{_A:3,_B:3429,_C:462,_D:4494},{_A:6,_B:4153,_C:163,_D:3721},{_A:4,_B:3982,_C:115,_D:2026},{_A:5,_B:4550,_C:162,_D:3646}]},{_E:30,_F:[{_A:10,_B:1524,_C:1754,_D:3964},{_A:19,_B:3380,_C:1640,_D:120}]},{_E:112,_F:[{_A:1,_B:1515,_C:80,_D:2506}]},{_E:34,_F:[{_A:3,_B:3464,_C:1040,_D:1716}]},{_E:26,_F:[{_A:8,_B:814,_C:8,_D:1334}]},{_E:87,_F:[{_A:15,_B:1293,_C:472,_D:238},{_A:11,_B:1808,_C:1406,_D:1270}]},{_E:72,_F:[{_A:11,_B:int(new_caves_portal_coords[0]-25),_C:int(new_caves_portal_coords[1]),_D:int(new_caves_portal_coords[2]-12)}]}]
-exit_additions=[]
-temp_file='temp.bin'
+    """Convert a hex int to a float."""
+    if val == 0:
+        return 0
+    return struct.unpack("!f", bytes.fromhex(hex(val).split("0x")[1]))[0]
+
+
+exit_adjustments = [
+    {
+        "containing_map": 0x30,  # Fungi Main
+        "exits": [
+            {
+                # Dark Attic
+                "exit_index": 3,
+                "x": 3429,
+                "y": 462,
+                "z": 4494,
+            },
+            {
+                # Mill (W1 Exit)
+                "exit_index": 6,
+                "x": 4153,
+                "y": 163,
+                "z": 3721,
+            },
+            {
+                # DK Barn
+                "exit_index": 4,
+                "x": 3982,
+                "y": 115,
+                "z": 2026,
+            },
+            {
+                # Mill Rear PPunch Door
+                "exit_index": 5,
+                "x": 4550,
+                "y": 162,
+                "z": 3646,
+            },
+        ],
+    },
+    {
+        "containing_map": 0x1E,  # Galleon
+        "exits": [
+            {
+                # Lighthouse
+                "exit_index": 10,
+                "x": 1524,
+                "y": 1754,
+                "z": 3964,
+            },
+            {
+                # Seal Race
+                "exit_index": 19,
+                "x": 3380,
+                "y": 1640,
+                "z": 120,
+            },
+        ],
+    },
+    {
+        "containing_map": 112,  # DDC Crypt
+        "exits": [
+            {
+                # Minecart
+                "exit_index": 1,
+                "x": 1515,
+                "y": 80,
+                "z": 2506,
+            }
+        ],
+    },
+    {
+        "containing_map": 0x22,  # Isles
+        "exits": [
+            {
+                # Aztec Lobby
+                "exit_index": 3,
+                "x": 3464,
+                "y": 1040,
+                "z": 1716,
+            }
+        ],
+    },
+    {
+        "containing_map": 0x1A,  # Factory
+        "exits": [
+            {
+                # Crusher
+                "exit_index": 8,
+                "x": 814,
+                "y": 8,
+                "z": 1334,
+            }
+        ],
+    },
+    {
+        "containing_map": 0x57,  # Castle
+        "exits": [
+            {
+                # Tree
+                "exit_index": 15,
+                "x": 1293,
+                "y": 472,
+                "z": 238,
+            },
+            {
+                # Ballroom
+                "exit_index": 11,
+                "x": 1808,
+                "y": 1406,
+                "z": 1270,
+            },
+        ],
+    },
+    {
+        "containing_map": 0x48,  # Caves
+        "exits": [
+            {
+                # Unused 5DI Portal Exit
+                "exit_index": 11,
+                "x": int(new_caves_portal_coords[0] - 25),
+                "y": int(new_caves_portal_coords[1]),
+                "z": int(new_caves_portal_coords[2] - 12),
+            }
+        ],
+    },
+]
+
+exit_additions = []
+
+temp_file = "temp.bin"
+
+
 def shortToUshort(short):
-	'Convert Short to Unsigned Short.';A=short
-	if A<0:return A+65536
-	return A
+    """Convert Short to Unsigned Short."""
+    if short < 0:
+        return short + 65536
+    return short
+
+
 def adjustExits(fh):
-	'Write new exits.';C=fh;B='big';print('Adjusting Exits');C.seek(pointer_table_address+4*setup_index);O=pointer_table_address+int.from_bytes(C.read(4),B)
-	for D in range(216):
-		K=[]
-		if D not in(97,170,17):
-			C.seek(O+4*D);I=pointer_table_address+int.from_bytes(C.read(4),B);P=pointer_table_address+int.from_bytes(C.read(4),B);Q=P-I;C.seek(I);R=int.from_bytes(C.read(2),B);L=False
-			if R==8075:L=True
-			C.seek(I);E=C.read(Q)
-			if L:E=zlib.decompress(E,15+32)
-			with open(temp_file,'wb')as A:A.write(E)
-			with open(temp_file,'rb')as A:
-				S=int.from_bytes(A.read(4),B)
-				for T in range(S):
-					J=4+T*48;A.seek(J+40);M=int.from_bytes(A.read(2),B);U=int.from_bytes(A.read(2),B)
-					if M>=528 and M<=532:
-						if U==87 and D==72:A.seek(J+4);G=[int(176.505),int(int_to_float(int.from_bytes(A.read(4),B)))+5,int(1089.408)]
-						else:
-							A.seek(J);G=[]
-							for a in range(3):G.append(int(int_to_float(int.from_bytes(A.read(4),B))))
-							G[1]+=5
-						K.append(G.copy())
-			if os.path.exists(temp_file):os.remove(temp_file)
-		exit_additions.append(K.copy())
-	C.seek(pointer_table_address+4*pointer_table_index);V=pointer_table_address+int.from_bytes(C.read(4),B)
-	for D in range(216):
-		C.seek(V+4*D);H=pointer_table_address+int.from_bytes(C.read(4),B);W=pointer_table_address+int.from_bytes(C.read(4),B);X=W-H;C.seek(H);E=C.read(X);F=f"exit{D}.bin"
-		with open(F,'wb')as A:
-			A.write(E)
-			for Y in exit_additions[D]:
-				for Z in Y:A.write(shortToUshort(Z).to_bytes(2,B))
-				A.write((0).to_bytes(4,B))
-		with open(F,'r+b')as A:
-			for N in exit_adjustments:
-				if D==N[_E]:
-					for exit in N[_F]:H=exit[_A]*10;A.seek(H);A.write(shortToUshort(exit[_B]).to_bytes(2,B));A.write(shortToUshort(exit[_C]).to_bytes(2,B));A.write(shortToUshort(exit[_D]).to_bytes(2,B))
-		if os.path.exists(F):
-			if os.path.getsize(F)==0:os.remove(F)
+    """Write new exits."""
+    print("Adjusting Exits")
+    # Get Setups
+    fh.seek(pointer_table_address + (4 * setup_index))
+    setup_table = pointer_table_address + int.from_bytes(fh.read(4), "big")
+    for map_index in range(216):
+        exit_coords = []
+        if map_index not in (0x61, 0xAA, 0x11):  # Prevent K. Lumsy exit being generated with fake warp
+            fh.seek(setup_table + (4 * map_index))
+            setup_start = pointer_table_address + int.from_bytes(fh.read(4), "big")
+            setup_end = pointer_table_address + int.from_bytes(fh.read(4), "big")
+            setup_size = setup_end - setup_start
+            fh.seek(setup_start)
+            indicator = int.from_bytes(fh.read(2), "big")
+            is_compressed = False
+            if indicator == 0x1F8B:
+                is_compressed = True
+            fh.seek(setup_start)
+            data = fh.read(setup_size)
+            if is_compressed:
+                data = zlib.decompress(data, (15 + 32))
+            with open(temp_file, "wb") as fg:
+                fg.write(data)
+            with open(temp_file, "rb") as fg:
+                model2_count = int.from_bytes(fg.read(4), "big")
+                for model2_item in range(model2_count):
+                    item_start = 4 + (model2_item * 0x30)
+                    fg.seek(item_start + 0x28)
+                    item_type = int.from_bytes(fg.read(2), "big")
+                    item_id = int.from_bytes(fg.read(2), "big")
+                    if item_type >= 0x210 and item_type <= 0x214:
+                        if item_id == 0x57 and map_index == 0x48:
+                            fg.seek(item_start + 4)
+                            coords = [int(176.505), int(int_to_float(int.from_bytes(fg.read(4), "big"))) + 5, int(1089.408)]
+                        else:
+                            fg.seek(item_start)
+                            coords = []
+                            for coord_index in range(3):
+                                coords.append(int(int_to_float(int.from_bytes(fg.read(4), "big"))))
+                            coords[1] += 5
+                        exit_coords.append(coords.copy())
+            if os.path.exists(temp_file):
+                os.remove(temp_file)
+        exit_additions.append(exit_coords.copy())
+    # Exits
+    fh.seek(pointer_table_address + (4 * pointer_table_index))
+    ptr_table = pointer_table_address + int.from_bytes(fh.read(4), "big")
+    for map_index in range(216):
+        fh.seek(ptr_table + (4 * map_index))
+        exit_start = pointer_table_address + int.from_bytes(fh.read(4), "big")
+        exit_end = pointer_table_address + int.from_bytes(fh.read(4), "big")
+        exit_size = exit_end - exit_start
+        fh.seek(exit_start)
+        data = fh.read(exit_size)
+        file_name = f"exit{map_index}.bin"
+        with open(file_name, "wb") as fg:
+            fg.write(data)
+            for exit_set in exit_additions[map_index]:
+                for coord in exit_set:
+                    fg.write(shortToUshort(coord).to_bytes(2, "big"))
+                fg.write((0).to_bytes(4, "big"))
+        with open(file_name, "r+b") as fg:
+            for x in exit_adjustments:
+                if map_index == x["containing_map"]:
+                    for exit in x["exits"]:
+                        exit_start = exit["exit_index"] * 0xA
+                        fg.seek(exit_start)
+                        fg.write(shortToUshort(exit["x"]).to_bytes(2, "big"))
+                        fg.write(shortToUshort(exit["y"]).to_bytes(2, "big"))
+                        fg.write(shortToUshort(exit["z"]).to_bytes(2, "big"))
+        if os.path.exists(file_name):
+            if os.path.getsize(file_name) == 0:
+                os.remove(file_name)

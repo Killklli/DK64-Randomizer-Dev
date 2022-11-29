@@ -1,1 +1,1 @@
-'Holds the locations and data points for Collectibles.'
+"""Holds the locations and data points for Collectibles."""

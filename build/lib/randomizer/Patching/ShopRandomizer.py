@@ -1,73 +1,191 @@
-'Place Shuffled Shops.'
-import math,js
+"""Place Shuffled Shops."""
+
+import math
+
+import js
 from randomizer.Enums.Regions import Regions
 from randomizer.Lists.MapsAndExits import Maps
 from randomizer.Patching.Patcher import ROM
 from randomizer.ShuffleShopLocations import available_shops
 from randomizer.Spoiler import Spoiler
-from randomizer.Patching.Lib import float_to_hex,intf_to_float
-def ApplyShopRandomizer(spoiler):
-	'Write shop locations to ROM.';q='scale_factor';p='replace_zone';o='zone_index';n='model_index';m='pointing_to';l='entries';e=spoiler;d='angle_change';M='replace_model';C='big'
-	if e.settings.shuffle_shops:
-		f=e.shuffled_shop_locations;Y=[]
-		for U in available_shops:
-			Z=available_shops[U]
-			for B in Z:
-				if B.map not in Y:Y.append(B.map)
-		for map in Y:
-			a=js.pointer_addresses[9][l][map][m];b=js.pointer_addresses[18][l][map][m];g=[];c=0
-			for U in available_shops:
-				Z=available_shops[U]
-				for B in Z:
-					if B.map==map and not B.locked:g.append(B.shop);c=U
-			h=[]
-			for B in g:
-				if c not in f.keys():continue
-				D={};r=f[c][B];H=-1;I=-1;N=-1;E=-1;F=-1;J=-1;O=-1;P=-1;s=[B,r]
-				for (V,W) in enumerate(s):
-					if W==Regions.CrankyGeneric:
-						if V==0:F=115;J=Maps.Cranky;O=180;P=0.95
-						else:H=115;I=Maps.Cranky;N=180;E=0.95
-					elif W==Regions.CandyGeneric:
-						if V==0:F=292;J=Maps.Candy;O=0;P=0.95
-						else:H=292;I=Maps.Candy;N=0;E=0.95
-					elif W==Regions.FunkyGeneric:
-						if V==0:F=122;J=Maps.Funky;O=90;P=1.045
-						else:H=122;I=Maps.Funky;N=90;E=1.045
-					elif W==Regions.Snide:
-						if V==0:F=121;J=Maps.Snide;O=270;P=3
-						else:H=121;I=Maps.Snide;N=270;E=3
-				if H>-1 and I>-1 and F>-1 and J>-1:
-					Q=-1;R=-1;ROM().seek(a);t=int.from_bytes(ROM().readBytes(4),C)
-					for i in range(t):
-						if Q==-1:
-							u=a+4+i*48;ROM().seek(u+40);v=int.from_bytes(ROM().readBytes(2),C)
-							if v==F:Q=i
-					ROM().seek(b);w=int.from_bytes(ROM().readBytes(2),C)
-					for j in range(w):
-						if R==-1:
-							k=b+2+j*56;ROM().seek(k+16);x=int.from_bytes(ROM().readBytes(2),C)
-							if x==16:
-								ROM().seek(k+18);y=int.from_bytes(ROM().readBytes(2),C)
-								if y==J:R=j
-					if Q>-1 and R>-1:D[n]=Q;D[o]=R;D[M]=H;D['original_model']=F;D[p]=I;D[d]=O-N;D[q]=P/E;h.append(D)
-					else:print(f"ERROR: Couldn't find LZ or Model attributed to shop ({Q} | {R})")
-				else:print("ERROR: Couldn't find shop in assortment")
-			for A in h:
-				G=a+4+A[n]*48;X=b+2+A[o]*56;ROM().seek(G+40);ROM().writeMultipleBytes(A[M],2)
-				if A[d]!=0:
-					ROM().seek(G+28);z=intf_to_float(int.from_bytes(ROM().readBytes(4),C));S=z+A[d]
-					if S<0:S+=360
-					elif S>=360:S-=360
-					ROM().seek(G+28);ROM().writeMultipleBytes(int(float_to_hex(S),16),4)
-				ROM().seek(G+12);A0=intf_to_float(int.from_bytes(ROM().readBytes(4),C));E=A0*A[q];ROM().seek(G+12);ROM().writeMultipleBytes(int(float_to_hex(E),16),4);ROM().seek(G);K=intf_to_float(int.from_bytes(ROM().readBytes(4),C));ROM().seek(G+8);L=intf_to_float(int.from_bytes(ROM().readBytes(4),C))
-				if K<0:K=int(K)+65536
-				else:K=int(K)
-				if L<0:L=int(L)+65536
-				else:L=int(L)
-				ROM().seek(X);ROM().writeMultipleBytes(K,2);ROM().seek(X+4);ROM().writeMultipleBytes(L,2);T=88
-				if A[M]==115:T=50
-				elif A[M]==122:T=55
-				elif A[M]==292:T=40.1
-				elif A[M]==121:T=87.5
-				ROM().seek(X+6);ROM().writeMultipleBytes(int(T*E),2);ROM().seek(X+18);ROM().writeMultipleBytes(A[p],2)
+from randomizer.Patching.Lib import float_to_hex, intf_to_float
+
+
+def ApplyShopRandomizer(spoiler: Spoiler):
+    """Write shop locations to ROM."""
+    if spoiler.settings.shuffle_shops:
+        shop_assortment = spoiler.shuffled_shop_locations
+        shop_placement_maps = []
+        for level in available_shops:
+            shop_array = available_shops[level]
+            for shop in shop_array:
+                if shop.map not in shop_placement_maps:
+                    shop_placement_maps.append(shop.map)
+        for map in shop_placement_maps:
+            setup_address = js.pointer_addresses[9]["entries"][map]["pointing_to"]
+            lz_address = js.pointer_addresses[18]["entries"][map]["pointing_to"]
+            shops_in_map = []
+            map_level = 0
+            for level in available_shops:
+                shop_array = available_shops[level]
+                for shop in shop_array:
+                    if shop.map == map and not shop.locked:
+                        shops_in_map.append(shop.shop)
+                        map_level = level
+            placement_data = []
+            for shop in shops_in_map:
+                if map_level not in shop_assortment.keys():
+                    continue
+                shop_data = {}
+                new_shop = shop_assortment[map_level][shop]
+                new_model = -1
+                new_lz = -1
+                new_rot = -1
+                new_scale = -1
+                search_model = -1
+                search_lz = -1
+                search_rot = -1
+                search_scale = -1
+                search_vars = [shop, new_shop]
+                for x_i, x in enumerate(search_vars):
+                    if x == Regions.CrankyGeneric:
+                        if x_i == 0:
+                            search_model = 0x73
+                            search_lz = Maps.Cranky
+                            search_rot = 180
+                            search_scale = 0.95
+                        else:
+                            new_model = 0x73
+                            new_lz = Maps.Cranky
+                            new_rot = 180
+                            new_scale = 0.95
+                    elif x == Regions.CandyGeneric:
+                        if x_i == 0:
+                            search_model = 0x124
+                            search_lz = Maps.Candy
+                            search_rot = 0
+                            search_scale = 0.95
+                        else:
+                            new_model = 0x124
+                            new_lz = Maps.Candy
+                            new_rot = 0
+                            new_scale = 0.95
+                    elif x == Regions.FunkyGeneric:
+                        if x_i == 0:
+                            search_model = 0x7A
+                            search_lz = Maps.Funky
+                            search_rot = 90
+                            search_scale = 1.045
+                        else:
+                            new_model = 0x7A
+                            new_lz = Maps.Funky
+                            new_rot = 90
+                            new_scale = 1.045
+                    elif x == Regions.Snide:
+                        if x_i == 0:
+                            search_model = 0x79
+                            search_lz = Maps.Snide
+                            search_rot = 270
+                            search_scale = 3
+                        else:
+                            new_model = 0x79
+                            new_lz = Maps.Snide
+                            new_rot = 270
+                            new_scale = 3
+                if new_model > -1 and new_lz > -1 and search_model > -1 and search_lz > -1:
+                    model_index = -1
+                    zone_index = -1
+                    ROM().seek(setup_address)
+                    model2_count = int.from_bytes(ROM().readBytes(4), "big")
+                    for model2_index in range(model2_count):
+                        if model_index == -1:
+                            obj_start = setup_address + 4 + (model2_index * 0x30)
+                            ROM().seek(obj_start + 0x28)
+                            obj_type = int.from_bytes(ROM().readBytes(2), "big")
+                            if obj_type == search_model:
+                                model_index = model2_index
+                    ROM().seek(lz_address)
+                    lz_count = int.from_bytes(ROM().readBytes(2), "big")
+                    for lz_index in range(lz_count):
+                        if zone_index == -1:
+                            lz_start = lz_address + 2 + (lz_index * 0x38)
+                            ROM().seek(lz_start + 0x10)
+                            lz_type = int.from_bytes(ROM().readBytes(2), "big")
+                            if lz_type == 16:
+                                ROM().seek(lz_start + 0x12)
+                                lz_map = int.from_bytes(ROM().readBytes(2), "big")
+                                if lz_map == search_lz:
+                                    zone_index = lz_index
+                    if model_index > -1 and zone_index > -1:
+                        shop_data["model_index"] = model_index
+                        shop_data["zone_index"] = zone_index
+                        shop_data["replace_model"] = new_model
+                        shop_data["original_model"] = search_model
+                        shop_data["replace_zone"] = new_lz
+                        shop_data["angle_change"] = search_rot - new_rot
+                        shop_data["scale_factor"] = search_scale / new_scale
+                        placement_data.append(shop_data)
+                    else:
+                        print(f"ERROR: Couldn't find LZ or Model attributed to shop ({model_index} | {zone_index})")
+                else:
+                    print("ERROR: Couldn't find shop in assortment")
+            for placement in placement_data:
+                setup_item = setup_address + 4 + (placement["model_index"] * 0x30)
+                zone_item = lz_address + 2 + (placement["zone_index"] * 0x38)
+                # Type
+                ROM().seek(setup_item + 0x28)
+                ROM().writeMultipleBytes(placement["replace_model"], 2)
+                # Angle
+                if placement["angle_change"] != 0:
+                    ROM().seek(setup_item + 0x1C)
+                    original_angle = intf_to_float(int.from_bytes(ROM().readBytes(4), "big"))
+                    new_angle = original_angle + placement["angle_change"]
+                    if new_angle < 0:
+                        new_angle += 360
+                    elif new_angle >= 360:
+                        new_angle -= 360
+                    ROM().seek(setup_item + 0x1C)
+                    ROM().writeMultipleBytes(int(float_to_hex(new_angle), 16), 4)
+                # Scale
+                ROM().seek(setup_item + 0xC)
+                original_scale = intf_to_float(int.from_bytes(ROM().readBytes(4), "big"))
+                new_scale = original_scale * placement["scale_factor"]
+                ROM().seek(setup_item + 0xC)
+                ROM().writeMultipleBytes(int(float_to_hex(new_scale), 16), 4)
+                # Get Model X and Z
+                ROM().seek(setup_item)
+                model_x = intf_to_float(int.from_bytes(ROM().readBytes(4), "big"))
+                ROM().seek(setup_item + 0x8)
+                model_z = intf_to_float(int.from_bytes(ROM().readBytes(4), "big"))
+                # Get Base Zone X and Z
+                if model_x < 0:
+                    model_x = int(model_x) + 65536
+                else:
+                    model_x = int(model_x)
+                if model_z < 0:
+                    model_z = int(model_z) + 65536
+                else:
+                    model_z = int(model_z)
+                ROM().seek(zone_item)
+                ROM().writeMultipleBytes(model_x, 2)
+                ROM().seek(zone_item + 0x4)
+                ROM().writeMultipleBytes(model_z, 2)
+                # Overwrite new radius
+                base_model_scale = 88
+                if placement["replace_model"] == 0x73:
+                    # Cranky
+                    base_model_scale = 50
+                elif placement["replace_model"] == 0x7A:
+                    # Funky
+                    base_model_scale = 55
+                elif placement["replace_model"] == 0x124:
+                    # Candy
+                    base_model_scale = 40.1
+                elif placement["replace_model"] == 0x79:
+                    # Snide
+                    base_model_scale = 87.5
+                ROM().seek(zone_item + 0x6)
+                ROM().writeMultipleBytes(int(base_model_scale * new_scale), 2)
+                # Loading Zone
+                ROM().seek(zone_item + 0x12)
+                ROM().writeMultipleBytes(placement["replace_zone"], 2)

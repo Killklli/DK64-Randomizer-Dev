@@ -1,56 +1,139 @@
-'Apply Door Locations.'
-import random,js
+"""Apply Door Locations."""
+import random
+
+import js
 from randomizer.Lists.MapsAndExits import Maps
 from randomizer.Lists.DoorLocations import door_locations
 from randomizer.Patching.Patcher import ROM
 from randomizer.Spoiler import Spoiler
-from randomizer.Patching.Lib import float_to_hex,getNextFreeID,addNewScript
+from randomizer.Patching.Lib import float_to_hex, getNextFreeID, addNewScript
 from randomizer.Enums.ScriptTypes import ScriptTypes
-def place_door_locations(spoiler):
-	'Place Wrinkly Doors, and eventually T&S Doors.';T='remove_wrinkly_puzzles';K=False;G='big';B=spoiler
-	if B.settings.wrinkly_location_rando or B.settings.tns_location_rando or(T in B.settings.misc_changes_selected or len(B.settings.misc_changes_selected)==0):
-		U=[240,242,239,103,241]
-		for D in range(216):
-			L=js.pointer_addresses[9]['entries'][D]['pointing_to'];ROM().seek(L);V=int.from_bytes(ROM().readBytes(4),G);H=[]
-			for P in range(V):
-				W=L+4+P*48;ROM().seek(W+40);I=int.from_bytes(ROM().readBytes(2),G);F=True
-				if B.settings.wrinkly_location_rando or(T in B.settings.misc_changes_selected or len(B.settings.misc_changes_selected)==0):
-					if I in U:F=K
-					if D==Maps.AngryAztecLobby and I in(572,24):F=K
-					if D==Maps.FungiForestLobby and I in(573,40):F=K
-					if D==Maps.CrystalCavesLobby and I in(53,206):F=K
-				if B.settings.tns_location_rando:
-					if D!=42:
-						if I in(683,684):F=K
-				if F:
-					ROM().seek(W);A=[]
-					for b in range(int(48/4)):A.append(int.from_bytes(ROM().readBytes(4),G))
-					H.append(A)
-			M=L+4+V*48;ROM().seek(M);c=int.from_bytes(ROM().readBytes(4),G);X=M+4+c*36;ROM().seek(X);d=int.from_bytes(ROM().readBytes(4),G);e=X+4+d*56;Y=[];ROM().seek(M)
-			for b in range(int((e-M)/4)):Y.append(int.from_bytes(ROM().readBytes(4),G))
-			N=[];Q=[];f=[];R=[];S=[]
-			for Z in B.shuffled_door_data:
-				for E in B.shuffled_door_data[Z]:
-					C=door_locations[Z][E[0]];a=E[1]
-					if C.map==D:
-						if a=='wrinkly'and(B.settings.wrinkly_location_rando or(T in B.settings.misc_changes_selected or len(B.settings.misc_changes_selected)==0)):
-							g=E[2];A=[]
-							for J in range(3):A.append(int(float_to_hex(C.location[J]),16))
-							A.append(int(float_to_hex(C.scale),16));A.append(1520);A.append(2148670208);A.append(int(float_to_hex(C.rx),16));A.append(int(float_to_hex(C.location[3]),16));A.append(int(float_to_hex(C.rz),16));A.append(0);id=getNextFreeID(D,N);Q.append(id);N.append(id);A.append(U[g]<<16|id);A.append(1<<16);H.append(A)
-						elif a=='tns'and B.settings.tns_location_rando:
-							for O in range(2):
-								A=[]
-								for J in range(3):
-									if O==1 and J==1:A.append(int(float_to_hex(C.location[J]-30),16))
-									else:A.append(int(float_to_hex(C.location[J]),16))
-								A.append(int(float_to_hex([C.scale,0.35][O]),16));A.append(4294901503);A.append(1834977);A.append(int(float_to_hex(C.rx),16));A.append(int(float_to_hex(C.location[3]),16));A.append(int(float_to_hex(C.rz),16));A.append(0);id=getNextFreeID(D,N);f.append(id);N.append(id)
-								if O==0:R.append(id)
-								else:S.append(id)
-								A.append([684,683][O]<<16|id);A.append(1<<16);H.append(A)
-			if len(Q)>0:addNewScript(D,Q,ScriptTypes.Wrinkly)
-			if len(R)>0:addNewScript(D,R,ScriptTypes.TnsPortal)
-			if len(S)>0:addNewScript(D,S,ScriptTypes.TnsIndicator)
-			ROM().seek(L);ROM().writeMultipleBytes(len(H),4)
-			for P in H:
-				for E in P:ROM().writeMultipleBytes(E,4)
-			for E in Y:ROM().writeMultipleBytes(E,4)
+
+
+def place_door_locations(spoiler: Spoiler):
+    """Place Wrinkly Doors, and eventually T&S Doors."""
+    if (
+        spoiler.settings.wrinkly_location_rando
+        or spoiler.settings.tns_location_rando
+        or ("remove_wrinkly_puzzles" in spoiler.settings.misc_changes_selected or len(spoiler.settings.misc_changes_selected) == 0)
+    ):
+        wrinkly_doors = [0xF0, 0xF2, 0xEF, 0x67, 0xF1]
+        # Also remove
+        #   0x23C: Spinning Door (Az Lobby)
+        #   0x18: Metal Pad (Az Lobby)
+        #   0x23D: Wrinkly Wheel (Fungi Lobby)
+        #   0x28: Lever (Fungi Lobby)
+        #   0x35: Ice Block (Caves Lobby)
+        #   0xCE: Grey Switch (Caves Lobby)
+        # Handle Setup
+        for cont_map_id in range(216):
+            setup_table = js.pointer_addresses[9]["entries"][cont_map_id]["pointing_to"]
+            # Filter Setup
+            ROM().seek(setup_table)
+            model2_count = int.from_bytes(ROM().readBytes(4), "big")
+            retained_model2 = []
+            for item in range(model2_count):
+                item_start = setup_table + 4 + (item * 0x30)
+                ROM().seek(item_start + 0x28)
+                item_type = int.from_bytes(ROM().readBytes(2), "big")
+                retain = True
+                if spoiler.settings.wrinkly_location_rando or ("remove_wrinkly_puzzles" in spoiler.settings.misc_changes_selected or len(spoiler.settings.misc_changes_selected) == 0):
+                    if item_type in wrinkly_doors:
+                        retain = False
+                    if cont_map_id == Maps.AngryAztecLobby and item_type in (0x23C, 0x18):
+                        retain = False
+                    if cont_map_id == Maps.FungiForestLobby and item_type in (0x23D, 0x28):
+                        retain = False
+                    if cont_map_id == Maps.CrystalCavesLobby and item_type in (0x35, 0xCE):
+                        retain = False
+                if spoiler.settings.tns_location_rando:
+                    if cont_map_id != 0x2A:
+                        if item_type in (0x2AB, 0x2AC):
+                            retain = False
+                if retain:
+                    ROM().seek(item_start)
+                    item_data = []
+                    for x in range(int(0x30 / 4)):
+                        item_data.append(int.from_bytes(ROM().readBytes(4), "big"))
+                    retained_model2.append(item_data)
+            mys_start = setup_table + 4 + (model2_count * 0x30)
+            ROM().seek(mys_start)
+            mys_count = int.from_bytes(ROM().readBytes(4), "big")
+            act_start = mys_start + 4 + (mys_count * 0x24)
+            ROM().seek(act_start)
+            act_count = int.from_bytes(ROM().readBytes(4), "big")
+            act_end = act_start + 4 + (act_count * 0x38)
+            other_retained_data = []
+            ROM().seek(mys_start)
+            for x in range(int((act_end - mys_start) / 4)):
+                other_retained_data.append(int.from_bytes(ROM().readBytes(4), "big"))
+            # Construct placed wrinkly doors
+            door_ids = []
+            map_wrinkly_ids = []
+            portal_indicator_ids = []
+            portal_ids = []
+            indicator_ids = []
+            for level in spoiler.shuffled_door_data:
+                for data in spoiler.shuffled_door_data[level]:
+                    door = door_locations[level][data[0]]
+                    door_type = data[1]
+                    if door.map == cont_map_id:
+                        if door_type == "wrinkly" and (
+                            spoiler.settings.wrinkly_location_rando or ("remove_wrinkly_puzzles" in spoiler.settings.misc_changes_selected or len(spoiler.settings.misc_changes_selected) == 0)
+                        ):
+                            kong = data[2]
+                            item_data = []
+                            for coord_index in range(3):
+                                item_data.append(int(float_to_hex(door.location[coord_index]), 16))  # x y z
+                            item_data.append(int(float_to_hex(door.scale), 16))  # Scale
+                            item_data.append(0x5F0)
+                            item_data.append(0x80121B00)
+                            item_data.append(int(float_to_hex(door.rx), 16))  # rx
+                            item_data.append(int(float_to_hex(door.location[3]), 16))  # ry
+                            item_data.append(int(float_to_hex(door.rz), 16))  # rz
+                            item_data.append(0)
+                            id = getNextFreeID(cont_map_id, door_ids)
+                            map_wrinkly_ids.append(id)
+                            door_ids.append(id)
+                            item_data.append((wrinkly_doors[kong] << 16) | id)
+                            item_data.append(1 << 16)
+                            retained_model2.append(item_data)
+                        elif door_type == "tns" and spoiler.settings.tns_location_rando:
+                            for k in range(2):
+                                item_data = []
+                                for coord_index in range(3):
+                                    if k == 1 and coord_index == 1:
+                                        item_data.append(int(float_to_hex(door.location[coord_index] - 30), 16))  # y
+                                    else:
+                                        item_data.append(int(float_to_hex(door.location[coord_index]), 16))  # x y z
+                                item_data.append(int(float_to_hex([door.scale, 0.35][k]), 16))  # Scale
+                                item_data.append(0xFFFEFEFF)
+                                item_data.append(0x001BFFE1)
+                                item_data.append(int(float_to_hex(door.rx), 16))  # rx
+                                item_data.append(int(float_to_hex(door.location[3]), 16))  # ry
+                                item_data.append(int(float_to_hex(door.rz), 16))  # rz
+                                item_data.append(0)
+                                id = getNextFreeID(cont_map_id, door_ids)
+                                portal_indicator_ids.append(id)
+                                door_ids.append(id)
+                                if k == 0:
+                                    portal_ids.append(id)
+                                else:
+                                    indicator_ids.append(id)
+                                item_data.append(([0x2AC, 0x2AB][k] << 16) | id)
+                                item_data.append(1 << 16)
+                                retained_model2.append(item_data)
+            if len(map_wrinkly_ids) > 0:
+                addNewScript(cont_map_id, map_wrinkly_ids, ScriptTypes.Wrinkly)
+            if len(portal_ids) > 0:
+                addNewScript(cont_map_id, portal_ids, ScriptTypes.TnsPortal)
+            if len(indicator_ids) > 0:
+                addNewScript(cont_map_id, indicator_ids, ScriptTypes.TnsIndicator)
+            # Reconstruct setup file
+            ROM().seek(setup_table)
+            ROM().writeMultipleBytes(len(retained_model2), 4)
+            for item in retained_model2:
+                for data in item:
+                    ROM().writeMultipleBytes(data, 4)
+            for data in other_retained_data:
+                ROM().writeMultipleBytes(data, 4)

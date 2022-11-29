@@ -1,78 +1,175 @@
-'Port models to actors and model two objects, based on inputs of vertices and a display list.'
-_I='potion_any'
-_H='potion_chunky'
-_G='potion_tiny'
-_F='potion_lanky'
-_E='potion_diddy'
-_D='potion_dk'
-_C=None
-_B='rb'
-_A='big'
-import zlib,os
-rom_file='rom/dk64.z64'
-temp_file='temp.bin'
-ptr_offset=1055824
-m2_table=4
-ac_table=5
-def portalModel_M2(vtx_file,dl_file,overlay_dl_file,model_name,base):
-	'Convert model two model file from various source files.';K=overlay_dl_file
-	with open(rom_file,_B)as C:
-		C.seek(ptr_offset+m2_table*4);Q=ptr_offset+int.from_bytes(C.read(4),_A);C.seek(Q+base*4);E=ptr_offset+(int.from_bytes(C.read(4),_A)&2147483647);R=ptr_offset+(int.from_bytes(C.read(4),_A)&2147483647);S=R-E;C.seek(E);F=C.read(S);C.seek(E);T=int.from_bytes(C.read(2),_A)
-		if T==8075:F=zlib.decompress(F,15+32)
-		with open(temp_file,'wb')as A:A.write(F)
-	with open(temp_file,_B)as A:
-		with open(f"{model_name}_om2.bin",'wb')as B:
-			A.seek(64);G=int.from_bytes(A.read(4),_A);A.seek(0);U=A.read(G);B.write(U);L=0
-			with open(dl_file,_B)as H:M=H.read();L=len(M);B.write(M)
-			I=0
-			if K!=0:
-				with open(K,_B)as H:N=H.read();I=len(N);B.write(N)
-			else:I=8;B.write((223<<56).to_bytes(8,_A))
-			O=0
-			with open(vtx_file,_B)as V:P=V.read();O=len(P);B.write(P)
-			A.seek(76);W=int.from_bytes(A.read(4),_A);A.seek(W);X=A.read();B.write(X);B.seek(68);D=G+L;B.write(D.to_bytes(4,_A));D+=I;B.write(D.to_bytes(4,_A));D+=O;A.seek(76);J=int.from_bytes(A.read(4),_A);B.write(D.to_bytes(4,_A));Y=D-J;Z=int((G-1-80)/4)
-			for a in range(Z):J=int.from_bytes(A.read(4),_A);B.write((J+Y).to_bytes(4,_A))
-	if os.path.exists(temp_file):os.remove(temp_file)
-def portalModel_Actor(vtx_file,dl_file,model_name,base):
-	'Create actor file from various source files.';L=dl_file;K=vtx_file
-	with open(rom_file,_B)as C:
-		C.seek(ptr_offset+ac_table*4);S=ptr_offset+int.from_bytes(C.read(4),_A);C.seek(S+base*4);G=ptr_offset+(int.from_bytes(C.read(4),_A)&2147483647);T=ptr_offset+(int.from_bytes(C.read(4),_A)&2147483647);U=T-G;C.seek(G);H=C.read(U);C.seek(G);V=int.from_bytes(C.read(2),_A)
-		if V==8075:H=zlib.decompress(H,15+32)
-		with open(temp_file,'wb')as B:B.write(H)
-	with open(temp_file,_B)as B:
-		with open(f"{model_name}_om1.bin",'w+b')as A:
-			if L is _C:
-				A.write(B.read());A.seek(40);W=10
-				with open(K,_B)as I:
-					E=I.read();F=int(len(E)/16);A.write(E);b=A.tell()
-					for M in range(F):
-						for N in range(3):
-							A.seek(M*16+40+2*N);D=int.from_bytes(A.read(2),_A)
-							if D>32767:D-=65536
-							D*=W;A.seek(M*16+40+2*N)
-							if D<0:D+=65536
-							A.write(D.to_bytes(2,_A))
-			else:
-				B.seek(0);J=int.from_bytes(B.read(4),_A);O=int.from_bytes(B.read(4),_A);A.write(B.read(40));F=0
-				with open(K,_B)as I:E=I.read();F=len(E);A.write(E)
-				X=0
-				with open(L,_B)as Y:P=Y.read()[48:];X=len(P);A.write(P)
-				Q=A.tell();A.seek(4);R=Q+J-40;A.write(R.to_bytes(4,_A));Z=R-O
-				for c in range(3):a=int.from_bytes(B.read(4),_A);A.write((a+Z).to_bytes(4,_A))
-				A.seek(Q);A.write((J+F).to_bytes(4,_A));B.seek(O+44-J);A.write(B.read())
-	if os.path.exists(temp_file):os.remove(temp_file)
-model_dir='assets/Non-Code/models/'
-portalModel_M2(f"{model_dir}coin.vtx",f"{model_dir}nin_coin.dl",f"{model_dir}coin_overlay.dl",'nintendo_coin',144)
-portalModel_M2(f"{model_dir}coin.vtx",f"{model_dir}rw_coin.dl",f"{model_dir}coin_overlay.dl",'rareware_coin',144)
-portalModel_M2(f"{model_dir}potion_dk.vtx",f"{model_dir}potion.dl",0,_D,144)
-portalModel_M2(f"{model_dir}potion_diddy.vtx",f"{model_dir}potion.dl",0,_E,144)
-portalModel_M2(f"{model_dir}potion_lanky.vtx",f"{model_dir}potion.dl",0,_F,144)
-portalModel_M2(f"{model_dir}potion_tiny.vtx",f"{model_dir}potion.dl",0,_G,144)
-portalModel_M2(f"{model_dir}potion_chunky.vtx",f"{model_dir}potion.dl",0,_H,144)
-portalModel_M2(f"{model_dir}potion_any.vtx",f"{model_dir}potion.dl",0,_I,144)
-portalModel_Actor(f"{model_dir}potion_dk.vtx",_C,_D,184)
-portalModel_Actor(f"{model_dir}potion_diddy.vtx",_C,_E,184)
-portalModel_Actor(f"{model_dir}potion_lanky.vtx",_C,_F,184)
-portalModel_Actor(f"{model_dir}potion_tiny.vtx",_C,_G,184)
-portalModel_Actor(f"{model_dir}potion_chunky.vtx",_C,_H,184)
-portalModel_Actor(f"{model_dir}potion_any.vtx",_C,_I,184)
+"""Port models to actors and model two objects, based on inputs of vertices and a display list."""
+
+import zlib
+import os
+
+rom_file = "rom/dk64.z64"
+temp_file = "temp.bin"
+ptr_offset = 0x101C50
+m2_table = 4
+ac_table = 5
+
+# Conversions:
+# Load vertices Seg Start:
+# - Actor: 0x3
+# - M2: 0x8
+# G_MTX:
+# - Actor: 0x4
+# - M2: 0x9
+
+
+def portalModel_M2(vtx_file, dl_file, overlay_dl_file, model_name, base):
+    """Convert model two model file from various source files."""
+    with open(rom_file, "rb") as rom:
+        rom.seek(ptr_offset + (m2_table * 4))
+        table = ptr_offset + int.from_bytes(rom.read(4), "big")
+        rom.seek(table + (base * 4))
+        start = ptr_offset + (int.from_bytes(rom.read(4), "big") & 0x7FFFFFFF)
+        finish = ptr_offset + (int.from_bytes(rom.read(4), "big") & 0x7FFFFFFF)
+        size = finish - start
+        rom.seek(start)
+        data = rom.read(size)
+        rom.seek(start)
+        indic = int.from_bytes(rom.read(2), "big")
+        if indic == 0x1F8B:
+            data = zlib.decompress(data, (15 + 32))
+        with open(temp_file, "wb") as fh:
+            fh.write(data)
+    with open(temp_file, "rb") as fh:
+        with open(f"{model_name}_om2.bin", "wb") as fg:
+            fh.seek(0x40)
+            dl_start = int.from_bytes(fh.read(4), "big")
+            fh.seek(0)
+            head = fh.read(dl_start)
+            fg.write(head)
+            dl_data_length = 0
+            with open(dl_file, "rb") as dl:
+                dl_data = dl.read()
+                dl_data_length = len(dl_data)
+                fg.write(dl_data)
+            dl_addon_length = 0
+            if overlay_dl_file != 0:
+                with open(overlay_dl_file, "rb") as dl:
+                    dl_addon = dl.read()
+                    dl_addon_length = len(dl_addon)
+                    fg.write(dl_addon)
+            else:
+                dl_addon_length = 8
+                fg.write((0xDF << 56).to_bytes(8, "big"))
+            vtx_data_length = 0
+            with open(vtx_file, "rb") as vtx:
+                vtx_data = vtx.read()
+                vtx_data_length = len(vtx_data)
+                fg.write(vtx_data)
+            fh.seek(0x4C)
+            file_extra_data_start = int.from_bytes(fh.read(4), "big")
+            fh.seek(file_extra_data_start)
+            file_extra_data = fh.read()
+            fg.write(file_extra_data)
+            fg.seek(0x44)
+            pointer = dl_start + dl_data_length
+            fg.write(pointer.to_bytes(4, "big"))
+            pointer += dl_addon_length
+            fg.write(pointer.to_bytes(4, "big"))
+            pointer += vtx_data_length
+            fh.seek(0x4C)
+            old = int.from_bytes(fh.read(4), "big")
+            fg.write(pointer.to_bytes(4, "big"))
+            diff = pointer - old
+            iterations = int(((dl_start - 1) - 0x50) / 4)
+            for i in range(iterations):
+                old = int.from_bytes(fh.read(4), "big")
+                fg.write((old + diff).to_bytes(4, "big"))
+    if os.path.exists(temp_file):
+        os.remove(temp_file)
+
+
+def portalModel_Actor(vtx_file, dl_file, model_name, base):
+    """Create actor file from various source files."""
+    with open(rom_file, "rb") as rom:
+        rom.seek(ptr_offset + (ac_table * 4))
+        table = ptr_offset + int.from_bytes(rom.read(4), "big")
+        rom.seek(table + (base * 4))
+        start = ptr_offset + (int.from_bytes(rom.read(4), "big") & 0x7FFFFFFF)
+        finish = ptr_offset + (int.from_bytes(rom.read(4), "big") & 0x7FFFFFFF)
+        size = finish - start
+        rom.seek(start)
+        data = rom.read(size)
+        rom.seek(start)
+        indic = int.from_bytes(rom.read(2), "big")
+        if indic == 0x1F8B:
+            data = zlib.decompress(data, (15 + 32))
+        with open(temp_file, "wb") as fh:
+            fh.write(data)
+    with open(temp_file, "rb") as fh:
+        with open(f"{model_name}_om1.bin", "w+b") as fg:
+            if dl_file is None:
+                fg.write(fh.read())
+                fg.seek(0x28)
+                upscale = 10
+                with open(vtx_file, "rb") as vtx:
+                    vtx_data = vtx.read()
+                    vtx_len = int(len(vtx_data) / 0x10)
+                    fg.write(vtx_data)
+                    vtx_end = fg.tell()
+                    for vtx_item in range(vtx_len):
+                        for c in range(3):
+                            fg.seek((vtx_item * 0x10) + 0x28 + (2 * c))
+                            c_v = int.from_bytes(fg.read(2), "big")
+                            if c_v > 32767:
+                                c_v -= 65536
+                            c_v *= upscale
+                            fg.seek((vtx_item * 0x10) + 0x28 + (2 * c))
+                            if c_v < 0:
+                                c_v += 65536
+                            fg.write(c_v.to_bytes(2, "big"))
+            else:
+                fh.seek(0)
+                init_ptr = int.from_bytes(fh.read(4), "big")
+                init_dl_end_ptr = int.from_bytes(fh.read(4), "big")
+                fg.write(fh.read(0x28))  # Head
+                vtx_len = 0
+                with open(vtx_file, "rb") as vtx:
+                    vtx_data = vtx.read()
+                    vtx_len = len(vtx_data)
+                    fg.write(vtx_data)
+                dl_len = 0
+                with open(dl_file, "rb") as dl:
+                    dl_data = dl.read()[0x30:]
+                    dl_len = len(dl_data)
+                    fg.write(dl_data)
+                dl_end = fg.tell()
+                fg.seek(4)
+                dl_end_ptr = dl_end + init_ptr - 0x28
+                fg.write(dl_end_ptr.to_bytes(4, "big"))
+                diff = dl_end_ptr - init_dl_end_ptr
+                for i in range(3):
+                    old = int.from_bytes(fh.read(4), "big")
+                    fg.write((old + diff).to_bytes(4, "big"))
+                fg.seek(dl_end)
+                fg.write((init_ptr + vtx_len).to_bytes(4, "big"))
+                fh.seek(init_dl_end_ptr + 0x2C - init_ptr)
+                fg.write(fh.read())
+    if os.path.exists(temp_file):
+        os.remove(temp_file)
+
+
+model_dir = "assets/Non-Code/models/"
+# Coins
+portalModel_M2(f"{model_dir}coin.vtx", f"{model_dir}nin_coin.dl", f"{model_dir}coin_overlay.dl", "nintendo_coin", 0x90)
+portalModel_M2(f"{model_dir}coin.vtx", f"{model_dir}rw_coin.dl", f"{model_dir}coin_overlay.dl", "rareware_coin", 0x90)
+# Potions - Model 2
+portalModel_M2(f"{model_dir}potion_dk.vtx", f"{model_dir}potion.dl", 0, "potion_dk", 0x90)
+portalModel_M2(f"{model_dir}potion_diddy.vtx", f"{model_dir}potion.dl", 0, "potion_diddy", 0x90)
+portalModel_M2(f"{model_dir}potion_lanky.vtx", f"{model_dir}potion.dl", 0, "potion_lanky", 0x90)
+portalModel_M2(f"{model_dir}potion_tiny.vtx", f"{model_dir}potion.dl", 0, "potion_tiny", 0x90)
+portalModel_M2(f"{model_dir}potion_chunky.vtx", f"{model_dir}potion.dl", 0, "potion_chunky", 0x90)
+portalModel_M2(f"{model_dir}potion_any.vtx", f"{model_dir}potion.dl", 0, "potion_any", 0x90)
+# Potions - Actors (Ignore Chunky Model)
+portalModel_Actor(f"{model_dir}potion_dk.vtx", None, "potion_dk", 0xB8)
+portalModel_Actor(f"{model_dir}potion_diddy.vtx", None, "potion_diddy", 0xB8)
+portalModel_Actor(f"{model_dir}potion_lanky.vtx", None, "potion_lanky", 0xB8)
+portalModel_Actor(f"{model_dir}potion_tiny.vtx", None, "potion_tiny", 0xB8)
+portalModel_Actor(f"{model_dir}potion_chunky.vtx", None, "potion_chunky", 0xB8)
+portalModel_Actor(f"{model_dir}potion_any.vtx", None, "potion_any", 0xB8)
+# portalModel_Actor(f"{model_dir}coin.vtx", f"{model_dir}nin_coin.dl", "nintendo_coin", 0x66)

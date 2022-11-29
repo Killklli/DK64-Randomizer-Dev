@@ -1,8 +1,43 @@
-'Location/item type enum.'
-_C='tooltip'
-_B='value'
-_A='name'
-from enum import IntEnum,auto
-class Types(IntEnum):'Location/item type enum.';Banana=auto();BlueprintBanana=auto();Shop=auto();Blueprint=auto();Fairy=auto();Key=auto();Crown=auto();Coin=auto();TrainingBarrel=auto();Kong=auto();Medal=auto();Shockwave=auto();Constant=auto();NoItem=auto()
-ItemRandoSelector=[{_A:'Shops',_B:'shop',_C:''},{_A:'Golden Bananas',_B:'banana',_C:''},{_A:'Battle Crowns',_B:'crown',_C:''},{_A:'Blueprints',_B:'blueprint',_C:''},{_A:'Keys',_B:'key',_C:''},{_A:'Banana Medals',_B:'medal',_C:''},{_A:'Nintendo/Rareware Coins',_B:'coin',_C:''}]
-KeySelector=[{_A:'Key 1',_B:'key1',_C:''},{_A:'Key 2',_B:'key2',_C:''},{_A:'Key 3',_B:'key3',_C:''},{_A:'Key 4',_B:'key4',_C:''},{_A:'Key 5',_B:'key5',_C:''},{_A:'Key 6',_B:'key6',_C:''},{_A:'Key 7',_B:'key7',_C:''},{_A:'Key 8',_B:'key8',_C:''}]
+"""Location/item type enum."""
+from enum import IntEnum, auto
+
+
+class Types(IntEnum):
+    """Location/item type enum."""
+
+    Banana = auto()
+    BlueprintBanana = auto()
+    Shop = auto()
+    Blueprint = auto()
+    Fairy = auto()
+    Key = auto()
+    Crown = auto()
+    Coin = auto()
+    TrainingBarrel = auto()
+    Kong = auto()
+    Medal = auto()
+    Shockwave = auto()
+    Constant = auto()
+    NoItem = auto()
+
+
+ItemRandoSelector = [
+    {"name": "Shops", "value": "shop", "tooltip": ""},
+    {"name": "Golden Bananas", "value": "banana", "tooltip": ""},
+    {"name": "Battle Crowns", "value": "crown", "tooltip": ""},
+    {"name": "Blueprints", "value": "blueprint", "tooltip": ""},
+    {"name": "Keys", "value": "key", "tooltip": ""},
+    {"name": "Banana Medals", "value": "medal", "tooltip": ""},
+    {"name": "Nintendo/Rareware Coins", "value": "coin", "tooltip": ""},
+]
+
+KeySelector = [
+    {"name": "Key 1", "value": "key1", "tooltip": ""},
+    {"name": "Key 2", "value": "key2", "tooltip": ""},
+    {"name": "Key 3", "value": "key3", "tooltip": ""},
+    {"name": "Key 4", "value": "key4", "tooltip": ""},
+    {"name": "Key 5", "value": "key5", "tooltip": ""},
+    {"name": "Key 6", "value": "key6", "tooltip": ""},
+    {"name": "Key 7", "value": "key7", "tooltip": ""},
+    {"name": "Key 8", "value": "key8", "tooltip": ""},
+]

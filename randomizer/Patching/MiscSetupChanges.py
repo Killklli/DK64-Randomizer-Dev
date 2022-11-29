@@ -1,146 +1,396 @@
-'Apply misc setup changes.'
-_D=True
-_C='picked'
-_B=False
-_A='index'
-import math,random,js
+"""Apply misc setup changes."""
+import math
+import random
+
+import js
 from randomizer.Lists.MapsAndExits import Maps
 from randomizer.Lists.Patches import DirtPatchLocations
 from randomizer.Patching.Patcher import ROM
 from randomizer.Spoiler import Spoiler
 from randomizer.Patching.Lib import float_to_hex
-def pickRandomPositionCircle(center_x,center_z,min_radius,max_radius):
-	'Pick a random position within a torus where the center and radius boundaries are specified.';B=min_radius;C=B+math.sqrt(random.random())*(max_radius-B);A=random.uniform(0,math.pi*2)
-	if A==math.pi*2:A=0
-	D=C*math.sin(A);E=C*math.cos(A);F=center_x+D;G=center_z+E;return[F,G]
-def pickRandomPositionsMult(center_x,center_z,min_radius,max_radius,count,min_dist):
-	"Pick multiple points within a torus where the center and radius boundaries are defined. There is a failsafe to make sure 2 points aren't within a certain specified distance away from each other.";B=[]
-	for H in range(count):
-		A=_B
-		while not A:
-			C=pickRandomPositionCircle(center_x,center_z,min_radius,max_radius)
-			if len(B)==0:A=_D
-			else:
-				A=_D
-				for D in B:
-					E=D[0]-C[0];F=D[1]-C[1];G=math.sqrt(E*E+F*F)
-					if G<min_dist:A=_B
-			if A:B.append(C)
-	return{_C:B.copy(),_A:0}
+
+
+def pickRandomPositionCircle(center_x, center_z, min_radius, max_radius):
+    """Pick a random position within a torus where the center and radius boundaries are specified."""
+    radius = min_radius + (math.sqrt(random.random()) * (max_radius - min_radius))
+    angle = random.uniform(0, math.pi * 2)
+    if angle == math.pi * 2:
+        angle = 0
+    item_dx = radius * math.sin(angle)
+    item_dz = radius * math.cos(angle)
+    item_x = center_x + item_dx
+    item_z = center_z + item_dz
+    return [item_x, item_z]
+
+
+def pickRandomPositionsMult(center_x, center_z, min_radius, max_radius, count, min_dist):
+    """Pick multiple points within a torus where the center and radius boundaries are defined. There is a failsafe to make sure 2 points aren't within a certain specified distance away from each other."""
+    picked = []
+    for item in range(count):
+        good_place = False
+        while not good_place:
+            selected = pickRandomPositionCircle(center_x, center_z, min_radius, max_radius)
+            if len(picked) == 0:
+                good_place = True
+            else:
+                good_place = True
+                for picked_item in picked:
+                    dx = picked_item[0] - selected[0]
+                    dz = picked_item[1] - selected[1]
+                    delta = math.sqrt((dx * dx) + (dz * dz))
+                    if delta < min_dist:
+                        good_place = False
+            if good_place:
+                picked.append(selected)
+    return {"picked": picked.copy(), "index": 0}
+
+
 def pickChunkyCabinPadPositions():
-	"Pick 3 points within a torus in Chunky's 5-door cabin where the center and radius boundaries are defined. There are failsafes to make sure 2 points are far enough apart and all points are easy enough to reach for casual game play purposes.";I=[];C=[[169.53,205.91],[435.219,483.118]];B=[294.594,337.22];N=70
-	for R in range(3):
-		D=_B
-		while not D:
-			A=pickRandomPositionCircle(B[0],B[1],70,180)
-			for J in C:
-				E=A[0]-J[0];F=A[1]-J[1];K=math.sqrt(E*E+F*F)
-				if K<N:
-					G=A[0]
-					if J[0]<B[0]:G=G+70
-					else:G=G-70
-					H=A[1]
-					if J[1]<B[1]:H=H+70
-					else:H=H-70
-					A=random.choice([[G,A[1]],[A[0],H]])
-			O=C[0][0]<A[0]<B[0]and C[0][1]<A[1]<B[1];P=B[0]<A[0]<C[1][0]and B[1]<A[1]<C[1][1]
-			if O or P:L=294.594;Q=A[0]-L;A[0]=L-Q
-			if len(I)==0:D=_D
-			else:
-				D=_D
-				for M in I:
-					E=M[0]-A[0];F=M[1]-A[1];K=math.sqrt(E*E+F*F)
-					if K<70:D=_B
-			if D:I.append(A)
-	return{_C:I.copy(),_A:0}
-def randomize_setup(spoiler):
-	'Randomize setup.';AE='coords';AD='corner';A5='offset';A4='center';m='rotation';l='numbers';k='subtype';b='offsets';a='item';V='item_list';U='map';T='weight';S='type';N='positions';G='big';D='rot';C='number';A=spoiler;AF=[{a:'orange',S:86,T:3},{a:'film',S:152,T:1},{a:'crystals',S:142,T:4},{a:'standard_crate',S:143,T:4},{a:'homing_crate',S:17,T:2}];n=[]
-	for A6 in AF:
-		for AX in range(A6[T]):n.append(A6[S])
-	AG=[A.settings.fast_gbs,A.settings.randomize_pickups,A.settings.random_patches,A.settings.puzzle_rando,A.settings.hard_bosses,A.settings.high_req];o=_B
-	for AH in AG:o=o or AH
-	AI=[{U:Maps.AztecLlamaTemple,V:[188,555,553,554]},{U:Maps.CastleMuseum,V:[23]},{U:Maps.AztecTinyTemple,V:[167,166,165,164]},{U:Maps.FranticFactory,V:[333,332,331,330]},{U:Maps.CastleCrypt,V:[583,584,585,586]}];AJ=[{k:AD,l:[{C:12,D:0},{C:3,D:1},{C:5,D:2},{C:6,D:3}]},{k:'edge',l:[{C:8,D:0},{C:10,D:0},{C:7,D:1},{C:16,D:1},{C:14,D:2},{C:9,D:2},{C:4,D:3},{C:1,D:3}]},{k:A4,l:[{C:13,D:0},{C:15,D:0},{C:11,D:0},{C:2,D:0}]}];p=[[212.543,120.5,963.536],[100.017,120.5,569.51],[497.464,120.5,458.709],[401.557,138.167,754.136],[318.119,138.167,752.011],[311.555,138.167,666.162],[398.472,138.167,668.426]]
-	if o:
-		q=pickRandomPositionsMult(287.94,312.119,0,140,6,40);c=pickRandomPositionsMult(274.9,316.505,40,160,5,40);r=pickChunkyCabinPadPositions();random.shuffle(p);d=0
-		for E in range(216):
-			O=js.pointer_addresses[9]['entries'][E]['pointing_to'];ROM().seek(O);W=int.from_bytes(ROM().readBytes(4),G);s=[];X=[]
-			if E==Maps.FranticFactory:e={AD:{b:[],N:[]},'edge':{b:[],N:[]},A4:{b:[],N:[]}}
-			for AK in range(W):
-				B=O+4+AK*48;ROM().seek(B+40);F=int.from_bytes(ROM().readBytes(2),G);A7=_B
-				for A8 in AI:
-					if A8[U]==E and F in A8[V]:A7=_D
-				if F==406 and A.settings.fast_gbs and E==Maps.FactoryBaboonBlast:ROM().seek(B+40);ROM().writeMultipleBytes(116,2);ROM().seek(B+12);ROM().writeMultipleBytes(1056964608,4)
-				elif F in n and A.settings.randomize_pickups:ROM().seek(B+40);ROM().writeMultipleBytes(random.choice(n),2)
-				elif A7:
-					if A.settings.puzzle_rando:s.append(B);ROM().seek(B);Y=int.from_bytes(ROM().readBytes(4),G);t=int.from_bytes(ROM().readBytes(4),G);u=int.from_bytes(ROM().readBytes(4),G);ROM().seek(B+28);AL=int.from_bytes(ROM().readBytes(4),G);X.append([Y,t,u,AL])
-				elif F==565 and(E==Maps.GalleonBoss and A.settings.hard_bosses or E==Maps.HideoutHelm and A.settings.puzzle_rando):
-					if E==Maps.HideoutHelm:v=[1055.704,3446.966];w=[123.128,235.971];f=[-131,500]
-					elif E==Maps.GalleonBoss:v=[1216,1478];w=[200,460];f=[]
-					A9=pickRandomPositionCircle(v[0],v[1],w[0],w[1]);x=random.uniform(0,360)
-					if x==360:x=0
-					AM=A9[0];AN=A9[1];ROM().seek(B);ROM().writeMultipleBytes(int(float_to_hex(AM),16),4);ROM().seek(B+8);ROM().writeMultipleBytes(int(float_to_hex(AN),16),4);ROM().seek(B+28);ROM().writeMultipleBytes(int(float_to_hex(x),16),4)
-					if len(f)>0:AO=random.uniform(f[0],f[1]);ROM().seek(B+4);ROM().writeMultipleBytes(int(float_to_hex(AO),16),4)
-				elif F==116 and E==Maps.GalleonLighthouse and A.settings.high_req:
-					AP=[407.107,720,501.02]
-					for (AQ,I) in enumerate(AP):ROM().seek(B+AQ*4);ROM().writeMultipleBytes(int(float_to_hex(I),16),4)
-				elif E==Maps.FranticFactory and A.settings.puzzle_rando and F>=244 and F<=259:
-					for AA in AJ:
-						for y in AA[l]:
-							if y[C]==F-243:g=AA[k];ROM().seek(B);Y=int.from_bytes(ROM().readBytes(4),G);t=int.from_bytes(ROM().readBytes(4),G);u=int.from_bytes(ROM().readBytes(4),G);e[g][b].append({A5:B,m:y[D],C:F-243});e[g][N].append({AE:[Y,t,u],m:y[D]})
-				elif E==Maps.ForestLankyMushroomsRoom and A.settings.puzzle_rando:
-					if F>=442 and F<=446:H=c[_C][c[_A]];ROM().seek(B);ROM().writeMultipleBytes(int(float_to_hex(H[0]),16),4);ROM().seek(B+8);ROM().writeMultipleBytes(int(float_to_hex(H[1]),16),4);c[_A]+=1
-					elif F==517:H=c[_C][0];ROM().seek(B);ROM().writeMultipleBytes(int(float_to_hex(H[0]),16),4);ROM().seek(B+8);ROM().writeMultipleBytes(int(float_to_hex(H[1]),16),4)
-				elif E==Maps.AngryAztec and A.settings.puzzle_rando and(F==289 or F>=550 and F<=552):
-					ROM().seek(B)
-					for I in range(3):ROM().writeMultipleBytes(int(float_to_hex(p[d][I]),16),4)
-					d+=1
-				elif E==Maps.CavesChunkyCabin and A.settings.puzzle_rando and F==515:H=r[_C][r[_A]];ROM().seek(B);ROM().writeMultipleBytes(int(float_to_hex(H[0]),16),4);ROM().seek(B+8);ROM().writeMultipleBytes(int(float_to_hex(H[1]),16),4);r[_A]+=1
-			if A.settings.puzzle_rando:
-				if len(X)>0 and len(s)>0:
-					random.shuffle(X)
-					for (Z,P) in enumerate(s):
-						ROM().seek(P)
-						for I in range(3):ROM().writeMultipleBytes(X[Z][I],4)
-						ROM().seek(P+28);ROM().writeMultipleBytes(X[Z][3],4)
-				if E==Maps.FranticFactory:
-					AR=['0x00000000','0x42B40000','0x43340000','0x43870000']
-					for L in e:
-						g=L;L=e[L];random.shuffle(L[N])
-						for (Z,P) in enumerate(L[b]):
-							ROM().seek(P[A5]);AS=P[m]
-							for I in range(3):
-								AB=L[N][Z][AE][I]
-								if I==1:AB=int(float_to_hex(1002),16)
-								ROM().writeMultipleBytes(AB,4)
-							z=L[N][Z][m];AC=(AS-z+4)%4
-							if g==A4:AC=random.randint(0,3)
-							ROM().seek(P[A5]+28);z=(2+AC)%4;ROM().writeMultipleBytes(int(AR[z],16),4)
-			ROM().seek(O+4+W*48);A0=int.from_bytes(ROM().readBytes(4),G);A1=O+4+W*48+4+A0*36;ROM().seek(O+4+W*48+4+A0*36);A2=int.from_bytes(ROM().readBytes(4),G);h=[];i=[]
-			for A3 in range(A2):
-				J=A1+4+A3*56;ROM().seek(J+50);Q=int.from_bytes(ROM().readBytes(2),G)+16
-				if A.settings.random_patches:
-					if not Q==139:
-						j=[];ROM().seek(J+52);i.append(int.from_bytes(ROM().readBytes(2),G));ROM().seek(J)
-						for Y in range(int(56/4)):j.append(int.from_bytes(ROM().readBytes(4),G))
-						h.append(j.copy())
-			if A.settings.random_patches:
-				R=32
-				for AT in A.dirt_patch_placement:
-					for M in DirtPatchLocations:
-						if M.map_id==E and M.name==AT:
-							if R in i:
-								while R in i:R+=1
-							K=[];K.append(int(float_to_hex(M.x),16));K.append(int(float_to_hex(M.y),16));K.append(int(float_to_hex(M.z),16));K.append(int(float_to_hex(M.scale),16))
-							for Y in range(8):K.append(0)
-							AU=hex(M.rotation)+'007B';K.append(int(AU,16));AV=hex(R)+'46D0';i.append(R);R+=1;K.append(int(AV,16));h.append(K)
-					ROM().seek(A1);ROM().writeMultipleBytes(len(h),4)
-					for AW in h:
-						for j in AW:ROM().writeMultipleBytes(j,4)
-			ROM().seek(O+4+W*48+4+A0*36);A2=int.from_bytes(ROM().readBytes(4),G);AY=[]
-			for A3 in range(A2):
-				J=A1+4+A3*56;ROM().seek(J+50);Q=int.from_bytes(ROM().readBytes(2),G)+16
-				if Q>=100 and Q<=105 and A.settings.puzzle_rando and E==Maps.CavesDiddyIgloo:H=q[_C][q[_A]];ROM().seek(J);ROM().writeMultipleBytes(int(float_to_hex(H[0]),16),4);ROM().seek(J+8);ROM().writeMultipleBytes(int(float_to_hex(H[1]),16),4);q[_A]+=1
-				elif Q>=64 and Q<=66 and A.settings.puzzle_rando and E==Maps.AngryAztec:
-					ROM().seek(J)
-					for I in range(3):ROM().writeMultipleBytes(int(float_to_hex(p[d][I]),16),4)
-					d+=1
+    """Pick 3 points within a torus in Chunky's 5-door cabin where the center and radius boundaries are defined. There are failsafes to make sure 2 points are far enough apart and all points are easy enough to reach for casual game play purposes."""
+    picked_pads = []
+    # lamp_halfway_points are the center of the moving light circles when they are in their halfway points along their routes
+    lamp_halfway_points = [[169.53, 205.91], [435.219, 483.118]]
+    center_of_room = [294.594, 337.22]
+    lamp_radius = 70  # lamp radius is 65-70 but safe to use 70
+    for count in range(3):
+        good_pad = False
+        while not good_pad:
+            pad = pickRandomPositionCircle(center_of_room[0], center_of_room[1], 70, 180)
+            # check if pad is in a difficult spot to clear and if so, get the pad out of the difficult spot
+            for lamp in lamp_halfway_points:
+                # check if pad is in a lamp's radius when said lamp is on its halfway point
+                dx = pad[0] - lamp[0]
+                dz = pad[1] - lamp[1]
+                delta = math.sqrt((dx * dx) + (dz * dz))
+                # pad is in the radius mentioned in the comment above. Move the pad out of this radius
+                if delta < lamp_radius:
+                    suggested_x = pad[0]
+                    if lamp[0] < center_of_room[0]:
+                        suggested_x = suggested_x + 70
+                    else:
+                        suggested_x = suggested_x - 70
+                    suggested_z = pad[1]
+                    if lamp[1] < center_of_room[1]:
+                        suggested_z = suggested_z + 70
+                    else:
+                        suggested_z = suggested_z - 70
+                    pad = random.choice([[suggested_x, pad[1]], [pad[0], suggested_z]])
+            # check if the pad is far inside and near the lamp radius (not in it, as that's what we fixed above)
+            # top right has a Low X and Low Z coordinate, bottom left has a high X and High Z coordinate
+            is_far_inside_top_right = lamp_halfway_points[0][0] < pad[0] < center_of_room[0] and lamp_halfway_points[0][1] < pad[1] < center_of_room[1]
+            is_far_inside_bottom_left = center_of_room[0] < pad[0] < lamp_halfway_points[1][0] and center_of_room[1] < pad[1] < lamp_halfway_points[1][1]
+            if is_far_inside_top_right or is_far_inside_bottom_left:
+                # flip the coordinates horizontally, this effectively moves the pad one quadrant clockwise
+                mirror_line = 294.594
+                difference = pad[0] - mirror_line
+                pad[0] = mirror_line - difference
+            # check if any pads overlap
+            if len(picked_pads) == 0:
+                good_pad = True
+            else:
+                good_pad = True
+                for previously_picked_item in picked_pads:
+                    dx = previously_picked_item[0] - pad[0]
+                    dz = previously_picked_item[1] - pad[1]
+                    delta = math.sqrt((dx * dx) + (dz * dz))
+                    if delta < 70:
+                        good_pad = False
+            if good_pad:
+                picked_pads.append(pad)
+    return {"picked": picked_pads.copy(), "index": 0}
+
+
+def randomize_setup(spoiler: Spoiler):
+    """Randomize setup."""
+    pickup_weights = [
+        {"item": "orange", "type": 0x56, "weight": 3},
+        {"item": "film", "type": 0x98, "weight": 1},
+        {"item": "crystals", "type": 0x8E, "weight": 4},
+        {"item": "standard_crate", "type": 0x8F, "weight": 4},
+        {"item": "homing_crate", "type": 0x11, "weight": 2},
+        # {
+        #     "item": "feather_single",
+        #     "type": 0x15D,
+        #     "weight": 3,
+        # },
+        # {
+        #     "item": "grape_single",
+        #     "type": 0x15E,
+        #     "weight": 3,
+        # },
+        # {
+        #     "item": "pineapple_single",
+        #     "type": 0x15F,
+        #     "weight": 3,
+        # },
+        # {
+        #     "item": "coconut_single",
+        #     "type": 0x160,
+        #     "weight": 3,
+        # },
+        # {
+        #     "item": "peanut_single",
+        #     "type": 0x91,
+        #     "weight": 3,
+        # },
+    ]
+    pickup_list = []
+    for pickup in pickup_weights:
+        for count in range(pickup["weight"]):
+            pickup_list.append(pickup["type"])
+
+    allowed_settings = [
+        spoiler.settings.fast_gbs,
+        spoiler.settings.randomize_pickups,
+        spoiler.settings.random_patches,
+        spoiler.settings.puzzle_rando,
+        spoiler.settings.hard_bosses,
+        spoiler.settings.high_req,
+    ]
+    enabled = False
+    for setting in allowed_settings:
+        enabled = enabled or setting
+    swap_list = [
+        {"map": Maps.AztecLlamaTemple, "item_list": [0xBC, 0x22B, 0x229, 0x22A]},
+        {"map": Maps.CastleMuseum, "item_list": [0x17]},
+        {"map": Maps.AztecTinyTemple, "item_list": [0xA7, 0xA6, 0xA5, 0xA4]},
+        {"map": Maps.FranticFactory, "item_list": [0x14D, 0x14C, 0x14B, 0x14A]},
+        {"map": Maps.CastleCrypt, "item_list": [0x247, 0x248, 0x249, 0x24A]},
+    ]
+    number_gb_data = [
+        {"subtype": "corner", "numbers": [{"number": 12, "rot": 0}, {"number": 3, "rot": 1}, {"number": 5, "rot": 2}, {"number": 6, "rot": 3}]},
+        {
+            "subtype": "edge",
+            "numbers": [
+                {"number": 8, "rot": 0},
+                {"number": 10, "rot": 0},
+                {"number": 7, "rot": 1},
+                {"number": 16, "rot": 1},
+                {"number": 14, "rot": 2},
+                {"number": 9, "rot": 2},
+                {"number": 4, "rot": 3},
+                {"number": 1, "rot": 3},
+            ],
+        },
+        {"subtype": "center", "numbers": [{"number": 13, "rot": 0}, {"number": 15, "rot": 0}, {"number": 11, "rot": 0}, {"number": 2, "rot": 0}]},
+    ]
+    vase_puzzle_positions = [
+        # [365.533, 138.167, 717.282], # Exclude center to force it to be a vase
+        [212.543, 120.5, 963.536],
+        [100.017, 120.5, 569.51],
+        [497.464, 120.5, 458.709],
+        [401.557, 138.167, 754.136],
+        [318.119, 138.167, 752.011],
+        [311.555, 138.167, 666.162],
+        [398.472, 138.167, 668.426],
+    ]
+
+    if enabled:
+        diddy_5di_pads = pickRandomPositionsMult(287.94, 312.119, 0, 140, 6, 40)
+        lanky_fungi_mush = pickRandomPositionsMult(274.9, 316.505, 40, 160, 5, 40)
+        chunky_5dc_pads = pickChunkyCabinPadPositions()
+        random.shuffle(vase_puzzle_positions)
+        vase_puzzle_rando_progress = 0
+        for cont_map_id in range(216):
+            cont_map_setup_address = js.pointer_addresses[9]["entries"][cont_map_id]["pointing_to"]
+            ROM().seek(cont_map_setup_address)
+            model2_count = int.from_bytes(ROM().readBytes(4), "big")
+            # Puzzle Stuff
+            offsets = []
+            positions = []
+            if cont_map_id == Maps.FranticFactory:
+                number_replacement_data = {"corner": {"offsets": [], "positions": []}, "edge": {"offsets": [], "positions": []}, "center": {"offsets": [], "positions": []}}
+            for model2_item in range(model2_count):
+                item_start = cont_map_setup_address + 4 + (model2_item * 0x30)
+                ROM().seek(item_start + 0x28)
+                item_type = int.from_bytes(ROM().readBytes(2), "big")
+                is_swap = False
+                for swap in swap_list:
+                    if swap["map"] == cont_map_id and item_type in swap["item_list"]:
+                        is_swap = True
+                if item_type == 0x196 and spoiler.settings.fast_gbs and cont_map_id == Maps.FactoryBaboonBlast:
+                    ROM().seek(item_start + 0x28)
+                    ROM().writeMultipleBytes(0x74, 2)
+                    ROM().seek(item_start + 0xC)
+                    ROM().writeMultipleBytes(0x3F000000, 4)  # Scale: 0.5
+                elif item_type in pickup_list and spoiler.settings.randomize_pickups:
+                    ROM().seek(item_start + 0x28)
+                    ROM().writeMultipleBytes(random.choice(pickup_list), 2)
+                elif is_swap:
+                    if spoiler.settings.puzzle_rando:
+                        offsets.append(item_start)
+                        ROM().seek(item_start)
+                        x = int.from_bytes(ROM().readBytes(4), "big")
+                        y = int.from_bytes(ROM().readBytes(4), "big")
+                        z = int.from_bytes(ROM().readBytes(4), "big")
+                        ROM().seek(item_start + 0x1C)
+                        ry = int.from_bytes(ROM().readBytes(4), "big")
+                        positions.append([x, y, z, ry])
+                elif item_type == 0x235 and ((cont_map_id == Maps.GalleonBoss and spoiler.settings.hard_bosses) or (cont_map_id == Maps.HideoutHelm and spoiler.settings.puzzle_rando)):
+                    if cont_map_id == Maps.HideoutHelm:
+                        star_donut_center = [1055.704, 3446.966]
+                        star_donut_boundaries = [123.128, 235.971]
+                        star_height_boundaries = [-131, 500]
+                    elif cont_map_id == Maps.GalleonBoss:
+                        star_donut_center = [1216, 1478]
+                        star_donut_boundaries = [200, 460]
+                        star_height_boundaries = []
+                    star_pos = pickRandomPositionCircle(star_donut_center[0], star_donut_center[1], star_donut_boundaries[0], star_donut_boundaries[1])
+                    star_a = random.uniform(0, 360)
+                    if star_a == 360:
+                        star_a = 0
+                    star_x = star_pos[0]
+                    star_z = star_pos[1]
+                    ROM().seek(item_start)
+                    ROM().writeMultipleBytes(int(float_to_hex(star_x), 16), 4)
+                    ROM().seek(item_start + 8)
+                    ROM().writeMultipleBytes(int(float_to_hex(star_z), 16), 4)
+                    ROM().seek(item_start + 0x1C)
+                    ROM().writeMultipleBytes(int(float_to_hex(star_a), 16), 4)
+                    if len(star_height_boundaries) > 0:
+                        star_y = random.uniform(star_height_boundaries[0], star_height_boundaries[1])
+                        ROM().seek(item_start + 4)
+                        ROM().writeMultipleBytes(int(float_to_hex(star_y), 16), 4)
+                elif item_type == 0x74 and cont_map_id == Maps.GalleonLighthouse and spoiler.settings.high_req:
+                    new_gb_coords = [407.107, 720, 501.02]
+                    for coord_i, coord in enumerate(new_gb_coords):
+                        ROM().seek(item_start + (coord_i * 4))
+                        ROM().writeMultipleBytes(int(float_to_hex(coord), 16), 4)
+                elif cont_map_id == Maps.FranticFactory and spoiler.settings.puzzle_rando and item_type >= 0xF4 and item_type <= 0x103:
+                    for subtype_item in number_gb_data:
+                        for num_item in subtype_item["numbers"]:
+                            if num_item["number"] == (item_type - 0xF3):
+                                subtype_name = subtype_item["subtype"]
+                                ROM().seek(item_start)
+                                x = int.from_bytes(ROM().readBytes(4), "big")
+                                y = int.from_bytes(ROM().readBytes(4), "big")
+                                z = int.from_bytes(ROM().readBytes(4), "big")
+                                number_replacement_data[subtype_name]["offsets"].append({"offset": item_start, "rotation": num_item["rot"], "number": item_type - 0xF3})
+                                number_replacement_data[subtype_name]["positions"].append({"coords": [x, y, z], "rotation": num_item["rot"]})
+                elif cont_map_id == Maps.ForestLankyMushroomsRoom and spoiler.settings.puzzle_rando:
+                    if item_type >= 0x1BA and item_type <= 0x1BE:  # Mushrooms
+                        spawner_pos = lanky_fungi_mush["picked"][lanky_fungi_mush["index"]]
+                        ROM().seek(item_start)
+                        ROM().writeMultipleBytes(int(float_to_hex(spawner_pos[0]), 16), 4)
+                        ROM().seek(item_start + 8)
+                        ROM().writeMultipleBytes(int(float_to_hex(spawner_pos[1]), 16), 4)
+                        lanky_fungi_mush["index"] += 1
+                    elif item_type == 0x205:  # Lanky Bunch
+                        spawner_pos = lanky_fungi_mush["picked"][0]
+                        ROM().seek(item_start)
+                        ROM().writeMultipleBytes(int(float_to_hex(spawner_pos[0]), 16), 4)
+                        ROM().seek(item_start + 8)
+                        ROM().writeMultipleBytes(int(float_to_hex(spawner_pos[1]), 16), 4)
+                elif cont_map_id == Maps.AngryAztec and spoiler.settings.puzzle_rando and (item_type == 0x121 or (item_type >= 0x226 and item_type <= 0x228)):
+                    # Is Vase Pad
+                    ROM().seek(item_start)
+                    for coord in range(3):
+                        ROM().writeMultipleBytes(int(float_to_hex(vase_puzzle_positions[vase_puzzle_rando_progress][coord]), 16), 4)
+                    vase_puzzle_rando_progress += 1
+                elif cont_map_id == Maps.CavesChunkyCabin and spoiler.settings.puzzle_rando and item_type == 0x203:
+                    spawner_pos = chunky_5dc_pads["picked"][chunky_5dc_pads["index"]]
+                    ROM().seek(item_start)
+                    ROM().writeMultipleBytes(int(float_to_hex(spawner_pos[0]), 16), 4)
+                    ROM().seek(item_start + 8)
+                    ROM().writeMultipleBytes(int(float_to_hex(spawner_pos[1]), 16), 4)
+                    chunky_5dc_pads["index"] += 1
+
+            if spoiler.settings.puzzle_rando:
+                if len(positions) > 0 and len(offsets) > 0:
+                    random.shuffle(positions)
+                    for index, offset in enumerate(offsets):
+                        ROM().seek(offset)
+                        for coord in range(3):
+                            ROM().writeMultipleBytes(positions[index][coord], 4)
+                        ROM().seek(offset + 0x1C)
+                        ROM().writeMultipleBytes(positions[index][3], 4)
+                if cont_map_id == Maps.FranticFactory:
+                    rotation_hexes = ["0x00000000", "0x42B40000", "0x43340000", "0x43870000"]  # 0  # 90  # 180  # 270
+                    for subtype in number_replacement_data:
+                        subtype_name = subtype
+                        subtype = number_replacement_data[subtype]
+                        random.shuffle(subtype["positions"])
+                        for index, offset in enumerate(subtype["offsets"]):
+                            ROM().seek(offset["offset"])
+                            base_rot = offset["rotation"]
+                            for coord in range(3):
+                                coord_val = subtype["positions"][index]["coords"][coord]
+                                if coord == 1:
+                                    coord_val = int(float_to_hex(1002), 16)
+                                ROM().writeMultipleBytes(coord_val, 4)
+                            new_rot = subtype["positions"][index]["rotation"]
+                            rot_diff = ((base_rot - new_rot) + 4) % 4
+                            if subtype_name == "center":
+                                rot_diff = random.randint(0, 3)
+                            ROM().seek(offset["offset"] + 0x1C)
+                            new_rot = (2 + rot_diff) % 4
+                            ROM().writeMultipleBytes(int(rotation_hexes[new_rot], 16), 4)
+
+            ROM().seek(cont_map_setup_address + 4 + (model2_count * 0x30))
+            mystery_count = int.from_bytes(ROM().readBytes(4), "big")
+            actor_block_start = cont_map_setup_address + 4 + (model2_count * 0x30) + 4 + (mystery_count * 0x24)
+            ROM().seek(cont_map_setup_address + 4 + (model2_count * 0x30) + 4 + (mystery_count * 0x24))
+            actor_count = int.from_bytes(ROM().readBytes(4), "big")
+            actor_bytes = []
+            used_actor_ids = []
+            for actor_item in range(actor_count):
+                actor_start = actor_block_start + 4 + (actor_item * 0x38)
+                ROM().seek(actor_start + 0x32)
+                actor_type = int.from_bytes(ROM().readBytes(2), "big") + 0x10
+                if spoiler.settings.random_patches:
+                    if not actor_type == 139:
+                        byte_list = []
+                        ROM().seek(actor_start + 0x34)
+                        used_actor_ids.append(int.from_bytes(ROM().readBytes(2), "big"))
+                        ROM().seek(actor_start)
+                        for x in range(int(0x38 / 4)):
+                            byte_list.append(int.from_bytes(ROM().readBytes(4), "big"))
+                        actor_bytes.append(byte_list.copy())
+            if spoiler.settings.random_patches:
+                new_actor_id = 0x20
+                for dirt_item in spoiler.dirt_patch_placement:
+                    for patch in DirtPatchLocations:
+                        if patch.map_id == cont_map_id and patch.name == dirt_item:
+                            if new_actor_id in used_actor_ids:
+                                while new_actor_id in used_actor_ids:
+                                    new_actor_id += 1
+                            dirt_bytes = []
+                            dirt_bytes.append(int(float_to_hex(patch.x), 16))
+                            dirt_bytes.append(int(float_to_hex(patch.y), 16))
+                            dirt_bytes.append(int(float_to_hex(patch.z), 16))
+                            dirt_bytes.append(int(float_to_hex(patch.scale), 16))
+                            for x in range(8):
+                                dirt_bytes.append(0)
+                            rot_type_hex = hex(patch.rotation) + "007B"
+                            dirt_bytes.append(int(rot_type_hex, 16))
+                            id_something_hex = hex(new_actor_id) + "46D0"
+                            used_actor_ids.append(new_actor_id)
+                            new_actor_id += 1
+                            dirt_bytes.append(int(id_something_hex, 16))
+                            actor_bytes.append(dirt_bytes)
+                    ROM().seek(actor_block_start)
+                    ROM().writeMultipleBytes(len(actor_bytes), 4)
+                    for actor in actor_bytes:
+                        for byte_list in actor:
+                            ROM().writeMultipleBytes(byte_list, 4)
+            # Re-run through actor stuff for changes
+            ROM().seek(cont_map_setup_address + 4 + (model2_count * 0x30) + 4 + (mystery_count * 0x24))
+            actor_count = int.from_bytes(ROM().readBytes(4), "big")
+            diddy_5di_pos = []
+            for actor_item in range(actor_count):
+                actor_start = actor_block_start + 4 + (actor_item * 0x38)
+                ROM().seek(actor_start + 0x32)
+                actor_type = int.from_bytes(ROM().readBytes(2), "big") + 0x10
+                if actor_type >= 100 and actor_type <= 105 and spoiler.settings.puzzle_rando and cont_map_id == Maps.CavesDiddyIgloo:  # 5DI Spawner
+                    spawner_pos = diddy_5di_pads["picked"][diddy_5di_pads["index"]]
+                    ROM().seek(actor_start)
+                    ROM().writeMultipleBytes(int(float_to_hex(spawner_pos[0]), 16), 4)
+                    ROM().seek(actor_start + 8)
+                    ROM().writeMultipleBytes(int(float_to_hex(spawner_pos[1]), 16), 4)
+                    diddy_5di_pads["index"] += 1
+                elif actor_type >= 64 and actor_type <= 66 and spoiler.settings.puzzle_rando and cont_map_id == Maps.AngryAztec:  # Exclude O Vase to force it to be vanilla
+                    # Vase
+                    ROM().seek(actor_start)
+                    for coord in range(3):
+                        ROM().writeMultipleBytes(int(float_to_hex(vase_puzzle_positions[vase_puzzle_rando_progress][coord]), 16), 4)
+                    vase_puzzle_rando_progress += 1

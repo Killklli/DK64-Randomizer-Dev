@@ -1,1 +1,1 @@
-'List Data for CB Locations.'
+"""List Data for CB Locations."""

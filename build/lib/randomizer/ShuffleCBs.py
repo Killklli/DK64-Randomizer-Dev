@@ -1,60 +1,179 @@
-'Select CB Location selection.'
-_C='balloons'
-_B='cb'
-_A='logic'
+"""Select CB Location selection."""
 from randomizer.LogicClasses import Collectible
 from .Enums.Collectibles import Collectibles
-import randomizer.Lists.CBLocations.JungleJapesCBLocations,randomizer.Lists.CBLocations.AngryAztecCBLocations,randomizer.Lists.CBLocations.FranticFactoryCBLocations,randomizer.Lists.CBLocations.GloomyGalleonCBLocations,randomizer.Lists.CBLocations.FungiForestCBLocations,randomizer.Lists.CBLocations.CrystalCavesCBLocations,randomizer.Lists.CBLocations.CreepyCastleCBLocations,randomizer.CollectibleLogicFiles.JungleJapes,randomizer.CollectibleLogicFiles.AngryAztec,randomizer.CollectibleLogicFiles.FranticFactory,randomizer.CollectibleLogicFiles.GloomyGalleon,randomizer.CollectibleLogicFiles.FungiForest,randomizer.CollectibleLogicFiles.CrystalCaves,randomizer.CollectibleLogicFiles.CreepyCastle
+import randomizer.Lists.CBLocations.JungleJapesCBLocations
+import randomizer.Lists.CBLocations.AngryAztecCBLocations
+import randomizer.Lists.CBLocations.FranticFactoryCBLocations
+import randomizer.Lists.CBLocations.GloomyGalleonCBLocations
+import randomizer.Lists.CBLocations.FungiForestCBLocations
+import randomizer.Lists.CBLocations.CrystalCavesCBLocations
+import randomizer.Lists.CBLocations.CreepyCastleCBLocations
+import randomizer.CollectibleLogicFiles.JungleJapes
+import randomizer.CollectibleLogicFiles.AngryAztec
+import randomizer.CollectibleLogicFiles.FranticFactory
+import randomizer.CollectibleLogicFiles.GloomyGalleon
+import randomizer.CollectibleLogicFiles.FungiForest
+import randomizer.CollectibleLogicFiles.CrystalCaves
+import randomizer.CollectibleLogicFiles.CreepyCastle
+
 from randomizer.Enums.Levels import Levels
 from randomizer.Spoiler import Spoiler
 from randomizer.Enums.Kongs import Kongs
 import random
-max_balloons=105
-max_singles=780
-max_bunches=790-max_balloons*2-round(max_singles/5)
-level_data={Levels.JungleJapes:{_B:randomizer.Lists.CBLocations.JungleJapesCBLocations.ColoredBananaGroupList,_C:randomizer.Lists.CBLocations.JungleJapesCBLocations.BalloonList,_A:randomizer.CollectibleLogicFiles.JungleJapes.LogicRegions},Levels.AngryAztec:{_B:randomizer.Lists.CBLocations.AngryAztecCBLocations.ColoredBananaGroupList,_C:randomizer.Lists.CBLocations.AngryAztecCBLocations.BalloonList,_A:randomizer.CollectibleLogicFiles.AngryAztec.LogicRegions},Levels.FranticFactory:{_B:randomizer.Lists.CBLocations.FranticFactoryCBLocations.ColoredBananaGroupList,_C:randomizer.Lists.CBLocations.FranticFactoryCBLocations.BalloonList,_A:randomizer.CollectibleLogicFiles.FranticFactory.LogicRegions},Levels.GloomyGalleon:{_B:randomizer.Lists.CBLocations.GloomyGalleonCBLocations.ColoredBananaGroupList,_C:randomizer.Lists.CBLocations.GloomyGalleonCBLocations.BalloonList,_A:randomizer.CollectibleLogicFiles.GloomyGalleon.LogicRegions},Levels.FungiForest:{_B:randomizer.Lists.CBLocations.FungiForestCBLocations.ColoredBananaGroupList,_C:randomizer.Lists.CBLocations.FungiForestCBLocations.BalloonList,_A:randomizer.CollectibleLogicFiles.FungiForest.LogicRegions},Levels.CrystalCaves:{_B:randomizer.Lists.CBLocations.CrystalCavesCBLocations.ColoredBananaGroupList,_C:randomizer.Lists.CBLocations.CrystalCavesCBLocations.BalloonList,_A:randomizer.CollectibleLogicFiles.CrystalCaves.LogicRegions},Levels.CreepyCastle:{_B:randomizer.Lists.CBLocations.CreepyCastleCBLocations.ColoredBananaGroupList,_C:randomizer.Lists.CBLocations.CreepyCastleCBLocations.BalloonList,_A:randomizer.CollectibleLogicFiles.CreepyCastle.LogicRegions}}
-def ShuffleCBs(spoiler):
-	'Shuffle CBs selected from location files.';r='map';q='type';p='level';o='kong';n='name';e=None;f=0;K=0;L=0;g=[]
-	for (F,B) in enumerate(level_data):
-		for s in level_data[B][_A]:
-			for h in level_data[B][_A][s]:
-				if h.type in[Collectibles.balloon,Collectibles.bunch,Collectibles.banana]:h.enabled=False
-		S=[];M=6-F;A={Kongs.donkey:100,Kongs.diddy:100,Kongs.lanky:100,Kongs.tiny:100,Kongs.chunky:100};N=max_balloons-f;i=max(int(N/(7-F))-3,0)
-		if M==0:T=N
-		else:T=min(int(N/(7-F))+3,int(N/M))
-		U=level_data[B][_C].copy();t=min(random.randint(min(i,T),max(i,T)),len(U));random.shuffle(U);V=0
-		for H in U:
-			if V<t:
-				O=H.kongs.copy()
-				for E in A:
-					if A[E]<10 and E in O:O.remove(E)
-				if len(O)>0:D=random.choice(O);A[D]-=10;S.append({'id':H.id,n:H.name,o:D,p:B,q:_C,r:H.map});V+=1;level_data[B][_A][H.region].append(Collectible(Collectibles.balloon,D,H.logic,e,1))
-		P=max_bunches-L;Q=max_singles-K;j=max(int(P/(7-F))-5,0);k=max(int(Q/(7-F))-10,0)
-		if M==0:W=P;X=min(Q,int((5*(1127-L-K)-sum(A))/4))
-		else:W=min(int(P/(7-F))+15,int(P/M));X=min(int(Q/(7-F))+10,int(Q/M))
-		l=list(range(1,len(level_data[B][_B])+1));random.shuffle(l);u=random.randint(min(j,W),max(j,W));v=random.randint(min(k,X),max(k,X));Y=0;Z=0
-		for w in l:
-			R=0;a=0;b=0;m=[A for A in level_data[B][_B]if A.group==w];G=list(A.keys())
-			for C in m:
-				G=list(set(G)&set(C.kongs.copy()))
-				for I in C.locations:R+=I[0];a+=int(I[0]==5);b+=int(I[0]==1)
-			for E in A:
-				if E in G:
-					if A[E]<R or len(G)>1 and A[E]<=10 and A[E]-R>0:G.remove(E)
-			if len(G)>0 and v>=Z+b and u>=Y+a:
-				D=random.choice(G);A[D]-=R
-				if A[D]==0:del A[D]
-				for C in m:
-					c=0;d=0
-					for I in C.locations:c+=int(I[0]==5);d+=int(I[0]==1)
-					if c>0:level_data[B][_A][C.region].append(Collectible(Collectibles.bunch,D,C.logic,e,c))
-					if d>0:level_data[B][_A][C.region].append(Collectible(Collectibles.banana,D,C.logic,e,d))
-					S.append({'group':C.group,n:C.name,o:D,p:B,q:_B,r:C.map,'locations':C.locations})
-				Y+=a;Z+=b
-			if len(A.keys())==0:break
-		f+=V;L+=Y;K+=Z;g.extend(S.copy())
-		for J in A:
-			if A[J]>0:print(f"WARNING: {A[J]} bananas unassigned for {J.name} in {B.name}")
-			elif A[J]<0:print(f"WARNING: {-A[J]} too many bananas assigned for {J.name} in {B.name}")
-	if L+K>1127:print(f"WARNING: {L+K} banana objects placed, exceeding cap of 1127")
-	spoiler.cb_placements=g
+
+max_balloons = 105
+max_singles = 780  # 793 Singles in Vanilla, under-representing this to help with the calculation formula
+max_bunches = 790 - max_balloons * 2 - round(max_singles / 5)  # 334 bunches in vanilla, biasing this for now to help with calculation formula
+
+level_data = {
+    Levels.JungleJapes: {
+        "cb": randomizer.Lists.CBLocations.JungleJapesCBLocations.ColoredBananaGroupList,
+        "balloons": randomizer.Lists.CBLocations.JungleJapesCBLocations.BalloonList,
+        "logic": randomizer.CollectibleLogicFiles.JungleJapes.LogicRegions,
+    },
+    Levels.AngryAztec: {
+        "cb": randomizer.Lists.CBLocations.AngryAztecCBLocations.ColoredBananaGroupList,
+        "balloons": randomizer.Lists.CBLocations.AngryAztecCBLocations.BalloonList,
+        "logic": randomizer.CollectibleLogicFiles.AngryAztec.LogicRegions,
+    },
+    Levels.FranticFactory: {
+        "cb": randomizer.Lists.CBLocations.FranticFactoryCBLocations.ColoredBananaGroupList,
+        "balloons": randomizer.Lists.CBLocations.FranticFactoryCBLocations.BalloonList,
+        "logic": randomizer.CollectibleLogicFiles.FranticFactory.LogicRegions,
+    },
+    Levels.GloomyGalleon: {
+        "cb": randomizer.Lists.CBLocations.GloomyGalleonCBLocations.ColoredBananaGroupList,
+        "balloons": randomizer.Lists.CBLocations.GloomyGalleonCBLocations.BalloonList,
+        "logic": randomizer.CollectibleLogicFiles.GloomyGalleon.LogicRegions,
+    },
+    Levels.FungiForest: {
+        "cb": randomizer.Lists.CBLocations.FungiForestCBLocations.ColoredBananaGroupList,
+        "balloons": randomizer.Lists.CBLocations.FungiForestCBLocations.BalloonList,
+        "logic": randomizer.CollectibleLogicFiles.FungiForest.LogicRegions,
+    },
+    Levels.CrystalCaves: {
+        "cb": randomizer.Lists.CBLocations.CrystalCavesCBLocations.ColoredBananaGroupList,
+        "balloons": randomizer.Lists.CBLocations.CrystalCavesCBLocations.BalloonList,
+        "logic": randomizer.CollectibleLogicFiles.CrystalCaves.LogicRegions,
+    },
+    Levels.CreepyCastle: {
+        "cb": randomizer.Lists.CBLocations.CreepyCastleCBLocations.ColoredBananaGroupList,
+        "balloons": randomizer.Lists.CBLocations.CreepyCastleCBLocations.BalloonList,
+        "logic": randomizer.CollectibleLogicFiles.CreepyCastle.LogicRegions,
+    },
+}
+
+
+def ShuffleCBs(spoiler: Spoiler):
+    """Shuffle CBs selected from location files."""
+    total_balloons = 0
+    total_singles = 0
+    total_bunches = 0
+    cb_data = []
+    for level_index, level in enumerate(level_data):
+        # First, disable all vanilla placed colored bananas
+        for region in level_data[level]["logic"]:
+            for collectible in level_data[level]["logic"][region]:
+                if collectible.type in [Collectibles.balloon, Collectibles.bunch, Collectibles.banana]:
+                    collectible.enabled = False
+        level_placement = []
+        global_divisor = 6 - level_index
+        kong_specific_left = {Kongs.donkey: 100, Kongs.diddy: 100, Kongs.lanky: 100, Kongs.tiny: 100, Kongs.chunky: 100}
+        # Balloons
+        # Pick random amount of balloons assigned to level
+        balloons_left = max_balloons - total_balloons
+        balloon_lower = max(int(balloons_left / (7 - level_index)) - 3, 0)  # Select lower bound for randomization as max between 0, and balloons left distributed amongst the remaining levels minus 3
+        if global_divisor == 0:
+            # Last Level
+            balloon_upper = balloons_left
+        else:
+            balloon_upper = min(int(balloons_left / (7 - level_index)) + 3, int(balloons_left / global_divisor))
+        balloon_lst = level_data[level]["balloons"].copy()
+        selected_balloon_count = min(random.randint(min(balloon_lower, balloon_upper), max(balloon_lower, balloon_upper)), len(balloon_lst))
+        # selected_balloon_count = 22 # Test all balloon locations
+        random.shuffle(balloon_lst)  # TODO: Maybe make this more advanced?
+        # selects all balloons
+        placed_balloons = 0
+        for balloon in balloon_lst:
+            if placed_balloons < selected_balloon_count:
+                balloon_kongs = balloon.kongs.copy()
+                for kong in kong_specific_left:
+                    if kong_specific_left[kong] < 10 and kong in balloon_kongs:  # Not enough Colored Bananas to place a balloon:
+                        balloon_kongs.remove(kong)  # Remove kong from permitted list
+                if len(balloon_kongs) > 0:  # Has a kong who can be assigned to this balloon
+                    selected_kong = random.choice(balloon_kongs)
+                    kong_specific_left[selected_kong] -= 10  # Remove CBs for Balloon
+                    level_placement.append({"id": balloon.id, "name": balloon.name, "kong": selected_kong, "level": level, "type": "balloons", "map": balloon.map})
+                    placed_balloons += 1
+                    level_data[level]["logic"][balloon.region].append(Collectible(Collectibles.balloon, selected_kong, balloon.logic, None, 1))
+        # Model Two CBs
+        bunches_left = max_bunches - total_bunches
+        singles_left = max_singles - total_singles
+        bunches_lower = max(int(bunches_left / (7 - level_index)) - 5, 0)
+        singles_lower = max(int(singles_left / (7 - level_index)) - 10, 0)
+        if global_divisor == 0:
+            bunches_upper = bunches_left
+            singles_upper = min(singles_left, int((5 * (1127 - total_bunches - total_singles) - sum(kong_specific_left)) / 4))  # Places a hard cap of 1127 total singles+bunches
+        else:
+            bunches_upper = min(int(bunches_left / (7 - level_index)) + 15, int(bunches_left / global_divisor))
+            singles_upper = min(int(singles_left / (7 - level_index)) + 10, int(singles_left / global_divisor))
+        groupIds = list(range(1, len(level_data[level]["cb"]) + 1))
+        random.shuffle(groupIds)
+        selected_bunch_count = random.randint(min(bunches_lower, bunches_upper), max(bunches_lower, bunches_upper))
+        selected_single_count = random.randint(min(singles_lower, singles_upper), max(singles_lower, singles_upper))
+        placed_bunches = 0
+        placed_singles = 0
+        for groupId in groupIds:
+            group_weight = 0
+            bunches_in_group = 0
+            singles_in_group = 0
+            colored_banana_groups = [group for group in level_data[level]["cb"] if group.group == groupId]
+            cb_kongs = list(kong_specific_left.keys())
+            for group in colored_banana_groups:
+                cb_kongs = list(set(cb_kongs) & set(group.kongs.copy()))
+                for loc in group.locations:
+                    group_weight += loc[0]
+                    bunches_in_group += int(loc[0] == 5)
+                    singles_in_group += int(loc[0] == 1)
+            for kong in kong_specific_left:
+                if kong in cb_kongs:
+                    # If this kong doesn't have space for this group, remove it. Also if this kong is close to cap, don't use this kong unless it's the last one.
+                    if kong_specific_left[kong] < group_weight or (len(cb_kongs) > 1 and kong_specific_left[kong] <= 10 and (kong_specific_left[kong] - group_weight) > 0):
+                        cb_kongs.remove(kong)
+            if len(cb_kongs) > 0 and selected_single_count >= placed_singles + singles_in_group and selected_bunch_count >= placed_bunches + bunches_in_group:
+                selected_kong = random.choice(cb_kongs)
+                kong_specific_left[selected_kong] -= group_weight  # Remove CBs for kong
+                # When a kong hits 0 remaining in this level, we no longer need to consider it
+                if kong_specific_left[selected_kong] == 0:
+                    del kong_specific_left[selected_kong]
+                for group in colored_banana_groups:
+                    # Calculate the number of bananas we have to place by lesser group so different bananas in the same group can have different logic
+                    bunches_in_lesser_group = 0
+                    singles_in_lesser_group = 0
+                    for loc in group.locations:
+                        bunches_in_lesser_group += int(loc[0] == 5)
+                        singles_in_lesser_group += int(loc[0] == 1)
+                    if bunches_in_lesser_group > 0:
+                        level_data[level]["logic"][group.region].append(Collectible(Collectibles.bunch, selected_kong, group.logic, None, bunches_in_lesser_group))
+                    if singles_in_lesser_group > 0:
+                        level_data[level]["logic"][group.region].append(Collectible(Collectibles.banana, selected_kong, group.logic, None, singles_in_lesser_group))
+                    level_placement.append({"group": group.group, "name": group.name, "kong": selected_kong, "level": level, "type": "cb", "map": group.map, "locations": group.locations})
+                placed_bunches += bunches_in_group
+                placed_singles += singles_in_group
+            # If all kongs have 0 unplaced, we're done here
+            if len(kong_specific_left.keys()) == 0:
+                break
+
+        # Placement is valid
+        total_balloons += placed_balloons
+        total_bunches += placed_bunches
+        total_singles += placed_singles
+        cb_data.extend(level_placement.copy())
+        for x in kong_specific_left:
+            if kong_specific_left[x] > 0:
+                print(f"WARNING: {kong_specific_left[x]} bananas unassigned for {x.name} in {level.name}")
+            elif kong_specific_left[x] < 0:
+                print(f"WARNING: {-kong_specific_left[x]} too many bananas assigned for {x.name} in {level.name}")
+    if total_bunches + total_singles > 1127:
+        print(f"WARNING: {total_bunches + total_singles} banana objects placed, exceeding cap of 1127")
+    spoiler.cb_placements = cb_data

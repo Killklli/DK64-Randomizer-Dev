@@ -1,53 +1,103 @@
-'Randomizes Bananaports.'
-import random,js
+"""Randomizes Bananaports."""
+import random
+
+import js
 from randomizer.Enums.Warps import Warps
 from randomizer.Lists.MapsAndExits import Maps
 from randomizer.Lists.Warps import BananaportVanilla
+
+
 def getShuffleMaps():
-	'Produce list of maps which contain a bananaport swap.';A=[]
-	for B in BananaportVanilla.values():
-		if B.map_id not in A:A.append(B.map_id)
-	return A
-def ShuffleWarps(bananaport_replacements,human_ports):
-	'Shuffles warps between themselves.';H=getShuffleMaps()
-	for B in H:
-		D=[]
-		for A in BananaportVanilla.values():
-			if A.map_id==B and not A.locked:D.append(A.vanilla_warp)
-		random.shuffle(D);F=0
-		for A in BananaportVanilla.keys():
-			if BananaportVanilla[A].map_id==B and not BananaportVanilla[A].locked:BananaportVanilla[A].setNewWarp(D[F]);F+=1
-		G=[];C=[[],[],[],[],[]]
-		for A in BananaportVanilla.values():
-			if A.map_id==B:
-				human_ports[A.name]='Warp '+str(A.new_warp+1)
-				if not A.locked:C[A.new_warp].append(A.obj_id_vanilla)
-		for E in range(len(C)):
-			if len(C[E])>0:G.append({'warp_index':E,'warp_ids':C[E].copy()})
-		bananaport_replacements.append({'containing_map':B,'pads':G.copy()})
+    """Produce list of maps which contain a bananaport swap."""
+    lst = []
+    for x in BananaportVanilla.values():
+        if x.map_id not in lst:
+            lst.append(x.map_id)
+    return lst
+
+
+def ShuffleWarps(bananaport_replacements, human_ports):
+    """Shuffles warps between themselves."""
+    map_list = getShuffleMaps()
+    for warp_map in map_list:
+        shufflable_warps = []
+        # Generate list of shufflable warp types (Warp 1, Warp 2 etc.)
+        for warp in BananaportVanilla.values():
+            if warp.map_id == warp_map and not warp.locked:
+                shufflable_warps.append(warp.vanilla_warp)
+        random.shuffle(shufflable_warps)
+        shuffle_index = 0
+        # Apply shuffle
+        for warp in BananaportVanilla.keys():
+            if BananaportVanilla[warp].map_id == warp_map and not BananaportVanilla[warp].locked:
+                BananaportVanilla[warp].setNewWarp(shufflable_warps[shuffle_index])
+                shuffle_index += 1
+        # Write to spoiler and create array of replacements
+        pad_list = []
+        pad_temp_list = [[], [], [], [], []]
+        for warp in BananaportVanilla.values():
+            if warp.map_id == warp_map:
+                human_ports[warp.name] = "Warp " + str(warp.new_warp + 1)
+                if not warp.locked:
+                    pad_temp_list[warp.new_warp].append(warp.obj_id_vanilla)
+        for warp_index in range(len(pad_temp_list)):
+            if len(pad_temp_list[warp_index]) > 0:
+                pad_list.append({"warp_index": warp_index, "warp_ids": pad_temp_list[warp_index].copy()})
+        bananaport_replacements.append({"containing_map": warp_map, "pads": pad_list.copy()})
+
+
 def getWarpFromSwapIndex(index):
-	'Acquire warp name from index.'
-	for A in BananaportVanilla.values():
-		if A.swap_index==index:return A
-def ShuffleWarpsCrossMap(bananaport_replacements,human_ports,is_coupled):
-	'Shuffles warps with the cross-map setting.';K=is_coupled;J=human_ports;I=True;H=bananaport_replacements;G=False
-	for A in BananaportVanilla.values():A.cross_map_placed=G;H.append(0)
-	L=[]
-	for (P,A) in enumerate(BananaportVanilla.values()):
-		if not A.cross_map_placed or not K:
-			M=[];N=[]
-			for B in BananaportVanilla.values():
-				E=I
-				if B.swap_index==A.swap_index:E=G
-				if B.cross_map_placed:E=G
-				else:N.append(B.swap_index)
-				if A.restricted and B.restricted:E=G
-				if E:M.append(B.swap_index)
-			C=random.choice(M);F=random.randint(0,4);A.tied_index=C
-			for B in BananaportVanilla.values():
-				if B.swap_index==C:B.cross_map_placed=I
-			A.new_warp=F;D=getWarpFromSwapIndex(C);J[A.name]=D.name;H[A.swap_index]=[C,F];A.destination_region_id=D.region_id;O=[C];L.append(C)
-			if K:
-				A.cross_map_placed=I
-				for B in BananaportVanilla.values():
-					if B.swap_index==C:B.tied_index=A.swap_index;O.append(A.swap_index);B.new_warp=F;D=getWarpFromSwapIndex(A.swap_index);J[B.name]=D.name;H[B.swap_index]=[A.swap_index,F];B.destination_region_id=D.region_id;L.append(A.swap_index)
+    """Acquire warp name from index."""
+    for warp in BananaportVanilla.values():
+        if warp.swap_index == index:
+            return warp
+
+
+def ShuffleWarpsCrossMap(bananaport_replacements, human_ports, is_coupled):
+    """Shuffles warps with the cross-map setting."""
+    for warp in BananaportVanilla.values():
+        warp.cross_map_placed = False
+        bananaport_replacements.append(0)
+    selected_warp_list = []
+    for idx, warp in enumerate(BananaportVanilla.values()):
+        if not warp.cross_map_placed or not is_coupled:
+            available_warps = []
+            full_warps = []
+            for warp_check in BananaportVanilla.values():
+                is_enabled = True
+                if warp_check.swap_index == warp.swap_index:
+                    is_enabled = False
+                if warp_check.cross_map_placed:
+                    is_enabled = False
+                else:
+                    full_warps.append(warp_check.swap_index)
+                if warp.restricted and warp_check.restricted:
+                    is_enabled = False
+                if is_enabled:
+                    available_warps.append(warp_check.swap_index)
+            selected_index = random.choice(available_warps)
+            warp_type_index = random.randint(0, 4)
+            # Place Warp
+            warp.tied_index = selected_index
+            for warp_check in BananaportVanilla.values():
+                if warp_check.swap_index == selected_index:
+                    warp_check.cross_map_placed = True
+            warp.new_warp = warp_type_index
+            destination_warp = getWarpFromSwapIndex(selected_index)
+            human_ports[warp.name] = destination_warp.name
+            bananaport_replacements[warp.swap_index] = [selected_index, warp_type_index]
+            warp.destination_region_id = destination_warp.region_id
+            selected_lst = [selected_index]
+            selected_warp_list.append(selected_index)
+            if is_coupled:
+                warp.cross_map_placed = True
+                for warp_check in BananaportVanilla.values():
+                    if warp_check.swap_index == selected_index:
+                        warp_check.tied_index = warp.swap_index
+                        selected_lst.append(warp.swap_index)
+                        warp_check.new_warp = warp_type_index
+                        destination_warp = getWarpFromSwapIndex(warp.swap_index)
+                        human_ports[warp_check.name] = destination_warp.name
+                        bananaport_replacements[warp_check.swap_index] = [warp.swap_index, warp_type_index]
+                        warp_check.destination_region_id = destination_warp.region_id
+                        selected_warp_list.append(warp.swap_index)

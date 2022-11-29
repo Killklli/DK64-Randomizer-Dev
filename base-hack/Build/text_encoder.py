@@ -1,41 +1,231 @@
-'Encode text file to ROM.'
-_G='crystal_coconut'
-_F='dk_coloured_banana'
-_E='static_rain?'
-_D='green_sparkle'
-_C='yellow_sparkle'
-_B='purple_sparkle'
-_A='small_explosion'
+"""Encode text file to ROM."""
 import struct
-icon_db={0:'waterfall_tall',1:'waterfall_short',2:'water',3:'lava',4:'sparkles',5:'pop_explosion',6:'lava_explosion',7:'green_leaf?',8:'brown_smoke_explosion',9:_A,10:'solar_flare?',11:'splash',12:'bubble',13:_B,14:_C,15:_D,16:_B,17:_C,18:_D,19:'large_smoke_explosion',20:'pink_implosion',21:'brown_horizontal_spinning_plank',22:'birch_horizontal_spinning_plank',23:'brown_vertical_spinning_plank',24:'star_water_ripple',25:'circle_water_ripple',26:'small_smoke_explosion',27:'static_star',28:'static_z',29:'white_flare?',30:_E,31:'medium_smoke_explosion',32:'bouncing_melon',33:'vertical_rolling_melon',34:'red_flare?',35:'sparks',36:'peanut',37:'star_flare?',38:'peanut_shell',39:_A,40:'large_smoke_implosion',41:'blue_lazer',42:'pineapple',43:'fireball',44:'orange',45:'grape',46:'grape_splatter',47:'tnt_sparkle',48:'fire_explosion',49:'small_fireball',50:'diddy_coin',51:'chunky_coin',52:'lanky_coin',53:'dk_coin',54:'tiny_coin',55:_F,56:'film',57:'bouncing_orange',58:_G,59:'gb',60:'banana_medal',61:'diddy_coloured_banana',62:'chunky_coloured_banana',63:'lanky_coloured_banana',64:_F,65:'tiny_coloured_banana',66:'exploded_krash_barrel_enemy',67:'white_explosion_thing',68:'coconut',69:'coconut_shell',70:'spinning_watermelon_slice',71:'tooth',72:'ammo_crate',73:'race_coin',74:'lanky_bp',75:'cannonball',76:_G,77:'feather',78:'guitar_gazump',79:'bongo_blast',80:'saxophone',81:'triangle',82:'trombone',83:'waving_yellow_double_eighth_note',84:'waving_yellow_single_eighth_note',85:'waving_green_single_eighth_note',86:'waving_purple_double_eighth_note',87:'waving_red_double_eighth_note',88:'waving_red_single_eighth_note',89:'waving_white_double_eighth_note',90:'diddy_bp',91:'chunky_bp',92:'dk_bp',93:'tiny_bp',94:'spinning_sparkle',95:_E,96:'translucent_water',97:'unk61',98:'black_screen',99:'white_cloud',100:'thin_lazer',101:'blue_bubble',102:'white_faded_circle',103:'white_circle',104:'grape_particle?',105:'spinning_blue_sparkle',106:'white_smoke_explosion',107:'l-r_joystick',108:'fire_wall',109:'static_rain_bubble',110:'a_button',111:'b_button',112:'z_button',113:'c_down_button',114:'c_up_button',115:'c_left_button',116:'acid',117:'acid_explosion',118:'race_hoop',119:'acid_goop?',120:'unk78',121:'broken_bridge?',122:'white_pole?',123:'bridge_chip?',124:'wooden_beam_with_rivets',125:'chunky_bunch',126:'diddy_bunch',127:'lanky_bunch',128:'dk_bunch',129:'tiny_bunch',130:'chunky_balloon',131:'diddy_balloon',132:'dk_balloon',133:'lanky_balloon',134:'tiny_balloon',135:'r_button',136:'l_button',137:'fairy',138:'boss_key',139:'crown',140:'rareware_coin',141:'nintendo_coin',142:'no_symbol',143:'headphones',144:'opaque_blue_water',145:'start_button',146:'white_question_mark',147:'candy_face',148:'cranky_face',149:'snide_face',150:'funky_face',151:'left_arrow',152:'white_spark?',153:'black_boulder_chunk',154:'green_boulder_chunk',155:'wood_chip',156:'snowflake/dandelion',157:'static_water?',158:'spinning_leaf',159:'flashing_water?',160:'rainbow_coin',161:'shockwave_orange_particle',162:'implosion?',163:'rareware_employee_face',164:'smoke',165:'static_smoke?',166:'barrel_bottom_chunk',167:'scoff_face',168:'multicoloured_bunch',169:'dk_face',170:'diddy_face',171:'lanky_face',172:'tiny_face',173:'chunky_face',174:'fairy_tick',175:'wrinkly'}
+
+icon_db = {
+    0x0: "waterfall_tall",
+    0x1: "waterfall_short",
+    0x2: "water",
+    0x3: "lava",
+    0x4: "sparkles",
+    0x5: "pop_explosion",
+    0x6: "lava_explosion",
+    0x7: "green_leaf?",
+    0x8: "brown_smoke_explosion",
+    0x9: "small_explosion",
+    0xA: "solar_flare?",
+    0xB: "splash",
+    0xC: "bubble",
+    0xD: "purple_sparkle",
+    0xE: "yellow_sparkle",
+    0xF: "green_sparkle",
+    0x10: "purple_sparkle",
+    0x11: "yellow_sparkle",
+    0x12: "green_sparkle",
+    0x13: "large_smoke_explosion",
+    0x14: "pink_implosion",
+    0x15: "brown_horizontal_spinning_plank",
+    0x16: "birch_horizontal_spinning_plank",
+    0x17: "brown_vertical_spinning_plank",
+    0x18: "star_water_ripple",
+    0x19: "circle_water_ripple",
+    0x1A: "small_smoke_explosion",
+    0x1B: "static_star",
+    0x1C: "static_z",
+    0x1D: "white_flare?",
+    0x1E: "static_rain?",
+    0x1F: "medium_smoke_explosion",
+    0x20: "bouncing_melon",
+    0x21: "vertical_rolling_melon",
+    0x22: "red_flare?",
+    0x23: "sparks",
+    0x24: "peanut",
+    0x25: "star_flare?",
+    0x26: "peanut_shell",
+    0x27: "small_explosion",
+    0x28: "large_smoke_implosion",
+    0x29: "blue_lazer",
+    0x2A: "pineapple",
+    0x2B: "fireball",
+    0x2C: "orange",
+    0x2D: "grape",
+    0x2E: "grape_splatter",
+    0x2F: "tnt_sparkle",
+    0x30: "fire_explosion",
+    0x31: "small_fireball",
+    0x32: "diddy_coin",
+    0x33: "chunky_coin",
+    0x34: "lanky_coin",
+    0x35: "dk_coin",
+    0x36: "tiny_coin",
+    0x37: "dk_coloured_banana",
+    0x38: "film",
+    0x39: "bouncing_orange",
+    0x3A: "crystal_coconut",
+    0x3B: "gb",
+    0x3C: "banana_medal",
+    0x3D: "diddy_coloured_banana",
+    0x3E: "chunky_coloured_banana",
+    0x3F: "lanky_coloured_banana",
+    0x40: "dk_coloured_banana",
+    0x41: "tiny_coloured_banana",
+    0x42: "exploded_krash_barrel_enemy",
+    0x43: "white_explosion_thing",
+    0x44: "coconut",
+    0x45: "coconut_shell",
+    0x46: "spinning_watermelon_slice",
+    0x47: "tooth",
+    0x48: "ammo_crate",
+    0x49: "race_coin",
+    0x4A: "lanky_bp",
+    0x4B: "cannonball",
+    0x4C: "crystal_coconut",
+    0x4D: "feather",
+    0x4E: "guitar_gazump",
+    0x4F: "bongo_blast",
+    0x50: "saxophone",
+    0x51: "triangle",
+    0x52: "trombone",
+    0x53: "waving_yellow_double_eighth_note",
+    0x54: "waving_yellow_single_eighth_note",
+    0x55: "waving_green_single_eighth_note",
+    0x56: "waving_purple_double_eighth_note",
+    0x57: "waving_red_double_eighth_note",
+    0x58: "waving_red_single_eighth_note",
+    0x59: "waving_white_double_eighth_note",
+    0x5A: "diddy_bp",
+    0x5B: "chunky_bp",
+    0x5C: "dk_bp",
+    0x5D: "tiny_bp",
+    0x5E: "spinning_sparkle",
+    0x5F: "static_rain?",
+    0x60: "translucent_water",
+    0x61: "unk61",
+    0x62: "black_screen",
+    0x63: "white_cloud",
+    0x64: "thin_lazer",
+    0x65: "blue_bubble",
+    0x66: "white_faded_circle",
+    0x67: "white_circle",
+    0x68: "grape_particle?",
+    0x69: "spinning_blue_sparkle",
+    0x6A: "white_smoke_explosion",
+    0x6B: "l-r_joystick",
+    0x6C: "fire_wall",
+    0x6D: "static_rain_bubble",
+    0x6E: "a_button",
+    0x6F: "b_button",
+    0x70: "z_button",
+    0x71: "c_down_button",
+    0x72: "c_up_button",
+    0x73: "c_left_button",
+    0x74: "acid",
+    0x75: "acid_explosion",
+    0x76: "race_hoop",
+    0x77: "acid_goop?",
+    0x78: "unk78",
+    0x79: "broken_bridge?",
+    0x7A: "white_pole?",
+    0x7B: "bridge_chip?",
+    0x7C: "wooden_beam_with_rivets",
+    0x7D: "chunky_bunch",
+    0x7E: "diddy_bunch",
+    0x7F: "lanky_bunch",
+    0x80: "dk_bunch",
+    0x81: "tiny_bunch",
+    0x82: "chunky_balloon",
+    0x83: "diddy_balloon",
+    0x84: "dk_balloon",
+    0x85: "lanky_balloon",
+    0x86: "tiny_balloon",
+    0x87: "r_button",
+    0x88: "l_button",
+    0x89: "fairy",
+    0x8A: "boss_key",
+    0x8B: "crown",
+    0x8C: "rareware_coin",
+    0x8D: "nintendo_coin",
+    0x8E: "no_symbol",
+    0x8F: "headphones",
+    0x90: "opaque_blue_water",
+    0x91: "start_button",
+    0x92: "white_question_mark",
+    0x93: "candy_face",
+    0x94: "cranky_face",
+    0x95: "snide_face",
+    0x96: "funky_face",
+    0x97: "left_arrow",
+    0x98: "white_spark?",
+    0x99: "black_boulder_chunk",
+    0x9A: "green_boulder_chunk",
+    0x9B: "wood_chip",
+    0x9C: "snowflake/dandelion",
+    0x9D: "static_water?",
+    0x9E: "spinning_leaf",
+    0x9F: "flashing_water?",
+    0xA0: "rainbow_coin",
+    0xA1: "shockwave_orange_particle",
+    0xA2: "implosion?",
+    0xA3: "rareware_employee_face",
+    0xA4: "smoke",
+    0xA5: "static_smoke?",
+    0xA6: "barrel_bottom_chunk",
+    0xA7: "scoff_face",
+    0xA8: "multicoloured_bunch",
+    0xA9: "dk_face",
+    0xAA: "diddy_face",
+    0xAB: "lanky_face",
+    0xAC: "tiny_face",
+    0xAD: "chunky_face",
+    0xAE: "fairy_tick",
+    0xAF: "wrinkly",
+}
+
+
 def float_to_hex(f):
-	'Convert float to hex.'
-	if f==0:return'0x00000000'
-	return hex(struct.unpack('<I',struct.pack('<f',f))[0])
-def writeText(file_name,text):
-	'Write the text to ROM.';N='unk0';J=file_name;G=text;E='text';D='big';print(f"Writing Text File: {J}")
-	with open(J,'wb')as A:
-		A.write(bytearray([len(G)]));H=0
-		for F in G:
-			A.write(len(F).to_bytes(1,D))
-			for C in F:
-				I=-1
-				for B in C[E]:
-					if B in icon_db.values():
-						for K in icon_db:
-							if icon_db[K]==B:I=K
-				if I>-1:A.write(bytearray([2,1]));A.write(I.to_bytes(2,D));A.write(bytearray([0,0]))
-				else:
-					A.write(bytearray([1,len(C[E])]))
-					for B in C[E]:A.write(H.to_bytes(4,D));A.write(len(B).to_bytes(2,D));A.write(bytearray([0,0]));H+=len(B)
-				L=0
-				if N in C:L=C[N]
-				A.write(int(float_to_hex(L),16).to_bytes(4,D))
-		A.write(bytearray(H.to_bytes(2,D)))
-		for F in G:
-			for C in F:
-				M=False
-				for B in C[E]:
-					if B in icon_db.values():M=True
-				if not M:
-					for B in C[E]:A.write(B.encode('ascii'))
+    """Convert float to hex."""
+    if f == 0:
+        return "0x00000000"
+    return hex(struct.unpack("<I", struct.pack("<f", f))[0])
+
+
+def writeText(file_name, text):
+    """Write the text to ROM."""
+    print(f"Writing Text File: {file_name}")
+    with open(file_name, "wb") as fh:
+        fh.write(bytearray([len(text)]))
+        position = 0
+        for textbox in text:
+            fh.write(len(textbox).to_bytes(1, "big"))
+            for block in textbox:
+                # Get Icon State
+                icon_id = -1
+                for string in block["text"]:
+                    if string in icon_db.values():
+                        for icon in icon_db:
+                            if icon_db[icon] == string:
+                                icon_id = icon
+                if icon_id > -1:
+                    fh.write(bytearray([2, 1]))
+                    fh.write(icon_id.to_bytes(2, "big"))
+                    fh.write(bytearray([0, 0]))
+                else:
+                    fh.write(bytearray([1, len(block["text"])]))
+                    for string in block["text"]:
+                        fh.write(position.to_bytes(4, "big"))
+                        fh.write(len(string).to_bytes(2, "big"))
+                        fh.write(bytearray([0, 0]))
+                        position += len(string)
+                unk0 = 0
+                if "unk0" in block:
+                    unk0 = block["unk0"]
+                fh.write(int(float_to_hex(unk0), 16).to_bytes(4, "big"))
+        fh.write(bytearray(position.to_bytes(2, "big")))
+        for textbox in text:
+            for block in textbox:
+                is_icon = False
+                for string in block["text"]:
+                    if string in icon_db.values():
+                        is_icon = True
+                if not is_icon:
+                    for string in block["text"]:
+                        fh.write(string.encode("ascii"))

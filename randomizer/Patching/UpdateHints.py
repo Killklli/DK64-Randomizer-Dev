@@ -1,44 +1,101 @@
-'Update wrinkly hints compressed file.'
-_A=False
+"""Update wrinkly hints compressed file."""
 import random
 from io import BytesIO
+
 import js
 from randomizer.Enums.Kongs import Kongs
-from randomizer.Lists.WrinklyHints import HintLocation,hints
+from randomizer.Lists.WrinklyHints import HintLocation, hints
 from randomizer.Patching.Patcher import ROM
-def writeWrinklyHints(file_start_offset,text):
-	'Write the text to ROM.';E=text;B=file_start_offset;ROM().seek(B);ROM().writeMultipleBytes(len(E),1);F=0;A=1
-	for D in E:
-		ROM().seek(B+A);ROM().writeMultipleBytes(1,1);ROM().seek(B+A+1);ROM().writeMultipleBytes(1,1);ROM().seek(B+A+2);ROM().writeMultipleBytes(len(D),1);A+=3
-		for C in D:ROM().seek(B+A);ROM().writeMultipleBytes(F,4);ROM().seek(B+A+4);ROM().writeMultipleBytes(len(C),2);ROM().seek(B+A+6);ROM().writeMultipleBytes(0,2);A+=8;F+=len(C)
-		ROM().seek(B+A);ROM().writeMultipleBytes(0,4);A+=4
-	ROM().seek(B+A);ROM().writeMultipleBytes(F,2);A+=2
-	for D in E:
-		for C in D:
-			for G in range(len(C)):ROM().seek(B+A+G);ROM().writeMultipleBytes(int.from_bytes(C[G].encode('ascii'),'big'),1)
-			A+=len(C)
-def UpdateHint(WrinklyHint,message):
-	'Update the wrinkly hint with the new string.\n\n    Args:\n        WrinklyHint (Hint): Wrinkly hint object.\n        message (str): Hint message to write.\n    ';A=message
-	if len(A)<=914:WrinklyHint.hint=A;return True
-	else:raise Exception('Hint message is longer than allowed.')
-	return _A
-def updateRandomHint(message,kongs_req=[],keywords=[],levels=[]):
-	'Update a random hint with the string specifed.\n\n    Args:\n        message (str): Hint message to write.\n    ';B=[]
-	for A in range(len(hints)):
-		if hints[A].hint==''and hints[A].kong in kongs_req and hints[A].level in levels:
-			C=_A
-			for D in hints[A].banned_keywords:
-				if D in keywords:C=True
-			if not C:B.append(A)
-	if len(B)>0:E=random.choice(B);return UpdateHint(hints[E],message)
-	return _A
+
+
+def writeWrinklyHints(file_start_offset, text):
+    """Write the text to ROM."""
+    ROM().seek(file_start_offset)
+    ROM().writeMultipleBytes(len(text), 1)
+    position = 0
+    offset = 1
+    for textbox in text:
+        ROM().seek(file_start_offset + offset)
+        ROM().writeMultipleBytes(1, 1)
+        ROM().seek(file_start_offset + offset + 1)
+        ROM().writeMultipleBytes(1, 1)
+        ROM().seek(file_start_offset + offset + 2)
+        ROM().writeMultipleBytes(len(textbox), 1)
+        offset += 3
+        for string in textbox:
+            ROM().seek(file_start_offset + offset)
+            ROM().writeMultipleBytes(position, 4)
+            ROM().seek(file_start_offset + offset + 4)
+            ROM().writeMultipleBytes(len(string), 2)
+            ROM().seek(file_start_offset + offset + 6)
+            ROM().writeMultipleBytes(0, 2)
+            offset += 8
+            position += len(string)
+        ROM().seek(file_start_offset + offset)
+        ROM().writeMultipleBytes(0, 4)
+        offset += 4
+    ROM().seek(file_start_offset + offset)
+    ROM().writeMultipleBytes(position, 2)
+    offset += 2
+    for textbox in text:
+        for string in textbox:
+            for x in range(len(string)):
+                ROM().seek(file_start_offset + offset + x)
+                ROM().writeMultipleBytes(int.from_bytes(string[x].encode("ascii"), "big"), 1)
+            offset += len(string)
+
+
+def UpdateHint(WrinklyHint: HintLocation, message: str):
+    """Update the wrinkly hint with the new string.
+
+    Args:
+        WrinklyHint (Hint): Wrinkly hint object.
+        message (str): Hint message to write.
+    """
+    # Seek to the wrinkly data
+    if len(message) <= 914:
+        # We're safely below the character limit
+        WrinklyHint.hint = message
+        return True
+    else:
+        raise Exception("Hint message is longer than allowed.")
+    return False
+
+
+def updateRandomHint(message: str, kongs_req=[], keywords=[], levels=[]):
+    """Update a random hint with the string specifed.
+
+    Args:
+        message (str): Hint message to write.
+    """
+    hint_pool = []
+    for x in range(len(hints)):
+        if hints[x].hint == "" and hints[x].kong in kongs_req and hints[x].level in levels:
+            is_banned = False
+            for banned in hints[x].banned_keywords:
+                if banned in keywords:
+                    is_banned = True
+            if not is_banned:
+                hint_pool.append(x)
+    if len(hint_pool) > 0:
+        selected = random.choice(hint_pool)
+        return UpdateHint(hints[selected], message)
+    return False
+
+
 def PushHints(spoiler):
-	'Update the ROM with all hints.';B=spoiler;C=[]
-	for A in B.hint_list.values():
-		if A=='':A='PLACEHOLDER HINT'
-		C.append([A.upper()])
-	writeWrinklyHints(js.pointer_addresses[12]['entries'][41]['pointing_to'],C);B.hint_list.pop('First Time Talk')
+    """Update the ROM with all hints."""
+    hint_arr = []
+    for replacement_hint in spoiler.hint_list.values():
+        if replacement_hint == "":
+            replacement_hint = "PLACEHOLDER HINT"
+        hint_arr.append([replacement_hint.upper()])
+    writeWrinklyHints(js.pointer_addresses[12]["entries"][41]["pointing_to"], hint_arr)
+    spoiler.hint_list.pop("First Time Talk")  # The FTT needs to be written to the ROM but should not be found in the spoiler log
+
+
 def wipeHints():
-	'Wipe the hint block.'
-	for A in range(len(hints)):
-		if hints[A].kong!=Kongs.any:hints[A].hint=''
+    """Wipe the hint block."""
+    for x in range(len(hints)):
+        if hints[x].kong != Kongs.any:
+            hints[x].hint = ""

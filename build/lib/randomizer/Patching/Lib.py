@@ -1,55 +1,120 @@
-'Library functions for patching.'
-_C='pointing_to'
-_B='entries'
-_A='big'
-import struct,js
+"""Library functions for patching."""
+import struct
+import js
 from randomizer.Patching.Patcher import ROM
 from randomizer.Enums.ScriptTypes import ScriptTypes
+
+
 def float_to_hex(f):
-	'Convert float to hex.'
-	if f==0:return'0x00000000'
-	return hex(struct.unpack('<I',struct.pack('<f',f))[0])
+    """Convert float to hex."""
+    if f == 0:
+        return "0x00000000"
+    return hex(struct.unpack("<I", struct.pack("<f", f))[0])
+
+
 def short_to_ushort(short):
-	'Convert short to unsigned short format.';A=short
-	if A<0:return A+65536
-	return A
+    """Convert short to unsigned short format."""
+    if short < 0:
+        return short + 65536
+    return short
+
+
 def intf_to_float(intf):
-	'Convert float as int format to float.'
-	if intf==0:return 0
-	else:return struct.unpack('!f',bytes.fromhex('{:08X}'.format(intf)))[0]
+    """Convert float as int format to float."""
+    if intf == 0:
+        return 0
+    else:
+        return struct.unpack("!f", bytes.fromhex("{:08X}".format(intf)))[0]
+
+
 def ushort_to_short(ushort):
-	'Convert unsigned short to signed short.';A=ushort
-	if A>32767:return A-65536
-	return A
-def getNextFreeID(cont_map_id,ignore=[]):
-	'Get next available Model 2 ID.';B=js.pointer_addresses[9][_B][cont_map_id][_C];ROM().seek(B);D=int.from_bytes(ROM().readBytes(4),_A);A=list(range(0,600))
-	for E in range(D):
-		F=B+4+E*48;ROM().seek(F+42);C=int.from_bytes(ROM().readBytes(2),_A)
-		if C in A:A.remove(C)
-	for id in range(544,549):
-		if id in A:A.remove(id)
-	for id in ignore:
-		if id in A:A.remove(id)
-	if len(A)>0:return min(A)
-	return 0
-def addNewScript(cont_map_id,item_ids,type):
-	'Append a new script to the script database. Has to be just 1 execution and 1 endblock.';E=item_ids;B=js.pointer_addresses[10][_B][cont_map_id][_C];ROM().seek(B);J=int.from_bytes(ROM().readBytes(2),_A);D=[];A=2
-	for R in range(J):
-		ROM().seek(B+A);F=B+A;K=int.from_bytes(ROM().readBytes(2),_A);L=int.from_bytes(ROM().readBytes(2),_A);A+=6
-		for S in range(L):ROM().seek(B+A);M=int.from_bytes(ROM().readBytes(2),_A);A+=2+8*M;ROM().seek(B+A);N=int.from_bytes(ROM().readBytes(2),_A);A+=2+8*N
-		O=B+A
-		if K not in E:
-			G=[];ROM().seek(F)
-			for H in range(int((O-F)/2)):G.append(int.from_bytes(ROM().readBytes(2),_A))
-			D.append(G)
-	C=-100
-	if type==ScriptTypes.Bananaport:C=-1
-	elif type==ScriptTypes.Wrinkly:C=-2
-	elif type==ScriptTypes.TnsPortal:C=-3
-	elif type==ScriptTypes.TnsIndicator:C=-4
-	elif type==ScriptTypes.CrownMain:C=-5
-	elif type==ScriptTypes.CrownIsles2:C=-6
-	for I in E:P=[I,1,0,0,1,7,125,short_to_ushort(C),I];D.append(P)
-	ROM().seek(B);ROM().writeMultipleBytes(len(D),2)
-	for Q in D:
-		for H in Q:ROM().writeMultipleBytes(H,2)
+    """Convert unsigned short to signed short."""
+    if ushort > 32767:
+        return ushort - 65536
+    return ushort
+
+
+def getNextFreeID(cont_map_id: int, ignore=[]):
+    """Get next available Model 2 ID."""
+    setup_table = js.pointer_addresses[9]["entries"][cont_map_id]["pointing_to"]
+    ROM().seek(setup_table)
+    model2_count = int.from_bytes(ROM().readBytes(4), "big")
+    vacant_ids = list(range(0, 600))
+    for item in range(model2_count):
+        item_start = setup_table + 4 + (item * 0x30)
+        ROM().seek(item_start + 0x2A)
+        item_id = int.from_bytes(ROM().readBytes(2), "big")
+        if item_id in vacant_ids:
+            vacant_ids.remove(item_id)
+    for id in range(0x220, 0x225):
+        if id in vacant_ids:
+            vacant_ids.remove(id)
+    for id in ignore:
+        if id in vacant_ids:
+            vacant_ids.remove(id)
+    if len(vacant_ids) > 0:
+        return min(vacant_ids)
+    return 0  # Shouldn't ever hit this. This is a case if there's no vacant IDs in range [0,599]
+
+
+def addNewScript(cont_map_id: int, item_ids: list, type: ScriptTypes):
+    """Append a new script to the script database. Has to be just 1 execution and 1 endblock."""
+    script_table = js.pointer_addresses[10]["entries"][cont_map_id]["pointing_to"]
+    ROM().seek(script_table)
+    script_count = int.from_bytes(ROM().readBytes(2), "big")
+    good_scripts = []
+    # Construct good pre-existing scripts
+    file_offset = 2
+    for script_item in range(script_count):
+        ROM().seek(script_table + file_offset)
+        script_start = script_table + file_offset
+        script_id = int.from_bytes(ROM().readBytes(2), "big")
+        block_count = int.from_bytes(ROM().readBytes(2), "big")
+        file_offset += 6
+        for block_item in range(block_count):
+            ROM().seek(script_table + file_offset)
+            cond_count = int.from_bytes(ROM().readBytes(2), "big")
+            file_offset += 2 + (8 * cond_count)
+            ROM().seek(script_table + file_offset)
+            exec_count = int.from_bytes(ROM().readBytes(2), "big")
+            file_offset += 2 + (8 * exec_count)
+        script_end = script_table + file_offset
+        if script_id not in item_ids:
+            script_data = []
+            ROM().seek(script_start)
+            for x in range(int((script_end - script_start) / 2)):
+                script_data.append(int.from_bytes(ROM().readBytes(2), "big"))
+            good_scripts.append(script_data)
+    # Get new script data
+    subscript_type = -100
+    if type == ScriptTypes.Bananaport:
+        subscript_type = -1
+    elif type == ScriptTypes.Wrinkly:
+        subscript_type = -2
+    elif type == ScriptTypes.TnsPortal:
+        subscript_type = -3
+    elif type == ScriptTypes.TnsIndicator:
+        subscript_type = -4
+    elif type == ScriptTypes.CrownMain:
+        subscript_type = -5
+    elif type == ScriptTypes.CrownIsles2:
+        subscript_type = -6
+    for item_id in item_ids:
+        script_arr = [
+            item_id,
+            1,  # Block Count
+            0,  # Behav 9C, Not sure the purpose on this. 0 seems safe from prior knowledge
+            0,  # Cond Count
+            1,  # Exec Count
+            7,  # Func Type (Run JALR)
+            125,  # JALR Type (Points to our custom code)
+            short_to_ushort(subscript_type),  # Subscript Type
+            item_id,  # Item ID, for the purpose of our script to locate any required data
+        ]
+        good_scripts.append(script_arr)
+    # Reconstruct File
+    ROM().seek(script_table)
+    ROM().writeMultipleBytes(len(good_scripts), 2)
+    for script in good_scripts:
+        for x in script:
+            ROM().writeMultipleBytes(x, 2)
