@@ -60,6 +60,7 @@ def main():
         else:
             setting_data["seed"] = random.randint(0, 100000000)
     else:
+        print(os.environ.get("POST_BODY"))
         setting_data = json.loads(os.environ.get("POST_BODY"))
         if not setting_data.get("seed"):
             setting_data["seed"] = random.randint(0, 100000000)
