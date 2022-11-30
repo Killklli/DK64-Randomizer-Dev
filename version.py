@@ -28,7 +28,8 @@ try:
 except Exception:
     pass
 try:
-    resp = js.getFile("./static/py_libraries/dk64rando-1.0.0-py3-none-any.whl")
+    resp = str(js.getFile("./static/py_libraries/dk64rando-1.0.0-py3-none-any.whl")).encode()
+    print(len(resp))
     whl_hash = md5(resp).hexdigest()
 except Exception as e:
     whl_hash = "no_file_using_filler_hash"
