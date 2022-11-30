@@ -32,3 +32,4 @@ try:
     whl_hash = md5(resp).hexdigest()
 except Exception as e:
     whl_hash = "no_file_using_filler_hash"
+print(whl_hash)
